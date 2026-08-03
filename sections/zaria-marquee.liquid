@@ -1,0 +1,64 @@
+{% comment %}Zaria - statement marquee - Arkanet Technologies{% endcomment %}
+{%- assign sc = section.settings -%}
+{%- assign fg = '#111111' -%}{%- assign bg = '#ffffff' -%}
+{%- if sc.scheme == 'soft' -%}{%- assign bg = '#fafafa' -%}{%- endif -%}
+{%- if sc.scheme == 'ink' -%}{%- assign bg = '#111111' -%}{%- assign fg = '#ffffff' -%}{%- endif -%}
+<style>
+  #shopify-section-{{ section.id }} .zmq{background:{{ bg }};color:{{ fg }};border-top:1px solid rgba(128,128,128,.16);border-bottom:1px solid rgba(128,128,128,.16);
+    overflow:hidden;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:{{ sc.padding_y }}px 0}
+  #shopify-section-{{ section.id }} .zmq__row{display:flex;align-items:center;gap:0;white-space:nowrap;width:max-content}
+  #shopify-section-{{ section.id }} .zmq__item{display:inline-flex;align-items:center;font-size:{{ sc.text_size }}px;
+    letter-spacing:.24em;text-transform:uppercase;padding:0 34px}
+  #shopify-section-{{ section.id }} .zmq__item::after{content:"";width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.5;margin-left:34px}
+  #shopify-section-{{ section.id }} .zmq--static .zmq__row{width:auto;justify-content:center;flex-wrap:wrap;margin:0 auto;max-width:1200px;padding:0 20px}
+  #shopify-section-{{ section.id }} .zmq--static .zmq__item:last-child::after{display:none}
+  {%- if sc.animate -%}
+  #shopify-section-{{ section.id }} .zmq__track{display:flex;width:max-content;animation:zmq-scroll {{ sc.speed }}s linear infinite}
+  #shopify-section-{{ section.id }} .zmq:hover .zmq__track{animation-play-state:paused}
+  @keyframes zmq-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  {%- endif -%}
+  @media (prefers-reduced-motion:reduce){#shopify-section-{{ section.id }} .zmq__track{animation:none}}
+</style>
+{%- capture items -%}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.text != blank -%}<span class="zmq__item" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>{%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+<div class="zmq {% unless sc.animate %}zmq--static{% endunless %}">
+  {%- if sc.animate -%}
+    <div class="zmq__track"><div class="zmq__row">{{ items }}</div><div class="zmq__row" aria-hidden="true">{{ items }}</div></div>
+  {%- else -%}
+    <div class="zmq__row">{{ items }}</div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Zaria Marquee",
+  "settings": [
+    {
+      "type": "select", "id": "scheme", "label": "Colour",
+      "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" }, { "value": "ink", "label": "Black" } ],
+      "default": "ink"
+    },
+    { "type": "checkbox", "id": "animate", "label": "Scroll continuously", "default": true },
+    { "type": "range", "id": "speed", "label": "Scroll duration", "min": 12, "max": 80, "step": 2, "unit": "s", "default": 34 },
+    { "type": "range", "id": "text_size", "label": "Text size", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 12 },
+    { "type": "range", "id": "padding_y", "label": "Vertical padding", "min": 8, "max": 40, "step": 2, "unit": "px", "default": 16 }
+  ],
+  "blocks": [
+    { "type": "item", "name": "Statement", "settings": [ { "type": "text", "id": "text", "label": "Text", "default": "Made to measure" } ] }
+  ],
+  "presets": [
+    {
+      "name": "Zaria Marquee",
+      "blocks": [
+        { "type": "item", "settings": { "text": "Made to measure" } },
+        { "type": "item", "settings": { "text": "Hand finished in atelier" } },
+        { "type": "item", "settings": { "text": "Worldwide shipping" } },
+        { "type": "item", "settings": { "text": "Private appointments" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

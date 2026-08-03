@@ -1,0 +1,70 @@
+{% comment %}Zaria - editorial feature (image + text) - Arkanet Technologies{% endcomment %}
+{%- assign sc = section.settings -%}
+<style>
+  #shopify-section-{{ section.id }} .zft{background:{% if sc.scheme == 'soft' %}#fafafa{% else %}#ffffff{% endif %};
+    color:#111;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;
+    padding:{{ sc.padding_top }}px clamp(20px,4vw,48px) {{ sc.padding_bottom }}px}
+  #shopify-section-{{ section.id }} .zft *{box-sizing:border-box}
+  #shopify-section-{{ section.id }} .zft__inner{max-width:1240px;margin:0 auto;display:grid;
+    grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center}
+  #shopify-section-{{ section.id }} .zft--right .zft__media{order:2}
+  #shopify-section-{{ section.id }} .zft__media img{display:block;width:100%;height:auto}
+  #shopify-section-{{ section.id }} .zft__ph{width:100%;aspect-ratio:{{ sc.ratio }};background:linear-gradient(135deg,#ececec,#f6f6f6)}
+  #shopify-section-{{ section.id }} .zft__eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#6a6a6a;margin:0 0 18px}
+  #shopify-section-{{ section.id }} .zft__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
+    font-size:clamp(26px,3.4vw,42px);line-height:1.14;letter-spacing:.01em;margin:0 0 20px}
+  #shopify-section-{{ section.id }} .zft__body{color:#5f5f5f;font-size:15px;line-height:1.9}
+  #shopify-section-{{ section.id }} .zft__body p{margin:0 0 14px}
+  #shopify-section-{{ section.id }} .zft__link{display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.2em;
+    text-transform:uppercase;color:#111;text-decoration:none;border-bottom:1px solid #111;padding-bottom:5px;transition:opacity .2s ease}
+  #shopify-section-{{ section.id }} .zft__link:hover{opacity:.6}
+  @media (max-width:749px){
+    #shopify-section-{{ section.id }} .zft__inner{grid-template-columns:1fr;gap:28px}
+    #shopify-section-{{ section.id }} .zft--right .zft__media{order:0}
+  }
+</style>
+<section class="zft {% if sc.image_side == 'right' %}zft--right{% endif %}">
+  <div class="zft__inner">
+    <div class="zft__media">
+      {%- if sc.image != blank -%}
+        <img src="{{ sc.image | image_url: width: 1200 }}" alt="{{ sc.image.alt | escape }}" width="{{ sc.image.width }}" height="{{ sc.image.height }}" loading="lazy">
+      {%- else -%}
+        <div class="zft__ph"></div>
+      {%- endif -%}
+    </div>
+    <div class="zft__text">
+      {%- if sc.eyebrow != blank -%}<p class="zft__eyebrow">{{ sc.eyebrow }}</p>{%- endif -%}
+      {%- if sc.heading != blank -%}<h2 class="zft__title">{{ sc.heading }}</h2>{%- endif -%}
+      {%- if sc.body != blank -%}<div class="zft__body">{{ sc.body }}</div>{%- endif -%}
+      {%- if sc.link_label != blank -%}<a class="zft__link" href="{{ sc.link_url | default: '#' }}">{{ sc.link_label }}</a>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Zaria Feature",
+  "settings": [
+    { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    {
+      "type": "select", "id": "image_side", "label": "Image side",
+      "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ],
+      "default": "left"
+    },
+    {
+      "type": "select", "id": "ratio", "label": "Image ratio (placeholder)",
+      "options": [ { "value": "3/4", "label": "Portrait" }, { "value": "1/1", "label": "Square" }, { "value": "4/5", "label": "Tall" } ],
+      "default": "4/5"
+    },
+    { "type": "text", "id": "eyebrow", "label": "Overline", "default": "The House of Zaria" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A study in modern couture" },
+    { "type": "richtext", "id": "body", "label": "Text", "default": "<p>Zaria is a design-led couture house built on considered silhouettes and refined tailoring. Every piece is drawn, cut, and finished by hand, made to be worn and kept.</p>" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Discover the house" },
+    { "type": "url", "id": "link_url", "label": "Link" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 96 }
+  ],
+  "presets": [ { "name": "Zaria Feature" } ]
+}
+{% endschema %}
