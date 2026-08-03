@@ -1,0 +1,51 @@
+{%- doc -%}
+  Outputs the string "true" when the given product qualifies for the current
+  gift promotion, otherwise outputs nothing. Capture it and compare:
+
+    {%- capture is_offer -%}{%- render 'is-gift-offer', product: product -%}{%- endcapture -%}
+    {%- if is_offer contains 'true' -%} ... {%- endif -%}
+
+  Config comes exclusively from the Elixir Promotions app's shop metafields:
+    elixir_promotions.gift_offer_active     — master switch
+    elixir_promotions.gift_offer_mode       — quantity | amount | bogo (gift families),
+                                   discount (% / amount off, applied at the cart)
+                                   or markdown (product price already reduced)
+    elixir_promotions.gift_offer_scope_all  — store-wide offers (spend model without a collection)
+    elixir_promotions.gift_offer_collection — the qualifying collection
+
+  Only the GIFT families ever qualify a product here. A `discount`/`markdown`
+  offer drives the promo banner but must never badge a product as a free gift.
+
+  @param {object} product - the product to test
+{%- enddoc -%}
+{%- capture offer_on -%}{%- render 'gift-offer-active' -%}{%- endcapture -%}
+{%- liquid
+  assign offer_mode = shop.metafields.elixir_promotions.gift_offer_mode.value
+  assign is_gift_mode = true
+  if offer_mode == 'discount' or offer_mode == 'markdown'
+    assign is_gift_mode = false
+  endif
+  assign match = false
+
+  if offer_on contains 'true' and product != blank and is_gift_mode
+    if shop.metafields.elixir_promotions.gift_offer_scope_all.value == true
+      assign match = true
+    endif
+
+    unless match
+      assign eff_collection = shop.metafields.elixir_promotions.gift_offer_collection.value
+      if eff_collection != blank
+        for c in product.collections
+          if c.id == eff_collection.id
+            assign match = true
+            break
+          endif
+        endfor
+      endif
+    endunless
+  endif
+
+  if match
+    echo 'true'
+  endif
+-%}

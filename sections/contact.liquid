@@ -1,0 +1,245 @@
+{% comment %}
+  Contact page — "Visit Our Boutiques": a small stores section (addresses +
+  compact maps) that sits at the bottom of /pages/contact, below the Contact &
+  FAQ block. The Prestige contact form is preserved but hidden by default
+  (toggle "Show the message form"); the page leads with call / email / WhatsApp
+  and the FAQ, Ounass-style. Only this template uses the section.
+{% endcomment %}
+
+{%- assign show_form = section.settings.show_form -%}
+
+{% style %}
+  .elx-stores { background: #faf9f7; border-top: 1px solid rgba(0, 0, 0, .08); padding: clamp(44px, 7vw, 72px) 20px; }
+  .elx-stores * { box-sizing: border-box; }
+  .elx-stores .elx-st-inner { max-width: 1080px; margin: 0 auto; }
+  .elx-stores .elx-st-head { text-align: center; margin: 0 0 clamp(28px, 4vw, 44px); }
+  .elx-stores .elx-st-title { font-family: var(--heading-font-family, "Bodoni Moda", serif); font-weight: 400; font-size: clamp(21px, 4vw, 32px); text-transform: uppercase; letter-spacing: clamp(2px, 0.5vw, 4px); margin: 0; color: #1a1a1a; }
+  .elx-stores .elx-st-rule { width: 48px; height: 1px; background: #B87253; margin: 16px auto 0; }
+
+  .elx-stores .elx-st-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(22px, 3vw, 34px); }
+  .elx-stores .elx-st-card { background: #fff; border: 1px solid rgba(0, 0, 0, .08); }
+  .elx-stores .elx-st-map { position: relative; width: 100%; height: 240px; overflow: hidden; }
+  .elx-stores .elx-st-map iframe { width: 100%; height: 100%; border: 0; display: block; filter: grayscale(1); transition: filter .3s ease; }
+  .elx-stores .elx-st-card:hover .elx-st-map iframe { filter: grayscale(0); }
+  .elx-stores .elx-st-body { padding: 22px 24px 26px; }
+  .elx-stores .elx-st-country { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #B87253; margin: 0 0 10px; }
+  .elx-stores .elx-st-addr { font-size: 14px; line-height: 1.7; color: #4a4a4a; margin: 0 0 16px; white-space: pre-line; }
+  .elx-stores .elx-st-dir { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; border-bottom: 1px solid #B87253; padding-bottom: 3px; }
+  .elx-stores .elx-st-dir:hover { color: #B87253; }
+  .elx-stores .elx-st-dir svg { width: 13px; height: 13px; }
+
+  .elx-stores .elx-st-form { max-width: 640px; margin: 0 auto clamp(40px, 6vw, 60px); }
+{% endstyle %}
+
+<div class="elx-stores">
+  <div class="elx-st-inner">
+
+    {%- if show_form -%}
+      <div class="elx-st-form">
+        <div class="section-stack text-center">
+          {%- render 'section-header',
+            subheading: section.settings.subheading,
+            heading: section.settings.title,
+            heading_style: section.settings.heading_style,
+            content: section.settings.content,
+            text_alignment: 'center'
+          -%}
+
+          {%- form 'contact', class: 'form' -%}
+            {%- if form.posted_successfully? -%}
+              {%- assign content = 'contact.form.success_message' | t -%}
+              {%- render 'banner', status: 'success', content: content -%}
+            {%- endif -%}
+            {%- if form.errors -%}
+              {%- capture content -%}{{ form.errors.translated_fields[form.errors.first] | capitalize }} {{ form.errors.messages[form.errors.first] }}{%- endcapture -%}
+              {%- render 'banner', status: 'error', content: content -%}
+            {%- endif -%}
+
+            <div class="fieldset">
+              <div class="fieldset-row">
+                {%- assign label = 'contact.form.name' | t -%}
+                {%- render 'input', type: 'text', name: 'contact[name]', label: label, value: customer.name, required: true, autocomplete: 'name' -%}
+                {%- assign label = 'contact.form.email' | t -%}
+                {%- render 'input', type: 'email', name: 'contact[email]', label: label, value: customer.email, required: true, autocomplete: 'email' -%}
+              </div>
+              {%- assign label = 'contact.form.message' | t -%}
+              {%- render 'input', name: 'contact[body]', label: label, multiline: 4, required: true -%}
+            </div>
+
+            {%- assign button_content = 'contact.form.submit' | t -%}
+            {%- render 'button', content: button_content, type: 'submit' -%}
+          {%- endform -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="elx-st-head">
+      <h2 class="elx-st-title">{{ 'custom.contact.stores_heading' | t }}</h2>
+      <div class="elx-st-rule"></div>
+    </div>
+
+    <div class="elx-st-grid">
+      {%- if section.settings.uae_address != blank -%}
+        <div class="elx-st-card">
+          <div class="elx-st-map">
+            <iframe src="{{ section.settings.uae_map }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="{{ section.settings.uae_country | escape }}"></iframe>
+          </div>
+          <div class="elx-st-body">
+            <p class="elx-st-country">{{ section.settings.uae_country }}</p>
+            <p class="elx-st-addr">{{ section.settings.uae_address }}</p>
+            <a class="elx-st-dir" href="https://www.google.com/maps/search/?api=1&query={{ section.settings.uae_address | url_encode }}" target="_blank" rel="noopener">
+              {{ 'custom.contact.directions' | t }}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.ksa_address != blank -%}
+        <div class="elx-st-card">
+          <div class="elx-st-map">
+            <iframe src="{{ section.settings.ksa_map }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="{{ section.settings.ksa_country | escape }}"></iframe>
+          </div>
+          <div class="elx-st-body">
+            <p class="elx-st-country">{{ section.settings.ksa_country }}</p>
+            <p class="elx-st-addr">{{ section.settings.ksa_address }}</p>
+            <a class="elx-st-dir" href="https://www.google.com/maps/search/?api=1&query={{ section.settings.ksa_address | url_encode }}" target="_blank" rel="noopener">
+              {{ 'custom.contact.directions' | t }}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.contact.name",
+  "class": "shopify-section--contact",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Our boutiques"
+    },
+    {
+      "type": "text",
+      "id": "uae_country",
+      "label": "Store 1 — location label",
+      "default": "United Arab Emirates"
+    },
+    {
+      "type": "textarea",
+      "id": "uae_address",
+      "label": "Store 1 — address",
+      "default": "P3 The Box Storage, Dubai Investment Park 1, Dubai"
+    },
+    {
+      "type": "text",
+      "id": "uae_map",
+      "label": "Store 1 — Google Maps embed URL",
+      "default": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2669.735009145923!2d54.5246845!3d24.333118400000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5e38aae96454ab:0xbfd6c4379d8ea2f!2sDalma Mall!5e1!3m2!1sen!2sin!4v1781199569944!5m2!1sen!2sin"
+    },
+    {
+      "type": "text",
+      "id": "ksa_country",
+      "label": "Store 2 — location label",
+      "default": "Kingdom of Saudi Arabia"
+    },
+    {
+      "type": "textarea",
+      "id": "ksa_address",
+      "label": "Store 2 — address",
+      "default": "Riyadh City, Almuhamadiah District, Altakhasussi Road, The Zone Mall, Building E, Boutique 1 Gate"
+    },
+    {
+      "type": "text",
+      "id": "ksa_map",
+      "label": "Store 2 — Google Maps embed URL",
+      "default": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2661.2794337986365!2d46.647514699999995!3d24.7313475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f1d004f07ed63:0xa79f5af15f8ca2d2!2sElixir!5e1!3m2!1sen!2sin!4v1781199632083!5m2!1sen!2sin"
+    },
+    {
+      "type": "header",
+      "content": "Message form"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_form",
+      "label": "Show the message form",
+      "info": "Off by default — the page leads with call / email / WhatsApp and the FAQ.",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "t:global.text.subheading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:global.text.heading",
+      "default": "Send us a message"
+    },
+    {
+      "type": "select",
+      "id": "heading_style",
+      "label": "t:global.text.style",
+      "options": [
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h3"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "t:global.text.content"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:global.colors.scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "separate_section_with_border",
+      "label": "t:global.section.separate_section_with_border",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "t:sections.contact.blocks.text.name",
+      "settings": [
+        { "type": "text", "id": "title", "label": "t:sections.contact.blocks.text.name_label", "default": "Custom field" },
+        { "type": "checkbox", "id": "use_long_text", "label": "t:sections.contact.blocks.text.use_long_text", "default": false },
+        { "type": "checkbox", "id": "required", "label": "t:sections.contact.blocks.text.required", "default": false }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "name": "t:sections.contact.blocks.dropdown.name",
+      "settings": [
+        { "type": "text", "id": "title", "label": "t:sections.contact.blocks.dropdown.name_label", "default": "Custom field" },
+        { "type": "text", "id": "values", "label": "t:sections.contact.blocks.dropdown.values", "info": "t:sections.contact.blocks.dropdown.values_info", "default": "value 1, value 2, value 3" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.contact.presets.contact_form.name",
+      "category": "t:global.categories.call_to_action",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

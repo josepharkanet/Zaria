@@ -1,0 +1,440 @@
+<style>
+  .bls-grid {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+  .brand-logo-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f4f4;
+    border-radius: 14px;
+    min-height: 200px;
+    padding: 32px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .5s cubic-bezier(.16, 1, .3, 1), box-shadow .5s ease;
+  }
+  .brand-logo-card:hover,
+  .brand-logo-card.is-active {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 44px -18px rgba(20, 20, 20, 0.22);
+  }
+
+  /* Offer badges — flush to the card's top-left corner, elegant corner tab */
+  .bls__badges {
+    position: absolute;
+    left: 50%;
+    bottom: 22px;           /* centered below the logo */
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    pointer-events: none;
+  }
+  .bls__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 400;        /* normal weight, not bold */
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1;
+    border-radius: 4px;
+  }
+  .bls__badge svg { width: 14px; height: 14px; flex: 0 0 auto; }
+  /* Gift badge is dark grey rather than black, scoped to the brand card. Setting
+     the variable (not the colour) means it works in every style — the minimal
+     text and any solid fill both pick it up. */
+  .brand-logo-card { --elx-badge-gift-bg: #4d4d4d; }
+  /* Colours come from the Elixir Promotions app design (elx-design-vars), with the
+     card's original values as fallbacks — so these match the product-card badges.
+     The style shape (pill/outline/minimal/stacked) is applied by elx-design-vars. */
+  .bls__badge--gift { background: var(--elx-badge-gift-bg, #1a1a1a); color: var(--elx-badge-fg, #fff); }
+  .bls__badge--gift svg { color: var(--elx-badge-sale-bg, #B87253); }
+  .bls__badge--sale { background: var(--elx-badge-sale-bg, #B87253); color: var(--elx-badge-fg, #fff); }
+  @media (max-width: 600px) {
+    .bls__badge { font-size: 10px; padding: 5px 10px; gap: 6px; }
+    .bls__badge svg { width: 12px; height: 12px; }
+    .bls__badges { bottom: 16px; }
+  }
+
+  /* Logo (default state) — always stays put; no popup is ever rendered on top of it */
+  .bls__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+  .bls__logo img {
+    max-height: 76px;
+    width: auto;
+    max-width: 78%;
+    object-fit: contain;
+    opacity: 0.88;
+    transition: opacity .4s ease, transform .5s cubic-bezier(.16, 1, .3, 1);
+  }
+  .brand-logo-card:hover .bls__logo img,
+  .brand-logo-card.is-active .bls__logo img { opacity: 1; transform: scale(1.04); }
+  .bls__logo-text { font-size: 16px; letter-spacing: 4px; text-transform: uppercase; color: #1a1a1a; }
+
+  /* Elegant brass accent line — draws in under the logo on hover */
+  .bls__underline {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    width: 0;
+    height: 1px;
+    background: #B87253;
+    transform: translateX(-50%);
+    transition: width .4s ease;
+    pointer-events: none;
+  }
+  .brand-logo-card:hover .bls__underline,
+  .brand-logo-card.is-active .bls__underline { width: 32px; }
+
+  /* ── Shared quick-view panel ──────────────────────────────────────────────
+     ONE panel, fixed to the same spot on screen at all times (bottom-center).
+     It is never positioned relative to any card, so it can never overlap a
+     brand card — the logo card just lifts a touch while its product cycles
+     through this panel. */
+  .bls-panel {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translate(-50%, 24px);
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    display: flex;
+    align-items: stretch;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 48px -14px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+    transition: opacity 0.25s ease;
+  }
+  .bls-panel.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+  }
+
+  /* Left cell — elegant light gray, attached, shows which brand is showing */
+  .bls-panel__brand {
+    flex: 0 0 72px;
+    width: 72px;
+    background: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  .bls-panel__brand-logo { max-width: 100%; max-height: 44px; object-fit: contain; }
+  .bls-panel__brand-name {
+    font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: #1a1a1a;
+    text-align: center; line-height: 1.3;
+  }
+
+  /* Right cell — dark product info (unchanged content, own padding now) */
+  .bls-panel__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #212121;
+    padding: 14px 18px;
+  }
+
+  .bls-panel__media { flex: 0 0 56px; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; }
+  .bls-panel__media img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+  .bls-panel__info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; text-align: left; }
+  .bls-panel__name {
+    font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: #f2f0ec;
+    text-decoration: none; line-height: 1.3;
+    display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .bls-panel__price { font-size: 12px; font-weight: 600; color: #B87253; }
+
+  .bls-panel__atc, .bls-panel__soldout {
+    flex: 0 0 auto;
+    width: 52px;
+    font-size: 8px; letter-spacing: 0.06em; text-transform: uppercase;
+    line-height: 1.35;
+    padding: 8px 4px;
+    border: none;
+    border-radius: 0 12px 12px 0;
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
+  }
+  .bls-panel__atc { background: #f2f0ec; color: #1a1a1a; cursor: pointer; transition: background 0.25s ease, color 0.25s ease; }
+  .bls-panel__atc:hover { background: #B87253; color: #fff; }
+  .bls-panel__soldout { background: transparent; color: #9a8c7e; border: 1px solid rgba(255, 255, 255, 0.25); }
+
+  @media (max-width: 768px) {
+    .bls-grid { grid-template-columns: repeat(2, 1fr); gap: 0.875rem; }
+    .brand-logo-card { min-height: 130px; padding: 20px; border-radius: 12px; }
+    .bls__logo img { max-height: 58px; width: auto; max-width: 82%; }
+    .bls-panel { width: calc(100vw - 24px); bottom: 12px; }
+    .bls-panel__brand { flex-basis: 56px; width: 56px; padding: 8px; }
+    .bls-panel__brand-logo { max-height: 34px; }
+    .bls-panel__body { padding: 12px 14px; gap: 10px; }
+    .bls-panel__media { flex-basis: 44px; width: 44px; height: 44px; }
+  }
+
+  /* Header intro: shows the title, then the WHOLE section (incl. its own
+     padding) collapses away, leaving zero leftover gap — resolves within 2s. */
+  .bls-intro {
+    overflow: hidden;
+    text-align: center;
+    animation: bls-intro-motion 2s ease forwards;
+  }
+  @keyframes bls-intro-motion {
+    0%   { opacity: 0; transform: translateY(14px); max-height: 80px; padding-top: 24px; margin-bottom: 16px; }
+    20%  { opacity: 1; transform: none;             max-height: 80px; padding-top: 24px; margin-bottom: 16px; }
+    75%  { opacity: 1; transform: none;             max-height: 80px; padding-top: 24px; margin-bottom: 16px; }
+    100% { opacity: 0; transform: none;             max-height: 0;    padding-top: 0;    margin-bottom: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bls-intro { animation: none; padding-top: 24px; margin-bottom: 16px; }
+  }
+</style>
+
+<div style="background:#fafaf8;padding:1.25rem 20px 56px;">
+
+  <div class="bls-intro">
+    <p style="font-size:11px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#B87253;margin:0;">{{ 'custom.brands.grid_heading' | t }}</p>
+  </div>
+
+  <div class="bls-grid">
+    {% for brand in shop.metaobjects.brand.values %}
+      {% assign brand_name = brand.name.value | first %}
+      {% assign brand_logo = brand.logo.value %}
+      {% assign brand_url = '/pages/brand/' | append: brand.system.handle %}
+      {% assign brand_col = brand.collection.value %}
+      {%- comment -%} No brand-level offer/gift badge — gifts show per item on the product cards, not on the brand tile. {%- endcomment -%}
+      <div class="brand-logo-card{% if brand_col != blank and brand_col.products.size > 0 %} bls-has-products{% endif %}" data-href="{{ brand_url }}">
+        <a href="{{ brand_url }}" class="bls__logo" aria-label="{{ brand_name | escape }}">
+          {% if brand_logo != blank %}
+            {{ brand_logo | image_url: width: 480 | image_tag: alt: brand_name }}
+          {% else %}
+            <span class="bls__logo-text">{{ brand_name }}</span>
+          {% endif %}
+        </a>
+        <span class="bls__underline" aria-hidden="true"></span>
+
+        {% if brand_col != blank and brand_col.products.size > 0 %}
+          {%- comment -%} Product data for the shared quick-view panel (not rendered here) {%- endcomment -%}
+          <script type="application/json" class="bls-data">
+            [
+              {%- for product in brand_col.products limit: 8 -%}
+                {%- assign v = product.selected_or_first_available_variant -%}
+                {
+                  {%- comment -%} image_url on nil throws before default can catch it {%- endcomment -%}
+                  "image": {% if product.featured_image %}{{ product.featured_image | image_url: width: 400 | json }}{% else %}""{% endif %},
+                  "name": {%- capture _t -%}{%- render 'elx-product-title', product: product -%}{%- endcapture -%}{{ _t | strip | json }},
+                  "price": {{ v.price | money | json }},
+                  "available": {{ v.available | json }},
+                  "href": {{ product.url | json }},
+                  "variantId": {{ v.id | json }}
+                }{%- unless forloop.last -%},{%- endunless -%}
+              {%- endfor -%}
+            ]
+          </script>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+{%- comment -%} One shared quick-view panel, fixed to the same spot on screen at all times {%- endcomment -%}
+<div class="bls-panel" id="bls-panel" aria-live="polite">
+  <div class="bls-panel__brand" id="bls-panel-brand">
+    <img class="bls-panel__brand-logo" id="bls-panel-brand-logo" alt="">
+    <span class="bls-panel__brand-name" id="bls-panel-brand-name" hidden></span>
+  </div>
+  <div class="bls-panel__body">
+    <a href="#" class="bls-panel__media" id="bls-panel-link-media">
+      <img id="bls-panel-img" alt="">
+    </a>
+    <div class="bls-panel__info">
+      <a href="#" class="bls-panel__name" id="bls-panel-name"></a>
+      <span class="bls-panel__price" id="bls-panel-price"></span>
+    </div>
+    <form action="/cart/add" method="post" enctype="multipart/form-data" id="bls-panel-form">
+      <input type="hidden" name="id" id="bls-panel-vid" value="">
+      <button type="submit" name="add" class="bls-panel__atc" id="bls-panel-atc">{{ 'custom.brands.add' | t }}<br>To<br>{{ 'custom.brands.cart' | t }}</button>
+    </form>
+    <span class="bls-panel__soldout" id="bls-panel-soldout" hidden>{{ 'custom.brands.sold_out' | t }}</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  var cards = document.querySelectorAll('.brand-logo-card.bls-has-products');
+  if (!cards.length) return;
+
+  var panel = document.getElementById('bls-panel');
+  var brandLogoImg = document.getElementById('bls-panel-brand-logo');
+  var brandNameEl = document.getElementById('bls-panel-brand-name');
+  var img = document.getElementById('bls-panel-img');
+  var linkMedia = document.getElementById('bls-panel-link-media');
+  var nameEl = document.getElementById('bls-panel-name');
+  var priceEl = document.getElementById('bls-panel-price');
+  var form = document.getElementById('bls-panel-form');
+  var vidEl = document.getElementById('bls-panel-vid');
+  var atcBtn = document.getElementById('bls-panel-atc');
+  var soldoutEl = document.getElementById('bls-panel-soldout');
+
+  var activeCard = null, rotateTimer = null, hideTimer = null, hoverTimer = null;
+
+  function getProducts(card) {
+    if (card._products) return card._products;
+    var script = card.querySelector('.bls-data');
+    try { card._products = script ? JSON.parse(script.textContent) : []; } catch (e) { card._products = []; }
+    return card._products;
+  }
+
+  function renderSlide(item) {
+    img.src = item.image || '';
+    img.alt = item.name || '';
+    linkMedia.href = item.href || '#';
+    nameEl.textContent = item.name || '';
+    nameEl.href = item.href || '#';
+    priceEl.textContent = item.price || '';
+    if (item.available) {
+      vidEl.value = item.variantId || '';
+      atcBtn.hidden = false;
+      atcBtn.disabled = false;
+      atcBtn.innerHTML = 'Add<br>To<br>Cart';
+      soldoutEl.hidden = true;
+    } else {
+      atcBtn.hidden = true;
+      soldoutEl.hidden = false;
+    }
+  }
+
+  function updateBrandCell(card) {
+    var logoImg = card.querySelector('.bls__logo img');
+    if (logoImg) {
+      brandLogoImg.src = logoImg.src;
+      brandLogoImg.alt = logoImg.alt || '';
+      brandLogoImg.hidden = false;
+      brandNameEl.hidden = true;
+    } else {
+      var logoText = card.querySelector('.bls__logo-text');
+      brandNameEl.textContent = logoText ? logoText.textContent : '';
+      brandNameEl.hidden = false;
+      brandLogoImg.hidden = true;
+    }
+  }
+
+  function showPanel(card) {
+    clearTimeout(hideTimer);
+    if (activeCard === card) return;
+    if (activeCard) activeCard.classList.remove('is-active');
+    if (rotateTimer) { clearInterval(rotateTimer); rotateTimer = null; }
+
+    activeCard = card;
+    card.classList.add('is-active');
+    updateBrandCell(card);
+    var items = getProducts(card);
+    if (!items.length) { hidePanel(); return; }
+
+    var idx = 0;
+    renderSlide(items[idx]);
+    panel.classList.add('is-visible');
+
+    if (items.length > 1) {
+      rotateTimer = setInterval(function () {
+        idx = (idx + 1) % items.length;
+        renderSlide(items[idx]);
+      }, 1200);
+    }
+  }
+
+  function hidePanel() {
+    if (activeCard) { activeCard.classList.remove('is-active'); activeCard = null; }
+    if (rotateTimer) { clearInterval(rotateTimer); rotateTimer = null; }
+    panel.classList.remove('is-visible');
+  }
+
+  /* Require a 0.6s hover on a logo before revealing its products (cancel if the
+     mouse leaves the card before then). */
+  for (var i = 0; i < cards.length; i++) {
+    (function (c) {
+      c.addEventListener('mouseenter', function () {
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(function () { showPanel(c); }, 600);
+      });
+      c.addEventListener('mouseleave', function () {
+        clearTimeout(hoverTimer);
+      });
+    })(cards[i]);
+  }
+
+  /* Hide the panel shortly after the mouse leaves the whole grid (small delay
+     avoids flicker when moving between adjacent cards). */
+  var grid = document.querySelector('.bls-grid');
+  if (grid) {
+    grid.addEventListener('mouseleave', function () {
+      clearTimeout(hoverTimer);
+      hideTimer = setTimeout(hidePanel, 150);
+    });
+  }
+  panel.addEventListener('mouseenter', function () { clearTimeout(hideTimer); });
+  panel.addEventListener('mouseleave', function () { hideTimer = setTimeout(hidePanel, 150); });
+
+  /* Whole card (incl. background) navigates to the brand page */
+  var allCards = document.querySelectorAll('.brand-logo-card[data-href]');
+  for (var n = 0; n < allCards.length; n++) {
+    allCards[n].addEventListener('click', function (e) {
+      if (e.target.closest('a')) return;
+      var href = this.getAttribute('data-href');
+      if (href) window.location.href = href;
+    });
+  }
+
+  /* Add to Cart: add the current panel product via AJAX, stay on the page */
+  form.addEventListener('click', function (e) { e.stopPropagation(); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var id = vidEl.value;
+    if (!id || atcBtn.disabled) return;
+    var label = atcBtn.innerHTML;
+    atcBtn.disabled = true; atcBtn.textContent = 'Adding…';
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ items: [{ id: id, quantity: 1 }] })
+    }).then(function (r) { return r.json(); }).then(function () {
+      atcBtn.textContent = 'Added ✓';
+      document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true }));
+      setTimeout(function () { atcBtn.innerHTML = label; atcBtn.disabled = false; }, 1600);
+    }).catch(function () { atcBtn.innerHTML = label; atcBtn.disabled = false; });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Brand Logo Grid",
+  "presets": [{ "name": "Brand Logo Grid" }]
+}
+{% endschema %}

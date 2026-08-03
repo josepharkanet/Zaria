@@ -1,0 +1,304 @@
+{% doc %}
+  @prompt
+    a section to show an image with keyburn effcet , mobile optimized , the image should full width , reduice the height 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-ken-burns-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: {{ block.settings.border_radius }}px;
+    display: block;
+  }
+
+  .ai-ken-burns-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: {{ block.settings.aspect_ratio_desktop }}%;
+    overflow: hidden;
+  }
+
+  .ai-ken-burns-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-origin: {{ block.settings.zoom_origin }};
+    animation: ai-ken-burns-effect-{{ ai_gen_id }} {{ block.settings.animation_duration }}s {{ block.settings.animation_timing }} infinite alternate;
+  }
+
+  .ai-ken-burns-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-ken-burns-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 500px;
+    max-height: 500px;
+  }
+
+  .ai-ken-burns-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  @keyframes ai-ken-burns-effect-{{ ai_gen_id }} {
+    0% {
+      transform: scale(1) translate(0, 0);
+    }
+    100% {
+      transform: scale({{ block.settings.zoom_scale }}) translate({{ block.settings.pan_x }}%, {{ block.settings.pan_y }}%);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-ken-burns-wrapper-{{ ai_gen_id }} {
+      padding-bottom: {{ block.settings.aspect_ratio_mobile }}%;
+    }
+
+    .ai-ken-burns-image-{{ ai_gen_id }} {
+      animation-duration: {{ block.settings.animation_duration | times: 0.8 }}s;
+    }
+
+    @keyframes ai-ken-burns-effect-{{ ai_gen_id }} {
+      0% {
+        transform: scale(1) translate(0, 0);
+      }
+      100% {
+        transform: scale({{ block.settings.zoom_scale_mobile }}) translate({{ block.settings.pan_x }}%, {{ block.settings.pan_y }}%);
+      }
+    }
+  }
+{% endstyle %}
+
+<div class="ai-ken-burns-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-ken-burns-wrapper-{{ ai_gen_id }}">
+    {% if block.settings.image %}
+      <img
+        src="{{ block.settings.image | image_url: width: 2000 }}"
+        srcset="{{ block.settings.image | image_url: width: 600 }} 600w,
+                {{ block.settings.image | image_url: width: 1000 }} 1000w,
+                {{ block.settings.image | image_url: width: 1500 }} 1500w,
+                {{ block.settings.image | image_url: width: 2000 }} 2000w"
+        sizes="100vw"
+        alt="{{ block.settings.image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.image.width }}"
+        height="{{ block.settings.image.height }}"
+        class="ai-ken-burns-image-{{ ai_gen_id }}"
+      >
+    {% else %}
+      <div class="ai-ken-burns-placeholder-{{ ai_gen_id }}">
+        {{ 'hero-apparel-1' | placeholder_svg_tag }}
+        <div class="ai-ken-burns-empty-state-{{ ai_gen_id }}">
+          Add an image to see the Ken Burns effect
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Ken Burns image",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Aspect ratio"
+    },
+    {
+      "type": "range",
+      "id": "aspect_ratio_desktop",
+      "label": "Desktop height",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 35
+    },
+    {
+      "type": "range",
+      "id": "aspect_ratio_mobile",
+      "label": "Mobile height",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "label": "Duration",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "s",
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "animation_timing",
+      "label": "Timing",
+      "options": [
+        {
+          "value": "linear",
+          "label": "Linear"
+        },
+        {
+          "value": "ease-in-out",
+          "label": "Ease in-out"
+        },
+        {
+          "value": "ease-in",
+          "label": "Ease in"
+        },
+        {
+          "value": "ease-out",
+          "label": "Ease out"
+        }
+      ],
+      "default": "ease-in-out"
+    },
+    {
+      "type": "header",
+      "content": "Zoom"
+    },
+    {
+      "type": "range",
+      "id": "zoom_scale",
+      "label": "Desktop zoom level",
+      "min": 1,
+      "max": 1.5,
+      "step": 0.1,
+      "default": 1.2
+    },
+    {
+      "type": "range",
+      "id": "zoom_scale_mobile",
+      "label": "Mobile zoom level",
+      "min": 1,
+      "max": 1.5,
+      "step": 0.1,
+      "default": 1.1
+    },
+    {
+      "type": "select",
+      "id": "zoom_origin",
+      "label": "Zoom origin",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "top left",
+          "label": "Top left"
+        },
+        {
+          "value": "top center",
+          "label": "Top center"
+        },
+        {
+          "value": "top right",
+          "label": "Top right"
+        },
+        {
+          "value": "center left",
+          "label": "Center left"
+        },
+        {
+          "value": "center right",
+          "label": "Center right"
+        },
+        {
+          "value": "bottom left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "bottom right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Pan"
+    },
+    {
+      "type": "range",
+      "id": "pan_x",
+      "label": "Horizontal pan",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "pan_y",
+      "label": "Vertical pan",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "unit": "%",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ken Burns image"
+    }
+  ]
+}
+{% endschema %}

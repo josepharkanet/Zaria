@@ -1,0 +1,671 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "page": "Página {{ page }}",
+    "home": "Início",
+    "accessibility": {
+      "skip_to_content": "Pular para o conteúdo",
+      "pagination": "Navegação de paginação",
+      "go_to_page": "Ir para página {{ index }}",
+      "go_to_item": "Ir para item {{ index }}",
+      "item_nth_of_count": "Item {{ index }} de {{ count }}",
+      "drag": "Arrastar",
+      "close": "Fechar",
+      "next": "Próximo",
+      "previous": "Anterior",
+      "play_video": "Reproduzir vídeo",
+      "navigate_to_next_section": "Ir para a próxima seção",
+      "mute_video": "Silenciar vídeo",
+      "unmute_video": "Ativar som do vídeo",
+      "rss_feed": "Feed RSS"
+    },
+    "breadcrumb": {
+      "label": "Breadcrumb",
+      "home": "Página inicial",
+      "shop": "Todos os produtos"
+    },
+    "label": {
+      "color": "Cor",
+      "white": "Branco",
+      "size": "Tamanho"
+    },
+    "social": {
+      "follow_on": "Seguir em {{ social_media }}",
+      "share": "Compartilhar",
+      "share_on": "Compartilhar em {{ social_media }}",
+      "share_email": "Compartilhar por e-mail"
+    },
+    "reviews": {
+      "title": "Avaliações"
+    },
+    "rating": {
+      "info": "{{ rating_value }} de {{ rating_max }} estrelas"
+    },
+    "newsletter": {
+      "email": "E-mail",
+      "subscribe": "Assinar",
+      "notify_me": "Me avise",
+      "subscribed_successfully": "Você foi inscrito em nossa newsletter."
+    },
+    "localization": {
+      "country": "País",
+      "language": "Língua",
+      "change_country_accessibility_text": "Alterar país ou moeda",
+      "change_language_accessibility_text": "Alterar idioma"
+    },
+    "privacy_banner": {
+      "accept": "Aceitar",
+      "decline": "Rejeitar"
+    },
+    "form": {
+      "max_characters": "Máximo de {{ max_chars }} caracteres"
+    },
+    "on_boarding": {
+      "blog_post_category": "Categoria",
+      "blog_post_title": "Artigo",
+      "blog_post_excerpt": "Escreva sobre os seus posts.",
+      "product_vendor": "Fabricante",
+      "product_title": "Produto",
+      "product_description": "Escreva sobre os seus produtos.",
+      "collection_title": "Coleção"
+    },
+    "no_products": "No products are on offer right now."
+  },
+  "header": {
+    "general": {
+      "account": "Conta",
+      "login": "Login",
+      "search": "Pesquisar",
+      "cart": "Carrinho",
+      "primary_navigation": "Menu primário",
+      "secondary_navigation": "Menu secundário",
+      "menu": "Menu"
+    }
+  },
+  "product": {
+    "general": {
+      "description": "Descrição",
+      "view_details": "Ver detalhes",
+      "add_to_cart_button": "Adicionar ao carrinho",
+      "pre_order_button": "Pré-venda",
+      "sold_out_button": "Esgotado",
+      "unavailable_button": "Unavailable",
+      "choose_options": "Escolher opções",
+      "added_to_cart": "Adicionado ao carrinho!",
+      "added_to_cart_with_title": "{{ product_title }} foi adicionado ao carrinho.",
+      "sold_out_badge": "Esgotado",
+      "on_sale_badge": "Promoção",
+      "discount_badge_html": "Economize {{ savings }}",
+      "sku": "SKU:",
+      "variant": "Variante",
+      "view_in_space": "Veja em seu ambiente",
+      "taxes_included": "Tributo incluído.",
+      "taxes_excluded": "Tributo excluído.",
+      "shipping_policy_html": "<a href=\"{{ link }}\" class=\"link\">Frete</a> calculado no checkout",
+      "size_chart": "Guia de medidas",
+      "available_colors_count": {
+        "one": "{{ count }} cor disponível",
+        "other": "{{ count }} cores disponíveis"
+      }
+    },
+    "gallery": {
+      "close": "Fechar galeria",
+      "zoom": "Zoom na imagem",
+      "error": "Imagem não pode ser carregada"
+    },
+    "price": {
+      "regular_price": "Preço normal",
+      "sale_price": "Preço promocional",
+      "from_price_html": "De {{ price_min }}"
+    },
+    "quantity": {
+      "label": "Quantidade",
+      "change_quantity": "Mudar quantidade",
+      "increase_quantity": "Aumentar quantidade",
+      "decrease_quantity": "Diminuir quantidade",
+      "minimum_of": "Mínimo de {{ min }}",
+      "maximum_of": "Máximo de {{ max }}",
+      "increment_of": "Incremento de {{ step }}",
+      "cannot_add_more": "Você não pode adicionar mais"
+    },
+    "volume_pricing": {
+      "title": "Preços por volume",
+      "minimum": "Mais de {{ quantity }}",
+      "price_at_each": "{{ price }}/cada"
+    },
+    "rating_count": {
+      "zero": "Sem avaliações",
+      "one": "{{ count }} avaliação",
+      "other": "{{ count }} avaliações"
+    },
+    "inventory": {
+      "in_stock": "Em estoque",
+      "low_stock": "Restam apenas algumas unidades",
+      "oversell_stock": "Reestoque próximo",
+      "incoming_stock": "Reestoque em {{ next_incoming_date }}",
+      "low_stock_with_quantity_count": {
+        "one": "Apenas {{ count }} unidade disponível",
+        "other": "Apenas {{ count }} unidades disponíveis"
+      },
+      "in_stock_with_quantity_count": {
+        "one": "{{ count }} em estoque",
+        "other": "{{ count }} em estoque"
+      },
+      "out_of_stock": "Fora de estoque"
+    },
+    "store_availability": {
+      "view_store_info": "Ver as informações da loja",
+      "check_other_stores": "Verificar a disponibilidade em outras lojas",
+      "pick_up_available": "Retirada disponível",
+      "pick_up_currently_unavailable": "Retirada indisponível no momento",
+      "pick_up_available_at": "Retirada disponível em {{ location_name }}",
+      "pick_up_unavailable_at": "Retirada em {{ location_name }} indisponível no momento"
+    }
+  },
+  "collection": {
+    "general": {
+      "empty_collection": "Essa coleção está vazia",
+      "all_collections": "Todas as coleções",
+      "no_collections": "Essa loja não tem nenhuma coleção.",
+      "continue_shopping": "Continuar comprando"
+    },
+    "products_count": {
+      "one": "{{ count }} produto",
+      "other": "{{ count }} produtos"
+    },
+    "faceting": {
+      "filters": "Filtros",
+      "filter_button": "Filtrar",
+      "clear_filters": "Limpar",
+      "apply_filters": "Aplicar",
+      "sort_by": "Ordenar por",
+      "remove_filter": "Remover filtro \"{{ name }}\"",
+      "no_results": "Nenhum produto encontrado para esses filtros.",
+      "price_range_to": "até",
+      "price_filter_from": "De preço",
+      "price_filter_to": "Até preço",
+      "price_filter": "{{ min_price }} - {{ max_price }}",
+      "in_stock_only": "Apenas em estoque"
+    }
+  },
+  "blog": {
+    "general": {
+      "empty_blog": "Esse blog está vazio",
+      "back_to_home": "Voltar ao início",
+      "view": "Ver",
+      "all_posts": "Todos os posts",
+      "read_more": "Ver mais"
+    },
+    "post": {
+      "written_by": "Por {{ author }}",
+      "visit_author_website": "Visitar o site do autor",
+      "share": "Compartilhar",
+      "tags": "Tags"
+    },
+    "comments": {
+      "leave_comment": "Deixar comentário",
+      "moderated": "Os comentários precisam ser aprovados antes da publicação.",
+      "name": "Nome",
+      "email": "E-mail",
+      "message": "Comentário",
+      "submit": "Publicar comentário",
+      "comment_sent": "Comentário enviado. Será publicado depois que o lojista aprova-lo.",
+      "comment_published": "Seu comentário foi publicado.",
+      "count": {
+        "one": "{{ count }} comentário",
+        "other": "{{ count }} comentários"
+      }
+    }
+  },
+  "blog_post": {
+    "article": "Artigo:",
+    "share": "Compartilhar",
+    "prev": "Anterior",
+    "next": "Próximo"
+  },
+  "contact": {
+    "form": {
+      "name": "Nome",
+      "email": "E-mail",
+      "message": "Mensagem",
+      "submit": "Enviar mensagem",
+      "success_message": "Sua mensagem foi enviada."
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "Sua conta",
+      "primary_address": "Endereço principal",
+      "manage_addresses": "Gerenciar",
+      "tagline": "Veja seus pedidos e modifique as informações de sua conta.",
+      "orders": "Pedidos",
+      "logout": "Sair",
+      "no_orders": "Você ainda não fez nenhum pedido.",
+      "continue_shopping": "Continuar comprando"
+    },
+    "login": {
+      "title": "Entrar",
+      "instructions": "Insira seu e-mail e senha para entrar:",
+      "no_account": "Não possui uma conta?",
+      "email": "E-mail",
+      "password": "Senha",
+      "submit": "Entrar",
+      "forgot_password": "Esqueceu sua senha?",
+      "sign_up": "Criar conta"
+    },
+    "recover_password": {
+      "title": "Recuperar senha",
+      "instructions": "Insira seu e-mail para recuperar a senha:",
+      "remember_password": "Lembra sua senha?",
+      "email": "E-mail",
+      "submit": "Recuperar",
+      "back_to_login": "Voltar ao login",
+      "success_message": "Enviamos um e-mail com instruções para recuperar sua senha."
+    },
+    "register": {
+      "title": "Criar conta",
+      "instructions": "Por favor, insira as informações abaixo:",
+      "already_have_account": "Já possui uma conta?",
+      "first_name": "Nome",
+      "last_name": "Sobrenome",
+      "email": "E-mail",
+      "password": "Senha",
+      "accepts_marketing": "Se inscreva em nossa newsletter",
+      "submit": "Criar conta",
+      "login": "Entrar"
+    },
+    "activate_account": {
+      "title": "Ativar conta",
+      "instructions": "Escolha uma senha para criar sua conta:",
+      "password": "Senha",
+      "password_confirmation": "Confirmar senha",
+      "submit": "Ativar",
+      "cancel": "Cancelar"
+    },
+    "reset_password": {
+      "title": "Redefinir senha",
+      "instructions": "Insira uma nova senha:",
+      "password": "Senha",
+      "password_confirmation": "Confirmar senha",
+      "submit": "Redefinir"
+    },
+    "order": {
+      "order": "Pedido",
+      "order_name": "Pedido {{name}}",
+      "created_at": "Pedido feito em {{created_at}}",
+      "view_details": "Detalhes do pedido",
+      "back": "Voltar",
+      "date": "Data",
+      "payment_status": "Status do pagamento",
+      "fulfillment_status": "Status de processamento do pedido",
+      "cancelled_on": "Cancelado em {{date}}. Motivo: {{reason}}",
+      "product": "Produto",
+      "quantity": "Quantidade",
+      "fulfillment_with_number": "Seu pedido foi enviado em {{date}}. Rastrear envio com código {{tracking_number}}.",
+      "fulfillment": "Seu pedido foi enviado em {{date}}.",
+      "track_shipment": "Rastrear envio",
+      "subtotal": "Subtotal",
+      "discount": "Desconto",
+      "shipping": "Frete",
+      "taxes_included": "Tributo incluído",
+      "taxes_excluded": "Tributo excluído",
+      "total_duties": "Tributos de importação",
+      "refunded_amount": "Quantia estornado",
+      "total": "Total",
+      "shipping_address": "Endereço de entrega",
+      "billing_address": "Endereço de faturamento"
+    },
+    "addresses": {
+      "title": "Endereços",
+      "no_addresses": "Você ainda não salvou nenhum endereço.",
+      "add_address": "Adicionar endereço",
+      "edit_address": "Editar endereço",
+      "save_address": "Salvar endereço",
+      "edit": "Editar",
+      "delete": "Excluir",
+      "default_address": "Endereço padrão",
+      "address_title": "Endereço {{ position }}",
+      "delete_confirm": "Excluir endereço? Após confirmada, essa ação não pode ser revertida.",
+      "fill_form": "Preencha as informações abaixo:",
+      "first_name": "Nome",
+      "last_name": "Sobrenome",
+      "company": "Empresa",
+      "phone": "Telefone",
+      "address1": "Endereço",
+      "address2": "Complemento",
+      "city": "Cidade",
+      "zip": "CEP",
+      "country": "País/Região",
+      "province": "Estado",
+      "set_default": "Usar como endereço padrão"
+    },
+    "wishlist": {
+      "title": "Wishlist"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Carrinho",
+      "empty": "Seu carrinho está vazio",
+      "note_placeholder": "Como podemos ajudar?",
+      "update_cart": "Atualizar carrinho",
+      "continue_shopping": "Continuar comprando",
+      "weight": "Peso",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "taxes_and_shipping_policy_at_checkout_html": "Tributos e <a href=\"{{ link }}\" class=\"link\">frete</a> calculados na finalização da compra",
+      "taxes_included_but_shipping_at_checkout": "Tributos incluídos e frete calculado na finalização da compra",
+      "taxes_included_and_shipping_policy_html": "Tributos incluídos. <a href=\"{{ link }}\" class=\"link\">Frete</a> calculado na finalização da compra.",
+      "taxes_and_shipping_at_checkout": "Tributos e frete calculados na finalização da compra",
+      "add_order_note": "Adicionar observações sobre o pedido",
+      "edit_order_note": "Editar observações sobre o pedido",
+      "order_note": "Observações",
+      "save_note": "Salvar observações",
+      "view_cart": "Ver carrinho",
+      "checkout": "Checkout",
+      "we_accept": "Aceitamos"
+    },
+    "order": {
+      "product": "Produto",
+      "total": "Total",
+      "quantity": "Quantidade",
+      "remove": "Remover",
+      "remove_with_title": "Remover {{ title }}"
+    },
+    "free_shipping_bar": {
+      "limit_unreached_html": "Gaste mais {{ remaining_amount }} e tenha frete grátis!",
+      "limit_reached_html": "Você está elegível para frete grátis."
+    },
+    "shipping_estimator": {
+      "estimate_shipping": "Estimar frete",
+      "country": "País",
+      "province": "Estado",
+      "zip": "CEP",
+      "estimate": "Estimar",
+      "no_results": "Desculpe, não enviamos para o seu endereço.",
+      "one_result": "Temos um método de envio para o seu endereço:",
+      "multiple_results": "Temos diversos métodos de envio para o seu endereço:",
+      "error": "Um ou mais erros aconteceram durante a estimativa de frete:"
+    },
+    "discount": {
+      "label": "Código de desconto",
+      "error": "Insira um código de desconto válido"
+    }
+  },
+  "404": {
+    "general": {
+      "title": "404",
+      "not_found_info": "Não conseguimos encontrar a página que está procurando. Por favor, utilize o menu ou o botão abaixo para retornar ao nosso site.",
+      "continue_shopping": "Continuar comprando"
+    }
+  },
+  "search": {
+    "general": {
+      "title": "Pesquisar",
+      "terms": "Resultados para \"{{terms}}\"",
+      "search_placeholder": "Pesquisar por...",
+      "products": "Produtos",
+      "suggestions": "Sugestões",
+      "collections": "Coleções",
+      "posts": "Posts de blog",
+      "pages": "Páginas",
+      "clear": "Limpar",
+      "view_all_results": "Ver todos os resultados",
+      "no_results": "Não foram encontrados resultados para sua pesquisa"
+    },
+    "results_count": {
+      "one": "{{ count }} resultado",
+      "other": "{{ count }} resultados"
+    },
+    "results_count_for_terms": {
+      "one": "{{ count }} resultado para \"{{ terms }}\"",
+      "other": "{{ count }} resultados para \"{{ terms }}\""
+    }
+  },
+  "gift_card": {
+    "general": {
+      "title": "Aqui está seu cartão-presente",
+      "copy": "Copiar",
+      "print": "Imprimir"
+    },
+    "issued": {
+      "remaining_amount": "Quantia restante",
+      "redeem_instructions": "Use esse código para resgatar seu cartão-presente durante o checkout:",
+      "code": "Código do cartão-presente",
+      "amount": "Valor: {{ initial_value }}",
+      "copied": "Copiado!",
+      "expires_on": "Expira em: {{ expires_on }}",
+      "expired": "Seu cartão-presente expirou ou foi desativado.",
+      "scan": "ou faça a leitura desse QR Code",
+      "add_to_apple_wallet": "Adicionar à Apple Wallet"
+    },
+    "recipient": {
+      "checkbox": "Quero enviar como presente",
+      "email_label": "E-mail do destinatário",
+      "name_label": "Nome do destinatário (opcional)",
+      "send_on_label": "Enviar em (opcional)",
+      "message_label": "Mensagem (opcional)"
+    }
+  },
+  "password": {
+    "general": {
+      "follow_us": "Siga-nos",
+      "powered_by": "Esta loja terá a tecnologia da",
+      "store_owner": "Titular da loja?",
+      "login": "Entrar"
+    },
+    "storefront_access": {
+      "enter_password": "Entrar usando senha",
+      "store_access": "Acesso da loja",
+      "instructions": "Insira a senha para acessar a loja",
+      "password": "Senha",
+      "enter_store": "Entrar na loja"
+    }
+  },
+  "sections": {
+    "before_after": {
+      "not_enough_blocks": "Para mostrar a comparação antes/depois, por favor adicione mais blocos na seção",
+      "percentage_shown": "Porcentagem vísivel da imagem 'depois'",
+      "cursor_accessibility_text": "Use as teclas de seta esquerda e direita para navegar entre as fotos antes e depois."
+    },
+    "countdown_timer": {
+      "expires_accessibility_text": "Esta oferta se encerra em {{expiration_date}}",
+      "days": "Dia",
+      "hours": "Hrs",
+      "minutes": "Min",
+      "seconds": "Seg",
+      "days_long": "Dia",
+      "hours_long": "Hrs",
+      "minutes_long": "Min",
+      "seconds_long": "Seg"
+    },
+    "shop_the_look": {
+      "view_products": "Ver produtos",
+      "view_product": "Ver produto"
+    },
+    "quick_order_list": {
+      "products": "Produtos",
+      "variants": "Variações",
+      "quantity": "Quantidade",
+      "price": "Preço",
+      "total": "Total",
+      "remove": "Remover",
+      "quantity_rules": "Regras de quantidade",
+      "volume_pricing": "Preços por volume",
+      "volume_pricing_available": "Preços por volume disponíveis",
+      "show_variants": "Mostrar variações",
+      "minimum_of": "Mínimo: {{ min }}",
+      "maximum_of": "Máximo: {{ max }}",
+      "increment_of": "Incremento: {{ step }}",
+      "view_cart": "Ver carrinho",
+      "remove_all": "Remover todos",
+      "item_count": {
+        "zero": "{{ count }} itens",
+        "one": "{{ count }} item",
+        "other": "{{ count }} itens"
+      },
+      "product_subtotal": "Subtotal do produto"
+    }
+  },
+  "custom": {
+    "about_page": {
+      "story_heading": "OUR STORY",
+      "story_text": "Founded in Dubai, Elixir is a modern house of luxury perfumery, blending timeless artistry with contemporary elegance. It is the newest venture from the leadership behind Extravaganza one of the Middle East's most established names in prestige beauty born of that same expertise, but devoted to something more intimate: the world's finest niche fragrance houses, and the collectors who seek them.",
+      "md_role": "CHAIRMAN",
+      "md_intro": "With a passion for artistry and a commitment to excellence, our Managing Director has curated a collection that celebrates the finest in luxury perfumery. Each fragrance tells a story, and every bottle is a testament to our dedication to quality and distinction.",
+      "philosophy_heading": "OUR PHILOSOPHY",
+      "artistry_heading": "ARTISTRY MEETS SOUL",
+      "philosophy_text": "At Elixir, we believe fragrance is more than a scent — it is an expression of individuality, emotion, and memory. We bring the refinement of French perfumery together with the warmth and fragrance heritage of the UAE.",
+      "pillars_heading": "WHAT WE STAND FOR",
+      "pillar_2_title": "CRAFTSMANSHIP",
+      "pillar_2_text": "Every fragrance is a masterpiece, crafted with precision and passion by the world's finest perfumers.",
+      "pillar_1_title": "AUTHENTICITY",
+      "pillar_1_text": "We curate only the most genuine and exceptional scents, sourced from heritage houses and visionary creators.",
+      "pillar_3_title": "DISTINCTION",
+      "pillar_3_text": "Our collection is designed for those who seek the rare, the refined, and the unforgettable.",
+      "hero_quote": "\"Fragrance is the unseen, unforgettable, ultimate accessory — it heralds your arrival and prolongs your departure.\"",
+      "collections_label": "OUR COLLECTIONS",
+      "collections_heading": "A CURATED WORLD OF SCENT",
+      "collections_text": "Discover our carefully selected range of niche and luxury fragrances Amouage, Roja, Nishane, Vilhelm Parfumerie, Maison Crivelli, Ormonde Jayne, and more each chosen to inspire and captivate.",
+      "explore_button": "EXPLORE NOW"
+    },
+    "footer": {
+      "authentic": "100% AUTHENTIC",
+      "authentic_sub": "Genuine fragrances, always",
+      "delivery": "FREE UAE DELIVERY",
+      "delivery_sub": "Fast, tracked to your door",
+      "secure": "SECURE CHECKOUT",
+      "secure_sub": "Encrypted & protected",
+      "wrapped": "EXPERTLY CURATED",
+      "wrapped_sub": "Rare & niche houses",
+      "newsletter_heading": "Subscribe to our newsletter",
+      "newsletter_sub": "Exclusive offers, new arrivals and fragrance stories.",
+      "subscribe": "Subscribe",
+      "follow_us": "Follow Us",
+      "more_info": "More Info",
+      "privacy": "Privacy Policy",
+      "refunds": "Refund and Returns",
+      "shipping": "Shipping Terms",
+      "terms": "Terms of Service",
+      "quick_links": "Quick Links",
+      "my_account": "My Account",
+      "order_tracking": "Order Tracking",
+      "arabic_fragrance": "Arabic Fragrance",
+      "sets_kits": "Sets & Kits",
+      "company": "Company",
+      "about": "About Elixir",
+      "contact": "Contact",
+      "partner": "Partner With Us",
+      "careers": "Careers",
+      "designed_by": "Designed by",
+      "copyright": "{{ year }} Elixir All rights reserved."
+    },
+    "pdp": {
+      "free_gift_with": "Free Gift with this product",
+      "top": "TOP",
+      "heart": "HEART",
+      "base": "BASE",
+      "gender": "GENDER",
+      "category": "CATEGORY",
+      "size": "SIZE",
+      "class": "CLASS",
+      "scent": "SCENT",
+      "creator": "CREATOR",
+      "buy_now": "Buy it Now",
+      "view_all_arrow": "View All →",
+      "bogo_heading": "Buy {{ count }}, Get 1 Free",
+      "gift_over_heading": "Free Gift over {{ amount }}",
+      "bogo_text": "Add {{ count }} to your bag and the lowest-priced one is free — applied automatically at checkout.",
+      "gift_buy_text": "Buy {{ count }} and receive a complimentary gift.",
+      "add_to_cart": "Add to Cart",
+      "sold_out": "Sold Out",
+      "more_from": "More from {{ name }}"
+    },
+    "brands": {
+      "grid_heading": "Discover the Art of Fine Perfumery",
+      "add": "Add",
+      "cart": "Cart",
+      "sold_out": "Sold Out",
+      "about_house": "About the House",
+      "read_more": "Read More ↓",
+      "all": "All",
+      "men": "Men",
+      "women": "Women",
+      "unisex": "Unisex",
+      "fragrances": "Fragrances",
+      "hair_body": "Hair & Body",
+      "home": "Home",
+      "price": "Price",
+      "no_products": "No products found",
+      "shop_collection": "Shop Collection",
+      "the_collection": "The Collection",
+      "percent_off": "{{ percent }}% Off",
+      "sale": "Sale",
+      "brand_fragrances": "{{ name }} Fragrances",
+      "view_all_count": "View All {{ count }} Fragrances"
+    },
+    "home": {
+      "view_all": "View All",
+      "discover": "Discover",
+      "collection": "Collection",
+      "view_all_lc": "View all",
+      "subscribe": "Subscribe",
+      "view_all_arrow_ent": "View all →",
+      "limited_offer": "Limited Offer",
+      "view_all_label": "View All {{ label }}",
+      "banner_bogo": "Buy {{ count }}, Get 1 Free",
+      "banner_spend": "Spend {{ amount }} & Get a Free Gift",
+      "banner_buy_gift": "Buy {{ count }} & Get a Free Gift",
+      "banner_reduced": "Reduced prices for a limited time — no code needed.",
+      "banner_auto": "Discount applied automatically at checkout.",
+      "shop_eligible": "Shop Eligible",
+      "shop_offer": "Shop Offer"
+    },
+    "product_card": {
+      "top": "Top",
+      "heart": "Heart",
+      "base": "Base",
+      "percent_off": "{{ percent }}% OFF"
+    },
+    "contact": {
+      "eyebrow": "Customer Care",
+      "heading": "Get in Touch",
+      "intro": "Whether you are discovering a new signature scent or need help with an existing order, our fragrance advisors are here for you.",
+      "care_hours": "Sun–Thu · 10AM – 7PM (GST)",
+      "call_title": "Call Us",
+      "email_title": "Email Us",
+      "email_note": "We reply within 24 hours",
+      "whatsapp_title": "WhatsApp",
+      "whatsapp_note": "Chat with a fragrance advisor",
+      "faq_heading": "Frequently Asked Questions",
+      "stores_heading": "Visit Our Boutiques",
+      "directions": "Get directions",
+      "faq_q1": "What is Elixir's return policy?",
+      "faq_a1": "You can find our return policy on our website, or by contacting us directly.",
+      "faq_q2": "How do I track my order?",
+      "faq_a2": "Once your order ships, you'll receive an email with tracking information.",
+      "faq_q3": "What payment methods do you accept?",
+      "faq_a3": "We accept major credit cards and other secure payment methods.",
+      "faq_q4": "Can I cancel or change my order?",
+      "faq_a4": "Please contact us as soon as possible if you need to make changes.",
+      "faq_q5": "How long does shipping take?",
+      "faq_a5": "Shipping times vary depending on your location.",
+      "faq_q6": "Can I purchase a fragrance that is not listed on your website?",
+      "faq_a6": "Please contact us to inquire about availability.",
+      "faq_q7": "Do you offer samples?",
+      "faq_a7": "Yes, we offer samples of some fragrances.",
+      "faq_q8": "How do I know if a fragrance is suitable for my skin type?",
+      "faq_a8": "Our knowledgeable staff can help you find a fragrance that suits your skin type.",
+      "faq_q9": "What is your loyalty program?",
+      "faq_a9": "We have a loyalty program that rewards our repeat customers."
+    }
+  }
+}

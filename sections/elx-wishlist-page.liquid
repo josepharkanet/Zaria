@@ -1,0 +1,105 @@
+{%- comment -%}
+  Saved / Wishlist page — renders the products saved in localStorage as the SAME
+  product cards used everywhere else (fetched via the Section Rendering API).
+  Assign this section's template ("wishlist") to a page with handle "wishlist".
+{%- endcomment -%}
+
+<div class="elx-wishlist-page">
+  <div class="elx-wishlist-page__grid product-list" id="elx-wishlist-grid" aria-live="polite"></div>
+
+  <div class="elx-wishlist-page__empty" id="elx-wishlist-empty" hidden>
+    <p>{{ section.settings.empty_text | default: 'Your saved list is empty.' }}</p>
+    <a class="elx-wishlist-page__cta" href="{{ section.settings.empty_link | default: '/collections/all' }}">
+      {{ section.settings.empty_button | default: 'Browse fragrances' }}
+    </a>
+  </div>
+</div>
+
+<style>
+  .elx-wishlist-page { max-width: 1300px; margin: 0 auto; padding: clamp(1.5rem, 4vw, 3rem) 1.25rem 4rem; }
+  .elx-wishlist-page__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: clamp(1rem, 2.5vw, 1.5rem);
+  }
+  .elx-wishlist-page__empty { text-align: center; color: #6b6b6b; padding: 3rem 0; }
+  .elx-wishlist-page__cta {
+    display: inline-block; margin-top: 1rem; padding: .8rem 2rem;
+    background: #141414; color: #fff; text-decoration: none;
+    letter-spacing: .12em; text-transform: uppercase; font-size: .72rem; border-radius: 2px;
+  }
+</style>
+
+<script>
+  (function () {
+    var grid = document.getElementById('elx-wishlist-grid');
+    var empty = document.getElementById('elx-wishlist-empty');
+    if (!grid) return;
+
+    function showEmpty(show) { if (empty) empty.hidden = !show; }
+
+    function render() {
+      var list = (window.ElxWishlist && window.ElxWishlist.read()) || [];
+      grid.innerHTML = '';
+      if (!list.length) { showEmpty(true); return; }
+      showEmpty(false);
+
+      var seen = {};
+      list.forEach(function (handle) {
+        fetch('/products/' + handle + '?section_id=elx-wishlist-item')
+          .then(function (r) { return r.ok ? r.text() : ''; })
+          .then(function (html) {
+            if (!html) return;
+            var tmp = document.createElement('div');
+            tmp.innerHTML = html;
+            var card = tmp.querySelector('product-card, .product-card');
+            if (!card) return;
+            var heart = card.querySelector('.elx-heart');
+
+            // The stored handle can be stale (the product's handle was changed in
+            // the SEO rename). fetch() follows the redirect, so the rendered card
+            // carries the CURRENT canonical handle. If they differ, heal storage so
+            // the saved-state (and the remove button) match everywhere.
+            var canonical = (heart && heart.getAttribute('data-handle')) || card.getAttribute('handle') || handle;
+            if (canonical !== handle) {
+              if (window.ElxWishlist.has(handle)) { window.ElxWishlist.toggle(handle); }        // drop stale
+              if (!window.ElxWishlist.has(canonical)) { window.ElxWishlist.toggle(canonical); } // add current
+            }
+
+            if (!window.ElxWishlist.has(canonical)) return;   // removed while loading
+            if (seen[canonical]) return;                      // two stale handles → same product: no dupes
+            seen[canonical] = true;
+
+            if (heart) { heart.classList.add('is-saved'); heart.setAttribute('aria-pressed', 'true'); }
+            grid.appendChild(card);
+          })
+          .catch(function () {});
+      });
+    }
+
+    // When something is un-saved (e.g. clicking a card's heart), drop just that card.
+    document.addEventListener('elx:wishlist:change', function () {
+      var saved = (window.ElxWishlist && window.ElxWishlist.read()) || [];
+      var cards = grid.querySelectorAll('product-card[handle]');
+      for (var i = 0; i < cards.length; i++) {
+        if (saved.indexOf(cards[i].getAttribute('handle')) === -1) cards[i].remove();
+      }
+      showEmpty(grid.children.length === 0);
+    });
+
+    if (document.readyState !== 'loading') { render(); }
+    else { document.addEventListener('DOMContentLoaded', render); }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Saved (Wishlist)",
+  "settings": [
+    { "type": "text", "id": "empty_text", "label": "Empty message", "default": "Your saved list is empty." },
+    { "type": "text", "id": "empty_button", "label": "Empty button label", "default": "Browse fragrances" },
+    { "type": "url", "id": "empty_link", "label": "Empty button link" }
+  ],
+  "presets": [{ "name": "Saved (Wishlist)" }]
+}
+{% endschema %}

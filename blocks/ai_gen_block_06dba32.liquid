@@ -1,0 +1,553 @@
+{% doc %}
+  @prompt
+    Rebuild the complete About page for "Elixir" luxury perfumery (Dubai, 2024). Use ONLY var(--font-heading-family) and var(--font-body-family). Background #fafaf8. Accent #B87253. Zero top margin on wrapper. Full width all sections.
+    
+    SECTION 1 HERO: bg #fafaf8, padding 80px 60px, centered. H2 "OUR STORY" 32px uppercase letter-spacing 4px fw400 color #1a1a1a. Thin 40px 1px #B87253 line below centered. Paragraph "Founded in Dubai in 2024, Elixir is a modern house of luxury perfumery, blending timeless artistry with contemporary elegance." 12px ls 0.08em color #666 max-width 560px centered line-height 1.9.
+    
+    SECTION 2 MD PROFILE: bg #ffffff, padding 100px 60px. Two equal columns with gap 60px. Left column: Shopify image picker (schema type image_picker, id md_photo, label "MD Photo") displayed as portrait aspect ratio 3:4 object-fit cover full column width. If no image selected show placeholder bg #eeeeee. Right column: label "MANAGING DIRECTOR" color #B87253 10px ls 0.2em uppercase. Name field (schema text id md_name label "Name" default "Your Name") 24px uppercase ls 0.15em color #1a1a1a mt 12px. Bio (schema richtext id md_bio label "Biography") 12px ls 0.03em color #444 line-height 1.9 mt 20px. Thin 1px #B87253 vertical line between columns.
+    
+    SECTION 3 PHILOSOPHY: bg #fafaf8, padding 100px 60px. Two columns. Left: label "OUR PHILOSOPHY" #B87253 10px ls 0.2em, heading "ARTISTRY MEETS SOUL" 24px uppercase ls 0.15em color #1a1a1a mt 16px. Right: "At Elixir, we believe fragrance is more than a scent — it is an expression of individuality, emotion and memory." 12px ls 0.03em color #444 line-height 1.9. Thin 1px #B87253 vertical divider between columns.
+    
+    SECTION 4 PILLARS: bg #ffffff, padding 100px 60px. Label "WHAT WE STAND FOR" #B87253 10px ls 0.2em centered mb 60px. 3 columns each: 2px #B87253 top border, pt 28px, title 13px uppercase ls 0.15em #1a1a1a, text 11px ls 0.03em #666 mt 12px lh 1.8. (1)CRAFTSMANSHIP (2)AUTHENTICITY (3)DISTINCTION.
+    
+    SECTION 5 QUOTE: bg #212121, padding 80px 60px centered. Italic quote 18px #B87253 ls 0.08em max-width 680px. "Fragrance is the unseen, unforgettable, ultimate accessory — it heralds your arrival and prolongs your departure."
+    
+    SECTION 6 CTA: bg #ffffff, padding 100px 60px centered. Label "OUR COLLECTIONS" #B87253 10px ls 0.2em. Heading "A CURATED WORLD OF SCENT" 28px uppercase ls 0.15em #1a1a1a mt 16px mb 24px. Text 12px ls 0.03em #444 max-width 560px centered lh 1.9. Button: 1px solid #B87253, color #B87253, transparent bg, uppercase ls 0.18em 11px, padding 14px 48px, no border-radius. Hover: bg #B87253 color #fff. Text "EXPLORE NOW".
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-about-page-{{ ai_gen_id }} {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: block;
+  }
+
+  .ai-about-hero-{{ ai_gen_id }} {
+    background-color: #fafaf8;
+    padding: 80px 60px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .ai-about-hero-heading-{{ ai_gen_id }} {
+    font-family: var(--font-heading-family);
+    font-size: 32px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin: 0 0 20px 0;
+  }
+
+  .ai-about-hero-divider-{{ ai_gen_id }} {
+    width: 40px;
+    height: 1px;
+    background-color: #B87253;
+    margin: 0 auto 24px auto;
+  }
+
+  .ai-about-hero-text-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    color: #666;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.9;
+  }
+
+  .ai-about-md-{{ ai_gen_id }} {
+    background-color: #ffffff;
+    padding: 100px 60px;
+    width: 100%;
+  }
+
+  .ai-about-md-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: stretch;
+  }
+
+  .ai-about-md-photo-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    min-height: 480px;
+    object-fit: cover;
+  }
+
+  /* keep the bio centred against the photo's height */
+  .ai-about-md-bio-wrap-{{ ai_gen_id }},
+  .ai-about-md-grid-{{ ai_gen_id }} > div:last-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .ai-about-md-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background-color: #eeeeee;
+  }
+
+  .ai-about-md-divider-{{ ai_gen_id }} {
+    width: 1px;
+    background-color: #B87253;
+  }
+
+  .ai-about-md-label-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    color: #B87253;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .ai-about-md-name-{{ ai_gen_id }} {
+    font-family: var(--font-heading-family);
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #1a1a1a;
+    margin: 12px 0 0 0;
+  }
+
+  .ai-about-md-bio-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    color: #444;
+    line-height: 1.9;
+    margin-top: 20px;
+  }
+
+  .ai-about-philosophy-{{ ai_gen_id }} {
+    background-color: #fafaf8;
+    padding: 100px 60px;
+    width: 100%;
+  }
+
+  .ai-about-philosophy-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ai-about-philosophy-divider-{{ ai_gen_id }} {
+    width: 1px;
+    background-color: #B87253;
+  }
+
+  .ai-about-philosophy-label-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    color: #B87253;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .ai-about-philosophy-heading-{{ ai_gen_id }} {
+    font-family: var(--font-heading-family);
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #1a1a1a;
+    margin: 16px 0 0 0;
+  }
+
+  .ai-about-philosophy-text-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    color: #444;
+    line-height: 1.9;
+    margin: 0;
+  }
+
+  .ai-about-pillars-{{ ai_gen_id }} {
+    background-color: #ffffff;
+    padding: 100px 60px;
+    width: 100%;
+  }
+
+  .ai-about-pillars-label-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    color: #B87253;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 60px 0;
+  }
+
+  .ai-about-pillars-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ai-about-pillar-{{ ai_gen_id }} {
+    border-top: 2px solid #B87253;
+    padding-top: 28px;
+  }
+
+  .ai-about-pillar-title-{{ ai_gen_id }} {
+    font-family: var(--font-heading-family);
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #1a1a1a;
+    margin: 0 0 12px 0;
+  }
+
+  .ai-about-pillar-text-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    font-size: 14px;
+    letter-spacing: 0.03em;
+    color: #666;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .ai-about-quote-{{ ai_gen_id }} {
+    background-color: #212121;
+    padding: 80px 60px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .ai-about-quote-text-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    font-style: italic;
+    font-size: 18px;
+    color: #B87253;
+    letter-spacing: 0.08em;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .ai-about-cta-{{ ai_gen_id }} {
+    background-color: #ffffff;
+    padding: 100px 60px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .ai-about-cta-label-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    color: #B87253;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .ai-about-cta-heading-{{ ai_gen_id }} {
+    font-family: var(--font-heading-family);
+    font-size: 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #1a1a1a;
+    margin: 16px 0 24px 0;
+  }
+
+  .ai-about-cta-text-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    color: #444;
+    max-width: 560px;
+    margin: 0 auto 32px auto;
+    line-height: 1.9;
+  }
+
+  .ai-about-cta-button-{{ ai_gen_id }} {
+    display: inline-block;
+    border: 1px solid #B87253;
+    color: #B87253;
+    background-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 11px;
+    padding: 14px 48px;
+    border-radius: 0;
+    text-decoration: none;
+    font-family: var(--font-body-family);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .ai-about-cta-button-{{ ai_gen_id }}:hover {
+    background-color: #B87253;
+    color: #fff;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-about-hero-{{ ai_gen_id }} {
+      padding: 60px 30px;
+    }
+
+    .ai-about-hero-heading-{{ ai_gen_id }} {
+      font-size: 24px;
+      letter-spacing: 3px;
+    }
+
+    /* Readable body text on mobile */
+    .ai-about-hero-text-{{ ai_gen_id }},
+    .ai-about-md-bio-{{ ai_gen_id }},
+    .ai-about-philosophy-text-{{ ai_gen_id }},
+    .ai-about-cta-text-{{ ai_gen_id }} {
+      font-size: 15px;
+      line-height: 1.85;
+    }
+    .ai-about-pillar-title-{{ ai_gen_id }} { font-size: 16px; }
+    .ai-about-pillar-text-{{ ai_gen_id }} { font-size: 14px; line-height: 1.7; }
+    .ai-about-md-name-{{ ai_gen_id }},
+    .ai-about-philosophy-heading-{{ ai_gen_id }} { font-size: 22px; }
+
+    .ai-about-md-{{ ai_gen_id }},
+    .ai-about-philosophy-{{ ai_gen_id }},
+    .ai-about-pillars-{{ ai_gen_id }},
+    .ai-about-cta-{{ ai_gen_id }} {
+      padding: 60px 30px;
+    }
+
+    .ai-about-md-grid-{{ ai_gen_id }},
+    .ai-about-philosophy-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    /* stacked on mobile: photo a centred portrait, not stretched/oversized */
+    .ai-about-md-photo-{{ ai_gen_id }},
+    .ai-about-md-placeholder-{{ ai_gen_id }} {
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 3 / 4;
+      width: 100%;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+    .ai-about-md-divider-{{ ai_gen_id }},
+    .ai-about-philosophy-divider-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-about-pillars-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .ai-about-quote-{{ ai_gen_id }} {
+      padding: 60px 30px;
+    }
+
+    .ai-about-quote-text-{{ ai_gen_id }} {
+      font-size: 16px;
+    }
+
+    .ai-about-cta-heading-{{ ai_gen_id }} {
+      font-size: 22px;
+    }
+  }
+
+  /* Small phones */
+  @media screen and (max-width: 480px) {
+    .ai-about-hero-{{ ai_gen_id }},
+    .ai-about-md-{{ ai_gen_id }},
+    .ai-about-philosophy-{{ ai_gen_id }},
+    .ai-about-pillars-{{ ai_gen_id }},
+    .ai-about-quote-{{ ai_gen_id }},
+    .ai-about-cta-{{ ai_gen_id }} {
+      padding: 52px 20px;
+    }
+    .ai-about-hero-heading-{{ ai_gen_id }} { font-size: 21px; letter-spacing: 2px; }
+    .ai-about-md-name-{{ ai_gen_id }},
+    .ai-about-philosophy-heading-{{ ai_gen_id }},
+    .ai-about-cta-heading-{{ ai_gen_id }} { font-size: 20px; letter-spacing: 0.1em; }
+    .ai-about-pillar-title-{{ ai_gen_id }} { font-size: 15px; }
+    .ai-about-cta-button-{{ ai_gen_id }} { padding: 13px 34px; }
+  }
+
+  /* ── Dark mode (light version untouched) ── */
+  html.theme-dark .ai-about-hero-{{ ai_gen_id }},
+  html.theme-dark .ai-about-md-{{ ai_gen_id }},
+  html.theme-dark .ai-about-philosophy-{{ ai_gen_id }},
+  html.theme-dark .ai-about-pillars-{{ ai_gen_id }},
+  html.theme-dark .ai-about-cta-{{ ai_gen_id }} {
+    background-color: #212121 !important;
+  }
+  html.theme-dark .ai-about-md-placeholder-{{ ai_gen_id }} { background-color: #1f1f1f !important; }
+  html.theme-dark .ai-about-hero-heading-{{ ai_gen_id }},
+  html.theme-dark .ai-about-md-name-{{ ai_gen_id }},
+  html.theme-dark .ai-about-philosophy-heading-{{ ai_gen_id }},
+  html.theme-dark .ai-about-pillar-title-{{ ai_gen_id }},
+  html.theme-dark .ai-about-cta-heading-{{ ai_gen_id }} {
+    color: #ececec !important;
+  }
+  html.theme-dark .ai-about-hero-text-{{ ai_gen_id }},
+  html.theme-dark .ai-about-md-bio-{{ ai_gen_id }},
+  html.theme-dark .ai-about-philosophy-text-{{ ai_gen_id }},
+  html.theme-dark .ai-about-pillar-text-{{ ai_gen_id }},
+  html.theme-dark .ai-about-cta-text-{{ ai_gen_id }} {
+    color: #b3b3b3 !important;
+  }
+{% endstyle %}
+
+  <section class="ai-about-hero-{{ ai_gen_id }}" style="position: relative; overflow: hidden;">
+    {%- if block.settings.hero_video != blank -%}
+      {{ block.settings.hero_video | video_tag:
+         autoplay: true,
+         loop: true,
+         muted: true,
+         playsinline: true,
+         style: "position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.4;"
+      }}
+    {%- endif -%}
+    <div style="position: relative; z-index: 1;">
+      <h2 class="ai-about-hero-heading-{{ ai_gen_id }}">{{ 'custom.about_page.story_heading' | t }}</h2>
+      <div class="ai-about-hero-divider-{{ ai_gen_id }}"></div>
+      <p class="ai-about-hero-text-{{ ai_gen_id }}">{{ 'custom.about_page.story_text' | t }}</p>
+    </div>
+  </section>
+
+
+  <section class="ai-about-md-{{ ai_gen_id }}">
+    <div class="ai-about-md-grid-{{ ai_gen_id }}">
+      <div>
+        {% if block.settings.md_photo %}
+          <img
+            src="{{ block.settings.md_photo | image_url: width: 800 }}"
+            alt="{{ block.settings.md_photo.alt | escape }}"
+            class="ai-about-md-photo-{{ ai_gen_id }}"
+            loading="lazy"
+            width="{{ block.settings.md_photo.width }}"
+            height="{{ block.settings.md_photo.height }}"
+          >
+        {% else %}
+          <div class="ai-about-md-placeholder-{{ ai_gen_id }}"></div>
+        {% endif %}
+      </div>
+      <div class="ai-about-md-divider-{{ ai_gen_id }}"></div>
+      <div>
+        <p class="ai-about-md-label-{{ ai_gen_id }}">{{ 'custom.about_page.md_role' | t }}</p>
+        <h3 class="ai-about-md-name-{{ ai_gen_id }}">{{ block.settings.md_name }}</h3>
+        <div class="ai-about-md-bio-{{ ai_gen_id }}">
+          {{ block.settings.md_bio }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ai-about-philosophy-{{ ai_gen_id }}">
+    <div class="ai-about-philosophy-grid-{{ ai_gen_id }}">
+      <div>
+        <p class="ai-about-philosophy-label-{{ ai_gen_id }}">{{ 'custom.about_page.philosophy_heading' | t }}</p>
+        <h3 class="ai-about-philosophy-heading-{{ ai_gen_id }}">{{ 'custom.about_page.artistry_heading' | t }}</h3>
+      </div>
+      <div class="ai-about-philosophy-divider-{{ ai_gen_id }}"></div>
+      <div>
+        <p class="ai-about-philosophy-text-{{ ai_gen_id }}">{{ 'custom.about_page.philosophy_text' | t }}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ai-about-pillars-{{ ai_gen_id }}">
+    <p class="ai-about-pillars-label-{{ ai_gen_id }}">{{ 'custom.about_page.pillars_heading' | t }}</p>
+    <div class="ai-about-pillars-grid-{{ ai_gen_id }}">
+      <div class="ai-about-pillar-{{ ai_gen_id }}">
+        <h4 class="ai-about-pillar-title-{{ ai_gen_id }}">{{ 'custom.about_page.pillar_2_title' | t }}</h4>
+        <p class="ai-about-pillar-text-{{ ai_gen_id }}">{{ 'custom.about_page.pillar_2_text' | t }}</p>
+      </div>
+      <div class="ai-about-pillar-{{ ai_gen_id }}">
+        <h4 class="ai-about-pillar-title-{{ ai_gen_id }}">{{ 'custom.about_page.pillar_1_title' | t }}</h4>
+        <p class="ai-about-pillar-text-{{ ai_gen_id }}">{{ 'custom.about_page.pillar_1_text' | t }}</p>
+      </div>
+      <div class="ai-about-pillar-{{ ai_gen_id }}">
+        <h4 class="ai-about-pillar-title-{{ ai_gen_id }}">{{ 'custom.about_page.pillar_3_title' | t }}</h4>
+        <p class="ai-about-pillar-text-{{ ai_gen_id }}">{{ 'custom.about_page.pillar_3_text' | t }}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ai-about-quote-{{ ai_gen_id }}">
+    <p class="ai-about-quote-text-{{ ai_gen_id }}">{{ 'custom.about_page.hero_quote' | t }}</p>
+  </section>
+
+  <section class="ai-about-cta-{{ ai_gen_id }}">
+    <p class="ai-about-cta-label-{{ ai_gen_id }}">{{ 'custom.about_page.collections_label' | t }}</p>
+    <h2 class="ai-about-cta-heading-{{ ai_gen_id }}">{{ 'custom.about_page.collections_heading' | t }}</h2>
+    <p class="ai-about-cta-text-{{ ai_gen_id }}">{{ 'custom.about_page.collections_text' | t }}</p>
+    <a href="{{ block.settings.cta_link }}" class="ai-about-cta-button-{{ ai_gen_id }}">{{ 'custom.about_page.explore_button' | t }}</a>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Elixir about page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Managing director"
+    },
+    {
+      "type": "image_picker",
+      "id": "md_photo",
+      "label": "MD photo"
+    },
+    {
+      "type": "text",
+      "id": "md_name",
+      "label": "Name",
+      "default": "Your Name"
+    },
+    {
+      "type": "richtext",
+      "id": "md_bio",
+      "label": "Biography",
+      "default": "<p>{{ 'custom.about_page.md_intro' | t }}</p>"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+           "default": 100
+      },
+      {
+        "type": "video",
+        "id": "hero_video",
+        "label": "Hero Background Video"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Elixir about page"
+      }
+    ]
+  }
+  {% endschema %}

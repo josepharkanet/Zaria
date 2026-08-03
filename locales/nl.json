@@ -1,0 +1,675 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "page": "Pagina {{ page }}",
+    "home": "Start",
+    "accessibility": {
+      "skip_to_content": "Naar inhoud",
+      "pagination": "Navigatie paginering",
+      "go_to_page": "Naar pagina {{ index }}",
+      "go_to_item": "Naar artikel {{ index }}",
+      "item_nth_of_count": "Artikel {{ index }} van {{ count }}",
+      "drag": "Slepen",
+      "close": "Sluiten",
+      "next": "Volgende",
+      "previous": "Vorige",
+      "play_video": "Video afspelen",
+      "navigate_to_next_section": "Naar volgende onderdeel navigeren",
+      "mute_video": "Video dempen",
+      "unmute_video": "Dempen video opheffen",
+      "rss_feed": "RSS-feed"
+    },
+    "label": {
+      "color": "Kleur",
+      "white": "Wit",
+      "size": "Maat"
+    },
+    "breadcrumb": {
+      "label": "Broodkruimel",
+      "home": "Start",
+      "shop": "Winkel"
+    },
+    "reviews": {
+      "title": "Beoordelingen"
+    },
+    "social": {
+      "follow_on": "Volgen op {{ social_media }}",
+      "share": "Delen",
+      "share_on": "Delen op {{ social_media }}",
+      "share_email": "Delen via e-mail"
+    },
+    "rating": {
+      "info": "{{ rating_value }} van de {{ rating_max }} sterren"
+    },
+    "newsletter": {
+      "email": "E-mailadres",
+      "subscribe": "Abonneren",
+      "notify_me": "Mij melden",
+      "subscribed_successfully": "Je bent geabonneerd op onze nieuwsbrief."
+    },
+    "localization": {
+      "country": "Land",
+      "language": "Taal",
+      "change_country_accessibility_text": "Land of valuta wijzigen",
+      "change_language_accessibility_text": "Taal wijzigen"
+    },
+    "privacy_banner": {
+      "accept": "Accepteren",
+      "decline": "Weigeren"
+    },
+    "form": {
+      "max_characters": "Maximaal {{ max_chars }} tekens"
+    },
+    "on_boarding": {
+      "blog_post_category": "Categorie",
+      "blog_post_title": "Artikel",
+      "blog_post_excerpt": "Schrijf tekst over je blogpost.",
+      "product_vendor": "Verkoper",
+      "product_title": "Product",
+      "product_description": "Schrijf tekst over je product.",
+      "collection_title": "Collectie"
+    },
+    "no_products": "No products are on offer right now."
+  },
+  "header": {
+    "general": {
+      "account": "Account",
+      "login": "Inloggen",
+      "search": "Zoeken",
+      "cart": "Winkelwagen",
+      "primary_navigation": "Primaire navigatie",
+      "secondary_navigation": "Secundaire navigatie",
+      "menu": "Menu"
+    }
+  },
+  "product": {
+    "general": {
+      "description": "Beschrijving",
+      "add_to_cart_button": "Toevoegen aan winkelwagen",
+      "pre_order_button": "Vooruitbestellen",
+      "sold_out_button": "Uitverkocht",
+      "unavailable_button": "Niet beschikbaar",
+      "choose_options": "Opties kiezen",
+      "view_details": "Details weergeven",
+      "added_to_cart": "Toegevoegd aan je winkelwagen!",
+      "added_to_cart_with_title": "{{ product_title }} is toegevoegd aan je winkelwagen.",
+      "sold_out_badge": "Uitverkocht",
+      "on_sale_badge": "Aanbieding",
+      "discount_badge_html": "Bespaar {{ savings }}",
+      "sku": "SKU:",
+      "variant": "Variant",
+      "view_in_space": "Bekijk in je ruimte",
+      "taxes_included": "Inclusief btw.",
+      "taxes_excluded": "Exclusief btw.",
+      "shipping_policy_html": "<a href=\"{{ link }}\" class=\"link\">Verzendkosten berekend</a> bij het afrekenen",
+      "size_chart": "Maattabel",
+      "available_colors_count": {
+        "one": "{{ count }} kleur beschikbaar",
+        "other": "{{ count }} kleuren beschikbaar"
+      }
+    },
+    "gallery": {
+      "close": "Galerie sluiten",
+      "zoom": "In-/uitzoomen",
+      "error": "Afbeelding kan niet worden geladen"
+    },
+    "price": {
+      "regular_price": "Normale prijs",
+      "sale_price": "Aanbiedingsprijs",
+      "from_price_html": "Van {{ price_min }}"
+    },
+    "quantity": {
+      "label": "Aantal",
+      "change_quantity": "Aantal wijzigen",
+      "increase_quantity": "Aantal verhogen",
+      "decrease_quantity": "Aantal verlagen",
+      "minimum_of": "Minimum van {{ min }}",
+      "maximum_of": "Maximum van {{ max }}",
+      "increment_of": "Verhoging van {{ step }}",
+      "cannot_add_more": "Je kunt niet meer toevoegen"
+    },
+    "volume_pricing": {
+      "title": "Volumeprijsstelling",
+      "minimum": "Meer dan {{ quantity }}",
+      "price_at_each": "{{ price }}/st."
+    },
+    "rating_count": {
+      "zero": "Geen recensies",
+      "one": "{{ count }} recensie",
+      "other": "{{ count }} recensies"
+    },
+    "inventory": {
+      "in_stock": "Op voorraad",
+      "low_stock": "Slechts een paar eenheden over",
+      "in_stock_with_quantity_count": {
+        "one": "{{ count }} op voorraad",
+        "other": "{{ count }} op voorraad"
+      },
+      "out_of_stock": "Niet op voorraad",
+      "oversell_stock": "Binnenkort op voorraad",
+      "incoming_stock": "Op voorraad op {{ next_incoming_date }}",
+      "low_stock_with_quantity_count": {
+        "one": "Nog {{count}} stuk resterend",
+        "other": "Nog {{count}} stuks resterend"
+      }
+    },
+    "store_availability": {
+      "view_store_info": "Winkelinformatie bekijken",
+      "check_other_stores": "Beschikbaarheid bij andere winkels controleren",
+      "pick_up_available": "Ophalen beschikbaar",
+      "pick_up_currently_unavailable": "Ophaling momenteel niet beschikbaar",
+      "pick_up_available_at": "Ophalen beschikbaar bij {{ location_name }}",
+      "pick_up_unavailable_at": "Ophalen momenteel niet beschikbaar bij {{ location_name }}"
+    }
+  },
+  "collection": {
+    "general": {
+      "empty_collection": "Deze collectie is leeg",
+      "all_collections": "Alle collecties",
+      "no_collections": "Deze winkel bevat geen collecties.",
+      "continue_shopping": "Doorgaan met winkelen"
+    },
+    "products_count": {
+      "zero": "0 producten",
+      "one": "1 product",
+      "other": "{{ count }} producten"
+    },
+    "faceting": {
+      "filters": "Filters",
+      "filter_button": "Filteren",
+      "clear_filters": "Alles wissen",
+      "apply_filters": "Toepassen",
+      "sort_by": "Sorteren op",
+      "remove_filter": "Filter \"{{ name }}\" verwijderen",
+      "no_results": "Geen enkel product voldoet aan die filters.",
+      "price_range_to": "tot",
+      "price_filter_from": "Prijs vanaf",
+      "price_filter_to": "Prijs tot",
+      "price_filter": "{{ min_price }} - {{ max_price }}",
+      "in_stock_only": "Alleen op voorraad"
+    }
+  },
+  "blog_post": {
+    "article": "Artikel:",
+    "share": "Delen",
+    "prev": "Vorige",
+    "next": "Volgende"
+  },
+  "blog": {
+    "general": {
+      "empty_blog": "Deze blog is leeg",
+      "back_to_home": "Terug naar start",
+      "view": "Weergeven",
+      "all_posts": "Alle berichten",
+      "read_more": "Meer informatie"
+    },
+    "post": {
+      "written_by": "Door {{ author }}",
+      "visit_author_website": "Bezoek de website van de auteur",
+      "share": "Delen",
+      "tags": "Labels"
+    },
+    "comments": {
+      "leave_comment": "Laat een reactie achter",
+      "moderated": "Alle reacties worden gemodereerd voordat ze worden gepubliceerd.",
+      "name": "Naam",
+      "email": "E-mailadres",
+      "message": "Bericht",
+      "submit": "Verzenden",
+      "comment_sent": "Je reactie is verzonden. We publiceren het over enige tijd, omdat ons blog wordt gemodereerd.",
+      "comment_published": "Je reactie is gepubliceerd.",
+      "count": {
+        "zero": "{{ count }} reacties",
+        "one": "{{ count }} reactie",
+        "other": "{{ count }} reacties"
+      }
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Naam",
+      "email": "E-mailadres",
+      "message": "Bericht",
+      "submit": "Bericht verzenden",
+      "success_message": "Je bericht is verzonden."
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "Je account",
+      "primary_address": "Hoofdadres",
+      "manage_addresses": "Beheren",
+      "tagline": "Bekijk al je bestellingen bekijken en beheer je accountgegevens.",
+      "orders": "Bestellingen",
+      "logout": "Afmelden",
+      "no_orders": "Je hebt nog geen bestellingen geplaatst.",
+      "continue_shopping": "Doorgaan met winkelen"
+    },
+    "login": {
+      "title": "Inloggen",
+      "instructions": "Voer je e-mailadres en wachtwoord in om in te loggen:",
+      "no_account": "Heb je nog geen account?",
+      "email": "E-mailadres",
+      "password": "Wachtwoord",
+      "submit": "Inloggen",
+      "forgot_password": "Wachtwoord vergeten?",
+      "sign_up": "Aanmelden"
+    },
+    "recover_password": {
+      "title": "Wachtwoord herstellen",
+      "instructions": "Voer je e-mailadres in om je wachtwoord te herstellen:",
+      "remember_password": "Weet je je wachtwoord nog?",
+      "email": "E-mailadres",
+      "submit": "Herstellen",
+      "back_to_login": "Terug naar inloggen",
+      "success_message": "Er is een e-mail naar je adres gestuurd met instructies om je wachtwoord opnieuw in te stellen."
+    },
+    "register": {
+      "title": "Aanmelden",
+      "instructions": "Vul de onderstaande informatie in:",
+      "already_have_account": "Heb je al een account?",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "email": "E-mailadres",
+      "password": "Wachtwoord",
+      "accepts_marketing": "Registreren voor onze nieuwsbrief",
+      "submit": "Account aanmaken",
+      "login": "Inloggen"
+    },
+    "activate_account": {
+      "title": "Account activeren",
+      "instructions": "Voer een wachtwoord in om je account aan te maken:",
+      "password": "Wachtwoord",
+      "password_confirmation": "Bevestig wachtwoord",
+      "submit": "Activeren",
+      "cancel": "Annuleren"
+    },
+    "reset_password": {
+      "title": "Wachtwoord opnieuw instellen",
+      "instructions": "Voer een nieuw wachtwoord in:",
+      "password": "Wachtwoord",
+      "password_confirmation": "Bevestig wachtwoord",
+      "submit": "Opnieuw instellen"
+    },
+    "order": {
+      "order": "Bestelling",
+      "order_name": "Bestelling {{name}}",
+      "created_at": "Bestelling geplaatst op {{created_at}}",
+      "view_details": "Bestelgegevens bekijken",
+      "back": "Terug",
+      "date": "Datum",
+      "payment_status": "Betalingsstatus",
+      "fulfillment_status": "Afhandelingsstatus",
+      "cancelled_on": "Geannuleerd op {{date}}. Reden: {{reason}}",
+      "product": "Product",
+      "quantity": "Aantal",
+      "fulfillment_with_number": "Je bestelling is verzonden op {{date}}. Volg de zending met nummer {{tracking_number}}.",
+      "fulfillment": "Je bestelling is verzonden op {{date}}.",
+      "track_shipment": "Zending volgen",
+      "subtotal": "Subtotaal",
+      "discount": "Korting",
+      "shipping": "Verzendkosten",
+      "taxes_included": "Inclusief btw",
+      "taxes_excluded": "Exclusief btw",
+      "total_duties": "Invoerrechten",
+      "refunded_amount": "Terugbetaald bedrag",
+      "total": "Totaal",
+      "shipping_address": "Verzendadres",
+      "billing_address": "Factuuradres"
+    },
+    "addresses": {
+      "title": "Adressen",
+      "no_addresses": "Je hebt nog geen adressen opgeslagen.",
+      "add_address": "Adres toevoegen",
+      "edit_address": "Adres bewerken",
+      "save_address": "Adres opslaan",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "default_address": "Standaardadres",
+      "address_title": "Adres {{ position }}",
+      "delete_confirm": "Dit adres verwijderen? Eenmaal bevestigd kan deze actie niet meer ongedaan worden gemaakt.",
+      "fill_form": "Vul onderstaande informatie in:",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "company": "Bedrijf",
+      "phone": "Telefoonnummer",
+      "address1": "Adres 1",
+      "address2": "Adres 2",
+      "city": "Plaats",
+      "zip": "Postcode",
+      "country": "Land",
+      "province": "Provincie",
+      "set_default": "Als standaardadres instellen"
+    },
+    "wishlist": {
+      "title": "Wishlist"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Winkelwagen",
+      "empty": "Je winkelwagen is leeg",
+      "continue_shopping": "Doorgaan met winkelen",
+      "weight": "Gewicht",
+      "subtotal": "Subtotaal",
+      "total": "Totaal",
+      "add_order_note": "Bestelnotitie toevoegen",
+      "edit_order_note": "Bestelnotitie bewerken",
+      "order_note": "Bestelnotitie",
+      "save_note": "Opslaan",
+      "note_placeholder": "Hoe kunnen we je helpen?",
+      "update_cart": "Winkelwagen bijwerken",
+      "view_cart": "Winkelwagen bekijken",
+      "checkout": "Afrekenen",
+      "we_accept": "We accepteren",
+      "taxes_and_shipping_policy_at_checkout_html": "Btw en <a href=\"{{ link }}\" class=\"link\">verzendkosten</a> berekend bij het afrekenen",
+      "taxes_included_but_shipping_at_checkout": "Btw inbegrepen en verzendkosten berekend bij het afrekenen",
+      "taxes_included_and_shipping_policy_html": "Btw inbegrepen. <a href=\"{{ link }}\" class=\"link\">Verzendkosten</a> berekend bij het afrekenen.",
+      "taxes_and_shipping_at_checkout": "Btw en verzendkosten berekend bij het afrekenen"
+    },
+    "order": {
+      "product": "Product",
+      "total": "Totaal",
+      "quantity": "Aantal",
+      "remove": "Verwijderen",
+      "remove_with_title": "Verwijder {{ title }}"
+    },
+    "free_shipping_bar": {
+      "limit_unreached_html": "Besteed {{ remaining_amount }} meer en krijg gratis verzending!",
+      "limit_reached_html": "Je komt in aanmerking voor gratis verzending."
+    },
+    "shipping_estimator": {
+      "estimate_shipping": "Geschatte verzendkosten",
+      "country": "Land",
+      "province": "Provincie",
+      "zip": "Postcode",
+      "estimate": "Schatting",
+      "no_results": "Sorry, we verzenden niet naar je adres.",
+      "one_result": "Er is één verzendtarief voor je adres:",
+      "multiple_results": "Er zijn meerdere verzendtarieven voor je adres:",
+      "error": "Er zijn een of meer fouten opgetreden bij het ophalen van de verzendtarieven:"
+    },
+    "discount": {
+      "label": "Kortingscode",
+      "error": "Voer een geldige kortingscode in"
+    }
+  },
+  "404": {
+    "general": {
+      "title": "404",
+      "continue_shopping": "Doorgaan met winkelen",
+      "not_found_info": "We konden de pagina die je zocht niet vinden. Gebruik de navigatie of de knop hieronder om terug te gaan naar onze website."
+    }
+  },
+  "search": {
+    "general": {
+      "title": "Zoeken",
+      "terms": "Resultaten voor \"{{ terms }}\"",
+      "search_placeholder": "Zoek naar...",
+      "products": "Producten",
+      "suggestions": "Suggesties",
+      "collections": "Collecties",
+      "posts": "Blogberichten",
+      "pages": "Pagina's",
+      "clear": "Wissen",
+      "view_all_results": "Alle resultaten weergeven",
+      "no_results": "Er konden geen resultaten worden gevonden."
+    },
+    "results_count": {
+      "zero": "0 resultaten",
+      "one": "1 resultaat",
+      "other": "{{ count }} resultaten"
+    },
+    "results_count_for_terms": {
+      "zero": "0 resultaten voor \"{{ terms }}\"",
+      "one": "1 resultaat voor \"{{ terms }}\"",
+      "other": "{{ count }} resultaten voor \"{{ terms }}\""
+    }
+  },
+  "gift_card": {
+    "general": {
+      "title": "Hier is je cadeaubon",
+      "copy": "Kopiëren",
+      "print": "Afdrukken"
+    },
+    "issued": {
+      "remaining_amount": "Resterend bedrag",
+      "redeem_instructions": "Gebruik deze code om je cadeaubon in te wisselen bij het afrekenen:",
+      "code": "Cadeauboncode",
+      "expires_on": "Verloopt op: {{ expires_on }}",
+      "expired": "Je cadeaubon is verlopen of is uitgeschakeld.",
+      "scan": "of scan deze QR-code",
+      "add_to_apple_wallet": "Toevoegen aan Apple Wallet",
+      "amount": "Bedrag: {{ initial_value }}",
+      "copied": "Gekopieerd!"
+    },
+    "recipient": {
+      "checkbox": "Ik wil dit als cadeau sturen",
+      "email_label": "E-mailadres ontvanger",
+      "name_label": "Naam ontvanger (optioneel)",
+      "send_on_label": "Verzenden op (optioneel)",
+      "message_label": "Bericht (optioneel)"
+    }
+  },
+  "password": {
+    "general": {
+      "follow_us": "Volg ons",
+      "powered_by": "Deze winkel is mogelijk gemaakt door",
+      "store_owner": "Winkeleigenaar?",
+      "login": "Inloggen"
+    },
+    "storefront_access": {
+      "enter_password": "Ga binnen met een wachtwoord",
+      "store_access": "Winkeltoegang",
+      "instructions": "Voer onderstaand het wachtwoord in de winkel binnen te gaan",
+      "password": "Wachtwoord",
+      "enter_store": "Ga de winkel binnen"
+    }
+  },
+  "sections": {
+    "before_after": {
+      "not_enough_blocks": "Om de voor/na-vergelijking weer te geven, moet je meer blokken toevoegen in het onderdeel.",
+      "percentage_shown": "Percentage van achteraf getoonde foto",
+      "cursor_accessibility_text": "Gebruik de linker- en rechterpijltjestoetsen om te navigeren tussen voor- en na-foto's."
+    },
+    "countdown_timer": {
+      "expires_accessibility_text": "Deze aanbieding verloopt op {{expiration_date}}",
+      "days": "Dag",
+      "hours": "Uren",
+      "minutes": "Min.",
+      "seconds": "Sec.",
+      "days_long": "Dag",
+      "hours_long": "Uren",
+      "minutes_long": "Min.",
+      "seconds_long": "Sec."
+    },
+    "shop_the_look": {
+      "view_products": "Producten bekijken",
+      "view_product": "Product bekijken"
+    },
+    "quick_order_list": {
+      "products": "Producten",
+      "variants": "Varianten",
+      "quantity": "Aantal",
+      "price": "Prijs",
+      "total": "Totaal",
+      "remove": "Verwijderen",
+      "quantity_rules": "Aantalregels",
+      "volume_pricing": "Volumekorting",
+      "volume_pricing_available": "Volumekorting beschikbaar",
+      "show_variants": "Toon varianten",
+      "minimum_of": "Minimaal: {{ min }}",
+      "maximum_of": "Maximaal: {{ max }}",
+      "increment_of": "Incrementeel: {{ step }}",
+      "view_cart": "Bekijk winkelwagen",
+      "remove_all": "Verwijder alles",
+      "item_count": {
+        "zero": "{{ count }} items",
+        "one": "{{ count }} item",
+        "other": "{{ count }} items"
+      },
+      "product_subtotal": "Product subtotaal"
+    }
+  },
+  "custom": {
+    "about_page": {
+      "story_heading": "OUR STORY",
+      "story_text": "Founded in Dubai, Elixir is a modern house of luxury perfumery, blending timeless artistry with contemporary elegance. It is the newest venture from the leadership behind Extravaganza one of the Middle East's most established names in prestige beauty born of that same expertise, but devoted to something more intimate: the world's finest niche fragrance houses, and the collectors who seek them.",
+      "md_role": "CHAIRMAN",
+      "md_intro": "With a passion for artistry and a commitment to excellence, our Managing Director has curated a collection that celebrates the finest in luxury perfumery. Each fragrance tells a story, and every bottle is a testament to our dedication to quality and distinction.",
+      "philosophy_heading": "OUR PHILOSOPHY",
+      "artistry_heading": "ARTISTRY MEETS SOUL",
+      "philosophy_text": "At Elixir, we believe fragrance is more than a scent — it is an expression of individuality, emotion, and memory. We bring the refinement of French perfumery together with the warmth and fragrance heritage of the UAE.",
+      "pillars_heading": "WHAT WE STAND FOR",
+      "pillar_2_title": "CRAFTSMANSHIP",
+      "pillar_2_text": "Every fragrance is a masterpiece, crafted with precision and passion by the world's finest perfumers.",
+      "pillar_1_title": "AUTHENTICITY",
+      "pillar_1_text": "We curate only the most genuine and exceptional scents, sourced from heritage houses and visionary creators.",
+      "pillar_3_title": "DISTINCTION",
+      "pillar_3_text": "Our collection is designed for those who seek the rare, the refined, and the unforgettable.",
+      "hero_quote": "\"Fragrance is the unseen, unforgettable, ultimate accessory — it heralds your arrival and prolongs your departure.\"",
+      "collections_label": "OUR COLLECTIONS",
+      "collections_heading": "A CURATED WORLD OF SCENT",
+      "collections_text": "Discover our carefully selected range of niche and luxury fragrances Amouage, Roja, Nishane, Vilhelm Parfumerie, Maison Crivelli, Ormonde Jayne, and more each chosen to inspire and captivate.",
+      "explore_button": "EXPLORE NOW"
+    },
+    "footer": {
+      "authentic": "100% AUTHENTIC",
+      "authentic_sub": "Genuine fragrances, always",
+      "delivery": "FREE UAE DELIVERY",
+      "delivery_sub": "Fast, tracked to your door",
+      "secure": "SECURE CHECKOUT",
+      "secure_sub": "Encrypted & protected",
+      "wrapped": "EXPERTLY CURATED",
+      "wrapped_sub": "Rare & niche houses",
+      "newsletter_heading": "Subscribe to our newsletter",
+      "newsletter_sub": "Exclusive offers, new arrivals and fragrance stories.",
+      "subscribe": "Subscribe",
+      "follow_us": "Follow Us",
+      "more_info": "More Info",
+      "privacy": "Privacy Policy",
+      "refunds": "Refund and Returns",
+      "shipping": "Shipping Terms",
+      "terms": "Terms of Service",
+      "quick_links": "Quick Links",
+      "my_account": "My Account",
+      "order_tracking": "Order Tracking",
+      "arabic_fragrance": "Arabic Fragrance",
+      "sets_kits": "Sets & Kits",
+      "company": "Company",
+      "about": "About Elixir",
+      "contact": "Contact",
+      "partner": "Partner With Us",
+      "careers": "Careers",
+      "designed_by": "Designed by",
+      "copyright": "{{ year }} Elixir All rights reserved."
+    },
+    "pdp": {
+      "free_gift_with": "Free Gift with this product",
+      "top": "TOP",
+      "heart": "HEART",
+      "base": "BASE",
+      "gender": "GENDER",
+      "category": "CATEGORY",
+      "size": "SIZE",
+      "class": "CLASS",
+      "scent": "SCENT",
+      "creator": "CREATOR",
+      "buy_now": "Buy it Now",
+      "view_all_arrow": "View All →",
+      "bogo_heading": "Buy {{ count }}, Get 1 Free",
+      "gift_over_heading": "Free Gift over {{ amount }}",
+      "bogo_text": "Add {{ count }} to your bag and the lowest-priced one is free — applied automatically at checkout.",
+      "gift_buy_text": "Buy {{ count }} and receive a complimentary gift.",
+      "add_to_cart": "Add to Cart",
+      "sold_out": "Sold Out",
+      "more_from": "More from {{ name }}"
+    },
+    "brands": {
+      "grid_heading": "Discover the Art of Fine Perfumery",
+      "add": "Add",
+      "cart": "Cart",
+      "sold_out": "Sold Out",
+      "about_house": "About the House",
+      "read_more": "Read More ↓",
+      "all": "All",
+      "men": "Men",
+      "women": "Women",
+      "unisex": "Unisex",
+      "fragrances": "Fragrances",
+      "hair_body": "Hair & Body",
+      "home": "Home",
+      "price": "Price",
+      "no_products": "No products found",
+      "shop_collection": "Shop Collection",
+      "the_collection": "The Collection",
+      "percent_off": "{{ percent }}% Off",
+      "sale": "Sale",
+      "brand_fragrances": "{{ name }} Fragrances",
+      "view_all_count": "View All {{ count }} Fragrances"
+    },
+    "home": {
+      "view_all": "View All",
+      "discover": "Discover",
+      "collection": "Collection",
+      "view_all_lc": "View all",
+      "subscribe": "Subscribe",
+      "view_all_arrow_ent": "View all →",
+      "limited_offer": "Limited Offer",
+      "view_all_label": "View All {{ label }}",
+      "banner_bogo": "Buy {{ count }}, Get 1 Free",
+      "banner_spend": "Spend {{ amount }} & Get a Free Gift",
+      "banner_buy_gift": "Buy {{ count }} & Get a Free Gift",
+      "banner_reduced": "Reduced prices for a limited time — no code needed.",
+      "banner_auto": "Discount applied automatically at checkout.",
+      "shop_eligible": "Shop Eligible",
+      "shop_offer": "Shop Offer"
+    },
+    "product_card": {
+      "top": "Top",
+      "heart": "Heart",
+      "base": "Base",
+      "percent_off": "{{ percent }}% OFF"
+    },
+    "contact": {
+      "eyebrow": "Customer Care",
+      "heading": "Get in Touch",
+      "intro": "Whether you are discovering a new signature scent or need help with an existing order, our fragrance advisors are here for you.",
+      "care_hours": "Sun–Thu · 10AM – 7PM (GST)",
+      "call_title": "Call Us",
+      "email_title": "Email Us",
+      "email_note": "We reply within 24 hours",
+      "whatsapp_title": "WhatsApp",
+      "whatsapp_note": "Chat with a fragrance advisor",
+      "faq_heading": "Frequently Asked Questions",
+      "stores_heading": "Visit Our Boutiques",
+      "directions": "Get directions",
+      "faq_q1": "What is Elixir's return policy?",
+      "faq_a1": "You can find our return policy on our website, or by contacting us directly.",
+      "faq_q2": "How do I track my order?",
+      "faq_a2": "Once your order ships, you'll receive an email with tracking information.",
+      "faq_q3": "What payment methods do you accept?",
+      "faq_a3": "We accept major credit cards and other secure payment methods.",
+      "faq_q4": "Can I cancel or change my order?",
+      "faq_a4": "Please contact us as soon as possible if you need to make changes.",
+      "faq_q5": "How long does shipping take?",
+      "faq_a5": "Shipping times vary depending on your location.",
+      "faq_q6": "Can I purchase a fragrance that is not listed on your website?",
+      "faq_a6": "Please contact us to inquire about availability.",
+      "faq_q7": "Do you offer samples?",
+      "faq_a7": "Yes, we offer samples of some fragrances.",
+      "faq_q8": "How do I know if a fragrance is suitable for my skin type?",
+      "faq_a8": "Our knowledgeable staff can help you find a fragrance that suits your skin type.",
+      "faq_q9": "What is your loyalty program?",
+      "faq_a9": "We have a loyalty program that rewards our repeat customers."
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{%- doc -%}
+  Live gift-offer progress nudge for the cart page and cart drawer.
+  Supports three modes (shop metafield elixir_promotions.gift_offer_mode, written by the
+  Elixir Promotions app):
+    - quantity (default): buy N qualifying items -> gift
+    - amount:             spend X on qualifying items -> gift
+    - bogo:               buy N, get 1 of the same collection free
+{%- enddoc -%}
+{%- capture offer_on -%}{%- render 'gift-offer-active' -%}{%- endcapture -%}
+{%- if offer_on contains 'true' and cart.item_count > 0 -%}
+  {%- liquid
+    assign gift_mode = shop.metafields.elixir_promotions.gift_offer_mode.value | default: 'quantity'
+    assign gift_threshold = shop.metafields.elixir_promotions.gift_offer_threshold.value | default: 1
+    assign gift_min_amount = shop.metafields.elixir_promotions.gift_offer_min_amount.value | default: 0
+    assign gift_qty = 0
+    assign gift_amt = 0
+    for line_item in cart.items
+      capture li_offer
+        render 'is-gift-offer', product: line_item.product
+      endcapture
+      if li_offer contains 'true'
+        assign gift_qty = gift_qty | plus: line_item.quantity
+        assign gift_amt = gift_amt | plus: line_item.final_line_price
+      endif
+    endfor
+
+    # progress + remaining per mode
+    if gift_mode == 'amount'
+      assign gift_target = gift_min_amount | times: 100.0
+      assign gift_pct = gift_amt | times: 100 | divided_by: gift_target
+      assign gift_remaining_amt = gift_target | minus: gift_amt
+      if gift_remaining_amt > 0
+        assign gift_unlocked = false
+      else
+        assign gift_unlocked = true
+      endif
+    elsif gift_mode == 'bogo'
+      assign gift_target_qty = gift_threshold | plus: 1
+      assign gift_pct = gift_qty | times: 100 | divided_by: gift_target_qty
+      assign gift_remaining = gift_target_qty | minus: gift_qty
+      if gift_remaining > 0
+        assign gift_unlocked = false
+      else
+        assign gift_unlocked = true
+      endif
+    else
+      assign gift_pct = gift_qty | times: 100 | divided_by: gift_threshold
+      assign gift_remaining = gift_threshold | minus: gift_qty
+      if gift_remaining > 0
+        assign gift_unlocked = false
+      else
+        assign gift_unlocked = true
+      endif
+    endif
+    if gift_pct > 100
+      assign gift_pct = 100
+    endif
+    assign gift_col = shop.metafields.elixir_promotions.gift_offer_collection.value
+    assign gift_label = gift_col.title
+  -%}
+  {%- if gift_qty > 0 -%}
+    <div class="cart-gift {% if gift_unlocked %}cart-gift--unlocked{% endif %}">
+      <div class="cart-gift__row">
+        <span class="cart-gift__ic-wrap" aria-hidden="true">
+          <svg class="cart-gift__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9"/><path d="M12 8v13"/><path d="M12 8S10.5 3.5 8 4c-1.8.4-1.8 3 0 3.4 1.6.4 4 .6 4 .6zM12 8s1.5-4.5 4-4c1.8.4 1.8 3 0 3.4-1.6.4-4 .6-4 .6z"/></svg>
+        </span>
+        <div class="cart-gift__text">
+          {%- if gift_unlocked -%}
+            {%- if gift_mode == 'bogo' -%}
+              <strong>Buy {{ gift_threshold }}, get 1 free — unlocked!</strong>
+              <span>The lowest-priced item is free at checkout.</span>
+            {%- else -%}
+              <strong>Your free gift is unlocked!</strong>
+              {%- assign cg_gift = shop.metafields.elixir_promotions.gift_offer_gift.value -%}
+              {%- if cg_gift != blank -%}
+                <span>{{ cg_gift.title }} — applied at checkout.</span>
+              {%- else -%}
+                <span>It’ll be applied automatically at checkout.</span>
+              {%- endif -%}
+            {%- endif -%}
+          {%- elsif gift_mode == 'amount' -%}
+            <strong>Spend {{ gift_remaining_amt | round | money }} more</strong>
+            <span>to unlock your free gift.</span>
+          {%- elsif gift_mode == 'bogo' -%}
+            <strong>Add {{ gift_remaining }} more {% if gift_label != blank %}{{ gift_label }} {% endif %}item{% if gift_remaining > 1 %}s{% endif %}</strong>
+            <span>and the lowest-priced one is free.</span>
+          {%- else -%}
+            <strong>Add {{ gift_remaining }} more {% if gift_label != blank %}{{ gift_label }} {% endif %}item{% if gift_remaining > 1 %}s{% endif %}</strong>
+            <span>to unlock your free gift.</span>
+          {%- endif -%}
+        </div>
+      </div>
+      {%- unless gift_unlocked -%}
+        <div class="cart-gift__bar" role="progressbar" aria-valuenow="{{ gift_pct }}" aria-valuemin="0" aria-valuemax="100">
+          <span style="width: {{ gift_pct }}%"></span>
+        </div>
+      {%- endunless -%}
+    </div>
+  {%- endif -%}
+{%- endif -%}

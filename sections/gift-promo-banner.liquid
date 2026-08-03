@@ -1,0 +1,191 @@
+{%- comment -%}
+  Gift promo banner — an elegant "Buy 2 & Get a Gift" strip for the home page (or anywhere).
+  Purely promotional; the actual discount is configured in Shopify Discounts.
+{%- endcomment -%}
+
+{%- assign s = section.settings -%}
+{%- assign has_img = false -%}
+{%- if s.bg_image != blank -%}{%- assign has_img = true -%}{%- endif -%}
+
+{%- comment -%} Hide when the offer isn't live (unless editing in the theme customizer) {%- endcomment -%}
+{%- capture offer_on -%}{%- render 'gift-offer-active' -%}{%- endcapture -%}
+{%- assign gb_hide = false -%}
+{%- if s.respect_offer_status and request.design_mode == false -%}
+  {%- unless offer_on contains 'true' -%}
+    {%- assign gb_hide = true -%}
+  {%- endunless -%}
+{%- endif -%}
+{%- comment -%}
+  Text comes from the Elixir Promotions app when it has set one, so the banner
+  follows whichever offer is live; the section settings remain the fallback.
+{%- endcomment -%}
+{%- liquid
+  assign gb_heading = s.heading
+  assign gb_badge   = s.badge_text
+  if request.design_mode == false
+    assign mf_heading = shop.metafields.elixir_promotions.gift_offer_heading.value
+    assign mf_badge   = shop.metafields.elixir_promotions.gift_offer_badge_text.value
+    if mf_heading != blank
+      assign gb_heading = mf_heading
+    endif
+    if mf_badge != blank
+      assign gb_badge = mf_badge
+    endif
+  endif
+-%}
+{%- if gb_hide -%}
+  {%- comment -%}offer paused — render nothing{%- endcomment -%}
+{%- else -%}
+
+<div
+  class="giftbanner giftbanner--{{ s.text_align }} {% if has_img %}giftbanner--image{% endif %}"
+  style="
+    --gb-bg: {{ s.bg_color }};
+    --gb-fg: {{ s.text_color }};
+    --gb-accent: {{ s.accent_color }};
+    --gb-radius: {{ s.corner_radius }}px;
+    --gb-pad-y: {{ s.padding_top }}px {{ s.padding_bottom }}px;
+    {% if has_img %}--gb-image: url('{{ s.bg_image | image_url: width: 2400 }}');{% endif %}
+  "
+>
+  <div class="giftbanner__inner">
+    {%- if gb_badge != blank -%}
+      <span class="giftbanner__badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9"/><path d="M12 8v13"/><path d="M12 8S10.5 3.5 8 4c-1.8.4-1.8 3 0 3.4 1.6.4 4 .6 4 .6zM12 8s1.5-4.5 4-4c1.8.4 1.8 3 0 3.4-1.6.4-4 .6-4 .6z"/></svg>
+        {{- gb_badge -}}
+      </span>
+    {%- endif -%}
+
+    <div class="giftbanner__copy">
+      {%- if gb_heading != blank -%}
+        <h2 class="giftbanner__heading">{{ gb_heading }}</h2>
+      {%- endif -%}
+      {%- if s.subheading != blank -%}
+        <div class="giftbanner__sub">{{ s.subheading }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if s.button_label != blank -%}
+      <a href="{{ s.button_link | default: '#' }}" class="giftbanner__btn">{{ s.button_label }}</a>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- endif -%}
+
+{% style %}
+  #shopify-section-{{ section.id }} { margin: 0; }
+  .giftbanner {
+    position: relative;
+    background: var(--gb-bg);
+    color: var(--gb-fg);
+    border-radius: var(--gb-radius);
+    padding: var(--gb-pad-y);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .giftbanner--image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--gb-image);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.9;
+    z-index: -2;
+  }
+  .giftbanner--image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0,0,0,0.55), rgba(0,0,0,0.2));
+    z-index: -1;
+  }
+  .giftbanner__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-inline: clamp(20px, 5vw, 64px);
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 3vw, 40px);
+    flex-wrap: wrap;
+  }
+  .giftbanner--center .giftbanner__inner { flex-direction: column; text-align: center; justify-content: center; }
+  .giftbanner__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    padding: 8px 16px;
+    border: 1px solid var(--gb-accent);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--gb-accent);
+  }
+  .giftbanner__badge svg { width: 16px; height: 16px; }
+  .giftbanner__copy { flex: 1 1 auto; }
+  .giftbanner__heading {
+    margin: 0;
+    font-family: 'Bodoni Moda', var(--heading-font-family), serif;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+  }
+  .giftbanner__sub {
+    margin-top: 6px;
+    font-size: clamp(0.85rem, 1.4vw, 1rem);
+    opacity: 0.82;
+  }
+  .giftbanner__sub p { margin: 0; }
+  .giftbanner__btn {
+    flex: 0 0 auto;
+    display: inline-block;
+    padding: 13px 30px;
+    background: var(--gb-accent);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .giftbanner__btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  @media (max-width: 749px) {
+    .giftbanner__inner { flex-direction: column; text-align: center; }
+    .giftbanner__btn { width: 100%; max-width: 320px; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Gift promo banner",
+  "tag": "section",
+  "class": "shopify-section--gift-banner",
+  "settings": [
+    { "type": "text", "id": "badge_text", "label": "Badge text", "default": "Limited time" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Buy 2 & Get a Gift" },
+    { "type": "richtext", "id": "subheading", "label": "Subheading", "default": "<p>A complimentary gift with any two fragrances — automatically added at checkout.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the offer" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "checkbox", "id": "respect_offer_status", "label": "Auto-hide when the gift offer is off", "info": "Hides this banner on the live store whenever the gift offer is paused (theme toggle or the elixir_promotions.gift_offer_active shop metafield).", "default": true },
+    { "type": "header", "content": "Style" },
+    { "type": "select", "id": "text_align", "label": "Layout", "options": [ { "value": "left", "label": "Row (left)" }, { "value": "center", "label": "Centered" } ], "default": "left" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#1a1a1a" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#f4f3f1" },
+    { "type": "color", "id": "accent_color", "label": "Accent (badge + button)", "default": "#B87253" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image (optional)" },
+    { "type": "range", "id": "corner_radius", "label": "Corner radius", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 16, "max": 120, "step": 4, "unit": "px", "default": 44 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 16, "max": 120, "step": 4, "unit": "px", "default": 44 }
+  ],
+  "presets": [
+    { "name": "Gift promo banner" }
+  ]
+}
+{% endschema %}

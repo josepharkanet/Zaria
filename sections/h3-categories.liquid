@@ -1,0 +1,64 @@
+{%- comment -%} Home 2 — Shop by category/gender. Refined overlay tiles for effortless browsing. {%- endcomment -%}
+{%- liquid 
+  assign n = section.blocks.size
+  if n == 0
+    assign n = 4
+  endif -%}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,600&display=swap');
+  #shopify-section-{{ section.id }} { --g:#B87253; --ink:#1a1a1a; --serif: var(--heading-font-family); }
+  .h2cat { background: {{ section.settings.bg_color }}; color: var(--ink); font-family: var(--text-font-family); padding: clamp(3.5rem,7vw,6.5rem) clamp(1rem,4vw,3rem); }
+  .h2cat__head { text-align: center; margin: 0 auto clamp(2.4rem,5vw,3.5rem); }
+  .h2cat__eyebrow { font-size: 0.7rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--g); margin: 0 0 1rem; }
+  .h2cat__title { font-family: var(--serif); font-weight: 500; font-size: clamp(1.7rem,3vw,2.6rem); margin: 0; }
+  .h2cat__grid { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: repeat({{ n }}, 1fr); gap: clamp(0.7rem,1.6vw,1.4rem); }
+  .h2cat__tile { position: relative; display: block; text-decoration: none; aspect-ratio: 3 / 4; overflow: hidden; background: #efe9e0; }
+  .h2cat__tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.3s ease; }
+  .h2cat__tile:hover img { transform: scale(1.07); }
+  .h2cat__veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.4) 100%); transition: background 0.5s ease; }
+  .h2cat__tile:hover .h2cat__veil { background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.5) 100%); }
+  .h2cat__label { position: absolute; left: 50%; bottom: 1.8rem; transform: translateX(-50%); z-index: 2; text-align: center; color: #fff; padding: 0.7rem 1.4rem; border: 1px solid rgba(255,255,255,0.5); transition: border-color 0.4s ease; }
+  .h2cat__tile:hover .h2cat__label { border-color: var(--g); }
+  .h2cat__name { font-family: var(--serif); font-weight: 500; font-size: 1.05rem; letter-spacing: 0.14em; text-transform: uppercase; }
+  @media (max-width: 860px) { .h2cat__grid { grid-template-columns: repeat(2, 1fr) !important; } }
+  @media (max-width: 460px) { .h2cat__grid { grid-template-columns: 1fr !important; } }
+</style>
+
+<section class="h2cat">
+  <div class="h2cat__head">
+    {%- if section.settings.eyebrow != blank -%}<p class="h2cat__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    {%- if section.settings.heading != blank -%}<h2 class="h2cat__title">{{ section.settings.heading }}</h2>{%- endif -%}
+  </div>
+  <div class="h2cat__grid">
+    {%- for block in section.blocks -%}
+      {%- assign c = block.settings.collection -%}
+      {%- assign img = block.settings.image | default: c.image | default: c.products.first.featured_image -%}
+      <a href="{{ c.url | default: '#' }}" class="h2cat__tile" {{ block.shopify_attributes }}>
+        {%- if img != blank -%}<img src="{{ img | image_url: width: 800 }}" alt="{{ block.settings.label | default: c.title | escape }}" loading="lazy">{%- endif -%}
+        <span class="h2cat__veil"></span>
+        <span class="h2cat__label"><span class="h2cat__name">{{ block.settings.label | default: c.title | default: 'Shop' }}</span></span>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "H3 Categories",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f7f4ef" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Find Your World" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Category" }
+  ],
+  "blocks": [
+    { "type": "category", "name": "Tile", "settings": [
+      { "type": "collection", "id": "collection", "label": "Collection" },
+      { "type": "image_picker", "id": "image", "label": "Image (optional)" },
+      { "type": "text", "id": "label", "label": "Label (optional)" }
+    ] }
+  ],
+  "presets": [{ "name": "H3 Categories", "blocks": [ {"type":"category"},{"type":"category"},{"type":"category"},{"type":"category"} ] }]
+}
+{% endschema %}

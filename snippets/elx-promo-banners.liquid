@@ -1,0 +1,96 @@
+{% comment %}
+  App-managed promotion banners — rendered globally (home page) from
+  shop.metafields.elixir_promotions.banners so no theme-editor section is
+  needed. Each banner auto-places itself by stepping through the home page's
+  VISIBLE sections: `position` is the section index it sits above
+  (0 = top of the page / above the hero, 1 = after the 1st section, 2 = after
+  the 2nd, …). The ↑/↓ arrows in the Elixir Promotions app change that number
+  one section at a time. An optional `custom_selector` overrides it for an exact
+  drop point. Managed entirely in the app → Home page banners.
+{% endcomment %}
+
+{%- assign elx_banners = shop.metafields.elixir_promotions.banners.value -%}
+{%- if elx_banners != blank -%}
+  {%- style -%}
+    .elx-pbanner { position: relative; width: 100%; min-height: 350px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; background: #1a1a1a; }
+    .elx-pbanner__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .elx-pbanner__overlay { position: absolute; inset: 0; background: rgba(0,0,0,.35); }
+    .elx-pbanner__inner { position: relative; z-index: 2; max-width: 1100px; padding: 32px 24px; color: #fff; }
+    .elx-pbanner__title { font-family: var(--heading-font-family, "Bodoni Moda", serif); font-weight: 400; text-transform: uppercase; white-space: nowrap; letter-spacing: clamp(1px, .35vw, 4px); font-size: clamp(15px, 2.8vw, 31px); line-height: 1.15; margin: 0 0 13px; }
+    .elx-pbanner__desc { font-size: clamp(13px, 1.3vw, 16px); line-height: 1.6; letter-spacing: .02em; margin: 0 auto 20px; max-width: 560px; color: rgba(255,255,255,.9); }
+    .elx-pbanner__btn { display: inline-block; background: #1a1a1a; color: #fff; padding: 13px 30px; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; text-decoration: none; transition: opacity .2s ease; }
+    .elx-pbanner__btn:hover { opacity: .88; }
+    @media (max-width: 749px) { .elx-pbanner { min-height: 240px; } .elx-pbanner__inner { padding: 24px 18px; } }
+  {%- endstyle -%}
+
+  {%- for b in elx_banners -%}
+    {%- if b.enabled == false -%}{%- continue -%}{%- endif -%}
+    {%- if b.title == blank and b.image == blank -%}{%- continue -%}{%- endif -%}
+    {%- assign uid = 'elxpb-' | append: forloop.index -%}
+    {%- comment -%} Resolve the section index. Fall back to old placement values. {%- endcomment -%}
+    {%- if b.position == blank -%}
+      {%- if b.placement == 'above-footer' -%}{%- assign elx_pos = 999 -%}
+      {%- else -%}{%- assign elx_pos = 0 -%}{%- endif -%}
+    {%- else -%}
+      {%- assign elx_pos = b.position -%}
+    {%- endif -%}
+
+    <div id="{{ uid }}" data-elx-pbanner hidden>
+      <div class="elx-pbanner">
+        {%- if b.image != blank -%}
+          <img class="elx-pbanner__bg" src="{{ b.image }}" alt="{{ b.title | escape }}" width="1600" height="420" loading="lazy">
+        {%- endif -%}
+        <div class="elx-pbanner__overlay"></div>
+        <div class="elx-pbanner__inner">
+          {%- if b.title != blank -%}<h2 class="elx-pbanner__title">{{ b.title }}</h2>{%- endif -%}
+          {%- if b.description != blank -%}<p class="elx-pbanner__desc">{{ b.description }}</p>{%- endif -%}
+          {%- if b.button_label != blank -%}<a class="elx-pbanner__btn" href="{{ b.button_link | default: '#' }}">{{ b.button_label }}</a>{%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var host = document.getElementById('{{ uid }}');
+        if (!host) return;
+        var POS = parseInt({{ elx_pos | json }}, 10); if (isNaN(POS)) POS = 0;
+        var CUSTOM = {{ b.custom_selector | default: '' | json }};
+        function isBanner(el) { return el.nodeType === 1 && el.hasAttribute && el.hasAttribute('data-elx-pbanner'); }
+        function isEmpty(el) {
+          return el.textContent.replace(/\s+/g, '') === '' &&
+                 !el.querySelector('img,svg,video,picture,iframe,input,button,a,form');
+        }
+        function place() {
+          if (CUSTOM) {
+            var t = null; try { t = document.querySelector(CUSTOM); } catch (e) { t = null; }
+            if (t) { t.parentNode.insertBefore(host, t.nextSibling); host.hidden = false; return; }
+          }
+          var main = document.querySelector('main#main') || document.querySelector('main') ||
+                     document.getElementById('MainContent') || document.body;
+          var secs = [], kids = main.children, i, el, c;
+          for (i = 0; i < kids.length; i++) {
+            el = kids[i];
+            if (!el.classList || !el.classList.contains('shopify-section')) continue;
+            c = el.className || '';
+            if (c.indexOf('shopify-section-group-') > -1) continue;   // header / footer / overlay groups
+            if (isBanner(el)) continue;                               // our own injected banners
+            if (isEmpty(el)) continue;                                // empty placeholder sections
+            secs.push(el);
+          }
+          if (!secs.length) { main.insertBefore(host, main.firstChild); host.hidden = false; return; }
+          var idx = POS; if (idx < 0) idx = 0; if (idx > secs.length) idx = secs.length;
+          if (idx >= secs.length) {
+            var last = secs[secs.length - 1];
+            last.parentNode.insertBefore(host, last.nextSibling);     // after the last section (above footer)
+          } else {
+            var ref = secs[idx];
+            ref.parentNode.insertBefore(host, ref);                   // just above the idx-th section
+          }
+          host.hidden = false;
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', place);
+        else place();
+      })();
+    </script>
+  {%- endfor -%}
+{%- endif -%}

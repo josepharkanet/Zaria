@@ -1,0 +1,63 @@
+{%- comment -%} Home 2 — Editorial brand-story band. Asymmetric image + text, magazine-like. {%- endcomment -%}
+{%- liquid  -%}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,600&display=swap');
+  #shopify-section-{{ section.id }} { --g:#B87253; --ink:#1a1a1a; --serif: var(--heading-font-family); }
+  .h2ed { background: {{ section.settings.bg_color }}; color: var(--ink); font-family: var(--text-font-family); padding: clamp(3.5rem,8vw,7rem) clamp(1rem,4vw,3rem); }
+  .h2ed__grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
+  .h2ed--right .h2ed__grid { grid-template-columns: 0.85fr 1.15fr; }
+  .h2ed--right .h2ed__media { order: 2; }
+  .h2ed__media { position: relative; aspect-ratio: 5 / 6; overflow: hidden; background: #f1ece4; }
+  .h2ed__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 2s ease; }
+  .h2ed:hover .h2ed__media img { transform: scale(1.04); }
+  .h2ed__media .ph { position:absolute; inset:0; } .h2ed__media .ph svg { width:100%;height:100%;opacity:0.25; }
+  .h2ed__body { max-width: 460px; }
+  .h2ed__eyebrow { font-size: 0.7rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--g); margin: 0 0 1.4rem; }
+  .h2ed__title { font-family: var(--serif); font-weight: 500; font-size: clamp(1.9rem, 3.4vw, 3rem); line-height: 1.15; margin: 0 0 1.6rem; }
+  .h2ed__rule { width: 60px; height: 1px; background: var(--g); margin: 0 0 1.6rem; }
+  .h2ed__text { font-size: 1rem; line-height: 1.95; color: rgba(26,26,26,0.62); }
+  .h2ed__text p { margin: 0 0 1rem; }
+  .h2ed__sign { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--ink); margin-top: 1.4rem; }
+  .h2ed__cta { display: inline-block; margin-top: 1.8rem; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--g); padding-bottom: 5px; transition: letter-spacing 0.4s ease; }
+  .h2ed__cta:hover { letter-spacing: 0.3em; }
+  @media (max-width: 820px) {
+    .h2ed__grid, .h2ed--right .h2ed__grid { grid-template-columns: 1fr; gap: 2.4rem; }
+    .h2ed--right .h2ed__media { order: -1; }
+    .h2ed__media { aspect-ratio: 4 / 3; }
+  }
+</style>
+
+<section class="h2ed {% if section.settings.image_position == 'right' %}h2ed--right{% endif %}">
+  <div class="h2ed__grid">
+    <div class="h2ed__media">
+      {%- if section.settings.image != blank -%}<img src="{{ section.settings.image | image_url: width: 1400 }}" alt="{{ section.settings.heading | escape }}" loading="lazy">{%- else -%}<span class="ph">{{ 'collage' | placeholder_svg_tag }}</span>{%- endif -%}
+    </div>
+    <div class="h2ed__body">
+      {%- if section.settings.eyebrow != blank -%}<p class="h2ed__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="h2ed__title">{{ section.settings.heading }}</h2>
+      <span class="h2ed__rule"></span>
+      <div class="h2ed__text">{{ section.settings.text }}</div>
+      {%- if section.settings.signature != blank -%}<p class="h2ed__sign">{{ section.settings.signature }}</p>{%- endif -%}
+      {%- if section.settings.cta_label != blank -%}<a class="h2ed__cta" href="{{ section.settings.cta_link | default: '#' }}">{{ section.settings.cta_label }}</a>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "H3 Editorial",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "select", "id": "image_position", "label": "Image position", "default": "left", "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ] },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f7f4ef" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our Story" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A House Devoted to the Exceptional" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Every house in our collection is chosen by hand — a testament to authenticity, artistry, and distinction. We present the rarest and most expressive fragrances with the reverence they deserve.</p>" },
+    { "type": "text", "id": "signature", "label": "Signature (italic)", "default": "— Elixir, Dubai" },
+    { "type": "text", "id": "cta_label", "label": "Link label", "default": "Discover the Maison" },
+    { "type": "url", "id": "cta_link", "label": "Link" }
+  ],
+  "presets": [{ "name": "H3 Editorial" }]
+}
+{% endschema %}

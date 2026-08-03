@@ -1,0 +1,82 @@
+{%- comment -%}
+  Infinite brand-logo marquee. Pulls every brand from the `brand` metaobject
+  (same source as the brand grid) and scrolls their logos seamlessly. No manual
+  image uploads — add a brand + logo in admin and it appears here automatically.
+{%- enddoc -%}
+{%- assign blm_brands = shop.metaobjects.brand.values -%}
+{%- if blm_brands.size > 0 -%}
+  {%- assign u = section.id | replace: '_', '' | downcase -%}
+  <style>
+    #shopify-section-{{ section.id }} .blm-{{ u }} {
+      overflow: hidden;
+      {% if section.settings.background != blank %}background: {{ section.settings.background }};{% endif %}
+      padding-block: {{ section.settings.vertical_spacing }}px;
+    }
+    #shopify-section-{{ section.id }} .blm__viewport-{{ u }} { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+    #shopify-section-{{ section.id }} .blm__track-{{ u }} {
+      display: flex; align-items: center; width: max-content; gap: {{ section.settings.gap }}px;
+      animation: blmScroll-{{ u }} {{ section.settings.duration }}s linear infinite;
+      {% if section.settings.direction == 'right' %}animation-direction: reverse;{% endif %}
+    }
+    {% if section.settings.pause_on_hover %}#shopify-section-{{ section.id }} .blm-{{ u }}:hover .blm__track-{{ u }} { animation-play-state: paused; }{% endif %}
+    #shopify-section-{{ section.id }} .blm__item-{{ u }} { flex: 0 0 auto; display: grid; place-items: center; }
+    #shopify-section-{{ section.id }} .blm__logo-{{ u }} {
+      height: {{ section.settings.logo_height }}px; width: auto; object-fit: contain; display: block;
+      opacity: {{ section.settings.logo_opacity | divided_by: 100.0 }};
+      {% if section.settings.grayscale %}filter: grayscale(1);{% endif %}
+      transition: opacity .3s ease, filter .3s ease, transform .3s ease;
+    }
+    #shopify-section-{{ section.id }} .blm__item-{{ u }}:hover .blm__logo-{{ u }} { opacity: 1; filter: none; transform: scale(1.05); }
+    @keyframes blmScroll-{{ u }} { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @media (max-width: 749px) {
+      #shopify-section-{{ section.id }} .blm__logo-{{ u }} { height: {{ section.settings.logo_height | times: 0.75 | round }}px; }
+      #shopify-section-{{ section.id }} .blm__track-{{ u }} { gap: {{ section.settings.gap | times: 0.6 | round }}px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #shopify-section-{{ section.id }} .blm__track-{{ u }} { animation: none; flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+
+  {%- if section.settings.heading != blank -%}
+    <p style="text-align:center;text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:{{ section.settings.heading_color }};margin:0 0 {{ section.settings.vertical_spacing | times: 0.5 }}px;">{{ section.settings.heading }}</p>
+  {%- endif -%}
+
+  <div class="blm-{{ u }}">
+    <div class="blm__viewport-{{ u }}">
+      <div class="blm__track-{{ u }}">
+        {%- for pass in (1..2) -%}
+          {%- for brand in blm_brands -%}
+            {%- assign blm_logo = brand.logo.value -%}
+            {%- if blm_logo != blank -%}
+              {%- assign blm_name = brand.name.value | first -%}
+              <a class="blm__item-{{ u }}" href="/pages/brand/{{ brand.system.handle }}" aria-label="{{ blm_name | escape }}">
+                {{ blm_logo | image_url: width: 320 | image_tag: loading: 'lazy', alt: blm_name, class: 'blm__logo-' | append: u }}
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Brand logo scroll",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading (optional)", "default": "Our Brands" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#8a8a8a" },
+    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 24, "max": 120, "step": 4, "unit": "px", "default": 56 },
+    { "type": "range", "id": "gap", "label": "Space between logos", "min": 20, "max": 120, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "duration", "label": "Scroll duration (lower = faster)", "min": 10, "max": 90, "step": 1, "unit": "s", "default": 40 },
+    { "type": "select", "id": "direction", "label": "Direction", "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ], "default": "left" },
+    { "type": "checkbox", "id": "pause_on_hover", "label": "Pause on hover", "default": true },
+    { "type": "checkbox", "id": "grayscale", "label": "Grayscale logos (color on hover)", "default": false },
+    { "type": "range", "id": "logo_opacity", "label": "Logo opacity", "min": 40, "max": 100, "step": 5, "unit": "%", "default": 85 },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "range", "id": "vertical_spacing", "label": "Vertical spacing", "min": 8, "max": 80, "step": 2, "unit": "px", "default": 36 }
+  ],
+  "presets": [ { "name": "Brand logo scroll" } ]
+}
+{% endschema %}

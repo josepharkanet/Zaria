@@ -1,0 +1,607 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero_slider_RLqq37": {
+      "type": "hero-slider",
+      "blocks": {
+        "slide_6HfXgz": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Amouage_EternityDuo_Website_HomepageBanner_Collection_PageLaunch_Desktop_1920x770px.webp",
+            "image_mobile": "shopify://shop_images/Amouage_EternityDuo_Website_HomepageBanner_Collection_PageLaunch_Desktop_1920x770px.webp",
+            "overlay_color": "#000000",
+            "overlay_opacity": 35,
+            "eyebrow": "",
+            "eyebrow_color": "",
+            "heading": "",
+            "text": "",
+            "text_color": "#ffffff",
+            "align": "center",
+            "vposition": "center",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "solid",
+            "button_2_label": "",
+            "button_2_link": "",
+            "button_2_style": "outline"
+          }
+        },
+        "slide_afzz47": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Ganymede_16_9.jpg",
+            "image_mobile": "shopify://shop_images/Ganymede_16_9.jpg",
+            "overlay_color": "#000000",
+            "overlay_opacity": 35,
+            "eyebrow": "",
+            "eyebrow_color": "",
+            "heading": "",
+            "text": "",
+            "text_color": "#ffffff",
+            "align": "center",
+            "vposition": "center",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "solid",
+            "button_2_label": "",
+            "button_2_link": "",
+            "button_2_style": "outline"
+          }
+        },
+        "slide_X9pp68": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/2025_12_08_Roja_211887_copy.jpg",
+            "overlay_color": "#000000",
+            "overlay_opacity": 35,
+            "eyebrow": "",
+            "eyebrow_color": "",
+            "heading": "",
+            "text": "",
+            "text_color": "#ffffff",
+            "align": "center",
+            "vposition": "center",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "solid",
+            "button_2_label": "",
+            "button_2_link": "",
+            "button_2_style": "outline"
+          }
+        }
+      },
+      "block_order": [
+        "slide_6HfXgz",
+        "slide_afzz47",
+        "slide_X9pp68"
+      ],
+      "name": "Hero slider",
+      "settings": {
+        "autoplay": true,
+        "autoplay_speed": 4,
+        "transition": "fade",
+        "show_arrows": false,
+        "show_dots": true,
+        "height_desktop": 90,
+        "height_mobile": 80,
+        "accent_color": "#b87253",
+        "aria_label": "Hero"
+      }
+    },
+    "17810351174683f501": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_b742185_WF9icn": {
+          "type": "ai_gen_block_b742185",
+          "settings": {
+            "heading": "",
+            "color_scheme": "scheme-4",
+            "scroll_duration": 10,
+            "padding_top": 15,
+            "padding_bottom": 15
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_b742185_WF9icn"
+      ],
+      "settings": {
+        "color_scheme": "scheme-marquee-custom",
+        "separate_section_with_border": false,
+        "remove_vertical_spacing": true,
+        "remove_horizontal_spacing": true
+      }
+    },
+    "178167115441668eaa": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_01f174c_6KcUNK": {
+          "type": "ai_gen_block_01f174c",
+          "settings": {
+            "section_title": "",
+            "section_padding": 100,
+            "max_width": 1600,
+            "tab_1_label": "Unisex",
+            "collection_1": "unisex",
+            "tab_2_label": "Men",
+            "collection_2": "men",
+            "tab_3_label": "Women",
+            "collection_3": "women",
+            "products_limit": 4,
+            "products_per_row_desktop": 4,
+            "products_per_row_tablet": 4,
+            "grid_gap": 30,
+            "background_color": "#ffffff",
+            "text_color": "#1c1c1c",
+            "tab_active_color": "#ffffff",
+            "tab_inactive_color": "#666666",
+            "tab_hover_color": "#1c1c1c",
+            "tab_accent_color": "#b87253",
+            "tab_border_color": "#ffffff",
+            "image_background": "#ffffff",
+            "title_size": 36,
+            "tab_font_size": 14,
+            "product_title_size": 13,
+            "product_price_size": 13,
+            "tab_underline_height": 3
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_01f174c_6KcUNK"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "separate_section_with_border": false,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": true
+      }
+    },
+    "video": {
+      "type": "video",
+      "blocks": {
+        "heading-1": {
+          "type": "heading",
+          "settings": {
+            "text": "",
+            "heading_tag": "h2"
+          }
+        },
+        "play-1": {
+          "type": "play",
+          "settings": {
+            "icon_color": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "heading-1",
+        "play-1"
+      ],
+      "settings": {
+        "autoplay": true,
+        "show_controls": false,
+        "video_size": "fill",
+        "video": "shopify://files/videos/VideoForbiddenWhisper.mov",
+        "mobile_video": "shopify://files/videos/VideoForbiddenWhisper.mov",
+        "external_video_url": "",
+        "text_color": "#ffffff"
+      }
+    },
+    "rich-text": {
+      "type": "rich-text",
+      "blocks": {
+        "heading-1": {
+          "type": "heading",
+          "settings": {
+            "text": "Our belief: every scent should tell your story",
+            "heading_tag": "h4"
+          }
+        },
+        "link-1": {
+          "type": "link",
+          "settings": {
+            "text": "Our story",
+            "url": "https://www.elixirbeauty.com/pages/about"
+          }
+        },
+        "link-2": {
+          "type": "link",
+          "settings": {
+            "text": "Get in touch",
+            "url": "https://www.elixirbeauty.com/pages/contact"
+          }
+        }
+      },
+      "block_order": [
+        "heading-1",
+        "link-1",
+        "link-2"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "separate_section_with_border": false,
+        "content_width": "xs",
+        "text_position": "center",
+        "remove_vertical_spacing": false
+      }
+    },
+    "17816673745bf8d550": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_8b641f3_CffTLy": {
+          "type": "ai_gen_block_8b641f3",
+          "settings": {
+            "headline": "Celebrate Dad with Luxury Scents",
+            "subtext": "Discover our finest fragrances, the perfect gift for the sophisticated gentleman",
+            "content_max_width": 900,
+            "show_button": true,
+            "button_label": "Shop Father's Day Collection",
+            "button_link": "",
+            "background_color": "#212121",
+            "background_image": "shopify://shop_images/fathers-day-celebration-with-kid.jpg",
+            "background_image_opacity": 0.5,
+            "background_image_position": "left",
+            "headline_color": "#ffffff",
+            "subtext_color": "#ffffff",
+            "button_text_color": "#b87253",
+            "button_border_color": "#b87253",
+            "button_hover_background": "#b87253",
+            "button_hover_text_color": "#1a1a1a",
+            "button_hover_border_color": "#b87253",
+            "headline_size": 32,
+            "headline_letter_spacing": 4,
+            "headline_text_transform": "uppercase",
+            "headline_spacing": 18,
+            "subtext_size": 16,
+            "subtext_letter_spacing": 1,
+            "subtext_spacing": 28,
+            "button_font_size": 12,
+            "button_letter_spacing": 3,
+            "button_text_transform": "uppercase",
+            "button_padding_vertical": 8,
+            "button_padding_horizontal": 16,
+            "button_border_width": 1,
+            "show_shimmer": true,
+            "shimmer_color": "#b87253",
+            "shimmer_opacity": 0.1,
+            "shimmer_duration": 4,
+            "padding_vertical": 100,
+            "padding_horizontal": 60
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_8b641f3_CffTLy"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": false,
+        "remove_vertical_spacing": true,
+        "remove_horizontal_spacing": true
+      }
+    },
+    "featured_collections_LEtiXh": {
+      "type": "featured-collections",
+      "blocks": {
+        "collection_bVVLWJ": {
+          "type": "collection",
+          "settings": {
+            "collection": "newly-added",
+            "products_count": 9,
+            "title": "New Arrivals",
+            "link_url": "",
+            "link_text": "View all"
+          }
+        }
+      },
+      "block_order": [
+        "collection_bVVLWJ"
+      ],
+      "name": "t:sections.featured_collections.presets.featured_collections.name",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "separate_section_with_border": false,
+        "hide_product_information": false,
+        "group_by_brand": false,
+        "products_per_brand": 5,
+        "autoplay_products": false,
+        "autoplay_interval": 5,
+        "stack_products": false,
+        "products_per_row_mobile": "1",
+        "products_per_row_desktop": 4,
+        "horizontal_spacing_factor": 0.2,
+        "vertical_spacing_factor": 1,
+        "header_alignment": "center",
+        "heading_style": "h1",
+        "subheading": "Newly Added",
+        "hide_collection_title": true
+      }
+    },
+    "elixir-feature": {
+      "type": "elixir-feature",
+      "settings": {
+        "image": "shopify://shop_images/Narcotic_Desire_08.png",
+        "image_2": "shopify://shop_images/Narcotic_Desire_02.png",
+        "feature_video": "shopify://files/videos/Narcotic_Desire_ver6.mp4",
+        "scroll_swap": true,
+        "image_position": "left",
+        "subheading": "The Art of Fragrance",
+        "heading": "Crafted for the Connoisseur",
+        "text": "<p>Each Elixir creation is a study in refinement rare ingredients, masterful composition, and an enduring signature. Discover fragrances designed to be unforgettable.</p>",
+        "button_label": "Explore the Collection",
+        "button_link": "shopify://collections/all",
+        "background_color": "#212121",
+        "text_color": "#f3f3f3",
+        "min_height": 560
+      }
+    },
+    "featured_collections_E9LrTP": {
+      "type": "featured-collections",
+      "blocks": {
+        "collection_CaxQVN": {
+          "type": "collection",
+          "settings": {
+            "collection": "best-sellers",
+            "products_count": 9,
+            "title": "New Arrivals",
+            "link_url": "",
+            "link_text": "View all"
+          }
+        }
+      },
+      "block_order": [
+        "collection_CaxQVN"
+      ],
+      "name": "t:sections.featured_collections.presets.featured_collections.name",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "separate_section_with_border": false,
+        "hide_product_information": false,
+        "group_by_brand": false,
+        "products_per_brand": 5,
+        "autoplay_products": false,
+        "autoplay_interval": 5,
+        "stack_products": false,
+        "products_per_row_mobile": "1",
+        "products_per_row_desktop": 4,
+        "horizontal_spacing_factor": 0.2,
+        "vertical_spacing_factor": 1,
+        "header_alignment": "center",
+        "heading_style": "h1",
+        "subheading": "BEST SELLERS",
+        "hide_collection_title": true
+      }
+    },
+    "featured-collections-2": {
+      "type": "featured-collections",
+      "blocks": {
+        "collection-1": {
+          "type": "collection",
+          "settings": {
+            "collection": "gift-set",
+            "products_count": 4,
+            "title": "GIFT SET",
+            "link_url": "",
+            "link_text": "SEE MORE"
+          }
+        }
+      },
+      "block_order": [
+        "collection-1"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "separate_section_with_border": false,
+        "hide_product_information": false,
+        "group_by_brand": false,
+        "products_per_brand": 4,
+        "autoplay_products": false,
+        "autoplay_interval": 5,
+        "stack_products": false,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "horizontal_spacing_factor": 1,
+        "vertical_spacing_factor": 1,
+        "header_alignment": "center",
+        "heading_style": "h4",
+        "subheading": "GIFT SET",
+        "hide_collection_title": true
+      }
+    },
+    "scrolling-content-2": {
+      "type": "scrolling-content",
+      "settings": {
+        "separate_section_with_border": true,
+        "scrolling_speed": 0.3,
+        "scroll_direction": "right",
+        "pause_on_hover": false,
+        "text_font": "heading",
+        "text_font_size_mobile": 16,
+        "text_font_size_desktop": 16,
+        "section_vertical_spacing_mobile": 20,
+        "section_vertical_spacing_desktop": 40,
+        "item_horizontal_spacing_mobile": 25,
+        "item_horizontal_spacing_desktop": 50,
+        "background": "",
+        "text_color": "#b3b3b3"
+      }
+    },
+    "17808325798580bbde": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "17808784927ad3fce8": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "1781031565366cc705": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "1781031744d36b695c": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "17810319109f9d51b0": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "1781034019609d31d2": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "178104334566aa61c8": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": true,
+        "remove_horizontal_spacing": true
+      }
+    },
+    "178117512414203d37": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "17811767307239bbaa": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "17811767838ae36684": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "1781678875b008ca0c": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "1782461713a7089091": {
+      "type": "_blocks",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "1785386393cd6dd16d": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_9593a17_kdX6Pd": {
+          "type": "ai_gen_block_9593a17",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-07-29_at_00.55.19.jpg",
+            "border_radius": 0,
+            "aspect_ratio_desktop": 30,
+            "aspect_ratio_mobile": 50,
+            "animation_duration": 15,
+            "animation_timing": "ease-in-out",
+            "zoom_scale": 1.2,
+            "zoom_scale_mobile": 1.1,
+            "zoom_origin": "center",
+            "pan_x": 0,
+            "pan_y": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_9593a17_kdX6Pd"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": true,
+        "remove_horizontal_spacing": true
+      }
+    }
+  },
+  "order": [
+    "hero_slider_RLqq37",
+    "17810351174683f501",
+    "178167115441668eaa",
+    "video",
+    "rich-text",
+    "17816673745bf8d550",
+    "featured_collections_LEtiXh",
+    "elixir-feature",
+    "featured_collections_E9LrTP",
+    "featured-collections-2",
+    "scrolling-content-2",
+    "17808325798580bbde",
+    "17808784927ad3fce8",
+    "1781031565366cc705",
+    "1781031744d36b695c",
+    "17810319109f9d51b0",
+    "1781034019609d31d2",
+    "178104334566aa61c8",
+    "178117512414203d37",
+    "17811767307239bbaa",
+    "17811767838ae36684",
+    "1781678875b008ca0c",
+    "1782461713a7089091",
+    "1785386393cd6dd16d"
+  ]
+}

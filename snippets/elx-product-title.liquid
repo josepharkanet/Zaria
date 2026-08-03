@@ -1,0 +1,31 @@
+{%- doc -%}
+  The product's name in the language being viewed.
+
+  This just echoes `product.title`, because Shopify's translation layer already
+  returns the right language: the item master's Arabic is registered as the `ar`
+  translation of every product (by the elixir-translations tool), so `/ar` gets
+  Arabic and `/` gets English with nothing to do here.
+
+  It deliberately does NOT read `custom.arabic_name`. That metafield is the SOURCE
+  the translations are built from, not something to render. Metafields are
+  themselves translatable, and an `ar` translation registered against
+  `custom.arabic_name` by another app made this snippet emit a stale English name
+  on Arabic pages while `product.title` had been correct all along.
+
+  Kept as a snippet so every product name on the storefront still has one place to
+  change.
+
+  @param {object} product - the product
+  @param {boolean} [escape] - escape the output for use in an attribute
+
+  Usage:
+    {%- render 'elx-product-title', product: product -%}
+    alt="{%- render 'elx-product-title', product: product, escape: true -%}"
+{%- enddoc -%}
+{%- liquid
+  if escape
+    echo product.title | escape
+  else
+    echo product.title
+  endif
+-%}

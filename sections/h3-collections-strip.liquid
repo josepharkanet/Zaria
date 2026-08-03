@@ -1,0 +1,72 @@
+{%- comment -%} Home 2 — Featured collections strip. Hairline-divided columns, hover reveal. {%- endcomment -%}
+{%- liquid
+  assign n = section.blocks.size
+  if n == 0
+    assign n = 3
+  endif
+-%}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,600&display=swap');
+  #shopify-section-{{ section.id }} { --g: #B87253; --ink: #1a1a1a; --paper:#ffffff; --line: rgba(26,26,26,0.12); --serif: var(--heading-font-family); }
+  .h2cs { background: var(--paper); color: var(--ink); font-family: var(--text-font-family); padding: clamp(3.5rem, 7vw, 6.5rem) clamp(1rem,4vw,3rem); }
+  .h2cs__head { text-align: center; max-width: 640px; margin: 0 auto clamp(2.5rem,5vw,4rem); }
+  .h2cs__eyebrow { font-size: 0.7rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--g); margin: 0 0 1.1rem; }
+  .h2cs__title { font-family: var(--serif); font-weight: 500; font-size: clamp(1.7rem, 3vw, 2.6rem); margin: 0; }
+  .h2cs__row { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: repeat({{ n }}, 1fr); border-top: 1px solid var(--line); }
+  .h2cs__col { position: relative; border-left: 1px solid var(--line); padding: 2.2rem 1.6rem 2.6rem; text-align: center; text-decoration: none; color: var(--ink); overflow: hidden; }
+  .h2cs__col:first-child { border-left: none; }
+  .h2cs__num { font-size: 0.66rem; letter-spacing: 0.24em; color: var(--g); }
+  .h2cs__img { margin: 1.4rem auto 1.6rem; width: 100%; max-width: 240px; aspect-ratio: 1 / 1; overflow: hidden; }
+  .h2cs__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s ease; }
+  .h2cs__col:hover .h2cs__img img { transform: scale(1.06); }
+  .h2cs__name { font-family: var(--serif); font-weight: 500; font-size: 1.25rem; letter-spacing: 0.02em; margin: 0 0 0.5rem; }
+  .h2cs__link { font-size: 0.64rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(26,26,26,0.5); transition: color 0.3s ease; }
+  .h2cs__col:hover .h2cs__link { color: var(--g); }
+  .h2cs__link::after { content: ""; display: block; width: 0; height: 1px; background: var(--g); margin: 8px auto 0; transition: width 0.4s ease; }
+  .h2cs__col:hover .h2cs__link::after { width: 40px; }
+  @media (max-width: 820px) {
+    .h2cs__row { grid-template-columns: 1fr; }
+    .h2cs__col { border-left: none; border-bottom: 1px solid var(--line); }
+  }
+</style>
+
+<section class="h2cs">
+  {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
+    <div class="h2cs__head">
+      {%- if section.settings.eyebrow != blank -%}<p class="h2cs__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="h2cs__title">{{ section.settings.heading }}</h2>{%- endif -%}
+    </div>
+  {%- endif -%}
+  <div class="h2cs__row">
+    {%- for block in section.blocks -%}
+      {%- assign c = block.settings.collection -%}
+      {%- assign img = block.settings.image | default: c.image | default: c.products.first.featured_image -%}
+      <a href="{{ c.url | default: '#' }}" class="h2cs__col" {{ block.shopify_attributes }}>
+        <span class="h2cs__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+        <span class="h2cs__img">{% if img != blank %}<img src="{{ img | image_url: width: 600 }}" alt="{{ block.settings.label | default: c.title | escape }}" loading="lazy">{% endif %}</span>
+        <h3 class="h2cs__name">{{ block.settings.label | default: c.title | default: 'Collection' }}</h3>
+        <span class="h2cs__link">Explore</span>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "H3 Collections Strip",
+  "tag": "section",
+  "max_blocks": 5,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Houses" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Featured Collections" }
+  ],
+  "blocks": [
+    { "type": "collection", "name": "Collection", "settings": [
+      { "type": "collection", "id": "collection", "label": "Collection" },
+      { "type": "image_picker", "id": "image", "label": "Image (optional)" },
+      { "type": "text", "id": "label", "label": "Label (optional)" }
+    ] }
+  ],
+  "presets": [{ "name": "H3 Collections Strip", "blocks": [ { "type": "collection" }, { "type": "collection" }, { "type": "collection" } ] }]
+}
+{% endschema %}

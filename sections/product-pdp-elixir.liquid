@@ -1,0 +1,1367 @@
+{% comment %}
+  Luxury PDP — Two-column with sticky scroll gallery, dynamic icons,
+  related products below main section, brand logo enlarged, notes improved.
+{% endcomment %}
+
+{%- liquid
+  assign brand_ref    = product.metafields.custom.brand.value
+  assign top_notes    = product.metafields.custom.top_notes.value
+  assign middle_notes = product.metafields.custom.middle_notes.value
+  assign base_notes   = product.metafields.custom.base_notes.value
+  assign gender_list  = product.metafields.custom.gender.value
+  assign cat_ref      = product.metafields.custom.category.value
+  assign prod_size    = product.metafields.custom.product_size.value
+  assign class_list   = product.metafields.custom.class.value
+  assign family_list  = product.metafields.custom.family.value
+  assign creator      = product.metafields.custom.creator.value
+  assign first_variant = product.selected_or_first_available_variant
+  # Candles and body products are sold by weight (grams), even when the size
+  # metafield holds a bare number or a stray "ml" — force grams for those.
+  assign size_signal = product.title | append: ' ' | append: product.type | append: ' ' | append: cat_ref.name.value | downcase
+  assign size_force_weight = false
+  if size_signal contains 'candle' or size_signal contains 'bougie' or size_signal contains 'body'
+    assign size_force_weight = true
+  endif
+
+  # Breadcrumb links — gender + brand both map to real collection pages.
+  assign bc_gender_url = ''
+  assign bc_gender_label = ''
+  if gender_list != blank
+    assign gv = gender_list | first | downcase
+    if gv == 'men' or gv == 'women' or gv == 'unisex'
+      assign bc_gender_url = routes.collections_url | append: '/' | append: gv
+      assign bc_gender_label = gender_list | first
+    endif
+  endif
+  assign bc_brand_url = ''
+  if brand_ref != blank and brand_ref.name.value != blank
+    assign bc_brand_url = routes.collections_url | append: '/' | append: brand_ref.slug
+  endif
+-%}
+
+<div class="lpdp" id="lpdp-{{ section.id }}">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": {{ 'general.breadcrumb.home' | t | json }}, "item": {{ shop.url | json }} }
+      {%- assign bc_pos = 1 -%}
+      {%- if bc_gender_url != blank -%}{%- assign bc_pos = bc_pos | plus: 1 -%}
+      ,{ "@type": "ListItem", "position": {{ bc_pos }}, "name": {{ bc_gender_label | json }}, "item": {{ shop.url | append: bc_gender_url | json }} }
+      {%- endif -%}
+      {%- if bc_brand_url != blank -%}{%- assign bc_pos = bc_pos | plus: 1 -%}
+      ,{ "@type": "ListItem", "position": {{ bc_pos }}, "name": {{ brand_ref.name.value | json }}, "item": {{ shop.url | append: bc_brand_url | json }} }
+      {%- endif -%}
+      {%- assign bc_pos = bc_pos | plus: 1 -%}
+      ,{ "@type": "ListItem", "position": {{ bc_pos }}, "name": {{ product.title | json }}, "item": {{ shop.url | append: product.url | json }} }
+    ]
+  }
+  </script>
+
+  <!-- ═══ MAIN TWO-COLUMN ═══ -->
+  <div class="lpdp__inner">
+
+    <!-- BREADCRUMB — sits at the top of the image column so the info card stays at the top -->
+    <nav class="lpdp__crumbs" aria-label="{{ 'general.breadcrumb.label' | t }}">
+      <ol>
+        <li><a href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a></li>
+        {%- if bc_gender_url != blank -%}<li><a href="{{ bc_gender_url }}">{{ bc_gender_label }}</a></li>{%- endif -%}
+        {%- if bc_brand_url != blank -%}<li><a href="{{ bc_brand_url }}">{{ brand_ref.name.value }}</a></li>{%- endif -%}
+        <li aria-current="page"><span>{{ product.title }}</span></li>
+      </ol>
+    </nav>
+
+    <!-- LEFT: STICKY IMAGE GALLERY -->
+    <div class="lpdp__gallery-col" id="lpdp-gallery-{{ section.id }}">
+      <div class="lpdp__thumbs">
+        {%- for media in product.media -%}
+          <button
+            class="lpdp__thumb {% if forloop.first %}is-active{% endif %}"
+            data-index="{{ forloop.index0 }}"
+            aria-label="View image {{ forloop.index }}"
+          >
+            {{- media.preview_image | image_url: width: 120 | image_tag:
+                alt: media.alt | default: product.title,
+                loading: 'lazy'
+            -}}
+          </button>
+        {%- endfor -%}
+      </div>
+
+      <div class="lpdp__main-img-wrap" id="lpdp-imgwrap-{{ section.id }}">
+        {%- for media in product.media -%}
+          <div
+            class="lpdp__main-img {% if forloop.first %}is-active{% endif %}"
+            data-index="{{ forloop.index0 }}"
+          >
+            {{- media.preview_image | image_url: width: 900 | image_tag:
+                alt: media.alt | default: product.title,
+                class: 'lpdp__img'
+            -}}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <!-- RIGHT: PRODUCT INFO -->
+    <div class="lpdp__info" id="lpdp-info-{{ section.id }}">
+
+      <!-- Brand name — text, not the logo, matching the product cards -->
+      {%- if brand_ref != blank and brand_ref.name.value != blank -%}
+        <div class="lpdp__brand">
+          <a href="{{ routes.collections_url }}/{{ brand_ref.slug }}" class="lpdp__brand-name">
+            {{- brand_ref.name.value -}}
+          </a>
+        </div>
+      {%- endif -%}
+
+      <!-- Title -->
+      <h1 class="lpdp__title">{%- render 'elx-product-title', product: product -%}</h1>
+
+      <!-- Price -->
+      <div class="lpdp__price">
+        {%- if first_variant.compare_at_price > first_variant.price -%}
+          <span class="lpdp__price-compare">{{ first_variant.compare_at_price | money }}</span>
+        {%- endif -%}
+        <span class="lpdp__price-current">{{ first_variant.price | money }}</span>
+      </div>
+
+      <!-- Description -->
+      {%- if product.description != blank -%}
+        <div class="lpdp__desc" id="lpdp-desc-{{ section.id }}">{{ product.description }}</div>
+      {%- endif -%}
+
+      <!-- Gift offer — dynamic card (gift image left, details right), below the description -->
+      {%- capture lpdp_is_offer -%}{%- render 'is-gift-offer', product: product -%}{%- endcapture -%}
+      {%- if lpdp_is_offer contains 'true' -%}
+        {%- assign lpdp_gift = shop.metafields.elixir_promotions.gift_offer_gift.value -%}
+        {%- assign lpdp_threshold = shop.metafields.elixir_promotions.gift_offer_threshold.value | default: 1 -%}
+        {%- assign lpdp_mode = shop.metafields.elixir_promotions.gift_offer_mode.value | default: 'quantity' -%}
+        {%- assign lpdp_min_amount = shop.metafields.elixir_promotions.gift_offer_min_amount.value | default: 0 -%}
+        {%- assign lpdp_gift_img = lpdp_gift.featured_image | default: lpdp_gift.featured_media -%}
+        {%- assign lpdp_gift_alt = lpdp_gift.title | escape -%}
+        <div class="lpdp__gift">
+          
+          {%- if lpdp_mode != 'bogo' and lpdp_gift != blank and lpdp_gift_img != blank -%}
+            <span class="lpdp__gift-media">
+              {{ lpdp_gift_img | image_url: width: 300 | image_tag: loading: 'lazy', alt: lpdp_gift_alt, class: 'lpdp__gift-img' }}
+            </span>
+          {%- endif -%}
+          <div class="lpdp__gift-content">
+            <div class="lpdp__gift-heading">
+              <svg class="lpdp__gift-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9"/><path d="M12 8v13"/><path d="M12 8S10.5 3.5 8 4c-1.8.4-1.8 3 0 3.4 1.6.4 4 .6 4 .6zM12 8s1.5-4.5 4-4c1.8.4 1.8 3 0 3.4-1.6.4-4 .6-4 .6z"/></svg>
+              {%- assign lpdp_heading_txt = shop.metafields.elixir_promotions.gift_offer_heading.value -%}
+              {%- if lpdp_heading_txt != blank -%}
+                <span>{{ lpdp_heading_txt }}</span>
+              {%- elsif lpdp_mode == 'bogo' -%}
+                <span>{{ 'custom.pdp.bogo_heading' | t: count: lpdp_threshold }}</span>
+              {%- elsif lpdp_mode == 'amount' -%}
+                {%- assign lpdp_min_money = lpdp_min_amount | times: 100.0 | round | money -%}<span>{{ 'custom.pdp.gift_over_heading' | t: amount: lpdp_min_money }}</span>
+              {%- else -%}
+                <span>{{ 'custom.pdp.free_gift_with' | t }}</span>
+              {%- endif -%}
+            </div>
+            {%- if lpdp_mode == 'bogo' -%}
+              {%- assign lpdp_bogo_n = lpdp_threshold | plus: 1 -%}<div class="lpdp__gift-text">{{ 'custom.pdp.bogo_text' | t: count: lpdp_bogo_n }}</div>
+            {%- elsif lpdp_gift != blank -%}
+              <div class="lpdp__gift-title">{{ lpdp_gift.title }}</div>
+              {%- assign lpdp_gift_desc = lpdp_gift.description | strip_html | truncatewords: 20 -%}
+              {%- if lpdp_gift_desc != blank -%}
+                <div class="lpdp__gift-text">{{ lpdp_gift_desc }}</div>
+              {%- endif -%}
+            {%- else -%}
+              <div class="lpdp__gift-text">{{ 'custom.pdp.gift_buy_text' | t: count: lpdp_threshold }}</div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <!-- Fragrance Notes -->
+      {%- if top_notes != blank or middle_notes != blank or base_notes != blank -%}
+        <div class="lpdp__notes">
+          <div class="lpdp__notes-label">
+            <span>N</span><span>O</span><span>T</span><span>E</span><span>S</span>
+          </div>
+          <div class="lpdp__notes-rows">
+            {%- if top_notes != blank -%}
+              <div class="lpdp__notes-row">
+                <div class="lpdp__notes-tier">
+                  <span class="lpdp__notes-tier-label">{{ 'custom.pdp.top' | t }}</span>
+                </div>
+                <div class="lpdp__notes-content">{{ top_notes }}</div>
+              </div>
+            {%- endif -%}
+            {%- if middle_notes != blank -%}
+              <div class="lpdp__notes-row">
+                <div class="lpdp__notes-tier">
+                  <span class="lpdp__notes-tier-label">{{ 'custom.pdp.heart' | t }}</span>
+                </div>
+                <div class="lpdp__notes-content">{{ middle_notes }}</div>
+              </div>
+            {%- endif -%}
+            {%- if base_notes != blank -%}
+              <div class="lpdp__notes-row">
+                <div class="lpdp__notes-tier">
+                  <span class="lpdp__notes-tier-label">{{ 'custom.pdp.base' | t }}</span>
+                </div>
+                <div class="lpdp__notes-content">{{ base_notes }}</div>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <!-- Attributes Grid -->
+      <div class="lpdp__attrs">
+
+        <!-- GENDER — dynamic icon -->
+        {%- if gender_list != blank -%}
+          {%- assign gender_val = gender_list | first | downcase -%}
+          <div class="lpdp__attr">
+            <span class="lpdp__attr-label">{{ 'custom.pdp.gender' | t }}</span>
+            <div class="lpdp__attr-icon">
+              {%- if gender_val == 'men' or gender_val == 'male' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="10" cy="14" r="5"/>
+                  <line x1="19" y1="5" x2="14.2" y2="9.8"/>
+                  <polyline points="15,5 19,5 19,9"/>
+                </svg>
+              {%- elsif gender_val == 'women' or gender_val == 'female' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="8" r="5"/>
+                  <line x1="12" y1="13" x2="12" y2="21"/>
+                  <line x1="9" y1="18" x2="15" y2="18"/>
+                </svg>
+              {%- else -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="8" cy="14" r="4"/>
+                  <circle cx="16" cy="8" r="4"/>
+                  <line x1="8" y1="18" x2="8" y2="22"/>
+                  <line x1="6" y1="20" x2="10" y2="20"/>
+                  <line x1="20" y1="4" x2="16.5" y2="7.5"/>
+                  <polyline points="17,4 20,4 20,7"/>
+                </svg>
+              {%- endif -%}
+            </div>
+            <span class="lpdp__attr-value">
+              {%- for g in gender_list -%}{{ g }}{%- unless forloop.last -%}, {%- endunless -%}{%- endfor -%}
+            </span>
+          </div>
+        {%- endif -%}
+
+        <!-- CATEGORY — dynamic icon -->
+        {%- if cat_ref != blank -%}
+          {%- assign cat_val = cat_ref.name.value | downcase -%}
+          <div class="lpdp__attr">
+            <span class="lpdp__attr-label">{{ 'custom.pdp.category' | t }}</span>
+            <div class="lpdp__attr-icon">
+              {%- if cat_val contains 'hair' or cat_val contains 'body' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2C9 2 7 4 7 7c0 2 1 3.5 2.5 4.5L9 20h6l-.5-8.5C16 10.5 17 9 17 7c0-3-2-5-5-5z"/>
+                  <line x1="9" y1="20" x2="15" y2="20"/>
+                </svg>
+              {%- elsif cat_val contains 'home' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M3 12L12 3l9 9"/>
+                  <path d="M9 21V12h6v9"/>
+                </svg>
+              {%- else -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="7" y="8" width="10" height="13" rx="2"/>
+                  <path d="M9 8V6a1 1 0 011-1h4a1 1 0 011 1v2"/>
+                  <line x1="10" y1="5" x2="10" y2="3"/>
+                  <line x1="14" y1="5" x2="14" y2="3"/>
+                  <line x1="10" y1="3" x2="14" y2="3"/>
+                </svg>
+              {%- endif -%}
+            </div>
+            <span class="lpdp__attr-value">{{ cat_ref.name.value }}</span>
+          </div>
+        {%- endif -%}
+
+        <!-- SIZE — weight (grams) vs liquid (ml), with the matching unit + icon -->
+        {%- if prod_size != blank -%}
+          {%- assign size_lower = prod_size | downcase -%}
+          {%- assign size_is_weight = false -%}
+          {%- if size_lower contains 'g' or size_force_weight -%}{%- assign size_is_weight = true -%}{%- endif -%}
+          {%- assign size_num = size_lower | remove: 'ml' | remove: 'grams' | remove: 'gram' | remove: 'gm' | remove: 'g' | strip -%}
+          {%- if size_is_weight -%}{%- assign size_unit = 'G' -%}{%- else -%}{%- assign size_unit = 'ML' -%}{%- endif -%}
+          <div class="lpdp__attr">
+            <span class="lpdp__attr-label">{{ 'custom.pdp.size' | t }}</span>
+            <div class="lpdp__attr-icon">
+              {%- if size_is_weight -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v17"/><path d="M7.5 21h9"/><path d="M4.5 8h15"/><path d="M4.5 8 2 13a2.5 2.5 0 0 0 5 0z"/><path d="M19.5 8 17 13a2.5 2.5 0 0 0 5 0z"/><circle cx="12" cy="4" r="1.4"/></svg>
+              {%- else -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v5.5l-3.4 8.2A2 2 0 0 0 8.4 20h7.2a2 2 0 0 0 1.85-2.75L14 8.5V3"/><path d="M8 13.5h8"/></svg>
+              {%- endif -%}
+            </div>
+            <span class="lpdp__attr-value lpdp__attr-value--size">
+              <span class="lpdp__size-num">{{ size_num }}</span> <span class="lpdp__size-unit">{{ size_unit }}</span>
+            </span>
+          </div>
+        {%- endif -%}
+
+        <!-- CLASS -->
+        {%- if class_list != blank -%}
+          <div class="lpdp__attr">
+            <span class="lpdp__attr-label">{{ 'custom.pdp.class' | t }}</span>
+            <div class="lpdp__attr-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7S6.4 8.9 6.4 13.6a5.6 5.6 0 0 0 11.2 0C17.6 8.9 12 2.7 12 2.7z"/><path d="M14.2 14.2a2.3 2.3 0 0 1-2.2 1.6"/></svg>
+            </div>
+            <span class="lpdp__attr-value">
+              {%- for c in class_list -%}{{ c }}{%- unless forloop.last -%}<br>{%- endunless -%}{%- endfor -%}
+            </span>
+          </div>
+        {%- endif -%}
+
+        <!-- SCENT (metafield: family) — dynamic icon per family -->
+        {%- if family_list != blank -%}
+          {%- comment -%} Group to the primary family (one word) — e.g. "Amber Gourmand" -> "Amber" {%- endcomment -%}
+          {%- assign scent_primary = family_list | first | split: ',' | first | split: ' ' | first | strip -%}
+          {%- assign sk = scent_primary | downcase -%}
+          <div class="lpdp__attr">
+            <span class="lpdp__attr-label">{{ 'custom.pdp.scent' | t }}</span>
+            <div class="lpdp__attr-icon">
+              {%- if sk contains 'floral' or sk contains 'flower' or sk contains 'rose' or sk contains 'jasmin' or sk contains 'tuberose' or sk contains 'powder' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.4"/><path d="M12 9.6c-.4-2 .3-3.7 2-3.7s2.4 1.8 1 3.3"/><path d="M12 14.4c.4 2-.3 3.7-2 3.7s-2.4-1.8-1-3.3"/><path d="M14.4 12c2-.4 3.7.3 3.7 2s-1.8 2.4-3.3 1"/><path d="M9.6 12c-2 .4-3.7-.3-3.7-2s1.8-2.4 3.3-1"/></svg>
+              {%- elsif sk contains 'wood' or sk contains 'oud' or sk contains 'sandal' or sk contains 'cedar' or sk contains 'vetiver' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-8"/><path d="M12 15l-3.2-3.2M12 12l3-3"/><path d="M12 3a5 5 0 0 0-3.2 8.8 4.2 4.2 0 0 0 6.4 0A5 5 0 0 0 12 3z"/></svg>
+              {%- elsif sk contains 'citrus' or sk contains 'lemon' or sk contains 'bergamot' or sk contains 'orange' or sk contains 'grapefruit' or sk contains 'fruit' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>
+              {%- elsif sk contains 'spic' or sk contains 'pepper' or sk contains 'cinnamon' or sk contains 'clove' or sk contains 'saffron' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c.5 3.5 3.8 4.8 3.8 8.5a3.8 3.8 0 0 1-7.6 0c0-1.5.8-2.4.8-2.4s.2 1.6 1.4 1.6c1.6 0 1.6-2.5 1.6-7.7z"/></svg>
+              {%- elsif sk contains 'fresh' or sk contains 'aqua' or sk contains 'marine' or sk contains 'water' or sk contains 'ozon' or sk contains 'aromatic' or sk contains 'green' or sk contains 'herb' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M3 14c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>
+              {%- elsif sk contains 'amber' or sk contains 'orient' or sk contains 'warm' or sk contains 'vanilla' or sk contains 'gourmand' or sk contains 'sweet' or sk contains 'musk' or sk contains 'leather' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/></svg>
+              {%- else -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17c-2.2 0-3.5-1.6-3.5-3.4S4.8 10 7 10s3.5 1.7 3.5 3.5"/><path d="M10.5 14c0-2.2 1.7-3.9 3.9-3.9S18 11.8 18 14s-1.6 3.9-3.6 3.9"/></svg>
+              {%- endif -%}
+            </div>
+            <span class="lpdp__attr-value">{{ scent_primary }}</span>
+          </div>
+        {%- endif -%}
+
+        <!-- CREATOR -->
+        {%- if creator != blank -%}
+          <div class="lpdp__attr">
+            <span class="lpdp__attr-label">{{ 'custom.pdp.creator' | t }}</span>
+            <div class="lpdp__attr-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.24 4.76a4 4 0 0 0-5.66 0L5 14.34V19h4.66l9.58-9.58a4 4 0 0 0 0-5.66z"/>
+                <line x1="5" y1="19" x2="11" y2="13"/>
+              </svg>
+            </div>
+            <span class="lpdp__attr-value">{{ creator }}</span>
+          </div>
+        {%- endif -%}
+
+      </div>
+
+      <!-- ATC Form -->
+      {%- form 'product', product, id: 'lpdp-form', class: 'lpdp__form' -%}
+        <input type="hidden" name="id" value="{{ first_variant.id }}" id="lpdp-variant-id">
+
+        {%- if product.variants.size > 1 -%}
+          <div class="lpdp__variants">
+            {%- for option in product.options_with_values -%}
+              <div class="lpdp__option">
+                <span class="lpdp__option-name">{{ option.name }}</span>
+                <div class="lpdp__option-values">
+                  {%- for value in option.values -%}
+                    <label class="lpdp__option-btn">
+                      <input
+                        type="radio"
+                        name="option-{{ forloop.parentloop.index0 }}"
+                        value="{{ value }}"
+                        {% if option.selected_value == value %}checked{% endif %}
+                      >
+                      <span>{{ value }}</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div class="lpdp__atc-row">
+          <div class="lpdp__qty">
+            <button type="button" class="lpdp__qty-btn" id="lpdp-qty-minus-{{ section.id }}" aria-label="Decrease">−</button>
+            <input type="number" name="quantity" value="1" min="1" class="lpdp__qty-input" id="lpdp-qty-input-{{ section.id }}">
+            <button type="button" class="lpdp__qty-btn" id="lpdp-qty-plus-{{ section.id }}" aria-label="Increase">+</button>
+          </div>
+          <button type="submit" name="add" class="lpdp__atc">
+            {%- if first_variant.available -%}{{ 'custom.pdp.add_to_cart' | t }}{%- else -%}{{ 'custom.pdp.sold_out' | t }}{%- endif -%}
+          </button>
+        </div>
+
+        <a href="/checkout?variant={{ first_variant.id }}&quantity=1" class="lpdp__bin">
+          {{ 'custom.pdp.buy_now' | t }}
+        </a>
+      {%- endform -%}
+
+    </div><!-- /lpdp__info -->
+  </div><!-- /lpdp__inner -->
+
+  <!-- ═══ RELATED PRODUCTS ═══ -->
+  {%- assign related_collection = brand_ref.collection.value -%}
+  {%- if related_collection != blank -%}
+    <div class="lpdp__related">
+      <div class="lpdp__related-header">
+        {%- assign lpdp_brand_nm = brand_ref.name.value -%}<h2 class="lpdp__related-title">{{ 'custom.pdp.more_from' | t: name: lpdp_brand_nm }}</h2>
+        <a href="{{ routes.collections_url }}/{{ brand_ref.slug }}" class="lpdp__related-viewall">{{ 'custom.pdp.view_all_arrow' | t }}</a>
+      </div>
+      <div class="lpdp__related-grid">
+        {%- assign shown = 0 -%}
+        {%- for rp in related_collection.products -%}
+          {%- unless rp.id == product.id -%}
+            {%- if shown < 4 -%}
+              <a href="{{ rp.url }}" class="lpdp__related-card">
+                <div class="lpdp__related-img-wrap">
+                  {%- capture rp_offer -%}{%- render 'is-gift-offer', product: rp -%}{%- endcapture -%}
+                  {%- if rp_offer contains 'true' -%}
+                    <span class="lpdp__related-gift" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9"/><path d="M12 8v13"/><path d="M12 8S10.5 3.5 8 4c-1.8.4-1.8 3 0 3.4 1.6.4 4 .6 4 .6zM12 8s1.5-4.5 4-4c1.8.4 1.8 3 0 3.4-1.6.4-4 .6-4 .6z"/></svg>
+                      {{ shop.metafields.elixir_promotions.gift_offer_badge_text.value | default: 'Free Gift' }}
+                    </span>
+                  {%- endif -%}
+                  {{- rp.featured_image | image_url: width: 500 | image_tag:
+                      alt: rp.title,
+                      class: 'lpdp__related-img',
+                      loading: 'lazy'
+                  -}}
+                </div>
+                <div class="lpdp__related-info">
+                  <span class="lpdp__related-name">{{ rp.title }}</span>
+                  <span class="lpdp__related-price">{{ rp.price_min | money }}</span>
+                </div>
+              </a>
+              {%- assign shown = shown | plus: 1 -%}
+            {%- endif -%}
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+</div><!-- /lpdp -->
+
+<script>
+(function() {
+  var sid        = '{{ section.id }}';
+  var root       = document.getElementById('lpdp-' + sid);
+  var galleryCol = document.getElementById('lpdp-gallery-' + sid);
+  var thumbs     = root ? root.querySelectorAll('.lpdp__thumb') : [];
+  var imgs       = root ? root.querySelectorAll('.lpdp__main-img') : [];
+  var curIdx     = 0;
+  var totalImgs  = imgs.length;
+  var locked     = true;
+
+  /* ── Thumbnail click ── */
+  thumbs.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      setActive(parseInt(this.dataset.index, 10));
+    });
+  });
+
+  function setActive(idx) {
+    thumbs.forEach(function(t) { t.classList.remove('is-active'); });
+    imgs.forEach(function(i)   { i.classList.remove('is-active'); });
+    if (thumbs[idx]) thumbs[idx].classList.add('is-active');
+    if (imgs[idx])   imgs[idx].classList.add('is-active');
+    curIdx = idx;
+  }
+
+  /* ── Qty buttons ── */
+  var minus = document.getElementById('lpdp-qty-minus-' + sid);
+  var plus  = document.getElementById('lpdp-qty-plus-' + sid);
+  var qtyIn = document.getElementById('lpdp-qty-input-' + sid);
+  if (minus && plus && qtyIn) {
+    minus.addEventListener('click', function() {
+      var v = parseInt(qtyIn.value, 10);
+      if (v > 1) qtyIn.value = v - 1;
+    });
+    plus.addEventListener('click', function() {
+      qtyIn.value = parseInt(qtyIn.value, 10) + 1;
+    });
+  }
+
+  /* ── Scroll: cycle gallery images first, then release page scroll ── */
+  if (totalImgs <= 1 || !galleryCol) return;
+
+  var lastSwitch = 0;
+  window.addEventListener('wheel', function(e) {
+    var rect = galleryCol.getBoundingClientRect();
+    var galleryVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+    if (!galleryVisible) {
+      locked = false;
+      return;
+    }
+
+    var now = Date.now();
+
+    if (e.deltaY > 0) {
+      if (locked && curIdx < totalImgs - 1) {
+        e.preventDefault();
+        /* throttle: advance one image per gesture, smooth crossfade */
+        if (now - lastSwitch > 450) { setActive(curIdx + 1); lastSwitch = now; }
+      } else if (curIdx >= totalImgs - 1) {
+        locked = false;
+      }
+    } else if (e.deltaY < 0) {
+      if (curIdx > 0 && rect.top >= -10) {
+        e.preventDefault();
+        locked = true;
+        if (now - lastSwitch > 450) { setActive(curIdx - 1); lastSwitch = now; }
+      } else if (curIdx === 0) {
+        locked = true;
+      }
+    }
+  }, { passive: false });
+
+  /* Description: trim to 3 lines and inject "Read More →" as INLINE text inside
+     the paragraph, so it shares the exact font/size/weight/baseline of the text. */
+  var descEl = document.getElementById('lpdp-desc-{{ section.id }}');
+  if (descEl) {
+    var fullHTML = descEl.innerHTML;
+    var fullText = (descEl.textContent || '').replace(/\s+/g, ' ').trim();
+    var MORE = 'Read More →';
+    var LESS = 'Read Less ←';
+    var expanded = false;
+
+    function lineCount() {
+      var lh = parseFloat(getComputedStyle(descEl).lineHeight) || 1;
+      return Math.round(descEl.scrollHeight / lh);
+    }
+
+    function makeLink(label, onActivate) {
+      var s = document.createElement('span');
+      s.className = 'lpdp__more';
+      s.textContent = label;
+      s.setAttribute('role', 'button');
+      s.tabIndex = 0;
+      s.addEventListener('click', onActivate);
+      s.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onActivate(); }
+      });
+      return s;
+    }
+
+    function collapse() {
+      expanded = false;
+      descEl.textContent = fullText;
+      if (lineCount() <= 3) return; /* fits in 3 lines, no toggle needed */
+
+      /* largest word count whose text + " … Read More →" still fits in 3 lines */
+      var words = fullText.split(' ');
+      var lo = 1, hi = words.length, best = 1;
+      while (lo <= hi) {
+        var mid = (lo + hi) >> 1;
+        descEl.textContent = words.slice(0, mid).join(' ') + '… ' + MORE;
+        if (lineCount() <= 3) { best = mid; lo = mid + 1; } else { hi = mid - 1; }
+      }
+      descEl.textContent = words.slice(0, best).join(' ') + '… ';
+      descEl.appendChild(makeLink(MORE, expand));
+    }
+
+    function expand() {
+      expanded = true;
+      /* flatten to text (same as collapsed) so "Read Less ←" flows INLINE right
+         after the last word instead of dropping below a block <p> */
+      descEl.textContent = fullText + ' ';
+      descEl.appendChild(makeLink(LESS, collapse));
+    }
+
+    collapse();
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { if (!expanded) collapse(); }); }
+    window.addEventListener('load', function () { if (!expanded) collapse(); });
+    var rt;
+    window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { if (!expanded) collapse(); }, 150); });
+  }
+
+})();
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700&display=swap');
+/* ═══════════════════════════════════════
+   LUXURY PDP
+═══════════════════════════════════════ */
+.lpdp {
+  --lpdp-gold: #B87253;
+  background: #F4F4F4;
+  color: inherit;
+  font-family: inherit;
+  padding: 0;
+}
+
+.lpdp__crumbs { grid-area: crumbs; background: #F1F0ED; width: fit-content; padding: 9px clamp(16px, 3vw, 36px); }
+.lpdp__crumbs ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 0; padding: 0; font-size: 12px; letter-spacing: 0.03em; }
+.lpdp__crumbs li { display: inline-flex; align-items: center; gap: 9px; }
+.lpdp__crumbs li + li::before { content: "/"; color: #c3c3c3; font-size: 11px; }
+.lpdp__crumbs a { color: #8a8a8a; text-decoration: none; transition: color .2s ease; }
+.lpdp__crumbs a:hover { color: var(--lpdp-gold); }
+.lpdp__crumbs [aria-current] span { color: #1a1a1a; font-weight: 500; }
+@media (max-width: 749px) {
+  .lpdp__crumbs { padding: 8px 16px; }
+  .lpdp__crumbs ol { font-size: 11px; gap: 7px; }
+  .lpdp__crumbs li { gap: 7px; }
+}
+
+.lpdp__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "crumbs info" "gallery info";
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  max-width: none;
+  margin: 0;
+  align-items: stretch;
+}
+.lpdp__gallery-col { grid-area: gallery; }
+.lpdp__info { grid-area: info; }
+
+/* ── Gallery ── */
+.lpdp__gallery-col {
+  display: flex;
+  gap: 1rem;
+  position: sticky;
+  top: 2rem;
+  align-self: start;
+  padding-left: 2.25rem;
+  padding-top: 1.5rem;
+  padding-bottom: 2.5rem;            /* breathing room below the image */
+}
+
+.lpdp__thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.lpdp__thumb {
+  background: #f0f0f0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 4px;
+  transition: border-color 0.2s;
+  overflow: hidden;
+}
+.lpdp__thumb img {
+  width: 100%;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 2px;
+  display: block;
+}
+.lpdp__thumb.is-active,
+.lpdp__thumb:hover { border-color: rgba(0,0,0,0.45); }
+
+.lpdp__main-img-wrap {
+  flex: 1;
+  /* never taller than the laptop viewport: cap height and derive the width
+     from the 3/4 ratio so the full image is always visible without cropping */
+  max-height: 80vh;
+  max-width: min(90%, 60vh);
+  margin-inline: auto;              /* centred in the left section */
+  border-radius: 8px;
+  overflow: hidden;
+  background: transparent;
+  aspect-ratio: 3/4;
+  position: relative;
+}
+
+/* Crossfade between gallery images */
+.lpdp__main-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.55s ease;
+  pointer-events: none;
+}
+.lpdp__main-img.is-active { opacity: 1; pointer-events: auto; }
+.lpdp__img { width: 100%; height: 100%; object-fit: cover; display: block; mix-blend-mode: multiply; }
+/* Desktop: zoom past the photo's built-in margins so the bottle fills the frame,
+   anchored near the top (matches the marked composition) */
+@media (min-width: 769px) {
+  .lpdp__img { transform: translateY(7%) scale(1.5); transform-origin: 50% 16%; }
+}
+
+/* ── Info Panel ── */
+.lpdp__info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 0.5rem;
+}
+
+/* The brand as text in the body font, the same treatment the product cards use
+   for their brand line, so a product reads the same way in the grid and here. */
+.lpdp__brand-name {
+  display: inline-block;
+  font-family: var(--text-font-family);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.55);
+}
+.lpdp__brand-name:hover { color: var(--lpdp-gold); }
+
+h1.lpdp__title {
+  font-size: 1.15rem !important;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: inherit;
+  /* !important: a global heading-font rule was overriding this to a serif */
+  font-family: var(--text-font-family) !important;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.lpdp__price { display: flex; align-items: center; gap: 0.75rem; }
+
+/* Gift offer card — below the description: gift image left, details right, corner ribbon */
+/* The var() fallbacks are this card's original look; the Elixir Promotions app's
+   Storefront design page overrides them via elx-design-vars.liquid. The default
+   background stays a gradient because the app only offers one colour, so a flat
+   --elx-pdp-bg is applied ONLY when the merchant picks one. */
+.lpdp__gift {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+  margin: var(--elx-pdp-mt, 0.25rem) 0 var(--elx-pdp-mb, 0.25rem);
+  padding: var(--elx-pdp-padding, 0);
+  border: 1px solid var(--elx-pdp-border, rgba(184, 114, 83, 0.35));
+  border-radius: var(--elx-pdp-radius, 12px);
+  background: var(--elx-pdp-bg, linear-gradient(180deg, rgba(184,114,83,0.06), rgba(184,114,83,0.02)));
+}
+
+/* Gift image: fixed square panel flush to the card's left/top/bottom edges */
+.lpdp__gift-media {
+  flex: 0 0 128px;
+  align-self: stretch;
+  width: 128px;
+  min-height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;   /* ~1mm breathing room above/below the product */
+  border-radius: 0;
+  background: transparent;
+  overflow: hidden;
+  position: relative;
+}
+/* Elegant brass composition behind the product:
+   soft glow + twin fine rings + a light-catch on the rim.
+   Centre band is masked so it all sits one layer BEHIND the bottles. */
+.lpdp__gift-media::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 84%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 42%,
+      rgba(184,114,83,0.26), rgba(184,114,83,0.12) 46%, rgba(184,114,83,0.04) 62%, transparent 68%),
+    radial-gradient(circle,
+      transparent 62.4%, rgba(184,114,83,0.40) 63.2%, rgba(184,114,83,0.40) 64.2%, transparent 65%),
+    radial-gradient(circle,
+      transparent 69.4%, rgba(184,114,83,0.18) 70.2%, rgba(184,114,83,0.18) 71%, transparent 71.8%);
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 14%, transparent 32%, transparent 68%, #000 86%, #000 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 14%, transparent 32%, transparent 68%, #000 86%, #000 100%);
+}
+/* warm light catching the left rim of the inner ring */
+.lpdp__gift-media::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 84%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: conic-gradient(from 235deg,
+    transparent 0deg, rgba(228,174,132,0.65) 26deg, rgba(228,174,132,0.15) 50deg, transparent 66deg);
+  -webkit-mask-image: radial-gradient(circle, transparent 61.8%, #000 62.8%, #000 64.8%, transparent 65.8%);
+  mask-image: radial-gradient(circle, transparent 61.8%, #000 62.8%, #000 64.8%, transparent 65.8%);
+  pointer-events: none;
+}
+.lpdp__gift-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 1;
+  mix-blend-mode: multiply;   /* photo's own backdrop melts into the card colour */
+}
+.lpdp__gift-content { flex: 1 1 auto; min-width: 0; padding: 0.9rem 2.1rem 0.9rem 0; display: flex; flex-direction: column; justify-content: center; }
+.lpdp__gift-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--text-font-family);
+  font-size: var(--elx-pdp-heading-size, 0.92rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: var(--elx-pdp-fg, inherit);
+}
+.lpdp__gift-ic { width: 16px; height: 16px; color: var(--elx-pdp-accent, #B87253); flex: 0 0 auto; }
+.lpdp__gift-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 0.3rem;
+  font-family: var(--text-font-family);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--elx-pdp-accent, var(--lpdp-gold));
+}
+.lpdp__gift-price { font-size: 0.78rem; font-weight: 600; color: var(--elx-pdp-accent, var(--lpdp-gold)); }
+.lpdp__gift-price s { font-weight: 400; color: rgba(0,0,0,0.4); margin-right: 0.25rem; }
+.lpdp__gift-text { margin-top: 0.3rem; font-size: 0.84rem; line-height: 1.5; color: rgba(0,0,0,0.6); }
+.lpdp__gift-text p { margin: 0; }
+.lpdp__gift-text strong { font-weight: 600; color: var(--elx-pdp-accent, var(--lpdp-gold)); }
+@media (max-width: 600px) {
+  .lpdp__gift-media { width: 96px; }
+  .lpdp__gift-content { padding: 0.8rem 1.6rem 0.8rem 0; }
+  .lpdp__gift-media { flex-basis: 96px; width: 96px; min-height: 96px; }
+}
+.lpdp__price-current { font-size: 1.1rem; font-weight: 400; color: inherit; }
+.lpdp__price-compare { font-size: 0.85rem; color: rgba(0,0,0,0.4); text-decoration: line-through; }
+
+.lpdp__desc {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: rgba(0,0,0,0.65);
+  font-family: inherit;
+  border-left: 2px solid rgba(0,0,0,0.18);
+  padding-left: 1rem;
+}
+/* "Read More →" is injected by JS as inline text INSIDE the paragraph, so it
+   inherits the exact font/size/weight/colour/baseline — it's part of the same
+   text line, not a separate control. Only a pointer + hover tint distinguish it. */
+.lpdp__more {
+  cursor: pointer;
+  white-space: nowrap;
+}
+.lpdp__more:hover { color: #1a1a1a; }
+
+/* ── Notes ── */
+.lpdp__notes {
+  display: flex;
+  align-items: stretch;
+  background: rgba(0,0,0,0.02);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.lpdp__notes-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 1.25rem 0.85rem;
+  background: rgba(0,0,0,0.04);
+  border-right: 1px solid rgba(0,0,0,0.08);
+  min-width: 32px;
+}
+.lpdp__notes-label span {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  color: rgba(0,0,0,0.4);
+  text-transform: uppercase;
+}
+
+.lpdp__notes-rows {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1.25rem;
+}
+
+.lpdp__notes-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.lpdp__notes-row:last-child { border-bottom: none; }
+
+.lpdp__notes-tier {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 72px;
+  flex-shrink: 0;
+}
+
+
+.lpdp__notes-tier-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(0,0,0,0.4);
+  text-transform: uppercase;
+}
+
+.lpdp__notes-content {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgba(34, 33, 33, 0.7); 
+  font-family: inherit;
+  text-align: left;
+}
+
+/* ── Attributes ── */
+.lpdp__attrs {
+  display: flex;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.02);
+}
+
+.lpdp__attr {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;   /* label pinned to top, value pinned to bottom */
+  min-height: 6rem;
+  padding: 1rem 0.4rem;
+  border-right: 1px solid rgba(0,0,0,0.08);
+  gap: 0.5rem;
+  text-align: center;
+}
+.lpdp__attr:last-child { border-right: none; }
+
+.lpdp__attr-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(0,0,0,0.4);
+  text-transform: uppercase;
+}
+
+.lpdp__attr-icon {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(34, 33, 33, 0.7);
+}
+.lpdp__attr-icon svg { width: 100%; height: 100%; }
+
+.lpdp__attr-icon--size {
+  flex-direction: column;
+  gap: 0;
+  line-height: 1;
+  width: auto;
+  height: auto;
+}
+.lpdp__size-num { font-size: inherit; font-weight: inherit; color: inherit; line-height: 1; }
+.lpdp__size-unit { font-size: inherit; letter-spacing: 0.1em; color: rgba(34, 33, 33, 0.7); }
+
+.lpdp__attr-icon--text {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  width: auto;
+  height: auto;
+}
+
+.lpdp__attr-value {
+  font-size: inherit;
+  color: rgba(34, 33, 33, 0.7);
+  line-height: 1.3;
+}
+
+/* ── Form ── */
+.lpdp__form { display: flex; flex-direction: column; gap: 1rem; }
+
+.lpdp__variants { display: flex; flex-direction: column; gap: 0.75rem; }
+.lpdp__option-name {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: rgba(34, 33, 33, 0.7);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.4rem;
+  font-family: inherit;
+}
+.lpdp__option-values { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.lpdp__option-btn input { display: none; }
+.lpdp__option-btn span {
+  display: block;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 4px;
+  font-size: inherit;
+  color: rgba(34, 33, 33, 0.7);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.lpdp__option-btn input:checked + span {
+  border-color: rgba(34, 33, 33, 0.7);
+  color: rgba(34, 33, 33, 0.7);
+  background: rgba(0,0,0,0.05);
+}
+
+.lpdp__atc-row { display: flex; gap: 0.75rem; align-items: stretch; }
+
+.lpdp__qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.lpdp__qty-btn {
+  background: transparent;
+  border: none;
+  color: inherit;
+  width: 36px;
+  height: 48px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.lpdp__qty-btn:hover { background: rgba(0,0,0,0.05); }
+.lpdp__qty-input {
+  width: 44px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-left: 1px solid rgba(0,0,0,0.15);
+  border-right: 1px solid rgba(0,0,0,0.15);
+  color: inherit;
+  font-size: 0.9rem;
+  font-family: inherit;
+  height: 48px;
+  -moz-appearance: textfield;
+}
+.lpdp__qty-input::-webkit-outer-spin-button,
+.lpdp__qty-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+.lpdp__atc {
+  flex: 1;
+  background: transparent;
+  border: 1px solid rgba(34, 33, 33, 0.7);
+  color: rgba(34, 33, 33, 0.7);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-family: inherit;
+  padding: 0 1.5rem;
+  height: 48px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.lpdp__atc:hover { background: rgba(0,0,0,0.85); color: #fff; }
+
+.lpdp__bin {
+  display: block;
+  text-align: center;
+  background: var(--lpdp-gold);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-family: inherit;
+  padding: 0.9rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.lpdp__bin:hover { opacity: 0.82; }
+
+/* ── Related Products ── */
+.lpdp__related {
+  margin: 0 auto;
+  padding: 3.5rem 2rem 4rem;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  background: #ffffff;
+}
+.lpdp__related-header,
+.lpdp__related-grid { max-width: 1300px; margin-left: auto; margin-right: auto; }
+
+.lpdp__related-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.lpdp__related-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.lpdp__related-viewall {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+.lpdp__related-viewall:hover { opacity: 1; }
+
+.lpdp__related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.lpdp__related-card {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  /* match the site-wide light-gray product-card frame */
+  background: #f4f5f6;
+  border-radius: 12px;
+  padding: 1.25rem 0.875rem 1.5rem;
+  text-align: center;
+  transition: background .45s ease, box-shadow .45s ease;
+}
+.lpdp__related-img-wrap {
+  position: relative;
+  aspect-ratio: 3/4;
+  background: transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform .45s cubic-bezier(.16, 1, .3, 1), filter .45s ease;
+}
+.lpdp__related-gift {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px 3px 6px;
+  background: #B87253;
+  color: #fff;
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  pointer-events: none;
+}
+.lpdp__related-gift svg { width: 11px; height: 11px; flex: 0 0 auto; }
+/* product lifts off the gray surface with a realistic shadow; card stays flat */
+.lpdp__related-card:hover .lpdp__related-img-wrap {
+  transform: translateY(-7px);
+  filter: drop-shadow(0 16px 16px rgba(0, 0, 0, 0.24));
+}
+.lpdp__related-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.lpdp__related-card:hover .lpdp__related-img { transform: scale(1.04); }
+
+.lpdp__related-info { display: flex; flex-direction: column; gap: 0.3rem; align-items: center; }
+.lpdp__related-name {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: inherit;
+  font-family: inherit;
+  line-height: 1.4;
+}
+.lpdp__related-price { font-size: 0.85rem; color: inherit; font-weight: 600; }
+
+/* ── Gold accents + motion (elegant, restrained) ── */
+.lpdp__price-current { color: var(--lpdp-gold); letter-spacing: 0.02em; }
+
+.lpdp__title { position: relative; padding-bottom: 0.65rem; }
+.lpdp__title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 38px;
+  height: 2px;
+  background: var(--lpdp-gold);
+}
+
+.lpdp__desc { border-left-color: var(--lpdp-gold); }
+
+/* Always-visible gold framing (reads at rest, not only on hover) */
+.lpdp__notes,
+.lpdp__attrs { border-color: rgba(184, 114, 83, 0.45); }
+.lpdp__notes-label {
+  background: rgba(184, 114, 83, 0.14);
+  border-right-color: rgba(184, 114, 83, 0.3);
+}
+.lpdp__notes-label span { color: var(--lpdp-gold); }
+.lpdp__attr { border-right-color: rgba(184, 114, 83, 0.22); }
+.lpdp__attr-label { color: var(--lpdp-gold); }
+
+.lpdp__notes { transition: border-color 0.3s ease; }
+.lpdp__notes:hover { border-color: rgba(184, 114, 83, 0.7); }
+
+.lpdp__attr { transition: background 0.3s ease; }
+.lpdp__attr:hover { background: rgba(184, 114, 83, 0.10); }
+.lpdp__attr-icon { transition: color 0.3s ease; }
+.lpdp__attr:hover .lpdp__attr-icon { color: var(--lpdp-gold); }
+
+.lpdp__option-btn span:hover { border-color: var(--lpdp-gold); }
+.lpdp__option-btn input:checked + span {
+  border-color: var(--lpdp-gold);
+  color: #1a1a1a;
+  background: rgba(184, 114, 83, 0.12);
+}
+
+.lpdp__atc:hover {
+  background: var(--lpdp-gold);
+  border-color: var(--lpdp-gold);
+  color: #fff;
+}
+
+/* Staggered fade-up entrance for the info column */
+@keyframes lpdpFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.lpdp__info > * { animation: lpdpFadeUp 0.6s ease both; }
+.lpdp__info > *:nth-child(1) { animation-delay: 0.05s; }
+.lpdp__info > *:nth-child(2) { animation-delay: 0.12s; }
+.lpdp__info > *:nth-child(3) { animation-delay: 0.19s; }
+.lpdp__info > *:nth-child(4) { animation-delay: 0.26s; }
+.lpdp__info > *:nth-child(5) { animation-delay: 0.33s; }
+.lpdp__info > *:nth-child(6) { animation-delay: 0.40s; }
+.lpdp__info > *:nth-child(7) { animation-delay: 0.47s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lpdp__info > *,
+  .lpdp__main-img { animation: none; transition: none; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .lpdp { padding: 1.5rem 0 0; }   /* edge to edge: no left/right gap */
+  .lpdp__inner { grid-template-columns: 1fr; grid-template-areas: "crumbs" "gallery" "info"; grid-template-rows: auto auto auto; gap: 2rem; }
+  /* main image centered on top, thumbnails as a row below it (tight gap + elegant divider) */
+  .lpdp__gallery-col { position: static; padding-left: 0; padding-top: 0; flex-direction: column-reverse; gap: 0; }
+  /* shorter frame + anchor the bottle to the top so the photo's empty bottom is cropped */
+  .lpdp__main-img-wrap { flex: none; width: 100%; max-width: 100%; max-height: none; margin-inline: 0; aspect-ratio: 1 / 1; }
+  .lpdp__img { object-position: center top; }
+  .lpdp__thumbs {
+    flex-direction: row; width: auto; justify-content: center; gap: 0.6rem;
+    position: relative; margin-top: 0.55rem; padding-top: 0.85rem;
+  }
+  /* elegant brass divider, fading at both ends */
+  .lpdp__thumbs::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: min(220px, 58%); height: 1px;
+    background: linear-gradient(to right, transparent, rgba(184,114,83,0.6) 20%, rgba(184,114,83,0.6) 80%, transparent);
+  }
+  .lpdp__thumb { width: 64px; flex-shrink: 0; }
+  .lpdp__related-grid { grid-template-columns: repeat(2, 1fr); }
+  .lpdp__thumb img { height: 56px; }
+  .lpdp__related-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+}
+
+/* ══════════════════════════════════════════
+   LIGHT INFO PANEL (right column)
+   ══════════════════════════════════════════ */
+.lpdp__info {
+  --text-color: 26 26 26;
+  --background: 250 250 250;
+  background: #FAFAFA;
+  color: #1a1a1a;
+  padding: 3rem 3rem 3rem 3.25rem;
+  border-radius: 0;
+}
+/* Mobile: trim the big left/side indent on the info panel so the content
+   uses the width (the gallery above keeps its own spacing). */
+@media (max-width: 768px) {
+  .lpdp__info { padding: 2rem 1.25rem 2.5rem; }
+  h1.lpdp__title { font-size: 1.3rem !important; }
+}
+.lpdp__title { color: #1a1a1a; }
+.lpdp__title::after { background: var(--lpdp-gold) !important; }
+.lpdp__price-current { color: var(--lpdp-gold); }
+.lpdp__price-compare { color: rgba(0,0,0,0.4); }
+.lpdp__desc { color: rgba(0,0,0,0.65); border-left-color: rgba(184,114,83,0.6); }
+
+/* Gift card on the light info panel */
+.lpdp__gift { border-color: rgba(184,114,83,0.45); background: linear-gradient(180deg, rgba(184,114,83,0.10), rgba(184,114,83,0.03)), #ffffff; }
+.lpdp__gift-heading { color: #1a1a1a; }
+.lpdp__gift-text { color: rgba(0,0,0,0.6); }
+.lpdp__gift-price s { color: rgba(0,0,0,0.4); }
+
+.lpdp__notes { background: rgba(0,0,0,0.025); border-color: rgba(0,0,0,0.12); }
+.lpdp__notes-label { background: rgba(0,0,0,0.04); border-right-color: rgba(0,0,0,0.12); }
+.lpdp__notes-label span { color: var(--lpdp-gold); }
+.lpdp__notes-row { border-bottom-color: rgba(0,0,0,0.08); }
+.lpdp__notes-tier-label { color: rgba(0,0,0,0.55); }
+.lpdp__notes-content { color: rgba(0,0,0,0.8); }
+
+.lpdp__attrs { background: rgba(0,0,0,0.025); border-color: rgba(0,0,0,0.12); }
+.lpdp__attr { border-right-color: rgba(0,0,0,0.1); }
+.lpdp__attr-label { color: var(--lpdp-gold); }
+.lpdp__attr-icon, .lpdp__attr-value, .lpdp__size-num, .lpdp__size-unit, .lpdp__attr-icon--text { color: rgba(0,0,0,0.85); }
+
+</style>
+
+{% schema %}
+{
+  "name": "Luxury PDP",
+  "tag": "div",
+  "class": "section-luxury-pdp",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Luxury PDP"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,426 @@
+{% doc %}
+  @prompt
+    Create a Shopify Liquid section called "brand-logo-marquee" that automatically fetches all brand logos from metaobjects. Use this exact Liquid to fetch logos:
+    
+    {% assign brands = shop.metaobjects.brand.values %}
+    {% for brand in brands %}
+      {% assign logo = brand.logo.value %}
+      {% if logo != blank %}
+        <a href="/collections/{{ brand.slug.value }}" class="marquee-logo-link">
+          <div class="marquee-logo-box">
+            <img src="{{ logo | image_url: width: 300 }}" alt="{{ brand.name.value }}" loading="lazy" class="marquee-logo-img">
+          </div>
+        </a>
+      {% endif %}
+    {% endfor %}
+    
+    CRITICAL logo uniformity: each logo must be wrapped in a div.marquee-logo-box with fixed width: 150px, height: 80px, display: flex, align-items: center, justify-content: center. The img inside must have max-width: 100%, max-height: 100%, width: auto, height: auto, object-fit: contain, object-position: center. This ensures ALL logos appear the same size box regardless of original dimensions.
+    
+    Apply CSS filter: sepia(1) saturate(0.5) hue-rotate(5deg) brightness(0.85) on img for #B87253 gold tint. On hover filter: none for full color. Margin 0 30px between logo boxes.
+    
+    Seamless infinite horizontal scroll: duplicate the full logo list twice in a single flex row. CSS animation translateX(-50%) over 30s linear infinite. Fade gradient masks on left and right edges (width 120px) using ::before ::after pseudo elements. Full width section. Schema: heading text, color_scheme, padding_top range default 40, padding_bottom range default 40, scroll_duration range 10-60 default 30. No blocks.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-brand-marquee-section-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+    /* silky graphite ribbon base: a curved satin highlight over graphite */
+    isolation: isolate;
+    background-color: #242424;
+    background-image:
+      linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0) 46%, rgba(0,0,0,0.18) 100%),
+      linear-gradient(180deg, #2c2c2c 0%, #202020 100%);
+  }
+  /* Moving silk sheen — slanted soft highlight bands that drift across the ribbon,
+     like light travelling over silk. Driven by its own CSS animation now (the JS
+     scroll engine that used to move it is gone). */
+  .ai-brand-marquee-section-{{ ai_gen_id }}::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -700px;
+    right: -700px;
+    z-index: -1;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to right,
+      rgba(255,255,255,0) 0px,
+      rgba(255,255,255,0.06) 300px,
+      rgba(255,255,255,0) 600px
+    );
+    transform: skewX(-8deg);
+    animation: ai-marquee-sheen-{{ ai_gen_id }} {{ block.settings.scroll_duration | times: 8 }}s linear infinite;
+    will-change: transform;
+  }
+  @keyframes ai-marquee-sheen-{{ ai_gen_id }} {
+    from { transform: skewX(-8deg) translateX(0); }
+    to   { transform: skewX(-8deg) translateX(-600px); }
+  }
+  .ai-brand-marquee-section-{{ ai_gen_id }}:hover::before { animation-play-state: paused; }
+  /* Same fold-light, but ABOVE the logos with a blend mode, so each logo brightens
+     as a fold passes across it — the logos read as printed on the moving silk. */
+  .ai-brand-marquee-section-{{ ai_gen_id }}::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -700px;
+    right: -700px;
+    z-index: 2;                          /* above logos, below the preview panel (z 60) */
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to right,
+      rgba(255,255,255,0) 0px,
+      rgba(255,255,255,0.1) 300px,
+      rgba(255,255,255,0) 600px
+    );
+    transform: skewX(-8deg);
+    animation: ai-marquee-sheen-{{ ai_gen_id }} {{ block.settings.scroll_duration | times: 8 }}s linear infinite;
+    mix-blend-mode: screen;
+    will-change: transform;
+  }
+  .ai-brand-marquee-section-{{ ai_gen_id }}:hover::after { animation-play-state: paused; }
+
+  .ai-brand-marquee-heading-{{ ai_gen_id }} {
+    text-align: center;
+    margin: 0 0 40px;
+    font-size: 24px;
+    color: rgb(var(--text-color));
+  }
+
+  .ai-brand-marquee-container-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    /* Pin the strip to LTR even on an RTL page — it is a visual carousel, not text. */
+    direction: ltr;
+    overflow: hidden;
+    /* elegant edge fade — logos dissolve in/out at both sides (bg-agnostic) */
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);
+  }
+
+  .ai-brand-marquee-track-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    width: max-content;                 /* let the content define its full width */
+    /* Smooth, GPU-composited scroll. The list is rendered 4x, so translating by
+       one copy (-25%) loops seamlessly. transform is sub-pixel — no scrollLeft
+       integer snapping, which is what made it stutter. */
+    animation: ai-marquee-scroll-{{ ai_gen_id }} {{ block.settings.scroll_duration | times: 8 }}s linear infinite;
+    will-change: transform;
+  }
+  /* Pause on hover so the logos stay reachable and clickable. */
+  .ai-brand-marquee-section-{{ ai_gen_id }}:hover .ai-brand-marquee-track-{{ ai_gen_id }} {
+    animation-play-state: paused;
+  }
+  @keyframes ai-marquee-scroll-{{ ai_gen_id }} {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-25%, 0, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ai-brand-marquee-track-{{ ai_gen_id }} { animation: none; }
+  }
+
+  .ai-brand-marquee-logo-link-{{ ai_gen_id }} {
+    display: block;
+    margin: 0 46px;
+    flex-shrink: 0;
+    text-decoration: none;
+    position: relative;
+  }
+  /* elegant fading divider centered in the gap between logos */
+  .ai-brand-marquee-logo-link-{{ ai_gen_id }}::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    inset-inline-end: -46px;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0) 100%);
+  }
+
+  .ai-brand-marquee-logo-box-{{ ai_gen_id }} {
+    width: auto;
+    height: 60px;
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-brand-marquee-name-{{ ai_gen_id }} {
+    font-family: var(--heading-font-family);
+    font-size: 19px;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #ede8e2;
+    opacity: 0.82;
+    transition: color 0.4s ease, opacity 0.4s ease, transform 0.4s cubic-bezier(.16, 1, .3, 1);
+  }
+  .ai-brand-marquee-logo-link-{{ ai_gen_id }}:hover .ai-brand-marquee-name-{{ ai_gen_id }} {
+    color: #B87253;
+    opacity: 1;
+    transform: scale(1.04);
+  }
+
+  .ai-brand-marquee-logo-img-{{ ai_gen_id }} {
+    /* Logos are pre-normalised to a uniform size at the source, so a single
+       height is all that's needed — no per-brand tuning. */
+    height: 48px;
+    width: auto;
+    max-width: 260px;
+    object-fit: contain;
+    object-position: center;
+    /* Embroidered look: a soft off-white "thread", raised off the silk with a
+       bevel (light top-left highlight + dark bottom-right shadow) and a soft cast
+       shadow onto the fabric. */
+    filter:
+      brightness(0) invert(0.94)
+      drop-shadow(0.6px 0.9px 0.6px rgba(0, 0, 0, 0.55))
+      drop-shadow(-0.5px -0.5px 0.4px rgba(255, 255, 255, 0.32))
+      drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+    opacity: 0.9;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .ai-brand-marquee-logo-link-{{ ai_gen_id }}:hover .ai-brand-marquee-logo-img-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  /* ── Hover preview panel: brand's products ── */
+  .ai-brand-marquee-section-{{ ai_gen_id }} { position: relative; }
+  .ai-brand-preview-wrap-{{ ai_gen_id }} {
+    position: absolute;
+    left: 0; right: 0; top: 100%;
+    background: #1a1a1a;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 24px 44px rgba(0, 0, 0, 0.45);
+    z-index: 60;
+    padding: 22px clamp(16px, 4vw, 48px) 24px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.35s ease, transform 0.4s cubic-bezier(.16,1,.3,1), visibility 0.35s;
+    pointer-events: none;
+  }
+  .ai-brand-preview-wrap-{{ ai_gen_id }}.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .ai-brand-preview-{{ ai_gen_id }} { display: none; }
+  .ai-brand-preview-{{ ai_gen_id }}.is-active { display: block; }
+  /* products slip up when the panel opens */
+  .ai-brand-preview-{{ ai_gen_id }}.is-active .ai-brand-preview__card-{{ ai_gen_id }} {
+    animation: ai-bp-rise-{{ ai_gen_id }} 0.5s cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes ai-bp-rise-{{ ai_gen_id }} {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .ai-brand-preview__head-{{ ai_gen_id }} {
+    font-family: var(--heading-font-family);
+    color: #ffffff;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+  }
+  .ai-brand-preview__row-{{ ai_gen_id }} {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #B87253 transparent;
+  }
+  .ai-brand-preview__row-{{ ai_gen_id }}::-webkit-scrollbar { height: 5px; }
+  .ai-brand-preview__row-{{ ai_gen_id }}::-webkit-scrollbar-thumb { background: #B87253; border-radius: 3px; }
+  .ai-brand-preview__card-{{ ai_gen_id }} {
+    flex: 0 0 auto;
+    width: 132px;
+    text-decoration: none;
+    color: #e8e8e8;
+  }
+  .ai-brand-preview__img-{{ ai_gen_id }} {
+    width: 132px; height: 152px;
+    background: #ffffff;
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    margin-bottom: 9px;
+  }
+  .ai-brand-preview__img-{{ ai_gen_id }} img { width: 86%; height: 86%; object-fit: contain; }
+  .ai-brand-preview__name-{{ ai_gen_id }} {
+    font-family: var(--text-font-family);
+    font-size: 11px; color: #dddddd; margin: 0 0 3px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.04em;
+  }
+  .ai-brand-preview__price-{{ ai_gen_id }} {
+    font-family: var(--text-font-family);
+    font-size: 11px; color: #B87253; margin: 0;
+  }
+  @media (max-width: 749px) {
+    .ai-brand-preview-wrap-{{ ai_gen_id }} { display: none !important; }
+  }
+{% endstyle %}
+
+<div class="ai-brand-marquee-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.heading != blank %}
+    <h2 class="ai-brand-marquee-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+  {% endif %}
+
+  <div class="ai-brand-marquee-container-{{ ai_gen_id }}">
+    <div class="ai-brand-marquee-track-{{ ai_gen_id }}">
+      {% assign brands = shop.metaobjects.brand.values %}
+      
+      {%- comment -%}Render the list 4x so there's always content ahead — the
+        animation shifts by exactly one copy (-25%) for a seamless loop.{%- endcomment -%}
+      {% for i in (1..4) %}
+        {% for brand in brands %}
+          {% assign bname = brand.name.value %}
+          {% assign blogo = brand.logo.value %}
+          {% if bname != blank %}
+            <a href="/pages/brand/{{ brand.system.handle }}" class="ai-brand-marquee-logo-link-{{ ai_gen_id }}" data-brand="{{ brand.slug.value }}">
+              <div class="ai-brand-marquee-logo-box-{{ ai_gen_id }}">
+                {% if blogo != blank %}
+                  <img src="{{ blogo | image_url: width: 400 }}" alt="{{ bname | escape }}" loading="lazy" class="ai-brand-marquee-logo-img-{{ ai_gen_id }}">
+                {% else %}
+                  <span class="ai-brand-marquee-name-{{ ai_gen_id }}">{{ bname }}</span>
+                {% endif %}
+              </div>
+            </a>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+
+  {%- comment -%}Hover preview: products of the hovered brand{%- endcomment -%}
+  <div class="ai-brand-preview-wrap-{{ ai_gen_id }}" data-brand-preview>
+    {% for brand in brands %}
+      {%- assign bcol = collections[brand.slug.value] -%}
+      {% if bcol != blank and bcol.products.size > 0 %}
+        <div class="ai-brand-preview-{{ ai_gen_id }}" data-brand-panel="{{ brand.slug.value }}">
+          <div class="ai-brand-preview__head-{{ ai_gen_id }}">{{ brand.name.value }}</div>
+          <div class="ai-brand-preview__row-{{ ai_gen_id }}">
+            {% for product in bcol.products limit: 14 %}
+              <a href="{{ product.url }}" class="ai-brand-preview__card-{{ ai_gen_id }}">
+                <div class="ai-brand-preview__img-{{ ai_gen_id }}">
+                  {% if product.featured_image %}
+                    <img src="{{ product.featured_image | image_url: width: 300 }}" alt="{{ product.title | escape }}" loading="lazy">
+                  {% endif %}
+                </div>
+                <p class="ai-brand-preview__name-{{ ai_gen_id }}">{%- render 'elx-product-title', product: product -%}</p>
+                <p class="ai-brand-preview__price-{{ ai_gen_id }}">{{ product.price | money }}</p>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  (function () {
+    var section = document.querySelector('.ai-brand-marquee-section-{{ ai_gen_id }}');
+    if (!section) return;
+
+    /* Scrolling is now a pure CSS transform animation (see the track's animation
+       rule) — smooth and self-looping, with hover-pause handled in CSS too. No
+       JS scroll engine, which is what used to stutter. */
+
+    var wrap = section.querySelector('[data-brand-preview]');
+    if (!wrap) return;
+    var panels = wrap.querySelectorAll('[data-brand-panel]');
+    var links = section.querySelectorAll('[data-brand]');
+
+    function show(slug) {
+      var found = false;
+      panels.forEach(function (p) {
+        var match = p.getAttribute('data-brand-panel') === slug;
+        p.classList.toggle('is-active', match);
+        if (match) found = true;
+      });
+      wrap.classList.toggle('is-open', found);
+    }
+    function hide() {
+      wrap.classList.remove('is-open');
+      panels.forEach(function (p) { p.classList.remove('is-active'); });
+    }
+
+    links.forEach(function (a) {
+      a.addEventListener('mouseenter', function () { show(a.getAttribute('data-brand')); });
+    });
+    /* the preview panel is a descendant of the section, so leaving the section
+       (bar or panel) closes it; moving between logos just swaps the panel */
+    section.addEventListener('mouseleave', hide);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Brand logo marquee",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "scroll_duration",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "label": "Scroll duration",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand logo marquee"
+    }
+  ],
+  "tag": null
+}
+{% endschema %}

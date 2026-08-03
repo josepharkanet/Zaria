@@ -1,0 +1,117 @@
+<style>
+  #elx-prods-{{ section.id }} {
+    background: #FBFAF7;
+    font-family: var(--text-font-family);
+    color: #1A1A1A;
+  }
+  #elx-prods-{{ section.id }} * { box-sizing: border-box; }
+  #elx-prods-{{ section.id }} img { display: block; max-width: 100%; }
+
+  .ep-wrap-{{ section.id }} {
+    max-width: 1280px; margin: 0 auto; padding: 0 40px;
+  }
+  .ep-row-{{ section.id }} {
+    padding: 60px 0; border-bottom: 1px solid rgba(184, 114, 83,0.3);
+  }
+  .ep-row-{{ section.id }}:last-child { border-bottom: 0; padding-bottom: 80px; }
+  .ep-row-{{ section.id }}:first-child { padding-top: 80px; }
+
+  .ep-head-{{ section.id }} {
+    display: flex; align-items: baseline; gap: 16px; margin-bottom: 30px; flex-wrap: wrap;
+  }
+  .ep-eyebrow-{{ section.id }} {
+    font-size: 11px; letter-spacing: .32em; text-transform: uppercase;
+    color: #B87253; font-weight: 600; margin: 0;
+  }
+  .ep-title-{{ section.id }} {
+    font-family: var(--heading-font-family);
+    font-size: clamp(22px, 2.4vw, 32px); font-weight: 400; margin: 0;
+  }
+  .ep-link-{{ section.id }} {
+    margin-left: auto; font-size: 11px; letter-spacing: .22em;
+    text-transform: uppercase; color: #B87253; text-decoration: none;
+  }
+  .ep-link-{{ section.id }}:hover { text-decoration: underline; }
+
+  .ep-grid-{{ section.id }} {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px;
+  }
+  .ep-prod-{{ section.id }} { text-decoration: none; color: inherit; display: block; }
+  .ep-img-{{ section.id }} {
+    aspect-ratio: 4/5; background: #fff; border: 1px solid #F0EDE6;
+    overflow: hidden; display: flex; align-items: center;
+    justify-content: center; margin-bottom: 14px;
+  }
+  .ep-img-{{ section.id }} img {
+    width: 80%; height: 80%; object-fit: contain;
+    transition: transform .8s cubic-bezier(.16,1,.3,1);
+  }
+  .ep-prod-{{ section.id }}:hover .ep-img-{{ section.id }} img { transform: scale(1.06); }
+  .ep-name-{{ section.id }} {
+    font-family: var(--heading-font-family);
+    font-size: 15px; margin: 0 0 5px; line-height: 1.3;
+  }
+  .ep-price-{{ section.id }} { font-size: 13px; color: #6B6B6B; }
+
+  @media (max-width: 990px) {
+    .ep-grid-{{ section.id }} { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .ep-wrap-{{ section.id }} { padding: 0 24px; }
+    .ep-link-{{ section.id }} { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #elx-prods-{{ section.id }} * { transition: none !important; }
+  }
+</style>
+
+{%- liquid
+  assign rows = section.settings.collections | split: ','
+-%}
+
+<div id="elx-prods-{{ section.id }}">
+  <div class="ep-wrap-{{ section.id }}">
+
+    {%- for row in rows -%}
+      {%- assign handle = row | strip -%}
+      {%- assign c = collections[handle] -%}
+      {%- if c != blank -%}
+        <div class="ep-row-{{ section.id }}">
+          <div class="ep-head-{{ section.id }}">
+            <h2 class="ep-title-{{ section.id }}">{{ c.title }}</h2>
+            <a class="ep-link-{{ section.id }}" href="{{ c.url }}">{{ 'custom.home.view_all_arrow_ent' | t }}</a>
+          </div>
+          <div class="ep-grid-{{ section.id }}">
+            {%- for product in c.products limit: 4 -%}
+              <a class="ep-prod-{{ section.id }}" href="{{ product.url }}">
+                <div class="ep-img-{{ section.id }}">
+                  {%- if product.featured_image -%}
+                    <img src="{{ product.featured_image | image_url: width: 600 }}"
+                         alt="{{ product.title | escape }}" loading="lazy">
+                  {%- endif -%}
+                </div>
+                <p class="ep-name-{{ section.id }}">{%- render 'elx-product-title', product: product -%}</p>
+                <p class="ep-price-{{ section.id }}">{{ product.price | money }}</p>
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Home 4 — Product Rows",
+  "settings": [
+    {
+      "type": "text",
+      "id": "collections",
+      "label": "Collection handles (comma separated)",
+      "default": "women,men,unisex",
+      "info": "Enter handles exactly as in Shopify, e.g. women,men,unisex,arabic-fragrance"
+    }
+  ],
+  "presets": [{ "name": "Home 4 — Product Rows" }]
+}
+{% endschema %}

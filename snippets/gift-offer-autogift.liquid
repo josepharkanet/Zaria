@@ -1,0 +1,131 @@
+{%- doc -%}
+  Auto-gift pipeline for the "Buy N & Get a Gift" offer.
+
+  Native Shopify Buy-X-Get-Y does NOT add the gift to the cart — the customer would have to
+  know to add it themselves. This script closes that gap: when the cart holds N qualifying
+  items it adds the gift product (which the BxGy discount then zeroes), and removes it again
+  if the cart drops below N — so the shopper is never charged for it.
+
+  All config comes from Theme settings → Gift offer (gift product, offer collection, threshold),
+  so nothing is hard-coded. Runs only when the offer is active and a gift product is set.
+{%- enddoc -%}
+{%- capture offer_on -%}{%- render 'gift-offer-active' -%}{%- endcapture -%}
+{%- assign giftp = shop.metafields.elixir_promotions.gift_offer_gift.value -%}
+{%- assign ag_collection = shop.metafields.elixir_promotions.gift_offer_collection.value -%}
+{%- assign ag_threshold = shop.metafields.elixir_promotions.gift_offer_threshold.value | default: 1 -%}
+{%- assign ag_mode = shop.metafields.elixir_promotions.gift_offer_mode.value | default: 'quantity' -%}
+{%- assign ag_min_amount = shop.metafields.elixir_promotions.gift_offer_min_amount.value | default: 0 -%}
+{%- assign ag_scope_all = false -%}
+{%- if shop.metafields.elixir_promotions.gift_offer_scope_all.value == true -%}{%- assign ag_scope_all = true -%}{%- endif -%}
+{%- comment -%} BOGO has no separate gift product to auto-add — Shopify discounts the cheapest qualifying item {%- endcomment -%}
+{%- if offer_on contains 'true' and giftp != blank and ag_mode != 'bogo' -%}
+  {%- assign giftv = giftp.selected_or_first_available_variant -%}
+  {%- if giftv != blank -%}
+    <script>
+      window.ElxGiftOffer = {
+        active: true,
+        mode: {{ ag_mode | json }},
+        minAmount: {{ ag_min_amount | times: 100.0 | round }},
+        threshold: {{ ag_threshold }},
+        allProducts: {{ ag_scope_all }},
+        giftVariantId: {{ giftv.id }},
+        giftProductId: {{ giftp.id }},
+        giftTitle: {{ giftp.title | json }},
+        giftAvailable: {{ giftv.available }},
+        qualifyingIds: [
+          {%- if ag_collection != blank -%}
+            {%- for p in ag_collection.products limit: 250 -%}{{ p.id }},{%- endfor -%}
+          {%- endif -%}
+        ]
+      };
+    </script>
+    <script>
+      (function () {
+        var cfg = window.ElxGiftOffer;
+        if (!cfg || !cfg.active || window.__elxGiftInit) return;
+        window.__elxGiftInit = true;
+
+        var root = (window.Shopify && Shopify.routes && Shopify.routes.root) || '/';
+        var busy = false;
+
+        function isQualifying(item) {
+          if (item.variant_id === cfg.giftVariantId) return false;   // never count the gift itself
+          if (cfg.allProducts) return true;
+          return cfg.qualifyingIds.indexOf(item.product_id) !== -1;
+        }
+        function qualifyingCount(cart) {
+          return (cart.items || []).reduce(function (n, it) {
+            return isQualifying(it) ? n + it.quantity : n;
+          }, 0);
+        }
+        function qualifyingAmount(cart) {
+          return (cart.items || []).reduce(function (n, it) {
+            return isQualifying(it) ? n + it.final_line_price : n;
+          }, 0);
+        }
+        function thresholdMet(cart) {
+          if (cfg.mode === 'amount') return qualifyingAmount(cart) >= cfg.minAmount;
+          return qualifyingCount(cart) >= cfg.threshold;
+        }
+        function giftLine(cart) {
+          return (cart.items || []).filter(function (it) { return it.variant_id === cfg.giftVariantId; })[0];
+        }
+        function autoGiftLine(cart) {
+          return (cart.items || []).filter(function (it) {
+            return it.variant_id === cfg.giftVariantId && it.properties && it.properties._free_gift;
+          })[0];
+        }
+        function isCartPage() {
+          return window.themeVariables && window.themeVariables.settings && window.themeVariables.settings.pageType === 'cart';
+        }
+        function repaint() {
+          if (isCartPage()) { window.location.reload(); }
+          else { document.dispatchEvent(new CustomEvent('cart:refresh')); }
+        }
+        function addGift() {
+          return fetch(root + 'cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: [{ id: cfg.giftVariantId, quantity: 1, properties: { _free_gift: 'Buy ' + cfg.threshold + ' & Get a Gift' } }] })
+          });
+        }
+        function removeLine(line) {
+          return fetch(root + 'cart/change.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: line.key, quantity: 0 })
+          });
+        }
+        function reconcile(cart) {
+          if (busy || !cart) return;
+          var met = thresholdMet(cart);
+          var present = giftLine(cart);
+          var auto = autoGiftLine(cart);
+
+          if (met && !present && cfg.giftAvailable) {
+            busy = true;
+            addGift().then(function (r) { busy = false; if (r && r.ok) repaint(); })
+                     .catch(function () { busy = false; });
+          } else if (!met && auto) {
+            // remove ONLY the gift we auto-added (has the _free_gift flag), never a manual purchase
+            busy = true;
+            removeLine(auto).then(function (r) { busy = false; if (r && r.ok) repaint(); })
+                            .catch(function () { busy = false; });
+          }
+        }
+
+        // The theme fires cart:change (with the fresh cart) after every add / qty change.
+        document.addEventListener('cart:change', function (e) {
+          if (e && e.detail && e.detail.cart) reconcile(e.detail.cart);
+        });
+
+        // Reconcile once on load (e.g. arriving on the cart page with 2 items already in).
+        function initial() {
+          fetch(root + 'cart.js').then(function (r) { return r.json(); }).then(reconcile).catch(function () {});
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initial);
+        else initial();
+      })();
+    </script>
+  {%- endif -%}
+{%- endif -%}

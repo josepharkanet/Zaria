@@ -1,0 +1,243 @@
+{%- comment -%}
+  Elixir Feature — elegant split section: image on one side, text on the other.
+  Designed for a luxury homepage. Self-contained styling, scoped to the section id.
+{%- endcomment -%}
+
+<style>
+  #shopify-section-{{ section.id }} { --ef-gold: #B87253; }
+
+  .ef { background: {{ section.settings.background_color }}; color: {{ section.settings.text_color }}; }
+  .ef__pin {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    background: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+    min-height: {{ section.settings.min_height }}px;
+    overflow: hidden;
+  }
+  .ef--image-right .ef__pin { direction: rtl; }
+  .ef--image-right .ef__pin > * { direction: ltr; }
+
+  .ef__media {
+    position: relative;
+    min-height: 320px;
+    overflow: hidden;
+  }
+  .ef__img,
+  .ef__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .ef__placeholder { background: #ece6dd; }
+  .ef__placeholder svg { width: 100%; height: 100%; opacity: 0.35; }
+  .ef__img {
+    opacity: 0;
+    transform: scale(1.02);
+    transition: opacity 0.8s ease, transform 1.2s ease;
+  }
+  .ef__img.is-active { opacity: 1; }
+  .ef:hover .ef__img.is-active { transform: scale(1.06); }
+
+  .ef__content {
+    display: flex;
+    align-items: center;
+    padding: clamp(2.5rem, 6vw, 6rem);
+  }
+  .ef__inner {
+    max-width: 480px;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: efRise 0.9s ease 0.1s forwards;
+  }
+
+  .ef__eyebrow {
+    font-family: inherit;
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ef-gold);
+    margin: 0 0 1rem;
+  }
+  .ef__rule {
+    display: block;
+    width: 46px;
+    height: 1px;
+    background: var(--ef-gold);
+    margin-bottom: 1.6rem;
+  }
+  .ef__heading {
+    font-family: var(--heading-font-family);
+    font-weight: var(--heading-font-weight);
+    font-style: var(--heading-font-style);
+    font-size: clamp(1.7rem, 3vw, 2.7rem);
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 1.25rem;
+  }
+  .ef__text {
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.85;
+    opacity: 0.78;
+  }
+  .ef__text p { margin: 0 0 1rem; }
+  .ef__text p:last-child { margin-bottom: 0; }
+
+  .ef__btn {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.95rem 2.4rem;
+    font-family: inherit;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: transparent;
+    transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+  }
+  .ef__btn:hover { background: #ffffff; color: #1a1a1a; border-color: #ffffff; }
+
+  @keyframes efRise {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ef__inner { animation: none; opacity: 1; transform: none; }
+    .ef__img, .ef:hover .ef__img { transition: none; transform: none; }
+  }
+
+  @media (max-width: 768px) {
+    .ef__pin, .ef--image-right .ef__pin { grid-template-columns: 1fr; direction: ltr; }
+    .ef__media { min-height: 320px; order: 0; }
+    .ef__content { padding: 2.5rem 1.5rem 3rem; }
+  }
+</style>
+
+{%- assign ef_has_second = false -%}
+{%- if section.settings.image_2 != blank or section.settings.feature_video != blank -%}{%- assign ef_has_second = true -%}{%- endif -%}
+<div class="ef {% if section.settings.image_position == 'right' %}ef--image-right{% endif %} {% if section.settings.scroll_swap and ef_has_second %}ef--sticky{% endif %}">
+  <div class="ef__pin">
+  <div class="ef__media">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 1600 | image_tag:
+        loading: 'lazy',
+        class: 'ef__img is-active',
+        sizes: '(max-width: 768px) 100vw, 50vw',
+        widths: '400, 600, 800, 1000, 1200, 1400, 1600',
+        alt: section.settings.heading | default: 'Feature image' | escape
+      -}}
+      {%- if section.settings.feature_video != blank -%}
+        {{ section.settings.feature_video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, preload: 'metadata', class: 'ef__img ef__img--2' }}
+      {%- elsif section.settings.image_2 != blank -%}
+        {{ section.settings.image_2 | image_url: width: 1600 | image_tag:
+          loading: 'lazy',
+          class: 'ef__img ef__img--2',
+          sizes: '(max-width: 768px) 100vw, 50vw',
+          widths: '400, 600, 800, 1000, 1200, 1400, 1600',
+          alt: section.settings.heading | default: 'Feature image' | escape
+        -}}
+      {%- endif -%}
+    {%- else -%}
+      <div class="ef__placeholder">{{ 'lifestyle-1' | placeholder_svg_tag }}</div>
+    {%- endif -%}
+  </div>
+
+  <div class="ef__content">
+    <div class="ef__inner">
+      {%- if section.settings.subheading != blank -%}
+        <p class="ef__eyebrow">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+      <span class="ef__rule"></span>
+      {%- if section.settings.heading != blank -%}
+        <h2 class="ef__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="ef__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link | default: '#' }}" class="ef__btn">{{ section.settings.button_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+  </div>
+</div>
+
+{%- if section.settings.scroll_swap and ef_has_second -%}
+<script>
+(function () {
+  var root = document.getElementById('shopify-section-{{ section.id }}');
+  if (!root) return;
+  var sec = root.querySelector('.ef');
+  var imgs = root.querySelectorAll('.ef__img');
+  if (!sec || imgs.length < 2) return;
+  var vid = root.querySelector('video.ef__img');
+  if (vid) { vid.muted = true; }
+
+  var cur = -1;
+  function setActive(i) {
+    if (i === cur) return;
+    for (var j = 0; j < imgs.length; j++) { imgs[j].classList.toggle('is-active', j === i); }
+    if (vid && i === 1) { var p = vid.play(); if (p && p.catch) { p.catch(function () {}); } }
+    cur = i;
+  }
+
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var r = sec.getBoundingClientRect();
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    var center = r.top + r.height / 2;       /* section's vertical center */
+    /* once the section has scrolled into view (center in the upper part of the viewport),
+       show the video; revert to the image when scrolled back up. No extra height needed. */
+    setActive(center <= vh * 0.6 ? 1 : 0);
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Elixir Feature",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "image_picker", "id": "image_2", "label": "Second image (revealed on scroll)" },
+    { "type": "video", "id": "feature_video", "label": "Second media: video (autoplay)", "info": "If set, the video is used as the second slot instead of the second image. Plays muted on loop." },
+    { "type": "checkbox", "id": "scroll_swap", "label": "Crossfade to second media on scroll", "info": "Desktop: the page pauses while image 1 dissolves into the second image/video, then continues. Needs a second image or video.", "default": true },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    { "type": "text", "id": "subheading", "label": "Eyebrow / subheading", "default": "The Art of Fragrance" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Crafted for the Connoisseur" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Each Elixir creation is a study in refinement — rare ingredients, masterful composition, and an enduring signature. Discover fragrances designed to be unforgettable.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Explore the Collection" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "header", "content": "Appearance" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#1a1a1a" },
+    { "type": "range", "id": "min_height", "label": "Minimum height", "min": 360, "max": 760, "step": 20, "unit": "px", "default": 560 }
+  ],
+  "presets": [
+    { "name": "Elixir Feature" }
+  ]
+}
+{% endschema %}

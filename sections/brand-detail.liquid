@@ -1,0 +1,87 @@
+{% assign url_parts = page.handle | split: '/' %}
+{% assign brand_slug = url_parts | last %}
+{% assign brand = shop.metaobjects.brand[brand_slug] %}
+{% assign brand_name = brand.name.value | first %}
+{% assign brand_desc = brand.description.value %}
+{% assign brand_logo = brand.logo.value %}
+{% assign brand_banner = brand.banner.value %}
+{% assign brand_col = brand.collection.value %}
+
+{%- comment -%} BANNER {%- endcomment -%}
+{% if brand_banner != blank %}
+  <div style="position:relative;width:100%;height:480px;overflow:hidden;">
+    {{ brand_banner | image_url: width: 2000 | image_tag: alt: brand_name, style: 'width:100%;height:100%;object-fit:cover;object-position:center;' }}
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.6) 100%);"></div>
+    <div style="position:absolute;bottom:48px;left:50%;transform:translateX(-50%);text-align:center;">
+      {% if brand_logo != blank %}
+        {{ brand_logo | image_url: width: 400 | image_tag: alt: brand_name, style: 'max-height:80px;width:auto;object-fit:contain;filter:brightness(0) invert(1);' }}
+      {% else %}
+        <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:52px;font-weight:400;letter-spacing:6px;text-transform:uppercase;color:#fff;margin:0;">{{ brand_name }}</h1>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{%- comment -%} LOGO + DESCRIPTION {%- endcomment -%}
+<div style="max-width:1100px;margin:0 auto;padding:72px 24px;display:grid;grid-template-columns:280px 1fr;gap:64px;align-items:start;">
+  <div style="text-align:center;">
+    {% if brand_logo != blank %}
+      {{ brand_logo | image_url: width: 400 | image_tag: alt: brand_name, style: 'max-width:220px;width:100%;object-fit:contain;' }}
+    {% endif %}
+    {% if brand_col != blank %}
+      <a href="/collections/{{ brand_col.handle }}" style="display:inline-block;margin-top:32px;padding:12px 28px;border:1px solid #1a1a1a;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#1a1a1a;text-decoration:none;font-family:sans-serif;"
+        onmouseover="this.style.background='#1a1a1a';this.style.color='#fff'"
+        onmouseout="this.style.background='transparent';this.style.color='#1a1a1a'">
+        {{ 'custom.brands.shop_collection' | t }}
+      </a>
+    {% endif %}
+  </div>
+  <div>
+    <p style="font-size:11px;letter-spacing:5px;text-transform:uppercase;color:#9a8c7e;margin-bottom:16px;font-family:sans-serif;">{{ 'custom.brands.about_house' | t }}</p>
+    <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:36px;font-weight:400;letter-spacing:2px;color:#1a1a1a;margin:0 0 24px;">{{ brand_name }}</h2>
+    <div style="width:40px;height:1px;background:#9a8c7e;margin-bottom:28px;"></div>
+    {% if brand_desc != blank %}
+      <div style="font-family:sans-serif;font-size:15px;color:#4a4a4a;line-height:1.9;letter-spacing:0.3px;">{{ brand_desc }}</div>
+    {% endif %}
+  </div>
+</div>
+
+{%- comment -%} PRODUCTS {%- endcomment -%}
+{% if brand_col != blank %}
+  <div style="padding:64px 24px;">
+    <div style="max-width:1300px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:48px;">
+        <p style="font-size:11px;letter-spacing:5px;text-transform:uppercase;color:#9a8c7e;margin-bottom:12px;font-family:sans-serif;">{{ 'custom.brands.the_collection' | t }}</p>
+        <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:#1a1a1a;margin:0;">{{ 'custom.brands.brand_fragrances' | t: name: brand_name }}</h3>
+        <div style="width:40px;height:1px;background:#9a8c7e;margin:20px auto 0;"></div>
+      </div>
+
+      <div class="collection-products" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;">
+        {% for product in brand_col.products limit: 8 %}
+          {%- render 'product-card',
+            product: product,
+            show_vendor: true,
+            show_quick_buy: true,
+            show_secondary_image: true,
+            show_swatches: true,
+            stacked: true,
+            position: forloop.index
+          -%}
+        {% endfor %}
+      </div>
+
+      {% if brand_col.products_count > 8 %}
+        <div style="text-align:center;margin-top:40px;">
+          <a href="/collections/{{ brand_col.handle }}" style="display:inline-block;padding:14px 40px;border:1px solid #1a1a1a;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#1a1a1a;text-decoration:none;font-family:sans-serif;">{{ 'custom.brands.view_all_count' | t: count: brand_col.products_count }}</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Brand Detail",
+  "presets": [{ "name": "Brand Detail" }]
+}
+{% endschema %}

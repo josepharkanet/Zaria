@@ -1,0 +1,139 @@
+{% comment %}
+  Contact page — Customer Care hero, contact channels, and FAQ.
+  Rebuilt 2026-07 in an Ounass-style editorial layout. Prose lives in locale
+  keys custom.contact.* so it is translatable and reachable by live translate
+  mode; phone / email / WhatsApp are block settings so they can be swapped
+  without touching code. This renders first on /pages/contact; the stores map
+  is the section immediately below it.
+{% endcomment %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign tel = block.settings.phone_display | remove: ' ' | remove: '-' %}
+{% assign wa = block.settings.whatsapp_display | remove: ' ' | remove: '-' | remove: '+' %}
+
+{% style %}
+  .elx-cc-{{ ai_gen_id }} { background: #fff; color: #1a1a1a; padding: clamp(48px, 8vw, 88px) 20px; }
+  .elx-cc-{{ ai_gen_id }} * { box-sizing: border-box; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-inner { max-width: 1080px; margin: 0 auto; }
+
+  .elx-cc-{{ ai_gen_id }} .elx-cc-head { text-align: center; margin-bottom: clamp(34px, 5vw, 56px); }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-eyebrow { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: #B87253; margin: 0 0 14px; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-title { font-family: var(--heading-font-family, "Bodoni Moda", serif); font-weight: 400; font-size: clamp(21px, 4vw, 32px); line-height: 1.2; text-transform: uppercase; letter-spacing: clamp(2px, 0.5vw, 4px); margin: 0 0 16px; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-intro { max-width: 560px; margin: 0 auto 12px; color: #5a5a5a; font-size: 15px; line-height: 1.7; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-hours { font-size: 13px; letter-spacing: .04em; color: #8a8a8a; margin: 0; }
+
+  .elx-cc-{{ ai_gen_id }} .elx-cc-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin: 0 auto clamp(48px, 7vw, 76px); }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-card { border: 1px solid rgba(0, 0, 0, .09); padding: 34px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit; transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-card:hover { border-color: #B87253; transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0, 0, 0, .06); }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-ico { width: 26px; height: 26px; color: #B87253; margin-bottom: 16px; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-ctitle { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #8a8a8a; margin: 0 0 9px; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-cval { font-size: 16px; color: #1a1a1a; margin: 0 0 5px; word-break: break-word; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-cnote { font-size: 12.5px; color: #9a9a9a; margin: 0; }
+
+  .elx-cc-{{ ai_gen_id }} .elx-cc-faq { max-width: 760px; margin: 0 auto; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-faqhead { font-family: var(--heading-font-family, "Bodoni Moda", serif); font-weight: 400; font-size: clamp(21px, 4vw, 32px); text-align: center; text-transform: uppercase; letter-spacing: clamp(2px, 0.5vw, 4px); margin: 0; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-faqrule { width: 48px; height: 1px; background: #B87253; margin: 16px auto clamp(24px, 4vw, 38px); }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-item { border-bottom: 1px solid rgba(0, 0, 0, .1); }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-q { list-style: none; cursor: pointer; padding: 20px 46px 20px 4px; position: relative; font-size: 15.5px; letter-spacing: .01em; color: #1a1a1a; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-q::-webkit-details-marker { display: none; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-q::after { content: '+'; position: absolute; inset-inline-end: 10px; top: 50%; transform: translateY(-50%); font-size: 20px; line-height: 1; color: #B87253; font-weight: 300; transition: transform .2s ease; }
+  .elx-cc-{{ ai_gen_id }} details[open] .elx-cc-q::after { content: '\2013'; }
+  .elx-cc-{{ ai_gen_id }} .elx-cc-a { padding: 0 46px 22px 4px; color: #5a5a5a; font-size: 14px; line-height: 1.75; margin: 0; }
+{% endstyle %}
+
+<div class="elx-cc-{{ ai_gen_id }}">
+  <div class="elx-cc-inner">
+    <div class="elx-cc-head">
+      <p class="elx-cc-eyebrow">{{ 'custom.contact.eyebrow' | t }}</p>
+      <h2 class="elx-cc-title">{{ 'custom.contact.heading' | t }}</h2>
+      <p class="elx-cc-intro">{{ 'custom.contact.intro' | t }}</p>
+      <p class="elx-cc-hours">{{ 'custom.contact.care_hours' | t }}</p>
+    </div>
+
+    <div class="elx-cc-cards">
+      {%- if block.settings.phone_display != blank -%}
+        <a class="elx-cc-card" href="tel:{{ tel }}">
+          <svg class="elx-cc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <p class="elx-cc-ctitle">{{ 'custom.contact.call_title' | t }}</p>
+          <p class="elx-cc-cval">{{ block.settings.phone_display }}</p>
+          <p class="elx-cc-cnote">{{ 'custom.contact.care_hours' | t }}</p>
+        </a>
+      {%- endif -%}
+
+      {%- if block.settings.email != blank -%}
+        <a class="elx-cc-card" href="mailto:{{ block.settings.email }}">
+          <svg class="elx-cc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+          <p class="elx-cc-ctitle">{{ 'custom.contact.email_title' | t }}</p>
+          <p class="elx-cc-cval">{{ block.settings.email }}</p>
+          <p class="elx-cc-cnote">{{ 'custom.contact.email_note' | t }}</p>
+        </a>
+      {%- endif -%}
+
+      {%- if block.settings.show_whatsapp and block.settings.whatsapp_display != blank -%}
+        <a class="elx-cc-card" href="https://wa.me/{{ wa }}" target="_blank" rel="noopener">
+          <svg class="elx-cc-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.29-.15-1.71-.84-1.97-.94s-.46-.15-.65.15-.74.94-.91 1.13-.34.22-.63.07a8.06 8.06 0 0 1-2.37-1.46 8.9 8.9 0 0 1-1.64-2.04c-.17-.29 0-.45.13-.6s.29-.34.44-.51.19-.29.29-.48.05-.36-.02-.51-.65-1.57-.89-2.15-.47-.49-.65-.5h-.55a1.06 1.06 0 0 0-.77.36 3.23 3.23 0 0 0-1 2.4 5.6 5.6 0 0 0 1.17 2.98 12.83 12.83 0 0 0 4.91 4.34c.69.3 1.22.48 1.64.61a3.96 3.96 0 0 0 1.81.11c.55-.08 1.71-.7 1.95-1.37s.24-1.26.17-1.38-.26-.19-.55-.34zM12.05 21.5a9.5 9.5 0 0 1-4.84-1.32l-.35-.21-3.59.94.96-3.5-.23-.36A9.46 9.46 0 1 1 12.05 21.5zM20.52 3.45A11.32 11.32 0 0 0 2.5 17.13L1 22.5l5.5-1.44a11.36 11.36 0 0 0 5.43 1.38h.01a11.35 11.35 0 0 0 8.58-19z"/></svg>
+          <p class="elx-cc-ctitle">{{ 'custom.contact.whatsapp_title' | t }}</p>
+          <p class="elx-cc-cval">{{ block.settings.whatsapp_display }}</p>
+          <p class="elx-cc-cnote">{{ 'custom.contact.whatsapp_note' | t }}</p>
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="elx-cc-faq">
+      <h2 class="elx-cc-faqhead">{{ 'custom.contact.faq_heading' | t }}</h2>
+      <div class="elx-cc-faqrule"></div>
+      {%- for i in (1..9) -%}
+        {%- assign qk = 'custom.contact.faq_q' | append: i -%}
+        {%- assign ak = 'custom.contact.faq_a' | append: i -%}
+        <details class="elx-cc-item"{% if i == 1 %} open{% endif %}>
+          <summary class="elx-cc-q">{{ qk | t }}</summary>
+          <p class="elx-cc-a">{{ ak | t }}</p>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact & FAQ",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Contact channels"
+    },
+    {
+      "type": "paragraph",
+      "content": "The wording (heading, FAQ, labels) is managed in Content › Translations under custom.contact — so it translates. These are the values only."
+    },
+    {
+      "type": "text",
+      "id": "phone_display",
+      "label": "Phone number",
+      "default": "+971 56 711 7700"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "contact@elixirbeauty.com"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_whatsapp",
+      "label": "Show WhatsApp card",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_display",
+      "label": "WhatsApp number",
+      "default": "+971 56 711 7700"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact & FAQ"
+    }
+  ]
+}
+{% endschema %}

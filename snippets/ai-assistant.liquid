@@ -1,0 +1,703 @@
+{%- doc -%}
+  Elixir AI Assistant — floating concierge widget.
+  Talks to the Cloudflare Worker (settings.ai_assistant_endpoint) which holds the
+  Gemini key. Bilingual EN/عربي with RTL. Grounds on:
+    - Knowledge base: the admin PAGE whose handle is settings.ai_assistant_kb_page.
+    - Offers: the Elixir Promotions shop metafields (elixir_promotions.gift_offer_*).
+    - Live catalog: the Worker searches the storefront directly.
+  Renders replies + action buttons; executes add-to-cart via the AJAX cart and
+  opens checkout on request.
+{%- enddoc -%}
+
+{%- if settings.ai_assistant_enabled and settings.ai_assistant_endpoint != blank -%}
+
+  {%- comment -%} Language of the UI chrome follows the storefront locale {%- endcomment -%}
+  {%- assign ai_is_ar = false -%}
+  {%- if request.locale.iso_code contains 'ar' -%}{%- assign ai_is_ar = true -%}{%- endif -%}
+
+  {%- comment -%} Knowledge base: merchant-managed admin page {%- endcomment -%}
+  {%- assign ai_kb_handle = settings.ai_assistant_kb_page | default: 'assistant-knowledge' -%}
+  {%- assign ai_kb_page = pages[ai_kb_handle] -%}
+
+  {%- comment -%} Offers summary from the Elixir Promotions metafields {%- endcomment -%}
+  {%- capture ai_offers -%}
+    {%- if shop.metafields.elixir_promotions.gift_offer_active.value == true -%}
+      {%- assign _m = shop.metafields.elixir_promotions.gift_offer_mode.value | default: 'quantity' -%}
+      {%- assign _col = shop.metafields.elixir_promotions.gift_offer_collection.value -%}
+      {%- assign _gift = shop.metafields.elixir_promotions.gift_offer_gift.value -%}
+      {%- assign _thr = shop.metafields.elixir_promotions.gift_offer_threshold.value | default: 1 -%}
+      {%- assign _min = shop.metafields.elixir_promotions.gift_offer_min_amount.value | default: 0 -%}
+      {%- if _m == 'bogo' -%}
+        Buy {{ _thr }}, get 1 free{% if _col != blank %} on {{ _col.title }}{% endif %}. The lowest-priced item is free at checkout.
+      {%- elsif _m == 'amount' -%}
+        Spend {{ _min }} AED{% if _col != blank %} on {{ _col.title }}{% endif %} and receive {% if _gift != blank %}{{ _gift.title }}{% else %}a free gift{% endif %} free, applied at checkout.
+      {%- else -%}
+        Buy {{ _thr }}{% if _col != blank %} from {{ _col.title }}{% endif %} and receive {% if _gift != blank %}{{ _gift.title }}{% else %}a free gift{% endif %} free, applied automatically at checkout.
+      {%- endif -%}
+      {%- if _col != blank %} Eligible items: {{ shop.url }}{{ _col.url }}.{% endif -%}
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- comment -%} Real store links the AI can hand out as buttons {%- endcomment -%}
+  {%- assign ai_offers_col = shop.metafields.elixir_promotions.gift_offer_collection.value -%}
+  {%- capture ai_links_json -%}
+    {
+      "All fragrances": {{ routes.all_products_collection_url | json }},
+      {% if ai_offers_col != blank %}"Offers": {{ ai_offers_col.url | json }},{% endif %}
+      {% if pages['faq'] != blank %}"FAQ": {{ pages['faq'].url | json }},{% endif %}
+      {% if pages['contact'] != blank %}"Contact": {{ pages['contact'].url | json }},{% endif %}
+      "Cart": {{ routes.cart_url | json }},
+      "Account": {{ routes.account_url | json }}
+    }
+  {%- endcapture -%}
+
+  <script type="application/json" id="elx-ai-config">
+    {
+      "endpoint": {{ settings.ai_assistant_endpoint | json }},
+      "shopDomain": {{ shop.permanent_domain | json }},
+      "cartRoot": {{ routes.root_url | json }},
+      "isAr": {{ ai_is_ar }},
+      "model": {{ settings.ai_assistant_model | default: '' | json }},
+      "kb": {{ ai_kb_page.content | strip_html | strip | json }},
+      "offers": {{ ai_offers | strip | json }},
+      "links": {{ ai_links_json | strip }}
+    }
+  </script>
+
+  <div id="elx-ai" class="elx-ai" data-open="false" {% if ai_is_ar %}dir="rtl"{% endif %}>
+    <button type="button" class="elx-ai__fab" aria-label="{% if ai_is_ar %}المساعد{% else %}Assistant{% endif %}" data-ai-toggle>
+      <span class="elx-ai__fab-txt">AI</span>
+    </button>
+
+    <div class="elx-ai__panel" role="dialog" aria-label="{% if ai_is_ar %}مساعد إليكسير{% else %}Elixir assistant{% endif %}">
+      <div class="elx-ai__head">
+        <div class="elx-ai__head-info">
+          <span class="elx-ai__head-title">{% if ai_is_ar %}مساعد إليكسير الذكي للتسوق{% else %}Elixir AI Shopping Assistant{% endif %}</span>
+          <span class="elx-ai__head-sub"><span class="elx-ai__dot"></span>{% if ai_is_ar %}متصل الآن{% else %}Online now{% endif %}</span>
+        </div>
+        <button type="button" class="elx-ai__close" aria-label="{% if ai_is_ar %}إغلاق{% else %}Close{% endif %}" data-ai-toggle>&times;</button>
+      </div>
+      <div class="elx-ai__log" data-ai-log aria-live="polite"></div>
+      <div class="elx-ai__quick" data-ai-quick></div>
+      <form class="elx-ai__form" data-ai-form>
+        <input class="elx-ai__input" type="text" autocomplete="off"
+          placeholder="{% if ai_is_ar %}اسأل عن العطور أو الطلبات…{% else %}Ask about scents, orders, offers…{% endif %}"
+          data-ai-input {% if ai_is_ar %}dir="rtl"{% endif %}>
+        <button type="submit" class="elx-ai__send" aria-label="{% if ai_is_ar %}إرسال{% else %}Send{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    .elx-ai { position: fixed; z-index: 9998; bottom: 22px; inset-inline-end: 22px; font-family: var(--text-font-family); transition: bottom .3s ease; }
+    /* lifted above the back-to-top arrow when it appears on scroll */
+    .elx-ai.is-raised { bottom: 74px; }
+    /* Realistic glossy bubble launcher — pearl sphere with a specular highlight */
+    .elx-ai__fab {
+      position: relative; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+      display: grid; place-items: center; overflow: visible;
+      background: radial-gradient(circle at 35% 27%, #fffdfb 0%, #f5e9dd 38%, #e6cdb6 72%, #c99a78 100%);
+      border: 1px solid rgba(184,114,83,0.45);
+      box-shadow: inset 0 2px 3px rgba(255,255,255,0.9), inset 0 -7px 11px rgba(122,63,40,0.28), 0 8px 18px -4px rgba(0,0,0,0.35);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    /* bright specular highlight — the reflection that makes it read as a bubble */
+    .elx-ai__fab::before {
+      content: ''; position: absolute; top: 4px; left: 8px; width: 18px; height: 12px; border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.95), rgba(255,255,255,0) 70%);
+      filter: blur(1px); pointer-events: none;
+    }
+    .elx-ai__fab:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: inset 0 2px 3px rgba(255,255,255,0.9), inset 0 -7px 11px rgba(122,63,40,0.32), 0 12px 24px -5px rgba(0,0,0,0.42);
+    }
+    .elx-ai__fab-txt {
+      position: relative; z-index: 1; font-weight: 700; font-size: 12px; letter-spacing: 0.06em; line-height: 1;
+      color: #9c5c3e; text-shadow: 0 1px 1px rgba(255,255,255,0.6);
+    }
+    .elx-ai[data-open="true"] .elx-ai__fab { transform: scale(0.85); opacity: 0; pointer-events: none; }
+
+    .elx-ai__panel {
+      position: absolute; bottom: 0; inset-inline-end: 0;
+      width: min(380px, calc(100vw - 32px)); height: min(600px, calc(100vh - 90px));
+      background: #faf9f7; border: 1px solid rgba(0,0,0,0.14); border-radius: 6px; overflow: hidden;
+      display: flex; flex-direction: column; box-shadow: 0 24px 60px -18px rgba(0,0,0,0.45);
+      opacity: 0; transform: translateY(16px) scale(0.98); pointer-events: none; transition: opacity .28s ease, transform .28s ease;
+    }
+    .elx-ai[data-open="true"] .elx-ai__panel { opacity: 1; transform: none; pointer-events: auto; }
+
+    .elx-ai__head {
+      display: flex; align-items: center; gap: 11px;
+      padding: 14px 16px;
+      background: linear-gradient(135deg, #262320 0%, #1a1a1a 100%);
+      color: #f5f1ec;
+      border-bottom: 1px solid rgba(0,0,0,0.12);
+    }
+    .elx-ai__head-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .elx-ai__head-title {
+      font-family: var(--text-font-family);
+      font-size: 1rem; font-weight: 400; letter-spacing: 0.01em; line-height: 1.2;
+    }
+    .elx-ai__head-sub { display: flex; align-items: center; gap: 6px; font-size: 0.68rem; letter-spacing: 0.03em; color: rgba(245,241,236,0.6); }
+    .elx-ai__dot { width: 7px; height: 7px; border-radius: 50%; background: #7bd88f; box-shadow: 0 0 0 3px rgba(123,216,143,0.18); }
+    .elx-ai__close { background: none; border: 0; color: #f5f1ec; font-size: 1.5rem; line-height: 1; cursor: pointer; opacity: 0.7; align-self: flex-start; }
+    .elx-ai__close:hover { opacity: 1; color: #d98c5f; }
+
+    .elx-ai__log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .elx-ai__msg { max-width: 85%; padding: 10px 13px; border-radius: 14px; font-size: 0.9rem; line-height: 1.5; word-wrap: break-word; }
+    .elx-ai__msg--user { align-self: flex-end; background: #B87253; color: #fff; border-bottom-right-radius: 4px; white-space: pre-wrap; }
+    .elx-ai__msg--bot strong { font-weight: 600; color: #1a1a1a; }
+    .elx-ai__link { color: #B87253; text-decoration: underline; word-break: break-word; }
+    .elx-ai__link:hover { color: #1a1a1a; }
+    .elx-ai__para { margin: 0; }
+    .elx-ai__para + .elx-ai__para { margin-top: 8px; }
+    .elx-ai__list { margin: 8px 0 0; padding-inline-start: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .elx-ai__list li { position: relative; padding-inline-start: 14px; }
+    .elx-ai__list li::before { content: ''; position: absolute; inset-inline-start: 0; top: 0.62em; width: 5px; height: 5px; border-radius: 50%; background: #B87253; }
+    .elx-ai__para + .elx-ai__list { margin-top: 6px; }
+    .elx-ai__msg--bot { align-self: flex-start; background: #fff; color: #222; border: 1px solid rgba(0,0,0,0.07); border-bottom-left-radius: 4px; }
+    .elx-ai[dir="rtl"] .elx-ai__msg--user { border-bottom-right-radius: 14px; border-bottom-left-radius: 4px; }
+    .elx-ai[dir="rtl"] .elx-ai__msg--bot { border-bottom-left-radius: 14px; border-bottom-right-radius: 4px; }
+
+    .elx-ai__actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+    /* Flat, on-brand buttons — solid brass (primary) + brass outline (ghost) */
+    .elx-ai__act {
+      display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 8px; cursor: pointer;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em; text-decoration: none;
+      border: 1px solid #B87253; background: #B87253; color: #fff;
+      transition: background .2s ease, color .2s ease, border-color .2s ease;
+    }
+    .elx-ai__act--ghost { background: transparent; color: #B87253; }
+    .elx-ai__act:hover { background: #a5623f; border-color: #a5623f; color: #fff; }
+    .elx-ai__act--ghost:hover { background: #B87253; border-color: #B87253; color: #fff; }
+
+    .elx-ai__cards { align-self: stretch; display: flex; flex-direction: column; gap: 8px; }
+    .elx-ai__card { display: flex; align-items: center; gap: 11px; padding: 8px; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; background: #fff; }
+    .elx-ai__card-img { width: 46px; height: 46px; object-fit: cover; border-radius: 6px; flex: 0 0 auto; background: #f0ece7; }
+    .elx-ai__card-img--ph { background: linear-gradient(135deg, #efe7df, #e3d7cb); }
+    .elx-ai__card-body { flex: 1; min-width: 0; }
+    .elx-ai__card-name { display: block; font-size: 0.82rem; font-weight: 600; color: #1a1a1a; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .elx-ai__card-name:hover { color: #B87253; }
+    .elx-ai__card-price { font-size: 0.78rem; color: #B87253; margin-top: 3px; }
+    .elx-ai__card-add {
+      flex: 0 0 auto; border-radius: 8px; padding: 8px 16px; font-size: 0.76rem; font-weight: 600; cursor: pointer;
+      border: 1px solid #B87253; background: #B87253; color: #fff;
+      transition: background .2s ease, border-color .2s ease;
+    }
+    .elx-ai__card-add:hover { background: #a5623f; border-color: #a5623f; }
+    .elx-ai__quick { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 4px 16px 2px; }
+    .elx-ai__quick:empty { display: none; }
+    .elx-ai__chip {
+      display: inline-flex; align-items: center; gap: 7px; text-align: start;
+      padding: 9px 15px; border-radius: 8px; border: 1px solid rgba(184,114,83,0.45); background: #fff; color: #6b4a37;
+      font-size: 0.82rem; line-height: 1.2; cursor: pointer;
+      transition: background .2s ease, color .2s ease, border-color .2s ease;
+    }
+    .elx-ai__chip::before { content: '›'; color: #B87253; font-weight: 700; }
+    .elx-ai__chip:hover { background: #B87253; color: #fff; border-color: #B87253; }
+    .elx-ai__chip:hover::before { color: #fff; }
+
+    .elx-ai__typing { align-self: flex-start; display: inline-flex; gap: 4px; padding: 12px 14px; background: #fff; border: 1px solid rgba(0,0,0,0.07); border-radius: 14px; }
+    .elx-ai__typing span { width: 6px; height: 6px; border-radius: 50%; background: #c3b7ac; animation: elxTyping 1s infinite; }
+    .elx-ai__typing span:nth-child(2) { animation-delay: .15s; }
+    .elx-ai__typing span:nth-child(3) { animation-delay: .3s; }
+    @keyframes elxTyping { 0%,60%,100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+    .elx-ai__form { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-top: 1px solid rgba(0,0,0,0.07); background: #faf9f7; }
+    .elx-ai__input { flex: 1; border: 1px solid rgba(0,0,0,0.15); border-radius: 8px; padding: 10px 15px; font-size: 0.9rem; font-family: inherit; outline: none; background: #fff; }
+    .elx-ai__input:focus { border-color: #B87253; }
+    .elx-ai__send { width: 40px; height: 40px; border-radius: 8px; border: 0; background: #1a1a1a; color: #fff; cursor: pointer; display: grid; place-items: center; flex: 0 0 auto; }
+    .elx-ai__send:hover { background: #B87253; }
+    .elx-ai__send svg { width: 17px; height: 17px; }
+
+    @media (max-width: 600px) {
+      .elx-ai { bottom: 14px; inset-inline-end: 14px; }
+      .elx-ai.is-raised { bottom: 60px; }
+      /* full-width bottom sheet using the real (dynamic) viewport height so the
+         input never hides behind the mobile keyboard/browser bar */
+      .elx-ai__panel {
+        position: fixed; inset-inline: 0; bottom: 0;
+        width: 100vw; height: 90vh; height: 90dvh; max-height: 90dvh;
+        border-radius: 16px 16px 0 0; border-bottom: 0;
+        transform: translateY(20px);
+      }
+      .elx-ai__head { padding: 12px 14px; }
+      .elx-ai__log { padding: 12px 12px 8px; gap: 10px; }
+      .elx-ai__msg { max-width: 90%; font-size: 0.88rem; padding: 9px 12px; }
+      .elx-ai__quick { padding: 4px 12px 2px; }
+      .elx-ai__form { padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+      .elx-ai__input { font-size: 16px; }   /* 16px stops iOS zoom-on-focus */
+      .elx-ai__cards { }
+    }
+  </style>
+
+  <script>
+    (function () {
+      var root = document.getElementById('elx-ai');
+      if (!root) return;
+      var cfg;
+      try { cfg = JSON.parse(document.getElementById('elx-ai-config').textContent); } catch (e) { return; }
+
+      var AR = cfg.isAr;
+      var T = {
+        greet: AR
+          ? 'أهلاً بك في إليكسير ✨ أنا مساعدك الشخصي للتسوّق — هنا لأساعدك في اختيار العطر المثالي وإتمام طلبك بكل سهولة. أخبرني بما تبحث عنه، أو اسألني أي شيء.'
+          : 'Hello, and welcome to Elixir ✨ I’m your personal shopping assistant — here to help you find the perfect scent and make buying effortless. Tell me what you’re looking for, or ask me anything.',
+        starters: AR
+          ? ['ما العطر المناسب لي؟', 'ما هي العروض الحالية؟', 'معلومات الشحن']
+          : ['Which perfume suits me?', 'What are the current offers?', 'Shipping info'],
+        error: AR ? 'عذراً، حدث خطأ. حاول مرة أخرى.' : 'Sorry, something went wrong. Please try again.',
+        added: AR ? 'أُضيف إلى السلة ✓' : 'Added to cart ✓'
+      };
+
+      // Catalog: the browser is already past any password gate, so it can read
+      // the storefront catalog same-origin. We fetch once, cache, and match the
+      // user's message client-side, then send the top matches to the Worker.
+      var CATALOG = null, COLLECTIONS = null;
+      function loadCatalog() {
+        if (CATALOG) return Promise.resolve(CATALOG);
+        return fetch((cfg.cartRoot || '/') + 'products.json?limit=250')
+          .then(function (r) { return r.ok ? r.json() : { products: [] }; })
+          .then(function (d) { CATALOG = d.products || []; return CATALOG; })
+          .catch(function () { CATALOG = []; return CATALOG; });
+      }
+      function loadCollections() {
+        if (COLLECTIONS) return Promise.resolve(COLLECTIONS);
+        return fetch((cfg.cartRoot || '/') + 'collections.json?limit=250')
+          .then(function (r) { return r.ok ? r.json() : { collections: [] }; })
+          .then(function (d) { COLLECTIONS = d.collections || []; return COLLECTIONS; })
+          .catch(function () { COLLECTIONS = []; return COLLECTIONS; });
+      }
+      function fmt(p) {
+        var v = (p.variants || []).filter(function (z) { return z.available !== false; })[0] || (p.variants || [])[0];
+        var img = (p.images && p.images[0] && (p.images[0].src || p.images[0])) || p.featured_image || '';
+        if (img && img.indexOf('//') === 0) img = 'https:' + img;
+        return {
+          title: p.title,
+          url: (cfg.cartRoot || '/') + 'products/' + p.handle,
+          vendor: p.vendor,
+          price: v ? (v.price + ' AED') : null,
+          variantId: v ? v.id : null,
+          available: v ? v.available !== false : false,
+          image: img,
+          description: (p.body_html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200)
+        };
+      }
+      // Filler/confirmation words that must NOT match products (so "ok that i can
+      // buy" doesn't randomly match a candle). Domain words (perfume, oud, gift…) stay.
+      var STOP = {ok:1,okay:1,yes:1,no:1,that:1,this:1,it:1,'i':1,me:1,my:1,you:1,to:1,'for':1,of:1,and:1,or:1,is:1,are:1,a:1,an:1,the:1,please:1,can:1,could:1,would:1,go:1,'with':1,want:1,need:1,buy:1,add:1,order:1,'get':1,give:1,one:1,previous:1,back:1,some:1,any:1,more:1,'do':1,'have':1,'like':1,'them':1,'these':1,'those':1,now:1,ok1:1};
+      function matchProducts(catalog, query) {
+        var terms = String(query || '').toLowerCase().split(/\s+/)
+          .filter(function (t) { return t.length > 1 && !STOP[t]; });
+        if (!terms.length) return [];
+        return catalog.map(function (p) {
+          var hay = [p.title, p.vendor, p.product_type, (p.tags || []).join(' '), (p.body_html || '').replace(/<[^>]+>/g, ' ')].join(' ').toLowerCase();
+          var score = 0;
+          terms.forEach(function (t) { if (hay.indexOf(t) >= 0) score += (p.title || '').toLowerCase().indexOf(t) >= 0 ? 2 : 1; });
+          return { p: p, score: score };
+        }).filter(function (x) { return x.score > 0; })
+          .sort(function (a, b) { return b.score - a.score; })
+          .slice(0, 5).map(function (x) { return fmt(x.p); });
+      }
+      // Brands live as collections (not in product data). If the query contains a
+      // collection/brand title, fetch that collection's products so brand commands work.
+      function brandProducts(query) {
+        var q = String(query || '').toLowerCase();
+        return loadCollections().then(function (cols) {
+          var hit = null;
+          cols.forEach(function (c) {
+            var t = (c.title || '').toLowerCase();
+            if (t && t.length > 2 && q.indexOf(t) >= 0) { if (!hit || t.length > hit.title.toLowerCase().length) hit = c; }
+          });
+          if (!hit) return [];
+          return fetch((cfg.cartRoot || '/') + 'collections/' + hit.handle + '/products.json?limit=50')
+            .then(function (r) { return r.ok ? r.json() : { products: [] }; })
+            .then(function (d) {
+              var ps = d.products || [];
+              var refined = matchProducts(ps, query);       // narrow by any scent terms
+              return (refined.length ? refined : ps.slice(0, 5).map(fmt));
+            })
+            .catch(function () { return []; });
+        });
+      }
+      function findProductsFor(query) {
+        return brandProducts(query).then(function (brand) {
+          if (brand.length) return brand;
+          return loadCatalog().then(function (cat) { return matchProducts(cat, query); });
+        });
+      }
+
+      var log = root.querySelector('[data-ai-log]');
+      var quick = root.querySelector('[data-ai-quick]');
+      var form = root.querySelector('[data-ai-form]');
+      var input = root.querySelector('[data-ai-input]');
+      var history = [];
+      var greeted = false;
+      var busy = false;
+      var lastProducts = [];     // most recent recommendation set (context for "that one")
+      var lastSuggestions = [];  // the product cards currently on screen (for selection)
+      var lastAdded = null;      // variant id of the last item we added (for removal)
+      var aiAdded = [];          // all variant ids the assistant has added this chat
+      var pendingAdditive = false; // does the current turn want to ADD to the cart (keep old) vs REPLACE?
+
+      // "also / another / both / too" → keep existing items; otherwise a new pick
+      // replaces the previously assistant-added item.
+      function isAdditiveMsg(text) {
+        return /\b(also|as well|too|another|one more|both|in addition|add another|plus|and add)\b/i.test(String(text || ''))
+          || /أيضا|أيضًا|كمان|زيادة|كذلك|والاثنين|الاثنين/.test(String(text || ''));
+      }
+
+      // Only search the catalog when the message is actually about shopping for a
+      // product — not for gift messages, chit-chat, address, etc.
+      function hasProductIntent(text) {
+        var t = String(text || '').toLowerCase();
+        return /\b(perfume|perfumes|fragrance|fragrances|scent|scents|oud|cologne|parfum|eau|edp|edt|extrait|bottle|\d+\s?ml|recommend|recommendation|suggest|suggestion|show me|looking for|option|options|another|something else|more options|men|women|unisex|woody|floral|fresh|amber|musk|citrus|spicy|sweet|leather|cheap|cheaper|affordable|budget|expensive|luxury|brand|collection|maison|amouage|roja|crivelli|marc|barrois)\b/.test(t)
+          || /عطر|عطور|رائحة|عود|مسك|زهر|خشب|منعش|فواح/.test(t);
+      }
+
+      // Is this message the shopper PICKING one of the shown products (vs asking
+      // for new recommendations)?
+      function isSelectionMsg(text) {
+        var t = String(text || '').toLowerCase();
+        if (/\b(last one|first one|second one|third one|that one|this one|is ok|is fine|is good|go with|i'?ll take|the last|the first|let'?s go with)\b/.test(t)) return true;
+        var words = t.split(/\s+/).filter(Boolean);
+        if (words.length <= 4) {
+          if (/^(ok|okay|yes|yeah|sure|fine|good)\b/.test(t)) return true;
+          var terms = words.filter(function (w) { return w.length > 2 && !STOP[w]; });
+          if (terms.length && lastSuggestions.length) {
+            var titles = lastSuggestions.map(function (p) { return (p.title || '').toLowerCase(); }).join(' | ');
+            if (terms.every(function (w) { return titles.indexOf(w) >= 0; })) return true;
+          }
+        }
+        return false;
+      }
+      // Resolve a selection to a SINGLE shown product (or null if we can't).
+      function resolveSelection(text) {
+        if (!lastSuggestions.length) return null;
+        var t = String(text || '').toLowerCase();
+        if (/\blast\b/.test(t)) return lastSuggestions[lastSuggestions.length - 1];
+        if (/\bfirst\b|\b1st\b/.test(t)) return lastSuggestions[0];
+        if (/\bsecond\b|\b2nd\b/.test(t)) return lastSuggestions[1] || null;
+        if (/\bthird\b|\b3rd\b/.test(t)) return lastSuggestions[2] || null;
+        var terms = t.split(/\s+/).filter(function (w) { return w.length > 2 && !STOP[w]; });
+        if (terms.length) {
+          var hits = lastSuggestions.filter(function (p) {
+            var pt = (p.title || '').toLowerCase();
+            return terms.some(function (w) { return pt.indexOf(w) >= 0; });
+          });
+          if (hits.length) return hits[0];
+        }
+        if (lastSuggestions.length === 1) return lastSuggestions[0];
+        return null;
+      }
+
+      root.querySelectorAll('[data-ai-toggle]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var open = root.getAttribute('data-open') === 'true';
+          root.setAttribute('data-open', open ? 'false' : 'true');
+          if (!open && !greeted) {
+            greeted = true;
+            addBot(T.greet); renderQuick(T.starters); input.focus();
+          }
+          else if (!open) { input.focus(); }
+        });
+      });
+
+      function scroll() { log.scrollTop = log.scrollHeight; }
+
+      function addUser(text) {
+        var d = document.createElement('div');
+        d.className = 'elx-ai__msg elx-ai__msg--user';
+        d.setAttribute('dir', 'auto');
+        d.textContent = text;
+        log.appendChild(d); scroll();
+      }
+
+      // Minimal, safe Markdown → HTML for bot replies: **bold**, bullet lines
+      // (- / •), and paragraph line breaks. Everything is escaped first.
+      function esc(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+      // Turn full URLs and store paths (/collections/…, /pages/…) into tappable links.
+      function linkify(line) {
+        line = line.replace(/(https?:\/\/[^\s<]+)/g, function (u) {
+          return '<a class="elx-ai__link" href="' + u + '">' + u + '</a>';
+        });
+        line = line.replace(/(^|[\s(>])(\/(?:collections|products|pages|cart|account|offers|checkout|blogs)[A-Za-z0-9\-_\/]*)/g, function (m, pre, path) {
+          return pre + '<a class="elx-ai__link" href="' + path + '">' + path + '</a>';
+        });
+        return line;
+      }
+      function mdToHtml(text) {
+        var lines = esc(text).split('\n');
+        var html = '', inList = false;
+        lines.forEach(function (raw) {
+          var line = linkify(raw.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>'));
+          var m = line.match(/^\s*[-•]\s+(.*)$/);
+          if (m) {
+            if (!inList) { html += '<ul class="elx-ai__list">'; inList = true; }
+            html += '<li>' + m[1] + '</li>';
+          } else {
+            if (inList) { html += '</ul>'; inList = false; }
+            if (line.trim() !== '') html += '<p class="elx-ai__para">' + line + '</p>';
+          }
+        });
+        if (inList) html += '</ul>';
+        return html || '<p class="elx-ai__para">' + esc(text) + '</p>';
+      }
+
+      function addBot(text) {
+        var d = document.createElement('div');
+        d.className = 'elx-ai__msg elx-ai__msg--bot';
+        d.setAttribute('dir', 'auto');
+        d.innerHTML = mdToHtml(text);
+        log.appendChild(d); scroll();
+        return d;
+      }
+
+      function actionBtn(label, primary, onClick) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'elx-ai__act' + (primary ? '' : ' elx-ai__act--ghost');
+        b.textContent = label;
+        b.addEventListener('click', onClick);
+        return b;
+      }
+
+      // Single place that turns the assistant's actions into the correct flow:
+      // one add happens automatically (no duplicate "Add" button), then the shopper
+      // is offered Checkout + View cart. Links render as ghost buttons. Extra product
+      // matches (beyond the one added) show as "Add" options.
+      function handleActions(actions) {
+        actions = actions || [];
+        var seen = {}, adds = [], links = [], hasCheckout = false, hasRemove = false;
+        actions.forEach(function (a) {
+          if (a.type === 'add_to_cart' && a.variantId) {
+            if (!seen[a.variantId]) { seen[a.variantId] = 1; adds.push(a); }
+          } else if (a.type === 'link' && a.url) {
+            links.push(a);
+          } else if (a.type === 'checkout') {
+            hasCheckout = true;
+          } else if (a.type === 'remove_last') {
+            hasRemove = true;
+          }
+        });
+
+        // Clear the whole cart (e.g. "remove all items").
+        if (actions.some(function (a) { return a.type === 'clear_cart'; })) {
+          fetch((cfg.cartRoot || '/') + 'cart/clear.js', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+            .then(function () {
+              lastAdded = null;
+              document.dispatchEvent(new CustomEvent('cart:refresh'));
+              document.dispatchEvent(new CustomEvent('cart:change'));
+            }).catch(function () {});
+        }
+
+        // Remove the last item we added (e.g. "remove that").
+        if (hasRemove && lastAdded) {
+          fetch((cfg.cartRoot || '/') + 'cart/change.js', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: lastAdded, quantity: 0 })
+          }).then(function () {
+            lastAdded = null;
+            document.dispatchEvent(new CustomEvent('cart:refresh'));
+            document.dispatchEvent(new CustomEvent('cart:change'));
+          }).catch(function () {});
+        }
+
+        // Standalone checkout intent (nothing being added this turn) → just go.
+        if (hasCheckout && !adds.length) {
+          window.location.href = '/checkout';
+          return;
+        }
+
+        var wrap = document.createElement('div');
+        wrap.className = 'elx-ai__actions';
+
+        var addedOne = false;
+        if (adds.length) {
+          // Don't re-add the same item on a repeated "yes" (avoids qty inflation).
+          if (adds[0].variantId !== lastAdded) { replaceOrAdd(adds[0]); }
+          addedOne = true;                    // still show Checkout/View cart
+        }
+
+        // After adding, guide to checkout (primary) + view cart.
+        if (addedOne || hasCheckout) {
+          wrap.appendChild(actionBtn(AR ? 'إتمام الشراء' : 'Checkout', true, function () {
+            window.location.href = '/checkout';
+          }));
+          wrap.appendChild(actionBtn(AR ? 'عرض السلة' : 'View cart', false, function () {
+            window.location.href = (cfg.cartRoot || '/') + 'cart';
+          }));
+        }
+
+        // Extra product options (2nd match onward) as optional Add buttons.
+        adds.slice(1).forEach(function (a) {
+          wrap.appendChild(actionBtn((AR ? 'أضف ' : 'Add ') + (a.title || ''), true, function (e) {
+            addToCart(a, e.target);
+          }));
+        });
+
+        // Store/section links.
+        links.forEach(function (a) {
+          var link = document.createElement('a');
+          link.className = 'elx-ai__act elx-ai__act--ghost';
+          link.href = a.url; link.textContent = a.label || 'Open';
+          wrap.appendChild(link);
+        });
+
+        if (wrap.children.length) { log.appendChild(wrap); scroll(); }
+      }
+
+      function removeVariant(v) {
+        if (!v) return;
+        fetch((cfg.cartRoot || '/') + 'cart/change.js', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: v, quantity: 0 })
+        }).then(function () {
+          document.dispatchEvent(new CustomEvent('cart:refresh'));
+          document.dispatchEvent(new CustomEvent('cart:change'));
+        }).catch(function () {});
+      }
+
+      // Add a new pick. Unless the shopper asked for multiples ("also/another"),
+      // first remove the items the assistant previously added — so leftover,
+      // no-longer-wanted items don't pile up when they change their mind.
+      function replaceOrAdd(a) {
+        if (!pendingAdditive && aiAdded.length) {
+          aiAdded.forEach(function (v) { if (v !== a.variantId) removeVariant(v); });
+          aiAdded = aiAdded.filter(function (v) { return v === a.variantId; });
+        }
+        addToCart(a);
+      }
+
+      function addToCart(a, btn) {
+        if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
+        fetch((cfg.cartRoot || '/') + 'cart/add.js', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: [{ id: a.variantId, quantity: a.quantity || 1 }] })
+        }).then(function (r) { return r.json(); }).then(function () {
+          lastAdded = a.variantId;
+          if (aiAdded.indexOf(a.variantId) === -1) aiAdded.push(a.variantId);
+          if (btn) btn.textContent = T.added;
+          document.dispatchEvent(new CustomEvent('cart:refresh'));
+          document.dispatchEvent(new CustomEvent('cart:change'));
+        }).catch(function () { if (btn) { btn.disabled = false; btn.style.opacity = '1'; } });
+      }
+
+      // Product suggestion cards (image + name + price + Add).
+      function renderSuggestions(items) {
+        if (!items || !items.length) return;
+        lastSuggestions = items.slice();   // remember for selection ("last one", "apex")
+        var wrap = document.createElement('div');
+        wrap.className = 'elx-ai__cards';
+        items.forEach(function (p) {
+          var card = document.createElement('div');
+          card.className = 'elx-ai__card';
+
+          var img = document.createElement('img');
+          img.className = 'elx-ai__card-img';
+          img.loading = 'lazy'; img.alt = '';
+          if (p.image) { img.src = p.image; } else { img.className += ' elx-ai__card-img--ph'; }
+
+          var body = document.createElement('div');
+          body.className = 'elx-ai__card-body';
+          var name = document.createElement('a');
+          name.className = 'elx-ai__card-name'; name.href = p.url || '#'; name.textContent = p.title || '';
+          var price = document.createElement('div');
+          price.className = 'elx-ai__card-price'; price.textContent = p.price || '';
+          body.appendChild(name); body.appendChild(price);
+
+          var add = document.createElement('button');
+          add.type = 'button'; add.className = 'elx-ai__card-add';
+          add.textContent = AR ? 'أضف' : 'Add';
+          add.addEventListener('click', function (e) {
+            if (p.variantId) addToCart({ variantId: p.variantId, quantity: 1, title: p.title }, e.target);
+          });
+
+          card.appendChild(img); card.appendChild(body); card.appendChild(add);
+          wrap.appendChild(card);
+        });
+        log.appendChild(wrap); scroll();
+      }
+
+      function renderQuick(options) {
+        quick.innerHTML = '';
+        (options || []).forEach(function (opt) {
+          var c = document.createElement('button');
+          c.type = 'button'; c.className = 'elx-ai__chip'; c.textContent = opt;
+          c.addEventListener('click', function () { quick.innerHTML = ''; send(opt); });
+          quick.appendChild(c);
+        });
+      }
+
+      function typing(on) {
+        var ex = log.querySelector('.elx-ai__typing');
+        if (on && !ex) {
+          var t = document.createElement('div'); t.className = 'elx-ai__typing';
+          t.innerHTML = '<span></span><span></span><span></span>';
+          log.appendChild(t); scroll();
+        } else if (!on && ex) { ex.remove(); }
+      }
+
+      function send(text) {
+        if (busy || !text.trim()) return;
+        busy = true;
+        quick.innerHTML = '';
+        addUser(text);
+        history.push({ role: 'user', content: text });
+        typing(true);
+
+        pendingAdditive = isAdditiveMsg(text);
+
+        // Selection ("apex is ok", "the last one") → resolve to ONE shown product
+        // and add it; otherwise search the catalog for recommendations.
+        var picked = isSelectionMsg(text) ? resolveSelection(text) : null;
+        var work;
+        if (picked) {
+          work = Promise.resolve({ products: [picked], select: true });
+        } else if (hasProductIntent(text)) {
+          work = findProductsFor(text).then(function (p) { return { products: p, select: false }; });
+        } else {
+          work = Promise.resolve({ products: [], select: false });   // conversational — no product search
+        }
+
+        work.then(function (res) {
+          var products = res.products || [];
+          var context = [];
+          if (!res.select) {
+            if (products.length) { lastProducts = products; }
+            else { context = lastProducts; }
+          }
+          return fetch(cfg.endpoint, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              messages: history, shopDomain: cfg.shopDomain,
+              kb: cfg.kb, offers: cfg.offers, links: cfg.links,
+              model: cfg.model, products: products, contextProducts: context, select: res.select
+            })
+          });
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          typing(false);
+          var reply = (data && data.reply) || T.error;
+          addBot(reply);
+          history.push({ role: 'assistant', content: reply });
+          renderSuggestions(data && data.suggestions);
+          handleActions(data && data.actions);
+          if (data && data.quickReplies) renderQuick(data.quickReplies);
+          busy = false;
+        }).catch(function () {
+          typing(false); addBot(T.error); busy = false;
+        });
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var v = input.value; input.value = '';
+        send(v);
+      });
+    })();
+  </script>
+{%- endif -%}

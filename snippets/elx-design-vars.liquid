@@ -1,0 +1,168 @@
+{%- doc -%}
+  Turns the Elixir Promotions app's badge design into CSS variables.
+
+  The app writes `shop.metafields.elixir_promotions.design` (json) whenever the
+  merchant saves the Storefront design page. This is what makes those settings
+  actually reach the storefront: the app's own badge renderer has never been
+  deployed, so without this the design page saves values nothing reads.
+
+  EVERY fallback is the theme's existing hardcoded look, so a store with no design
+  saved -- or an unreadable metafield -- renders exactly as it did before. The CSS
+  in theme.css repeats the same fallbacks inside var(), so even this snippet going
+  missing changes nothing.
+
+  Render once, in <head>. Rendering per card would duplicate the CSS.
+
+  Usage:
+    {%- render 'elx-design-vars' -%}
+{%- enddoc -%}
+{%- liquid
+  assign design = shop.metafields.elixir_promotions.design.value
+  assign d = design.badge
+  assign pc = design.productCard
+
+  # the % OFF badge: brass. the Free Gift badge: near-black. both white text.
+  assign sale_bg = d.accentColor | default: '#B87253'
+  assign gift_bg = d.bgColor | default: '#1a1a1a'
+  assign fg = d.textColor | default: '#ffffff'
+
+  # 0.58rem is the theme's size; the app speaks px, so only override when set
+  assign fs = '0.58rem'
+  if d.fontSize > 0
+    assign fs = d.fontSize | append: 'px'
+  endif
+
+  assign fw = d.fontWeight | default: '600'
+
+  # the app stores letter-spacing as a whole percent of the font size; 0.08em = 8
+  assign ls = '0.08em'
+  if d.letterSpacing > 0
+    assign ls = d.letterSpacing | divided_by: 100.0 | append: 'em'
+  endif
+
+  assign tt = 'uppercase'
+  if d.uppercase == false
+    assign tt = 'none'
+  endif
+
+  # corner: the theme's tab shape. A pill rounds every corner instead.
+  assign radius_bl = '11px'
+  assign radius_tr = '12px'
+  if d.style == 'pill'
+    assign radius_bl = '999px'
+    assign radius_tr = '999px'
+  endif
+  if d.style == 'outline' or d.style == 'minimal' or d.style == 'stacked'
+    assign radius_bl = '0'
+    assign radius_tr = '0'
+  endif
+
+  # A left-hand position mirrors the tab's cut corner, or it points the wrong way.
+  assign on_left = false
+  if d.position == 'top-left' or d.position == 'mid-left' or d.position == 'bot-left'
+    assign on_left = true
+  endif
+
+  assign inset = 0
+  if d.offset > 0
+    assign inset = d.offset
+  endif
+-%}
+{%- capture elx_design_css -%}
+  :root {
+    --elx-badge-sale-bg: {{ sale_bg }};
+    --elx-badge-gift-bg: {{ gift_bg }};
+    --elx-badge-fg: {{ fg }};
+    --elx-badge-fs: {{ fs }};
+    --elx-badge-fw: {{ fw }};
+    --elx-badge-ls: {{ ls }};
+    --elx-badge-tt: {{ tt }};
+    --elx-badge-radius-bl: {{ radius_bl }};
+    --elx-badge-radius-tr: {{ radius_tr }};
+    --elx-badge-inset: {{ inset }}px;
+  }
+  {%- comment -%}
+    The shapes the app's style picker promises. These rules come after theme.css
+    at equal specificity, so they win without !important. "tab" is the theme's own
+    look and needs no rule at all.
+  {%- endcomment -%}
+  {%- comment -%}
+    Brand-card badges (.bls__badge on /pages/brands) get the same shape. They are
+    prefixed with .brand-logo-card so this (specificity 0,2,0) beats the grid
+    section's own .bls__badge rules (0,1,0), whatever the source order.
+  {%- endcomment -%}
+  {%- if d.style == 'pill' -%}
+    .elx-badge, .product-card > .elx-badges .elx-badge:first-child,
+    .brand-logo-card .bls__badge { border-radius: 999px; }
+    .product-card > .elx-badges { gap: 4px; }
+  {%- endif -%}
+  {%- if d.style == 'outline' -%}
+    .elx-badge, .brand-logo-card .bls__badge { background: transparent; border: 1px solid currentColor; }
+    .elx-badge--sale, .brand-logo-card .bls__badge--sale { background: transparent; color: var(--elx-badge-sale-bg); }
+    .elx-badge--gift, .brand-logo-card .bls__badge--gift { background: transparent; color: var(--elx-badge-gift-bg); }
+    .product-card > .elx-badges { gap: 4px; }
+  {%- endif -%}
+  {%- if d.style == 'minimal' -%}
+    .elx-badge, .brand-logo-card .bls__badge { background: transparent; padding-left: 0; padding-right: 0; }
+    .elx-badge--sale, .brand-logo-card .bls__badge--sale { background: transparent; color: var(--elx-badge-sale-bg); }
+    .elx-badge--gift, .brand-logo-card .bls__badge--gift { background: transparent; color: var(--elx-badge-gift-bg); }
+    .product-card > .elx-badges { gap: 2px; padding: 6px 10px; }
+  {%- endif -%}
+  {%- if d.style == 'stacked' -%}
+    .elx-badge, .brand-logo-card .bls__badge { background: transparent; border-bottom: 1px solid currentColor; padding-left: 0; padding-right: 0; }
+    .elx-badge--sale, .brand-logo-card .bls__badge--sale { background: transparent; color: var(--elx-badge-sale-bg); }
+    .elx-badge--gift, .brand-logo-card .bls__badge--gift { background: transparent; color: var(--elx-badge-gift-bg); }
+    .product-card > .elx-badges { gap: 4px; padding: 6px 10px; }
+  {%- endif -%}
+
+  {%- if d.position != blank and d.position != 'top-right' -%}
+    {%- comment -%} Only re-anchor when the merchant moved it off the theme's default. {%- endcomment -%}
+    .product-card > .elx-badges {
+      {%- case d.position -%}
+        {%- when 'top-left' -%}    top: var(--elx-badge-inset); right: auto; bottom: auto; left: var(--elx-badge-inset); align-items: flex-start;
+        {%- when 'top-center' -%}  top: var(--elx-badge-inset); right: auto; bottom: auto; left: 50%; transform: translateX(-50%); align-items: center;
+        {%- when 'mid-left' -%}    top: 50%; right: auto; bottom: auto; left: var(--elx-badge-inset); transform: translateY(-50%); align-items: flex-start;
+        {%- when 'mid-right' -%}   top: 50%; right: var(--elx-badge-inset); bottom: auto; left: auto; transform: translateY(-50%); align-items: flex-end;
+        {%- when 'bot-left' -%}    top: auto; right: auto; bottom: var(--elx-badge-inset); left: var(--elx-badge-inset); align-items: flex-start;
+        {%- when 'bot-center' -%}  top: auto; right: auto; bottom: var(--elx-badge-inset); left: 50%; transform: translateX(-50%); align-items: center;
+        {%- when 'bot-right' -%}   top: auto; right: var(--elx-badge-inset); bottom: var(--elx-badge-inset); left: auto; align-items: flex-end;
+      {%- endcase -%}
+    }
+    {%- if d.position == 'top-center' or d.position == 'bot-center' -%}
+      {%- comment -%} A centred badge hugs no corner, so the tab's cut corner is wrong there. {%- endcomment -%}
+      .elx-badge, .product-card > .elx-badges .elx-badge:first-child { border-radius: 4px; }
+    {%- endif -%}
+  {%- endif -%}
+  {%- if on_left and d.style == 'tab' -%}
+    {%- comment -%} Mirror the tab: cut the bottom-RIGHT corner, round the top-left. {%- endcomment -%}
+    .elx-badge { border-bottom-left-radius: 0; border-bottom-right-radius: var(--elx-badge-radius-bl, 11px); }
+    .product-card > .elx-badges .elx-badge:first-child { border-top-right-radius: 0; border-top-left-radius: var(--elx-badge-radius-tr, 12px); }
+  {%- endif -%}
+  {%- if d.enabled == false -%}
+    .elx-badges { display: none; }
+  {%- endif -%}
+
+  {%- comment -%}
+    The PDP offer card. Each var is only emitted when the merchant actually set
+    something, so anything left alone keeps the card's own CSS fallback -- that
+    matters most for the background, which is a brass gradient the app cannot
+    express with its single colour picker.
+  {%- endcomment -%}
+  {%- if pc != blank -%}
+    :root {
+      {%- if pc.bgColor != blank %} --elx-pdp-bg: {{ pc.bgColor }};{% endif -%}
+      {%- if pc.textColor != blank %} --elx-pdp-fg: {{ pc.textColor }};{% endif -%}
+      {%- if pc.accentColor != blank %} --elx-pdp-accent: {{ pc.accentColor }};{% endif -%}
+      {%- if pc.borderColor != blank %} --elx-pdp-border: {{ pc.borderColor }};{% endif -%}
+      {%- if pc.cornerRadius > 0 %} --elx-pdp-radius: {{ pc.cornerRadius }}px;{% endif -%}
+      {%- if pc.padding > 0 %} --elx-pdp-padding: {{ pc.padding }}px;{% endif -%}
+      {%- if pc.marginTop > 0 %} --elx-pdp-mt: {{ pc.marginTop }}px;{% endif -%}
+      {%- if pc.marginBottom > 0 %} --elx-pdp-mb: {{ pc.marginBottom }}px;{% endif -%}
+      {%- if pc.headingSize > 0 %} --elx-pdp-heading-size: {{ pc.headingSize }}px;{% endif -%}
+    }
+    {%- if pc.enabled == false -%}
+      .lpdp__gift { display: none; }
+    {%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+<style>{{ elx_design_css | strip_newlines }}</style>

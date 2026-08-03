@@ -1,0 +1,84 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "home-4",
+      "blocks": {
+        "pr1": {
+          "type": "product_row",
+          "settings": {
+            "eyebrow": "For Her",
+            "heading": "Women",
+            "collection": "women"
+          }
+        },
+        "pr2": {
+          "type": "product_row",
+          "settings": {
+            "eyebrow": "For Him",
+            "heading": "Men",
+            "collection": "men"
+          }
+        },
+        "pr3": {
+          "type": "product_row",
+          "settings": {
+            "eyebrow": "Shared Scents",
+            "heading": "Unisex",
+            "collection": "unisex"
+          }
+        },
+        "cat1": {
+          "type": "category",
+          "settings": {
+            "label": "For Her"
+          }
+        },
+        "cat2": {
+          "type": "category",
+          "settings": {
+            "label": "For Him"
+          }
+        },
+        "cat3": {
+          "type": "category",
+          "settings": {
+            "label": "Unisex"
+          }
+        },
+        "cat4": {
+          "type": "category",
+          "settings": {
+            "label": "Gift Sets"
+          }
+        }
+      },
+      "block_order": [
+        "pr1",
+        "pr2",
+        "pr3",
+        "cat1",
+        "cat2",
+        "cat3",
+        "cat4"
+      ],
+      "settings": {}
+    },
+    "prods": {
+      "type": "home-4-prods",
+      "settings": { "collections": "women,men,unisex" }
+    }
+  },
+  "order": [
+    "main",
+    "prods"
+  ]
+}

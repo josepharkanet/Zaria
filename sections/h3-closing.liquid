@@ -1,0 +1,34 @@
+{%- comment -%} Home 2 — Closing editorial quote band. Centered, hairline-framed, restrained. {%- endcomment -%}
+{%- liquid  -%}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,600&display=swap');
+  #shopify-section-{{ section.id }} { --g:#B87253; --ink:#1a1a1a; --serif: var(--heading-font-family); }
+  .h2cl { background: {{ section.settings.bg_color }}; color: var(--ink); font-family: var(--text-font-family); padding: clamp(4rem,9vw,8rem) clamp(1.5rem,5vw,3rem); text-align: center; }
+  .h2cl__inner { max-width: 760px; margin: 0 auto; position: relative; }
+  .h2cl__mark { font-family: var(--serif); font-size: 3rem; line-height: 1; color: var(--g); display: block; margin-bottom: 0.6rem; }
+  .h2cl__quote { font-family: var(--serif); font-weight: 500; font-size: clamp(1.4rem, 3vw, 2.2rem); line-height: 1.4; letter-spacing: 0.01em; margin: 0; }
+  .h2cl__rule { width: 56px; height: 1px; background: var(--g); margin: 2rem auto 1.2rem; }
+  .h2cl__by { font-size: 0.7rem; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(26,26,26,0.5); }
+</style>
+
+<section class="h2cl">
+  <div class="h2cl__inner">
+    <span class="h2cl__mark">”</span>
+    <p class="h2cl__quote">{{ section.settings.quote }}</p>
+    <span class="h2cl__rule"></span>
+    {%- if section.settings.by != blank -%}<span class="h2cl__by">{{ section.settings.by }}</span>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "H3 Closing",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f7f4ef" },
+    { "type": "textarea", "id": "quote", "label": "Quote", "default": "A fragrance should never be ordinary. It should move you, mark a moment, and stay with those around you long after you leave the room." },
+    { "type": "text", "id": "by", "label": "Attribution", "default": "The Elixir Philosophy" }
+  ],
+  "presets": [{ "name": "H3 Closing" }]
+}
+{% endschema %}

@@ -1,0 +1,675 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "page": "Pagina {{ page }}",
+    "home": "Pagina principală",
+    "accessibility": {
+      "skip_to_content": "Sari la conținut",
+      "pagination": "Navigare între pagini",
+      "go_to_page": "Mergi la pagina {{ index }}",
+      "go_to_item": "Mergi la articolul {{ index }}",
+      "item_nth_of_count": "Articolul {{ index }} din {{ count }}",
+      "drag": "Trage",
+      "close": "Închide",
+      "next": "Înainte",
+      "previous": "Înapoi",
+      "play_video": "Redă videoclipul",
+      "navigate_to_next_section": "Navighează la secțiunea următoare",
+      "mute_video": "Dezactivează sunetul videoclipului",
+      "unmute_video": "Reactivează sunetul videoclipului",
+      "rss_feed": "Flux RSS"
+    },
+    "label": {
+      "color": "Culoare",
+      "white": "Alb",
+      "size": "Mărime"
+    },
+    "breadcrumb": {
+      "label": "Urme",
+      "home": "Pagina principală",
+      "shop": "Magazin"
+    },
+    "reviews": {
+      "title": "Recenzii"
+    },
+    "social": {
+      "follow_on": "Urmărește pe {{ social_media }}",
+      "share": "Distribuie",
+      "share_on": "Distribuie pe {{ social_media }}",
+      "share_email": "Distribuie prin e-mail"
+    },
+    "rating": {
+      "info": "{{ rating_value }} din {{ rating_max }} stele"
+    },
+    "newsletter": {
+      "email": "E-mail",
+      "subscribe": "Abonează-te",
+      "notify_me": "Anunță-mă",
+      "subscribed_successfully": "Te-ai abonat la newsletterul nostru."
+    },
+    "localization": {
+      "country": "Țară",
+      "language": "Limbă",
+      "change_country_accessibility_text": "Schimbă țara sau moneda",
+      "change_language_accessibility_text": "Schimbă limba"
+    },
+    "privacy_banner": {
+      "accept": "Acceptă",
+      "decline": "Refuză"
+    },
+    "form": {
+      "max_characters": "Maximum {{ max_chars }} (de) caractere"
+    },
+    "on_boarding": {
+      "blog_post_category": "Categorie",
+      "blog_post_title": "Articol",
+      "blog_post_excerpt": "Scrie un text despre postarea ta de pe blog.",
+      "product_vendor": "Furnizor",
+      "product_title": "Produs",
+      "product_description": "Scrie un text despre produsul tău.",
+      "collection_title": "Colecție"
+    },
+    "no_products": "No products are on offer right now."
+  },
+  "header": {
+    "general": {
+      "account": "Cont",
+      "login": "Conectează-te",
+      "search": "Caută",
+      "cart": "Coș",
+      "primary_navigation": "Navigare principală",
+      "secondary_navigation": "Navigare secundară",
+      "menu": "Meniu"
+    }
+  },
+  "product": {
+    "general": {
+      "description": "Descriere",
+      "add_to_cart_button": "Adaugă în coș",
+      "pre_order_button": "Precomandă",
+      "sold_out_button": "Stoc epuizat",
+      "unavailable_button": "Indisponibil",
+      "choose_options": "Alege opțiunile",
+      "view_details": "Vezi detalii",
+      "added_to_cart": "Adăugat în coș!",
+      "added_to_cart_with_title": "{{ product_title }} a fost adăugat în coș.",
+      "sold_out_badge": "Stoc epuizat",
+      "on_sale_badge": "Reducere",
+      "discount_badge_html": "Economisește {{ savings }}",
+      "sku": "SKU:",
+      "variant": "Variantă",
+      "view_in_space": "Vizualizați în spațiul dvs.",
+      "taxes_included": "Taxă inclusă.",
+      "taxes_excluded": "Fără taxă.",
+      "shipping_policy_html": "<a href=\"{{ link }}\" class=\"link\">Costul de livrare este calculat</a> la finalizarea comenzii",
+      "size_chart": "Tabel de mărimi",
+      "available_colors_count": {
+        "one": "{{ count }} culoare disponibilă",
+        "other": "{{ count }} culori disponibile"
+      }
+    },
+    "gallery": {
+      "close": "Închide galeria",
+      "zoom": "Mărește",
+      "error": "Imaginea nu poate fi încărcată"
+    },
+    "price": {
+      "regular_price": "Preț normal",
+      "sale_price": "Preț redus",
+      "from_price_html": "De la {{ price_min }}"
+    },
+    "quantity": {
+      "label": "Cantitate",
+      "change_quantity": "Schimbă cantitatea",
+      "increase_quantity": "Crește cantitatea",
+      "decrease_quantity": "Scade cantitatea",
+      "minimum_of": "Minim de {{ min }}",
+      "maximum_of": "Maxim de {{ max }}",
+      "increment_of": "Increment de {{ step }}",
+      "cannot_add_more": "Nu mai poți adăuga altceva"
+    },
+    "volume_pricing": {
+      "title": "Stabilire preț per volum",
+      "minimum": "Peste {{ quantity }}",
+      "price_at_each": "la {{ price }}/buc."
+    },
+    "rating_count": {
+      "zero": "Nicio o recenzie",
+      "one": "{{ count }} recenzie",
+      "other": "{{ count }} recenzii"
+    },
+    "inventory": {
+      "in_stock": "În stoc",
+      "low_stock": "Au mai rămas doar câteva unități",
+      "in_stock_with_quantity_count": {
+        "one": "{{ count }} în stoc",
+        "other": "{{ count }} în stoc"
+      },
+      "out_of_stock": "Stoc epuizat",
+      "oversell_stock": "Va reveni în stoc în curând",
+      "incoming_stock": "Va reveni în stoc pe {{ next_incoming_date }}",
+      "low_stock_with_quantity_count": {
+        "one": "Doar {{count}} unitate rămasă",
+        "other": "Doar {{count}} unități rămase"
+      }
+    },
+    "store_availability": {
+      "view_store_info": "Vezi informații despre magazin",
+      "check_other_stores": "Verifică disponibilitatea la alte magazine",
+      "pick_up_available": "Preluare disponibilă",
+      "pick_up_currently_unavailable": "În prezent nu este disponibilă preluarea",
+      "pick_up_available_at": "Preluare disponibilă la {{ location_name }}",
+      "pick_up_unavailable_at": "În prezent preluarea nu este disponibilă la {{ location_name }}"
+    }
+  },
+  "collection": {
+    "general": {
+      "empty_collection": "Această colecție este goală",
+      "all_collections": "Toate colecțiile",
+      "no_collections": "Acest magazin nu conține nicio colecție.",
+      "continue_shopping": "Continuă cumpărăturile"
+    },
+    "products_count": {
+      "zero": "0 produse",
+      "one": "1 produs",
+      "other": "{{ count }} produse"
+    },
+    "faceting": {
+      "filters": "Filtre",
+      "filter_button": "Filtrează",
+      "clear_filters": "Șterge tot",
+      "apply_filters": "Aplică",
+      "sort_by": "Sortează după",
+      "remove_filter": "Elimină filtrul „{{ name }}”",
+      "no_results": "Nu există niciun produs care să corespundă cu aceste filtre.",
+      "price_range_to": "până la",
+      "price_filter_from": "Preț minim",
+      "price_filter_to": "Preț maxim",
+      "price_filter": "{{ min_price }} - {{ max_price }}",
+      "in_stock_only": "Doar în stoc"
+    }
+  },
+  "blog_post": {
+    "article": "Articol:",
+    "share": "Distribuie",
+    "prev": "Înapoi",
+    "next": "Înainte"
+  },
+  "blog": {
+    "general": {
+      "empty_blog": "Acest blog este gol",
+      "back_to_home": "Înapoi la pagina principală",
+      "view": "Vezi",
+      "all_posts": "Toate postările",
+      "read_more": "Află mai multe"
+    },
+    "post": {
+      "written_by": "De {{ author }}",
+      "visit_author_website": "Vizitează site-ul autorului",
+      "share": "Distribuie",
+      "tags": "Etichete"
+    },
+    "comments": {
+      "leave_comment": "Lasă un comentariu",
+      "moderated": "Toate comentariile sunt moderate înainte de a fi publicate.",
+      "name": "Nume",
+      "email": "E-mail",
+      "message": "Mesaj",
+      "submit": "Trimite",
+      "comment_sent": "Comentariul tău a fost trimis. Îl vom publica în scurt timp, deoarece blogul nostru este moderat.",
+      "comment_published": "Comentariul tău a fost publicat.",
+      "count": {
+        "zero": "{{ count }} comentarii",
+        "one": "{{ count }} comentariu",
+        "other": "{{ count }} comentarii"
+      }
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Nume",
+      "email": "E-mail",
+      "message": "Mesaj",
+      "submit": "Trimite mesajul",
+      "success_message": "Mesajul tău a fost trimis."
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "Contul tău",
+      "primary_address": "Adresa principală",
+      "manage_addresses": "Gestionează",
+      "tagline": "Vezi toate comenzile și gestionează informațiile contului tău.",
+      "orders": "Comenzi",
+      "logout": "Deconectează-te",
+      "no_orders": "Nu ai făcut nicio comandă încă.",
+      "continue_shopping": "Continuă cumpărăturile"
+    },
+    "login": {
+      "title": "Conectează-te",
+      "instructions": "Introdu adresa de e-mail și parola pentru autentificare:",
+      "no_account": "Nu ai un cont?",
+      "email": "E-mail",
+      "password": "Parolă",
+      "submit": "Conectează-te",
+      "forgot_password": "Ai uitat parola?",
+      "sign_up": "Înregistrează-te"
+    },
+    "recover_password": {
+      "title": "Recuperează parola",
+      "instructions": "Introdu adresa de e-mail pentru a recupera parola:",
+      "remember_password": "Îți amintești parola?",
+      "email": "E-mail",
+      "submit": "Recuperează",
+      "back_to_login": "Înapoi la conectare",
+      "success_message": "A fost trimis un e-mail către adresa ta de e-mail cu instrucțiuni pentru resetarea parolei."
+    },
+    "register": {
+      "title": "Înscrie-te",
+      "instructions": "Completează informațiile de mai jos:",
+      "already_have_account": "Ai deja un cont?",
+      "first_name": "Prenume",
+      "last_name": "Nume",
+      "email": "E-mail",
+      "password": "Parolă",
+      "accepts_marketing": "Abonează-te la newsletterul nostru",
+      "submit": "Creează contul",
+      "login": "Conectează-te"
+    },
+    "activate_account": {
+      "title": "Activează contul",
+      "instructions": "Introdu o parolă pentru a-ți crea contul:",
+      "password": "Parolă",
+      "password_confirmation": "Confirmare parolă",
+      "submit": "Activează",
+      "cancel": "Anulează"
+    },
+    "reset_password": {
+      "title": "Resetează parola",
+      "instructions": "Introdu o parolă nouă:",
+      "password": "Parolă",
+      "password_confirmation": "Confirmare parolă",
+      "submit": "Resetează"
+    },
+    "order": {
+      "order": "Comandă",
+      "order_name": "Comanda {{name}}",
+      "created_at": "Comandă plasată pe {{created_at}}",
+      "view_details": "Vezi detaliile comenzii",
+      "back": "Înapoi",
+      "date": "Dată",
+      "payment_status": "Starea plății",
+      "fulfillment_status": "Stare comandă",
+      "cancelled_on": "Anulată pe {{date}}. Motiv: {{reason}}",
+      "product": "Produs",
+      "quantity": "Cantitate",
+      "fulfillment_with_number": "Comanda ta a fost trimisă pe {{date}}. Urmărește livrarea cu numărul {{tracking_number}}.",
+      "fulfillment": "Comanda ta a fost trimisă pe {{date}}.",
+      "track_shipment": "Urmărește livrarea",
+      "subtotal": "Subtotal",
+      "discount": "Reducere",
+      "shipping": "Livrare",
+      "taxes_included": "Taxe incluse",
+      "taxes_excluded": "Fără taxe",
+      "total_duties": "Taxe de import",
+      "refunded_amount": "Sumă rambursată",
+      "total": "Total",
+      "shipping_address": "Adresă de livrare",
+      "billing_address": "Adresă de facturare"
+    },
+    "addresses": {
+      "title": "Adrese",
+      "no_addresses": "Nu ai salvat nicio adresă încă.",
+      "add_address": "Adaugă o adresă",
+      "edit_address": "Editează adresa",
+      "save_address": "Salvează adresa",
+      "edit": "Editează",
+      "delete": "Șterge",
+      "default_address": "Adresă implicită",
+      "address_title": "Adresa {{ position }}",
+      "delete_confirm": "Vrei să elimini această adresă? După confirmare, acțiunea nu poate fi anulată.",
+      "fill_form": "Te rugăm să completezi informațiile de mai jos:",
+      "first_name": "Prenume",
+      "last_name": "Nume",
+      "company": "Companie",
+      "phone": "Număr de telefon",
+      "address1": "Adresa 1",
+      "address2": "Adresa 2",
+      "city": "Oraș",
+      "zip": "Cod poștal",
+      "country": "Țară",
+      "province": "Județ",
+      "set_default": "Setează ca adresă implicită"
+    },
+    "wishlist": {
+      "title": "Wishlist"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Coș",
+      "empty": "Coșul tău este gol",
+      "continue_shopping": "Continuă cumpărăturile",
+      "weight": "Greutate",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "add_order_note": "Adaugă observații la comandă",
+      "edit_order_note": "Editează observațiile la comandă",
+      "order_note": "Observații la comandă",
+      "save_note": "Salvează",
+      "note_placeholder": "Cum te putem ajuta?",
+      "update_cart": "Actualizează coșul",
+      "view_cart": "Vezi coșul",
+      "checkout": "Finalizează comanda",
+      "we_accept": "Acceptăm",
+      "taxes_and_shipping_policy_at_checkout_html": "Taxele și <a href=\"{{ link }}\" class=\"link\">costul de livrare</a> sunt calculate la finalizarea comenzii",
+      "taxes_included_but_shipping_at_checkout": "Taxa este inclusă și costul de livrare este calculat la finalizarea comenzii",
+      "taxes_included_and_shipping_policy_html": "Taxa este inclusă. <a href=\"{{ link }}\" class=\"link\">Costul de livrare</a> este calculat la finalizarea comenzii.",
+      "taxes_and_shipping_at_checkout": "Taxele și costul de livrare sunt calculate la finalizarea comenzii"
+    },
+    "order": {
+      "product": "Produs",
+      "total": "Total",
+      "quantity": "Cantitate",
+      "remove": "Elimină",
+      "remove_with_title": "Eliminați {{ title }}"
+    },
+    "free_shipping_bar": {
+      "limit_unreached_html": "Cheltuie încă {{ remaining_amount }} și vei obține livrare gratuită!",
+      "limit_reached_html": "Ești eligibil pentru livrare gratuită."
+    },
+    "shipping_estimator": {
+      "estimate_shipping": "Estimează costul de livrare",
+      "country": "Țară",
+      "province": "Județ",
+      "zip": "Cod poștal",
+      "estimate": "Estimează",
+      "no_results": "Ne pare rău, nu livrăm la adresa ta.",
+      "one_result": "Există un singur tarif de livrare pentru adresa ta:",
+      "multiple_results": "Există mai multe tarife de livrare pentru adresa ta:",
+      "error": "La preluarea tarifelor de livrare au survenit una sau mai multe erori:"
+    },
+    "discount": {
+      "label": "Cod de reducere",
+      "error": "Introduceți un cod de reducere valid"
+    }
+  },
+  "404": {
+    "general": {
+      "title": "404",
+      "continue_shopping": "Continuă cumpărăturile",
+      "not_found_info": "Nu am putut găsi pagina pe care o cauți. Folosește navigarea sau butonul de mai jos pentru a reveni la site-ul nostru."
+    }
+  },
+  "search": {
+    "general": {
+      "title": "Caută",
+      "terms": "Rezultate pentru „{{ terms }}”",
+      "search_placeholder": "Caută...",
+      "products": "Produse",
+      "suggestions": "Sugestii",
+      "collections": "Colecții",
+      "posts": "Postări pe blog",
+      "pages": "Pagini",
+      "clear": "Șterge",
+      "view_all_results": "Vezi toate rezultatele",
+      "no_results": "Nu a putut fi găsit niciun rezultat."
+    },
+    "results_count": {
+      "zero": "0 rezultate",
+      "one": "1 rezultat",
+      "other": "{{ count }} rezultate"
+    },
+    "results_count_for_terms": {
+      "zero": "0 rezultate pentru „{{ terms }}”",
+      "one": "1 rezultat pentru „{{ terms }}”",
+      "other": "{{ count }} rezultate pentru „{{ terms }}”"
+    }
+  },
+  "gift_card": {
+    "general": {
+      "title": "Iată cardul tău cadou",
+      "copy": "Copiază",
+      "print": "Tipărește"
+    },
+    "issued": {
+      "remaining_amount": "Suma rămasă",
+      "redeem_instructions": "Folosește acest cod pentru valorificarea cardului cadou la finalizarea comenzii:",
+      "code": "Cod card cadou",
+      "expires_on": "Expiră pe: {{ expires_on }}",
+      "expired": "Cardul tău cadou a expirat sau a fost dezactivat.",
+      "scan": "sau scanează acest cod QR",
+      "add_to_apple_wallet": "Adaugă în Apple Wallet",
+      "amount": "Sumă: {{ initial_value }}",
+      "copied": "Copiat!"
+    },
+    "recipient": {
+      "checkbox": "Vreau să trimit acest lucru drept cadou",
+      "email_label": "Adresă de e-mail destinatar",
+      "name_label": "Nume destinatar (opțional)",
+      "send_on_label": "Trimite pe (opțional)",
+      "message_label": "Mesaj (opțional)"
+    }
+  },
+  "password": {
+    "general": {
+      "follow_us": "Urmărește-ne",
+      "powered_by": "Acest magazin folosește tehnologia",
+      "store_owner": "Ești proprietarul?",
+      "login": "Conectează-te"
+    },
+    "storefront_access": {
+      "enter_password": "Accesează folosind parola",
+      "store_access": "Acces la magazin",
+      "instructions": "Introdu parola mai jos pentru a accesa magazinul",
+      "password": "Parolă",
+      "enter_store": "Accesează magazinul"
+    }
+  },
+  "sections": {
+    "before_after": {
+      "not_enough_blocks": "Pentru a afișa comparația dintre înainte și după, adaugă mai mult conținut în secțiune.",
+      "percentage_shown": "Procent afișat din imaginea „după”",
+      "cursor_accessibility_text": "Utilizați tastele săgeată stânga și dreapta pentru a naviga între fotografiile înainte și după."
+    },
+    "countdown_timer": {
+      "expires_accessibility_text": "Această ofertă expiră pe {{expiration_date}}",
+      "days": "Zi",
+      "hours": "Ore",
+      "minutes": "Min",
+      "seconds": "Sec",
+      "days_long": "Zi",
+      "hours_long": "Ore",
+      "minutes_long": "Min",
+      "seconds_long": "Sec"
+    },
+    "shop_the_look": {
+      "view_products": "Vezi produsele",
+      "view_product": "Vezi produsul"
+    },
+    "quick_order_list": {
+      "products": "Produse",
+      "variants": "Variante",
+      "quantity": "Cantitate",
+      "price": "Preț",
+      "total": "Total",
+      "remove": "Șterge",
+      "quantity_rules": "Reguli de cantitate",
+      "volume_pricing": "Prețuri de volum",
+      "volume_pricing_available": "Prețuri de volum disponibile",
+      "show_variants": "Afișează variantele",
+      "minimum_of": "Minim: {{ min }}",
+      "maximum_of": "Maxim: {{ max }}",
+      "increment_of": "Increment: {{ step }}",
+      "view_cart": "Vezi coșul",
+      "remove_all": "Șterge tot",
+      "item_count": {
+        "zero": "{{ count }} articole",
+        "one": "{{ count }} articol",
+        "other": "{{ count }} articole"
+      },
+      "product_subtotal": "Subtotal produse"
+    }
+  },
+  "custom": {
+    "about_page": {
+      "story_heading": "OUR STORY",
+      "story_text": "Founded in Dubai, Elixir is a modern house of luxury perfumery, blending timeless artistry with contemporary elegance. It is the newest venture from the leadership behind Extravaganza one of the Middle East's most established names in prestige beauty born of that same expertise, but devoted to something more intimate: the world's finest niche fragrance houses, and the collectors who seek them.",
+      "md_role": "CHAIRMAN",
+      "md_intro": "With a passion for artistry and a commitment to excellence, our Managing Director has curated a collection that celebrates the finest in luxury perfumery. Each fragrance tells a story, and every bottle is a testament to our dedication to quality and distinction.",
+      "philosophy_heading": "OUR PHILOSOPHY",
+      "artistry_heading": "ARTISTRY MEETS SOUL",
+      "philosophy_text": "At Elixir, we believe fragrance is more than a scent — it is an expression of individuality, emotion, and memory. We bring the refinement of French perfumery together with the warmth and fragrance heritage of the UAE.",
+      "pillars_heading": "WHAT WE STAND FOR",
+      "pillar_2_title": "CRAFTSMANSHIP",
+      "pillar_2_text": "Every fragrance is a masterpiece, crafted with precision and passion by the world's finest perfumers.",
+      "pillar_1_title": "AUTHENTICITY",
+      "pillar_1_text": "We curate only the most genuine and exceptional scents, sourced from heritage houses and visionary creators.",
+      "pillar_3_title": "DISTINCTION",
+      "pillar_3_text": "Our collection is designed for those who seek the rare, the refined, and the unforgettable.",
+      "hero_quote": "\"Fragrance is the unseen, unforgettable, ultimate accessory — it heralds your arrival and prolongs your departure.\"",
+      "collections_label": "OUR COLLECTIONS",
+      "collections_heading": "A CURATED WORLD OF SCENT",
+      "collections_text": "Discover our carefully selected range of niche and luxury fragrances Amouage, Roja, Nishane, Vilhelm Parfumerie, Maison Crivelli, Ormonde Jayne, and more each chosen to inspire and captivate.",
+      "explore_button": "EXPLORE NOW"
+    },
+    "footer": {
+      "authentic": "100% AUTHENTIC",
+      "authentic_sub": "Genuine fragrances, always",
+      "delivery": "FREE UAE DELIVERY",
+      "delivery_sub": "Fast, tracked to your door",
+      "secure": "SECURE CHECKOUT",
+      "secure_sub": "Encrypted & protected",
+      "wrapped": "EXPERTLY CURATED",
+      "wrapped_sub": "Rare & niche houses",
+      "newsletter_heading": "Subscribe to our newsletter",
+      "newsletter_sub": "Exclusive offers, new arrivals and fragrance stories.",
+      "subscribe": "Subscribe",
+      "follow_us": "Follow Us",
+      "more_info": "More Info",
+      "privacy": "Privacy Policy",
+      "refunds": "Refund and Returns",
+      "shipping": "Shipping Terms",
+      "terms": "Terms of Service",
+      "quick_links": "Quick Links",
+      "my_account": "My Account",
+      "order_tracking": "Order Tracking",
+      "arabic_fragrance": "Arabic Fragrance",
+      "sets_kits": "Sets & Kits",
+      "company": "Company",
+      "about": "About Elixir",
+      "contact": "Contact",
+      "partner": "Partner With Us",
+      "careers": "Careers",
+      "designed_by": "Designed by",
+      "copyright": "{{ year }} Elixir All rights reserved."
+    },
+    "pdp": {
+      "free_gift_with": "Free Gift with this product",
+      "top": "TOP",
+      "heart": "HEART",
+      "base": "BASE",
+      "gender": "GENDER",
+      "category": "CATEGORY",
+      "size": "SIZE",
+      "class": "CLASS",
+      "scent": "SCENT",
+      "creator": "CREATOR",
+      "buy_now": "Buy it Now",
+      "view_all_arrow": "View All →",
+      "bogo_heading": "Buy {{ count }}, Get 1 Free",
+      "gift_over_heading": "Free Gift over {{ amount }}",
+      "bogo_text": "Add {{ count }} to your bag and the lowest-priced one is free — applied automatically at checkout.",
+      "gift_buy_text": "Buy {{ count }} and receive a complimentary gift.",
+      "add_to_cart": "Add to Cart",
+      "sold_out": "Sold Out",
+      "more_from": "More from {{ name }}"
+    },
+    "brands": {
+      "grid_heading": "Discover the Art of Fine Perfumery",
+      "add": "Add",
+      "cart": "Cart",
+      "sold_out": "Sold Out",
+      "about_house": "About the House",
+      "read_more": "Read More ↓",
+      "all": "All",
+      "men": "Men",
+      "women": "Women",
+      "unisex": "Unisex",
+      "fragrances": "Fragrances",
+      "hair_body": "Hair & Body",
+      "home": "Home",
+      "price": "Price",
+      "no_products": "No products found",
+      "shop_collection": "Shop Collection",
+      "the_collection": "The Collection",
+      "percent_off": "{{ percent }}% Off",
+      "sale": "Sale",
+      "brand_fragrances": "{{ name }} Fragrances",
+      "view_all_count": "View All {{ count }} Fragrances"
+    },
+    "home": {
+      "view_all": "View All",
+      "discover": "Discover",
+      "collection": "Collection",
+      "view_all_lc": "View all",
+      "subscribe": "Subscribe",
+      "view_all_arrow_ent": "View all →",
+      "limited_offer": "Limited Offer",
+      "view_all_label": "View All {{ label }}",
+      "banner_bogo": "Buy {{ count }}, Get 1 Free",
+      "banner_spend": "Spend {{ amount }} & Get a Free Gift",
+      "banner_buy_gift": "Buy {{ count }} & Get a Free Gift",
+      "banner_reduced": "Reduced prices for a limited time — no code needed.",
+      "banner_auto": "Discount applied automatically at checkout.",
+      "shop_eligible": "Shop Eligible",
+      "shop_offer": "Shop Offer"
+    },
+    "product_card": {
+      "top": "Top",
+      "heart": "Heart",
+      "base": "Base",
+      "percent_off": "{{ percent }}% OFF"
+    },
+    "contact": {
+      "eyebrow": "Customer Care",
+      "heading": "Get in Touch",
+      "intro": "Whether you are discovering a new signature scent or need help with an existing order, our fragrance advisors are here for you.",
+      "care_hours": "Sun–Thu · 10AM – 7PM (GST)",
+      "call_title": "Call Us",
+      "email_title": "Email Us",
+      "email_note": "We reply within 24 hours",
+      "whatsapp_title": "WhatsApp",
+      "whatsapp_note": "Chat with a fragrance advisor",
+      "faq_heading": "Frequently Asked Questions",
+      "stores_heading": "Visit Our Boutiques",
+      "directions": "Get directions",
+      "faq_q1": "What is Elixir's return policy?",
+      "faq_a1": "You can find our return policy on our website, or by contacting us directly.",
+      "faq_q2": "How do I track my order?",
+      "faq_a2": "Once your order ships, you'll receive an email with tracking information.",
+      "faq_q3": "What payment methods do you accept?",
+      "faq_a3": "We accept major credit cards and other secure payment methods.",
+      "faq_q4": "Can I cancel or change my order?",
+      "faq_a4": "Please contact us as soon as possible if you need to make changes.",
+      "faq_q5": "How long does shipping take?",
+      "faq_a5": "Shipping times vary depending on your location.",
+      "faq_q6": "Can I purchase a fragrance that is not listed on your website?",
+      "faq_a6": "Please contact us to inquire about availability.",
+      "faq_q7": "Do you offer samples?",
+      "faq_a7": "Yes, we offer samples of some fragrances.",
+      "faq_q8": "How do I know if a fragrance is suitable for my skin type?",
+      "faq_a8": "Our knowledgeable staff can help you find a fragrance that suits your skin type.",
+      "faq_q9": "What is your loyalty program?",
+      "faq_a9": "We have a loyalty program that rewards our repeat customers."
+    }
+  }
+}

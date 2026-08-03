@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "brand-detail": {
+      "type": "brand-detail",
+      "settings": {}
+    }
+  },
+  "order": ["brand-detail"]
+}

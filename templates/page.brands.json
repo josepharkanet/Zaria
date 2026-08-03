@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "brand-logos": {
+      "type": "brand-logo-grid",
+      "settings": {}
+    }
+  },
+  "order": ["brand-logos"]
+}
+

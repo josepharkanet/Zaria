@@ -1,0 +1,75 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "custom_footer_redesign_AUWdj3": {
+      "type": "Custom-footer-redesign",
+      "name": "Elixir Footer",
+      "settings": {
+        "logo": "shopify://shop_images/elixir_logo_white_-Photoroom.png",
+        "brand_description": "A curated collection of the world's finest fragrances, <br> delivered to you across the UAE and beyond. <br> <br>| Dubai, United Arab Emirates",
+        "contact_line_1": "",
+        "contact_line_2": "",
+        "contact_line_3": "",
+        "instagram_url": "https://www.instagram.com/elixirbeautyofficial",
+        "facebook_url": "https://www.facebook.com/ElixirBeautyOfficial",
+        "linkedin_url": "https://www.linkedin.com/company/elixir-beauty-official/",
+        "snapchat_url": "https://www.snapchat.com/@elixirbeautyofl",
+        "youtube_url": "https://www.youtube.com/@ElixirBeautyOfficial",
+        "pinterest_url": "https://www.pinterest.com/ElixirBeautyOfficial/",
+        "x_url": "https://x.com/ElixirBeautyOfl"
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "title": "Newsletter",
+            "content": "<p>Sign up to our newsletter to receive exclusive offers.</p>",
+            "button_background": "",
+            "button_text_color": ""
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "title": "About",
+            "content": "<p>Use this text area to tell your customers about your brand and vision. You can change it in the theme editor.</p>",
+            "enable_follow_on_shop": true
+          }
+        }
+      },
+      "block_order": [
+        "newsletter",
+        "text"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": false,
+        "show_social_media": true,
+        "show_payment_icons": true,
+        "show_powered_by_shopify": true,
+        "show_country_selector": true,
+        "show_country_name": false,
+        "show_country_flag": false,
+        "show_locale_selector": true
+      }
+    }
+  },
+  "order": [
+    "custom_footer_redesign_AUWdj3",
+    "footer"
+  ]
+}

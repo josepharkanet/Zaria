@@ -1,0 +1,260 @@
+<!doctype html>
+
+<html lang="{{ request.locale.iso_code }}" dir="{% render 'direction' %}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, maximum-scale=5.0">
+
+    <title>
+      {% if page_title == blank -%}
+        {{- shop.name -}}
+      {%- else -%}
+        {{- page_title -}}
+        {%- if current_page != 1 %} &ndash; {{ 'general.page' | t: page: current_page }}{% endif -%}
+      {%- endif %}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon -%}
+      <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 96 }}">
+      <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180 }}">
+    {%- endif -%}
+
+    {%- comment -%}Few prefetch to increase performance on commonly used third-parties{%- endcomment -%}
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+
+    {%- comment -%}Global heading font: Bodoni Moda (classic luxury Didone){%- endcomment -%}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&display=swap">
+
+    {%- unless settings.heading_font.system? -%}
+      <link rel="preload" href="{{ settings.heading_font | font_url }}" as="font" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    {%- unless settings.text_font.system? -%}
+      <link rel="preload" href="{{ settings.text_font | font_url }}" as="font" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    {%- render 'social-meta-tags' -%}
+    {%- render 'microdata-schema' -%}
+    {%- render 'css-variables' -%}
+    {%- render 'js-variables' -%}
+
+    {%- if request.page_type == 'gift_card' -%}
+      <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
+    {%- endif -%}
+
+    <script type="importmap">
+      {%- comment -%}On Safari 16.3 and lower, a polyfill is used to load importmap{%- endcomment -%}
+      {
+        "imports": {
+          "vendor": "{{ 'vendor.min.js' | asset_url }}",
+          "theme": "{{ 'theme.js' | asset_url }}",
+          "photoswipe": "{{ 'photoswipe.min.js' | asset_url }}"
+        }
+      }
+    </script>
+
+    <script type="module" src="{{ 'vendor.min.js' | asset_url }}"></script>
+    <script type="module" src="{{ 'theme.js' | asset_url }}"></script>
+
+    {{ content_for_header }}
+
+    {{- 'theme.css' | asset_url | stylesheet_tag: preload: true -}}
+    {%- comment -%} After theme.css, so the app's design overrides the theme's defaults. {%- endcomment -%}
+    {%- render 'elx-design-vars' -%}
+    <script src="{{ 'elx-wishlist.js' | asset_url }}" defer></script>
+    {%- comment -%}
+      Live translate mode: loads when the URL carries ?elxt=<edit key>, and then
+      keeps following the visitor from page to page (sessionStorage) until they
+      press Exit or close the tab. Click any text, type the Arabic, save. The key
+      is checked by the Cloudflare worker; for everyone else this one-line check
+      is all that ever runs.
+
+      Admin entry without the key: visiting /translate (caught right here, no URL
+      redirect needed) lands on /?elxt=go, and for customers logged in with an
+      email on the elx_translate.admins allowlist the real key is injected below
+      (it lives in a shop metafield, not in this repo). Everyone else hitting the
+      pretty URL is pointed at the login.
+    {%- endcomment -%}
+    {%- liquid
+      assign elx_tr_key = shop.metafields.elx_translate.key.value
+      assign elx_tr_admins = shop.metafields.elx_translate.admins.value
+    -%}
+    {%- if customer and elx_tr_key and elx_tr_admins -%}
+      {%- assign elx_cust_email = customer.email | downcase | strip -%}
+      {%- assign elx_admin_list = elx_tr_admins | downcase | split: ',' -%}
+      {%- for elx_admin in elx_admin_list -%}
+        {%- assign elx_admin_t = elx_admin | strip -%}
+        {%- if elx_admin_t == elx_cust_email -%}
+          <script>window.ELX_TRANSLATE_KEY = {{ elx_tr_key | json }};</script>
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+    <script>(function(){if(/^\/(?:[a-z]{2}(?:-[a-z]{2})?\/)?translate\/?$/i.test(location.pathname)){location.replace('/?elxt=go');return}var k=location.search.indexOf('elxt=')>-1;if(!k){try{k=!!sessionStorage.getItem('elxtKey')}catch(e){}}if(k){var s=document.createElement('script');s.src="{{ 'elx-translate.js' | asset_url }}";s.defer=true;document.head.appendChild(s);}})();</script>
+  </head>
+
+  {% liquid
+    assign features_class = ''
+
+    if settings.show_button_transition
+      assign features_class = features_class | append: 'features--button-transition '
+    endif
+
+    if settings.show_image_zoom_on_hover
+      assign features_class = features_class | append: 'features--zoom-image '
+    endif
+  %}
+
+  <body class="{{ features_class }} color-scheme color-scheme--{{ settings.default_color_scheme.id }}">
+    {%- render 'shadow-dom-templates' -%}
+
+    <loading-bar class="loading-bar" aria-hidden="true"></loading-bar>
+    <a href="#main" allow-hash-change class="skip-to-content sr-only">{{ 'general.accessibility.skip_to_content' | t }}</a>
+
+    {%- comment -%}
+      This placeholder will be filled to screen readers for any kind of announcements
+    {%- endcomment -%}
+    <div class="sr-only" role="status" aria-live="polite" aria-atomic="true">
+      <span id="status-announcement"></span>
+    </div>
+
+    <div class="sr-only" role="alert" aria-live="assertive" aria-atomic="true">
+      <span id="error-announcement"></span>
+    </div>
+
+    <span id="header-scroll-tracker" style="position: absolute; width: 1px; height: 1px; top: var(--header-scroll-tracker-offset, 10px); left: 0;">
+      {%- comment -%}
+        This allows our theme to track when the user has scrolled a given amount of pixels, without relying on a global scroll listener. This helps
+        to improve performance and reduce reflows.
+      {%- endcomment -%}
+    </span>
+
+    {%- if request.page_type != 'password' -%}
+      {%- sections 'header-group' -%}
+      {%- sections 'overlay-group' -%}
+    {%- endif -%}
+
+    <main id="main" class="anchor">
+      {{ content_for_layout }}
+
+      {%- comment -%}
+        IMPLEMENTATION NOTE: For best semantics, having the footer group outside the main would be slightly better, but
+          moving it inside the main allows to have all the sections (including sections inside the footer group) to be
+          consecutive, and hence having a cleaner margin collapsing management.
+      {%- endcomment -%}
+      {%- if request.page_type != 'password' -%}
+        {%- sections 'footer-group' -%}
+      {%- endif -%}
+    </main>
+
+    {%- comment -%}Title-case product card titles (some products are stored ALL-CAPS); keep acronyms/units{%- endcomment -%}
+    <script>
+      (function () {
+        var KEEP = { EDP: 1, EDT: 1, EDC: 1, EDP75: 1, OJ: 1, HFC: 1, UAE: 1, USA: 1, UK: 1 };
+        function tc(s) {
+          return s.replace(/[A-Za-zÀ-ÿ]+/g, function (w) {
+            var u = w.toUpperCase();
+            if (KEEP[u]) return u;                 // keep brand acronyms
+            if (w === u && w.length > 1) return w.charAt(0) + w.slice(1).toLowerCase();
+            return w;                              // already mixed-case (e.g. "ml", "MiN") -> leave
+          });
+        }
+        function apply(root) {
+          (root || document).querySelectorAll('.product-title:not([data-tc])').forEach(function (el) {
+            el.setAttribute('data-tc', '1');
+            var t = el.textContent.trim();
+            var n = tc(t);
+            if (n !== t) el.textContent = n;
+          });
+        }
+        apply();
+        document.addEventListener('shopify:section:load', function (e) { apply(e.target); });
+        if (window.MutationObserver) {
+          new MutationObserver(function (muts) {
+            for (var i = 0; i < muts.length; i++) {
+              var a = muts[i].addedNodes;
+              for (var j = 0; j < a.length; j++) { if (a[j].nodeType === 1) apply(a[j]); }
+            }
+          }).observe(document.body, { childList: true, subtree: true });
+        }
+      })();
+    </script>
+
+    {%- comment -%}Back-to-top button (brass circle, bottom-right; appears after scrolling){%- endcomment -%}
+    <button type="button" id="elx-back-to-top" class="elx-back-to-top" aria-label="Back to top">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="12" y1="19" x2="12" y2="5"></line>
+        <polyline points="5 12 12 5 19 12"></polyline>
+      </svg>
+    </button>
+    <style>
+      .elx-back-to-top {
+        position: fixed;
+        right: clamp(14px, 4vw, 26px);
+        bottom: clamp(14px, 4vw, 22px);
+        z-index: 45;
+        width: 32px;
+        height: 32px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 50%;
+        background: #eceae6;
+        color: #6b6b6b;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(12px);
+        transition: opacity .3s ease, transform .3s ease, visibility .3s ease, background .2s ease, color .2s ease;
+      }
+      .elx-back-to-top.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+      .elx-back-to-top:hover { background: #e0ddd6; color: #1a1a1a; }
+      @media (max-width: 749px) {
+        .elx-back-to-top { width: 30px; height: 30px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .elx-back-to-top { transition: opacity .3s ease, visibility .3s ease; transform: none; }
+      }
+    </style>
+    <script>
+      (function () {
+        var btn = document.getElementById('elx-back-to-top');
+        if (!btn) return;
+        var shown = false;
+        function onScroll() {
+          var show = window.scrollY > 400;
+          if (show !== shown) {
+            shown = show;
+            btn.classList.toggle('is-visible', show);
+            // Lift the AI orb above the arrow while it's visible so they don't crowd.
+            var ai = document.getElementById('elx-ai');
+            if (ai) ai.classList.toggle('is-raised', show);
+          }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        btn.addEventListener('click', function () {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      })();
+    </script>
+
+    {%- comment -%} Buy N & Get a Gift — auto-adds/removes the free gift as the cart qualifies {%- endcomment -%}
+    {%- render 'gift-offer-autogift' -%}
+
+    {%- comment -%} App-managed home-page promo banners — auto-placed per banner (Elixir Promotions app) {%- endcomment -%}
+    {%- if request.page_type == 'index' -%}{%- render 'elx-promo-banners' -%}{%- endif -%}
+
+    {%- comment -%} AI concierge (Gemini via Cloudflare Worker) {%- endcomment -%}
+    {%- render 'ai-assistant' -%}
+  </body>
+</html>

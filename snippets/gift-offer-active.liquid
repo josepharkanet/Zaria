@@ -1,0 +1,13 @@
+{%- doc -%}
+  Single source of truth for whether the gift offer is currently live.
+  Outputs "true" when active, nothing otherwise.
+
+  Driven EXCLUSIVELY by the Elixir Promotions app via the shop metafield
+  `elixir_promotions.gift_offer_active` — theme settings play no role, so the app's
+  Show/Hide/Pause is always what the storefront does.
+{%- enddoc -%}
+{%- liquid
+  if shop.metafields.elixir_promotions.gift_offer_active.value == true
+    echo 'true'
+  endif
+-%}

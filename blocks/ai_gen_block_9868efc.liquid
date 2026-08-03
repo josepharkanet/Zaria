@@ -1,0 +1,316 @@
+{% doc %}
+  @prompt
+    Add a flying cart animation where a small clone of the product image smoothly flies from the "Add to Cart" button to the cart icon in the header when clicked. The animation should arc gracefully across the screen, shrink as it reaches the cart icon, and make the cart icon briefly bounce/pulse on arrival. Style should be premium and minimal — no bright colors, subtle easing curves, works on both desktop and mobile. Must not break existing cart drawer or AJAX cart functionality.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-flying-cart-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+  }
+
+  .ai-flying-cart-clone-{{ ai_gen_id }} {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  .ai-flying-cart-clone-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: {{ block.settings.clone_border_radius }}px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  @keyframes ai-cart-bounce-{{ ai_gen_id }} {
+    0%, 100% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(1.2);
+    }
+    50% {
+      transform: scale(0.95);
+    }
+    75% {
+      transform: scale(1.1);
+    }
+  }
+
+  .ai-cart-icon-bounce-{{ ai_gen_id }} {
+    animation: ai-cart-bounce-{{ ai_gen_id }} {{ block.settings.bounce_duration }}ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+{% endstyle %}
+
+<flying-cart-animation-{{ ai_gen_id }}
+  class="ai-flying-cart-{{ ai_gen_id }}"
+  data-animation-duration="{{ block.settings.animation_duration }}"
+  data-clone-size="{{ block.settings.clone_size }}"
+  data-bounce-duration="{{ block.settings.bounce_duration }}"
+  {{ block.shopify_attributes }}
+>
+</flying-cart-animation-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FlyingCartAnimation{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.animationDuration = parseInt(this.dataset.animationDuration) || 800;
+        this.cloneSize = parseInt(this.dataset.cloneSize) || 80;
+        this.bounceDuration = parseInt(this.dataset.bounceDuration) || 600;
+        this.isAnimating = false;
+      }
+
+      connectedCallback() {
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        document.addEventListener('submit', (event) => {
+          const form = event.target;
+          
+          if (form && form.matches('form[action*="/cart/add"]')) {
+            const productImage = this.findProductImage(form);
+            
+            if (productImage) {
+              this.triggerFlyingAnimation(productImage);
+            }
+          }
+        });
+
+        document.addEventListener('click', (event) => {
+          const button = event.target.closest('[name="add"], .product-form__add-button, [data-action="add-to-cart"]');
+          
+          if (button) {
+            const form = button.closest('form[action*="/cart/add"]');
+            if (form) {
+              const productImage = this.findProductImage(form);
+              
+              if (productImage) {
+                setTimeout(() => {
+                  this.triggerFlyingAnimation(productImage);
+                }, 100);
+              }
+            }
+          }
+        });
+      }
+
+      findProductImage(form) {
+        let productImage = null;
+        
+        const productContainer = form.closest('.product, [data-product], .product-block-list__item, .quick-buy-drawer');
+        
+        if (productContainer) {
+          productImage = productContainer.querySelector('.product__media img, .product-gallery img, img[class*="product"]');
+        }
+        
+        if (!productImage) {
+          productImage = form.querySelector('img');
+        }
+        
+        if (!productImage) {
+          const allImages = document.querySelectorAll('img[src*="products"], img[srcset*="products"]');
+          if (allImages.length > 0) {
+            productImage = allImages[0];
+          }
+        }
+        
+        return productImage;
+      }
+
+      triggerFlyingAnimation(sourceImage) {
+        if (this.isAnimating || !sourceImage) return;
+        
+        const cartIcon = this.findCartIcon();
+        if (!cartIcon) return;
+
+        this.isAnimating = true;
+
+        const clone = this.createClone(sourceImage);
+        document.body.appendChild(clone);
+
+        const startRect = sourceImage.getBoundingClientRect();
+        const endRect = cartIcon.getBoundingClientRect();
+
+        const startX = startRect.left + startRect.width / 2;
+        const startY = startRect.top + startRect.height / 2;
+        const endX = endRect.left + endRect.width / 2;
+        const endY = endRect.top + endRect.height / 2;
+
+        const deltaX = endX - startX;
+        const deltaY = endY - startY;
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        const arcHeight = Math.min(distance * 0.3, 150);
+
+        clone.style.left = startX - this.cloneSize / 2 + 'px';
+        clone.style.top = startY - this.cloneSize / 2 + 'px';
+        clone.style.width = this.cloneSize + 'px';
+        clone.style.height = this.cloneSize + 'px';
+
+        requestAnimationFrame(() => {
+          clone.style.opacity = '1';
+          
+          requestAnimationFrame(() => {
+            this.animateClone(clone, startX, startY, endX, endY, arcHeight, cartIcon);
+          });
+        });
+      }
+
+      createClone(sourceImage) {
+        const clone = document.createElement('div');
+        clone.className = 'ai-flying-cart-clone-{{ ai_gen_id }}';
+        
+        const img = document.createElement('img');
+        img.src = sourceImage.src;
+        img.alt = '';
+        
+        clone.appendChild(img);
+        
+        return clone;
+      }
+
+      findCartIcon() {
+        const selectors = [
+          'a[href*="/cart"]',
+          '[data-cart-icon]',
+          '.header__cart',
+          '.cart-link',
+          '#cart-icon',
+          'cart-notification-button',
+          'cart-drawer-button'
+        ];
+
+        for (const selector of selectors) {
+          const element = document.querySelector(selector);
+          if (element) {
+            return element;
+          }
+        }
+
+        return null;
+      }
+
+      animateClone(clone, startX, startY, endX, endY, arcHeight, cartIcon) {
+        const startTime = performance.now();
+        const duration = this.animationDuration;
+
+        const animate = (currentTime) => {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          
+          const easeProgress = this.easeInOutCubic(progress);
+
+          const currentX = startX + (endX - startX) * easeProgress;
+          const currentY = startY + (endY - startY) * easeProgress - arcHeight * Math.sin(progress * Math.PI);
+
+          const scale = 1 - progress * 0.7;
+          const opacity = progress < 0.9 ? 1 : 1 - (progress - 0.9) * 10;
+
+          clone.style.left = currentX - (this.cloneSize * scale) / 2 + 'px';
+          clone.style.top = currentY - (this.cloneSize * scale) / 2 + 'px';
+          clone.style.transform = 'scale(' + scale + ')';
+          clone.style.opacity = opacity;
+
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          } else {
+            this.completeAnimation(clone, cartIcon);
+          }
+        };
+
+        requestAnimationFrame(animate);
+      }
+
+      easeInOutCubic(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      }
+
+      completeAnimation(clone, cartIcon) {
+        clone.remove();
+        
+        cartIcon.classList.add('ai-cart-icon-bounce-{{ ai_gen_id }}');
+        
+        setTimeout(() => {
+          cartIcon.classList.remove('ai-cart-icon-bounce-{{ ai_gen_id }}');
+          this.isAnimating = false;
+        }, this.bounceDuration);
+      }
+    }
+
+    customElements.define('flying-cart-animation-{{ ai_gen_id }}', FlyingCartAnimation{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Flying cart animation",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "label": "Flight duration",
+      "min": 400,
+      "max": 1200,
+      "step": 100,
+      "unit": "ms",
+      "default": 800
+    },
+    {
+      "type": "range",
+      "id": "clone_size",
+      "label": "Image size",
+      "min": 40,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "clone_border_radius",
+      "label": "Image border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "bounce_duration",
+      "label": "Cart icon bounce duration",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "unit": "ms",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Flying cart animation"
+    }
+  ]
+}
+{% endschema %}

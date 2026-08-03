@@ -1,0 +1,13 @@
+<div class="mega-menu-brands">
+  <ul class="mega-menu-brands__grid unstyled-list" role="list">
+    {%- for brand in shop.metaobjects.brand.values -%}
+      {%- assign brand_name = brand.name | first -%}
+      {%- assign brand_slug = brand.slug -%}
+      <li>
+        <a href="/pages/{{ brand_slug }}" class="mega-menu-brands__link">
+          {{- brand_name -}}
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>

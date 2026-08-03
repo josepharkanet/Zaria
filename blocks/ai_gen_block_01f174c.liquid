@@ -1,0 +1,850 @@
+{% doc %}
+  @prompt
+    Create a tabbed featured collections section with 3 tabs labeled "Unisex", "Men", and "Women". Each tab should display a product collection grid when selected. The active tab should be highlighted with a gold underline or accent to match a dark luxury brand aesthetic. Tab switching should be smooth with no page reload. Each tab should have a configurable collection picker in the theme editor settings. The section should be fully responsive and match a premium dark luxury storefront style.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-tabbed-collections-{{ ai_gen_id }} {
+    width: 100%;
+    background-color: transparent;   /* was a solid white block; let the cards' gray frame read */
+    padding: {{ block.settings.section_padding }}px 0;
+  }
+
+  /* match the theme .container New Arrivals uses: full width minus the side gutter */
+  .ai-tabbed-collections__container-{{ ai_gen_id }} {
+    max-width: 100%;
+    margin-inline: var(--container-gutter, 1.25rem);
+    padding: 0;
+  }
+
+  .ai-tabbed-collections__header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .ai-tabbed-collections__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.text_color }};
+    margin: 0 0 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .ai-tabbed-collections__tabs-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    border-bottom: 1px solid {{ block.settings.tab_border_color }};
+    margin-bottom: 40px;
+  }
+
+  .ai-tabbed-collections__tab-{{ ai_gen_id }} {
+    background: none;
+    border: none;
+    padding: 16px 0 6px;
+    font-size: {{ block.settings.tab_font_size }}px;
+    color: {{ block.settings.tab_inactive_color }};
+    cursor: pointer;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: color 0.3s ease;
+  }
+
+  .ai-tabbed-collections__tab-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.tab_hover_color }};
+  }
+
+  .ai-tabbed-collections__tab-{{ ai_gen_id }}.active {
+    color: {{ block.settings.tab_active_color }};
+  }
+
+  .ai-tabbed-collections__tab-{{ ai_gen_id }}::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: {{ block.settings.tab_accent_color }};
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .ai-tabbed-collections__tab-{{ ai_gen_id }}.active::after {
+    transform: scaleX(1);
+  }
+
+  .ai-tabbed-collections__content-{{ ai_gen_id }} {
+    position: relative;
+    min-height: 400px;
+  }
+
+  .ai-tabbed-collections__panel-{{ ai_gen_id }} {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .ai-tabbed-collections__panel-{{ ai_gen_id }}.active {
+    display: block;
+    opacity: 1;
+  }
+
+  .ai-tabbed-collections__grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.products_per_row_desktop }}, 1fr);
+    /* match New Arrivals' product gap: clamp(gutter/4, default*0.2, gutter*2) */
+    gap: clamp(calc(var(--container-gutter, 2rem) / 4), 0.25rem, calc(var(--container-gutter, 2rem) * 2));
+  }
+
+  .ai-tabbed-collections__product-{{ ai_gen_id }} {
+    position: relative;
+    overflow: visible;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .ai-tabbed-collections__product-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    background-color: transparent;   /* no white tile behind the product; show the gray card frame */
+    margin-bottom: 16px;
+  }
+
+  .ai-tabbed-collections__product-image-{{ ai_gen_id }},
+  .ai-tabbed-collections__product-image-secondary-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease, opacity 0.4s ease;
+  }
+
+  /* second image sits on top, hidden until hover */
+  .ai-tabbed-collections__product-image-secondary-{{ ai_gen_id }} {
+    opacity: 0;
+  }
+
+  .ai-tabbed-collections__product-{{ ai_gen_id }}:hover .ai-tabbed-collections__product-image-secondary-{{ ai_gen_id }} {
+    opacity: 1;
+    /* hold the first image 0.8s on hover, then cross-fade to the second (zoom stays immediate) */
+    transition: transform 0.5s ease 0s, opacity 0.4s ease 0.8s;
+  }
+
+  /* gentle zoom on hover (applies even when there is only one image) */
+  .ai-tabbed-collections__product-{{ ai_gen_id }}:hover .ai-tabbed-collections__product-image-{{ ai_gen_id }},
+  .ai-tabbed-collections__product-{{ ai_gen_id }}:hover .ai-tabbed-collections__product-image-secondary-{{ ai_gen_id }} {
+    transform: scale(1.06);
+  }
+
+  .ai-tabbed-collections__product-info-{{ ai_gen_id }} {
+    text-align: center;
+  }
+
+  .ai-tabbed-collections__product-title-{{ ai_gen_id }} {
+    font-family: var(--text-font-family);
+    font-weight: var(--text-font-weight);
+    font-style: var(--text-font-style);
+    font-size: {{ block.settings.product_title_size }}px;
+    color: {{ block.settings.text_color }};
+    margin: 0 0 8px;
+    text-transform: var(--product-card-text-transform);
+    letter-spacing: normal;
+    transition: color 0.3s ease;
+  }
+
+  .ai-tabbed-collections__product-{{ ai_gen_id }}:hover .ai-tabbed-collections__product-title-{{ ai_gen_id }} {
+    color: {{ block.settings.tab_accent_color }};
+  }
+
+  .ai-tabbed-collections__product-price-{{ ai_gen_id }} {
+    font-family: var(--text-font-family);
+    font-weight: var(--text-font-weight);
+    font-style: var(--text-font-style);
+    font-size: {{ block.settings.product_price_size }}px;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-tabbed-collections__empty-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 60px 20px;
+    color: {{ block.settings.tab_inactive_color }};
+    font-size: 16px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-tabbed-collections__grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.products_per_row_tablet }}, 1fr);
+    }
+
+    .ai-tabbed-collections__tabs-{{ ai_gen_id }} {
+      gap: 24px;
+    }
+
+    .ai-tabbed-collections__tab-{{ ai_gen_id }} {
+      font-size: {{ block.settings.tab_font_size | times: 0.9 }}px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    /* 2-column grid on mobile, 4 products (2 rows) */
+    .ai-tabbed-collections__grid-{{ ai_gen_id }} {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: visible;
+      gap: 1.25rem 0.875rem;
+    }
+
+    .ai-tabbed-collections__tabs-{{ ai_gen_id }} {
+      gap: 16px;
+    }
+
+    .ai-tabbed-collections__tab-{{ ai_gen_id }} {
+      font-size: {{ block.settings.tab_font_size | times: 0.8 }}px;
+      padding: 12px 0;
+    }
+
+    .ai-tabbed-collections__title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.7 }}px;
+    }
+  }
+  .ai-tabbed-collections__viewmore-wrap-{{ ai_gen_id }} {
+    text-align: center;
+    margin-top: 38px;
+  }
+  .ai-tabbed-collections__viewmore-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 13px 36px;
+    border: 1px solid #212121;
+    color: #212121;
+    background: transparent;
+    font-family: var(--text-font-family);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  .ai-tabbed-collections__viewmore-{{ ai_gen_id }}:hover {
+    background: #212121;
+    color: #ffffff;
+    border-color: #212121;
+  }
+
+  /* ── These tabs render the standard <product-card>, but OUTSIDE a .product-list,
+       so the global frame never reaches them. Re-apply it here, including the
+       shrunk gray panel (3D pedestal: top 30% removed by default). ── */
+  .ai-tabbed-collections__grid-{{ ai_gen_id }} .product-card {
+    background: transparent;
+    border-radius: 12px;
+    padding: 1.25rem 0.875rem 1.5rem;
+    position: relative;
+    isolation: isolate;
+  }
+  .ai-tabbed-collections__grid-{{ ai_gen_id }} .product-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: #f4f4f4;
+    pointer-events: none;
+  }
+  .ai-tabbed-collections__grid-{{ ai_gen_id }} .product-card__media {
+    border-radius: 8px;
+    transition: transform .45s cubic-bezier(.16, 1, .3, 1), filter .45s ease;
+  }
+  /* on hover the product lifts off the gray surface with a realistic shadow */
+  @media (hover: hover) {
+    .ai-tabbed-collections__grid-{{ ai_gen_id }} .product-card:hover .product-card__media {
+      transform: translateY(-7px) scale(1.03);
+      filter: drop-shadow(0 16px 16px rgba(0, 0, 0, 0.24));
+    }
+  }
+{% endstyle %}
+
+<tabbed-collections-{{ ai_gen_id }} class="ai-tabbed-collections-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-tabbed-collections__container-{{ ai_gen_id }}">
+    {% if block.settings.section_title != blank %}
+      <div class="ai-tabbed-collections__header-{{ ai_gen_id }}">
+        <h2 class="ai-tabbed-collections__title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h2>
+      </div>
+    {% endif %}
+
+    <div class="ai-tabbed-collections__tabs-{{ ai_gen_id }}" role="tablist">
+      <button
+        class="ai-tabbed-collections__tab-{{ ai_gen_id }} active"
+        role="tab"
+        aria-selected="true"
+        aria-controls="panel-unisex-{{ ai_gen_id }}"
+        data-tab="unisex"
+      >
+        {{ block.settings.tab_1_label }}
+      </button>
+      <button
+        class="ai-tabbed-collections__tab-{{ ai_gen_id }}"
+        role="tab"
+        aria-selected="false"
+        aria-controls="panel-men-{{ ai_gen_id }}"
+        data-tab="men"
+      >
+        {{ block.settings.tab_2_label }}
+      </button>
+      <button
+        class="ai-tabbed-collections__tab-{{ ai_gen_id }}"
+        role="tab"
+        aria-selected="false"
+        aria-controls="panel-women-{{ ai_gen_id }}"
+        data-tab="women"
+      >
+        {{ block.settings.tab_3_label }}
+      </button>
+    </div>
+
+    <div class="ai-tabbed-collections__content-{{ ai_gen_id }}">
+      <div
+        id="panel-unisex-{{ ai_gen_id }}"
+        class="ai-tabbed-collections__panel-{{ ai_gen_id }} active"
+        role="tabpanel"
+        data-panel="unisex"
+      >
+        {% if block.settings.collection_1 != blank %}
+          <div class="ai-tabbed-collections__grid-{{ ai_gen_id }}">
+            {% for product in block.settings.collection_1.products limit: 4 %}
+              {%- render 'product-card', product: product, reveal: false, stacked: true, show_secondary_image: true -%}
+            {% endfor %}
+          </div>
+          {% if block.settings.collection_1.url != blank %}
+            <div class="ai-tabbed-collections__viewmore-wrap-{{ ai_gen_id }}">
+              <a href="{{ block.settings.collection_1.url }}" class="ai-tabbed-collections__viewmore-{{ ai_gen_id }}">{{ 'custom.home.view_all_label' | t: label: block.settings.tab_1_label }}</a>
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="ai-tabbed-collections__empty-{{ ai_gen_id }}">
+            Select a collection for {{ block.settings.tab_1_label }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div
+        id="panel-men-{{ ai_gen_id }}"
+        class="ai-tabbed-collections__panel-{{ ai_gen_id }}"
+        role="tabpanel"
+        data-panel="men"
+      >
+        {% if block.settings.collection_2 != blank %}
+          <div class="ai-tabbed-collections__grid-{{ ai_gen_id }}">
+            {% for product in block.settings.collection_2.products limit: 4 %}
+              {%- render 'product-card', product: product, reveal: false, stacked: true, show_secondary_image: true -%}
+            {% endfor %}
+          </div>
+          {% if block.settings.collection_2.url != blank %}
+            <div class="ai-tabbed-collections__viewmore-wrap-{{ ai_gen_id }}">
+              <a href="{{ block.settings.collection_2.url }}" class="ai-tabbed-collections__viewmore-{{ ai_gen_id }}">{{ 'custom.home.view_all_label' | t: label: block.settings.tab_2_label }}</a>
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="ai-tabbed-collections__empty-{{ ai_gen_id }}">
+            Select a collection for {{ block.settings.tab_2_label }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div
+        id="panel-women-{{ ai_gen_id }}"
+        class="ai-tabbed-collections__panel-{{ ai_gen_id }}"
+        role="tabpanel"
+        data-panel="women"
+      >
+        {% if block.settings.collection_3 != blank %}
+          <div class="ai-tabbed-collections__grid-{{ ai_gen_id }}">
+            {% for product in block.settings.collection_3.products limit: 4 %}
+              {%- render 'product-card', product: product, reveal: false, stacked: true, show_secondary_image: true -%}
+            {% endfor %}
+          </div>
+          {% if block.settings.collection_3.url != blank %}
+            <div class="ai-tabbed-collections__viewmore-wrap-{{ ai_gen_id }}">
+              <a href="{{ block.settings.collection_3.url }}" class="ai-tabbed-collections__viewmore-{{ ai_gen_id }}">{{ 'custom.home.view_all_label' | t: label: block.settings.tab_3_label }}</a>
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="ai-tabbed-collections__empty-{{ ai_gen_id }}">
+            Select a collection for {{ block.settings.tab_3_label }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {%- comment -%} Gift offer banner — below the tabs, links to the gift-eligible products {%- endcomment -%}
+    {%- capture gpb_active -%}{%- render 'gift-offer-active' -%}{%- endcapture -%}
+    {%- if gpb_active contains 'true' -%}
+      {%- assign gpb_threshold = shop.metafields.elixir_promotions.gift_offer_threshold.value | default: 1 -%}
+      {%- assign gpb_col = shop.metafields.elixir_promotions.gift_offer_collection.value -%}
+      {%- assign gpb_url = gpb_col.url | default: '/collections/gift-set' -%}
+      {%- assign gpb_mode = shop.metafields.elixir_promotions.gift_offer_mode.value | default: 'quantity' -%}
+      {%- assign gpb_min = shop.metafields.elixir_promotions.gift_offer_min_amount.value | default: 0 -%}
+      {%- comment -%}
+        discount = % / amount off applied at the cart; markdown = the price shown
+        is already reduced. Neither is a gift, so both take their wording from the
+        app's heading metafield and drop the gift iconography.
+      {%- endcomment -%}
+      {%- assign gpb_is_gift = true -%}
+      {%- if gpb_mode == 'discount' or gpb_mode == 'markdown' -%}
+        {%- assign gpb_is_gift = false -%}
+      {%- endif -%}
+      {%- assign gpb_heading = shop.metafields.elixir_promotions.gift_offer_heading.value -%}
+      <a href="{{ gpb_url }}" class="elx-giftbanner-{{ ai_gen_id }} color-scheme color-scheme--scheme-3" aria-label="{% if gpb_is_gift %}Shop gift-eligible products{% else %}Shop products on offer{% endif %}">
+        {%- if gpb_is_gift -%}
+          <svg class="elx-giftbanner__mark-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9"/><path d="M12 8v13"/><path d="M12 8S10.5 3.5 8 4c-1.8.4-1.8 3 0 3.4 1.6.4 4 .6 4 .6zM12 8s1.5-4.5 4-4c1.8.4 1.8 3 0 3.4-1.6.4-4 .6-4 .6z"/></svg>
+        {%- else -%}
+          {%- comment -%}discount tag instead of a gift box{%- endcomment -%}
+          <svg class="elx-giftbanner__mark-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2A2 2 0 0 1 2.8 12V4.8A2 2 0 0 1 4.8 2.8H12a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+        {%- endif -%}
+        <span class="elx-giftbanner__inner-{{ ai_gen_id }}">
+          <span class="elx-giftbanner__text-{{ ai_gen_id }}">
+            <span class="elx-giftbanner__eyebrow-{{ ai_gen_id }}"><i aria-hidden="true"></i>{{ 'custom.home.limited_offer' | t }}</span>
+            <span class="elx-giftbanner__title-{{ ai_gen_id }}">
+              {%- if gpb_is_gift == false and gpb_heading != blank -%}
+                {{ gpb_heading }}
+              {%- elsif gpb_mode == 'bogo' -%}
+                {{ 'custom.home.banner_bogo' | t: count: gpb_threshold }}
+              {%- elsif gpb_mode == 'amount' -%}
+                {%- assign gpb_min_money = gpb_min | times: 100.0 | round | money -%}{{ 'custom.home.banner_spend' | t: amount: gpb_min_money }}
+              {%- else -%}
+                {{ 'custom.home.banner_buy_gift' | t: count: gpb_threshold }}
+              {%- endif -%}
+            </span>
+            <span class="elx-giftbanner__sub-{{ ai_gen_id }}">
+              {%- if gpb_mode == 'markdown' -%}
+                {{ 'custom.home.banner_reduced' | t }}
+              {%- elsif gpb_mode == 'discount' -%}
+                {{ 'custom.home.banner_auto' | t }}
+              {%- elsif gpb_mode == 'bogo' -%}
+                The lowest-priced item is on us — automatically applied at checkout.
+              {%- else -%}
+                A complimentary gift with your order — automatically applied at checkout.
+              {%- endif -%}
+            </span>
+          </span>
+          <span class="elx-giftbanner__cta-{{ ai_gen_id }}">
+            <span>{% if gpb_is_gift %}{{ 'custom.home.shop_eligible' | t }}{% else %}{{ 'custom.home.shop_offer' | t }}{% endif %}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </span>
+      </a>
+      <style>
+        .elx-giftbanner-{{ ai_gen_id }} {
+          display: block;
+          position: relative;
+          left: 50%;
+          right: 50%;
+          width: 100vw;
+          margin-left: -50vw;
+          margin-right: -50vw;
+          margin-top: 32px;
+          margin-bottom: 0;
+          padding: 34px 0 38px;
+          background: rgb(var(--background));
+          color: rgb(var(--text-color));
+          text-decoration: none;
+          overflow: hidden;
+        }
+        /* fine brass hairline along the top, fading at both ends */
+        .elx-giftbanner-{{ ai_gen_id }}::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 50%; transform: translateX(-50%);
+          width: min(520px, 60%); height: 1px;
+          background: linear-gradient(to right, transparent, rgba(184,114,83,0.75) 25%, rgba(184,114,83,0.75) 75%, transparent);
+        }
+        /* oversized gift watermark, barely-there */
+        .elx-giftbanner__mark-{{ ai_gen_id }} {
+          position: absolute;
+          right: 4%; top: 50%;
+          width: 210px; height: 210px;
+          transform: translateY(-50%) rotate(-8deg);
+          color: #fff; opacity: 0.05;
+          pointer-events: none;
+        }
+        /* drop the block's bottom padding so the band sits flush against the video below */
+        .ai-tabbed-collections-{{ ai_gen_id }} { padding-bottom: 0; }
+        .elx-giftbanner__inner-{{ ai_gen_id }} {
+          position: relative;
+          max-width: var(--container-max-width, 1400px);
+          margin: 0 auto;
+          padding-inline: var(--container-gutter, clamp(20px, 5vw, 48px));
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 28px;
+        }
+        .elx-giftbanner__text-{{ ai_gen_id }} { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+        .elx-giftbanner__eyebrow-{{ ai_gen_id }} {
+          display: inline-flex; align-items: center; gap: 10px;
+          font-family: var(--text-font-family); font-size: 11px; font-weight: 700;
+          letter-spacing: 0.28em; text-transform: uppercase; color: #B87253;
+        }
+        .elx-giftbanner__eyebrow-{{ ai_gen_id }} i { display: inline-block; width: 26px; height: 1px; background: #B87253; }
+        .elx-giftbanner__title-{{ ai_gen_id }} {
+          font-family: var(--text-font-family);
+          font-size: clamp(1.2rem, 2.3vw, 1.6rem);
+          font-weight: 600; line-height: 1.2; letter-spacing: 0.06em;
+          text-transform: uppercase; color: inherit;
+        }
+        .elx-giftbanner__sub-{{ ai_gen_id }} { font-family: var(--text-font-family); font-size: 13px; letter-spacing: 0.02em; color: inherit; opacity: 0.58; }
+        /* Square button — theme style: sharp corners, uppercase, tracked */
+        .elx-giftbanner__cta-{{ ai_gen_id }} {
+          flex: 0 0 auto;
+          display: inline-flex; align-items: center; gap: 10px;
+          padding: 16px 34px;
+          background: #ffffff; color: #1a1a1a;
+          border: 1px solid #ffffff; border-radius: 0;
+          font-family: var(--text-font-family); font-size: 12px; font-weight: 600;
+          letter-spacing: 0.18em; text-transform: uppercase;
+          transition: background .3s ease, color .3s ease;
+        }
+        .elx-giftbanner__cta-{{ ai_gen_id }} svg { width: 15px; height: 15px; transition: transform .3s ease; }
+        .elx-giftbanner-{{ ai_gen_id }}:hover .elx-giftbanner__cta-{{ ai_gen_id }} { background: transparent; color: #fff; }
+        .elx-giftbanner-{{ ai_gen_id }}:hover .elx-giftbanner__cta-{{ ai_gen_id }} svg { transform: translateX(4px); }
+        @media (max-width: 749px) {
+          .elx-giftbanner-{{ ai_gen_id }} { margin-top: 22px; padding: 28px 0 30px; }
+          .elx-giftbanner__mark-{{ ai_gen_id }} { width: 150px; height: 150px; right: -20px; }
+          .elx-giftbanner__inner-{{ ai_gen_id }} { flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+          .elx-giftbanner__text-{{ ai_gen_id }} { align-items: center; }
+          .elx-giftbanner__cta-{{ ai_gen_id }} { width: 100%; justify-content: center; }
+        }
+      </style>
+    {%- endif -%}
+  </div>
+</tabbed-collections-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class TabbedCollections{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.tabs = this.querySelectorAll('.ai-tabbed-collections__tab-{{ ai_gen_id }}');
+        this.panels = this.querySelectorAll('.ai-tabbed-collections__panel-{{ ai_gen_id }}');
+      }
+
+      connectedCallback() {
+        this.tabs.forEach(tab => {
+          tab.addEventListener('click', () => this.switchTab(tab));
+        });
+      }
+
+      switchTab(selectedTab) {
+        const targetPanel = selectedTab.dataset.tab;
+
+        this.tabs.forEach(tab => {
+          tab.classList.remove('active');
+          tab.setAttribute('aria-selected', 'false');
+        });
+
+        this.panels.forEach(panel => {
+          panel.classList.remove('active');
+        });
+
+        selectedTab.classList.add('active');
+        selectedTab.setAttribute('aria-selected', 'true');
+
+        const activePanel = this.querySelector(`[data-panel="${targetPanel}"]`);
+        if (activePanel) {
+          activePanel.classList.add('active');
+        }
+      }
+    }
+
+    customElements.define('tabbed-collections-{{ ai_gen_id }}', TabbedCollections{{ ai_gen_id }});
+  })();
+</script>
+
+<script>
+  /* Auto smooth slide on mobile (matches New Arrivals / Be classy) */
+  (function () {
+    var grids = document.querySelectorAll('.ai-tabbed-collections__grid-{{ ai_gen_id }}');
+    if (!grids.length) return;
+    var mql = window.matchMedia('(max-width: 749px)');
+    var interval = 5000;
+
+    grids.forEach(function (g) {
+      var timer = null, resume = null;
+      function advance() {
+        if (!mql.matches || g.offsetParent === null) return;   // mobile + visible (active tab) only
+        var max = g.scrollWidth - g.clientWidth - 4;
+        if (max <= 0) return;
+        if (g.scrollLeft >= max) {
+          g.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          g.scrollBy({ left: g.clientWidth, behavior: 'smooth' });
+        }
+      }
+      function start() { stop(); timer = setInterval(advance, interval); }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+      function pause() { stop(); if (resume) { clearTimeout(resume); } resume = setTimeout(start, 4000); }
+      start();
+      g.addEventListener('pointerdown', pause);
+      g.addEventListener('touchstart', pause, { passive: true });
+    });
+  })();
+</script>
+
+<script>
+  /* Gift banner: measure the gap to the section below (video) and pull it up to touch */
+  document.addEventListener('DOMContentLoaded', function () {
+    var banner = document.querySelector('.elx-giftbanner-{{ ai_gen_id }}');
+    if (!banner) return;
+    var sec = banner.closest('.shopify-section');
+    if (!sec) return;
+    var next = sec.nextElementSibling;
+    while (next && !next.classList.contains('shopify-section')) next = next.nextElementSibling;
+    if (!next) return;
+    function closeGap() {
+      banner.style.marginBottom = '0';
+      var gap = Math.round(next.getBoundingClientRect().top - banner.getBoundingClientRect().bottom);
+      if (gap > 0) banner.style.marginBottom = (-gap) + 'px';
+    }
+    closeGap();
+    window.addEventListener('load', closeGap);
+    window.addEventListener('resize', closeGap);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Tabbed collections",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "Featured Collections"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "header",
+      "content": "Tabs"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "tab_1_label",
+      "label": "Tab 1 label",
+      "default": "Unisex"
+    },
+    {
+      "type": "collection",
+      "id": "collection_1",
+      "label": "Tab 1 collection"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "tab_2_label",
+      "label": "Tab 2 label",
+      "default": "Men"
+    },
+    {
+      "type": "collection",
+      "id": "collection_2",
+      "label": "Tab 2 collection"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "tab_3_label",
+      "label": "Tab 3 label",
+      "default": "Women"
+    },
+    {
+      "type": "collection",
+      "id": "collection_3",
+      "label": "Tab 3 collection"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "label": "Products to show",
+      "min": 4,
+      "max": 24,
+      "step": 2,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "products_per_row_desktop",
+      "label": "Products per row (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "products_per_row_tablet",
+      "label": "Products per row (tablet)",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "tab_active_color",
+      "label": "Active tab text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "tab_inactive_color",
+      "label": "Inactive tab text",
+      "default": "#999999"
+    },
+    {
+      "type": "color",
+      "id": "tab_hover_color",
+      "label": "Tab hover text",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "tab_accent_color",
+      "label": "Tab accent (gold underline)",
+      "default": "#B87253"
+    },
+    {
+      "type": "color",
+      "id": "tab_border_color",
+      "label": "Tab border",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "image_background",
+      "label": "Image background",
+      "default": "#2a2a2a"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Section title size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "tab_font_size",
+      "label": "Tab font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "product_title_size",
+      "label": "Product title size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "product_price_size",
+      "label": "Product price size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "tab_underline_height",
+      "label": "Tab underline height",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tabbed collections"
+    }
+  ]
+}
+{% endschema %}

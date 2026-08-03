@@ -1,0 +1,377 @@
+{% assign url_handle = request.path | split: '/pages/brand/' | last %}
+{% assign brand = shop.metaobjects.brand[url_handle] %}
+{% if brand == blank %}
+  {% for b in shop.metaobjects.brand.values %}
+    {% assign b_slug = b.slug.value %}
+    {% if b_slug == url_handle %}
+      {% assign brand = b %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% assign brand_name = brand.name.value | first %}
+{% assign brand_desc = brand.description.value %}
+{% assign brand_logo = brand.logo.value %}
+{% assign brand_banner = brand.banner.value %}
+{% assign brand_col = brand.collection.value %}
+
+<style>
+  /* Price slider - clean white */
+#brand-price-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 130px;
+  height: 4px;
+  background: #B87253;
+  outline: none;
+  cursor: pointer;
+  border-radius: 999px;
+}
+
+#brand-price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #B87253;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  transition: transform 0.15s ease;
+}
+#brand-price-slider::-webkit-slider-thumb:hover { transform: scale(1.12); }
+
+#brand-price-slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #B87253;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  cursor: pointer;
+}
+
+.brand-hero {
+  position:relative;
+  width:100%;
+  min-height:640px;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-end;
+}
+.brand-hero-grid {
+  position:relative;
+  z-index:2;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:flex-end;
+  padding:0 80px 72px;
+}
+.brand-hero-logo img {
+  max-height:220px;
+  width:auto;
+  max-width:280px;
+  object-fit:contain;
+  filter:brightness(0) invert(1);
+}
+.brand-hero-divider {
+  width:1px;
+  min-height:180px;
+  background:linear-gradient(to bottom,rgba(255,255,255,0) 0%,rgba(255,255,255,0.45) 30%,rgba(255,255,255,0.45) 70%,rgba(255,255,255,0) 100%);
+  flex-shrink:0;
+  margin-right:48px;
+  align-self:flex-end;
+}
+
+/* Ribbon */
+.brand-ribbon {
+  background:#212121;
+  width:100%;
+  padding:0 48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  min-height:60px;
+  box-sizing:border-box;
+}
+.brand-ribbon-filters {
+  display:flex;
+  align-items:center;
+  gap:0;
+  flex-wrap:nowrap;
+}
+.brand-ribbon-sep {
+  width:1px;
+  height:20px;
+  background:rgba(255,255,255,0.22);
+  margin:0 20px;
+  flex-shrink:0;
+}
+.brand-filter-btn {
+  background:none;
+  border:none;
+  padding:8px 16px;
+  font-family:var(--font-body-family);
+  font-size:var(--font-body-size);
+  letter-spacing:var(--font-body-letter-spacing);
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.72);
+  cursor:pointer;
+  transition:color 0.2s;
+  white-space:nowrap;
+  position:relative;
+}
+.brand-filter-btn::after {
+  content:'';
+  position:absolute;
+  bottom:-2px;
+  left:16px;
+  right:16px;
+  height:1px;
+  background:#B87253;
+  transform:scaleX(0);
+  transition:transform 0.2s;
+}
+.brand-filter-btn.active {
+  color:#ffffff;
+  font-weight:600;
+}
+.brand-filter-btn.active::after {
+  transform:scaleX(1);
+}
+.brand-filter-btn:hover:not(.active) {
+  color:#ffffff;
+}
+
+/* NEW - uses global variables */
+.brand-price-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-price-wrap label {
+  font-family: var(--font-body-family);
+  font-size: var(--font-body-size);
+  letter-spacing: var(--font-body-letter-spacing);
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.82);
+  white-space: nowrap;
+}
+
+.brand-price-wrap span {
+  font-family: var(--font-body-family);
+  font-size: var(--font-body-size);
+  letter-spacing: var(--font-body-letter-spacing);
+  color: #ffffff;
+  min-width: 56px;
+  white-space: nowrap;
+}
+
+
+
+/* Result count */
+.brand-result-count {
+  font-family:var(--font-body-family);
+  font-size:var(--font-body-size);
+  letter-spacing:var(--font-body-letter-spacing);
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.72);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+
+.brand-product-card { text-decoration:none; color:inherit; display:block; }
+.brand-product-card:hover .brand-product-img { transform:scale(1.03); }
+.brand-product-img { transition:transform 0.4s ease; }
+
+@media(max-width:768px){
+  .brand-hero { min-height:100svh; }
+  .brand-hero-grid {
+    grid-template-columns:1fr !important;
+    padding:0 24px 48px !important;
+    gap:28px;
+  }
+  .brand-hero-logo { display:flex; justify-content:center; padding:0 !important; }
+  .brand-hero-logo img { max-height:130px !important; max-width:180px !important; }
+  .brand-hero-right { padding-left:0 !important; }
+  .brand-hero-divider, .brand-hero-empty { display:none; }
+  .brand-ribbon {
+    padding:0 16px;
+    flex-wrap:wrap;
+    min-height:auto;
+    padding-top:12px;
+    padding-bottom:12px;
+    gap:12px;
+  }
+  .brand-ribbon-filters { flex-wrap:wrap; gap:0; }
+  .brand-filter-btn { padding:6px 10px; font-size:var(--font-body-size); letter-spacing:var(--font-body-letter-spacing); }
+  .brand-ribbon-sep { margin:0 8px; }
+  .brand-price-wrap input[type=range] { width:70px; }
+  #brand-product-grid { grid-template-columns:repeat(2,1fr) !important; gap:12px !important; }
+}
+</style>
+
+<!-- HERO BANNER -->
+<div class="brand-hero">
+  {% if brand_banner != blank %}
+    {{ brand_banner | image_url: width: 2000 | image_tag: alt: brand_name, style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;' }}
+  {% endif %}
+  <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.08) 35%,rgba(0,0,0,0.82) 100%);"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.75) 0%,rgba(0,0,0,0) 55%);"></div>
+
+  <div class="brand-hero-grid">
+    <div class="brand-hero-empty"></div>
+
+    <div class="brand-hero-logo" style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 56px;">
+      {% if brand_logo != blank %}
+        {{ brand_logo | image_url: width: 800 | image_tag: alt: brand_name, style: 'max-height:220px;width:auto;max-width:280px;object-fit:contain;filter:brightness(0) invert(1);' }}
+      {% endif %}
+    </div>
+
+    <div class="brand-hero-right" style="display:flex;align-items:flex-end;gap:0;">
+      <div class="brand-hero-divider"></div>
+      <div style="display:flex;flex-direction:column;justify-content:flex-end;">
+        <p style="font-size:var(--font-body-size);letter-spacing:var(--font-body-letter-spacing);text-transform:uppercase;color:rgba(255,255,255,0.5);margin:0 0 14px;font-family:var(--font-body-family);">{{ 'custom.brands.about_house' | t }}</p>
+        {% if brand_desc != blank %}
+          <div id="brand-desc-short" style="font-family:var(--font-body-family);font-size:var(--font-body-size);color:rgba(255,255,255,0.88);line-height:1.85;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;">{{ brand_desc }}</div>
+          <div id="brand-desc-full" style="display:none;font-family:var(--font-body-family);font-size:var(--font-body-size);color:rgba(255,255,255,0.88);line-height:1.85;">{{ brand_desc }}</div>
+          <button id="brand-read-more" onclick="
+            var s=document.getElementById('brand-desc-short');
+            var f=document.getElementById('brand-desc-full');
+            var b=document.getElementById('brand-read-more');
+            if(f.style.display==='none'){f.style.display='block';s.style.display='none';b.textContent='Read Less ↑';}
+            else{f.style.display='none';s.style.display='-webkit-box';b.textContent='Read More ↓';}
+          " style="background:none;border:none;color:rgba(255,255,255,0.5);font-size:var(--font-body-size);letter-spacing:var(--font-body-letter-spacing);text-transform:uppercase;cursor:pointer;padding:12px 0 0;font-family:var(--font-body-family);text-align:left;">{{ 'custom.brands.read_more' | t }}</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if brand_col != blank %}
+
+<!-- BLACK RIBBON -->
+<div class="brand-ribbon">
+  <div class="brand-ribbon-filters">
+
+    <!-- Gender -->
+    <button class="brand-filter-btn active" data-filter="gender" data-value="all" onclick="setFilter('gender','all',this)">{{ 'custom.brands.all' | t }}</button>
+    <button class="brand-filter-btn" data-filter="gender" data-value="men" onclick="setFilter('gender','men',this)">{{ 'custom.brands.men' | t }}</button>
+    <button class="brand-filter-btn" data-filter="gender" data-value="women" onclick="setFilter('gender','women',this)">{{ 'custom.brands.women' | t }}</button>
+    <button class="brand-filter-btn" data-filter="gender" data-value="unisex" onclick="setFilter('gender','unisex',this)">{{ 'custom.brands.unisex' | t }}</button>
+
+    <div class="brand-ribbon-sep"></div>
+
+    <!-- Category -->
+    <button class="brand-filter-btn active" data-filter="category" data-value="all" onclick="setFilter('category','all',this)">{{ 'custom.brands.all' | t }}</button>
+    <button class="brand-filter-btn" data-filter="category" data-value="fragrances" onclick="setFilter('category','fragrances',this)">{{ 'custom.brands.fragrances' | t }}</button>
+    <button class="brand-filter-btn" data-filter="category" data-value="hair" onclick="setFilter('category','hair',this)">{{ 'custom.brands.hair_body' | t }}</button>
+    <button class="brand-filter-btn" data-filter="category" data-value="home" onclick="setFilter('category','home',this)">{{ 'custom.brands.home' | t }}</button>
+
+  </div>
+
+  <div class="brand-ribbon-sep" style="margin:0 8px;"></div>
+
+  <!-- Price Slider -->
+  <div class="brand-price-wrap">
+    <label style="font-family:var(--font-body-family);font-size:var(--font-body-size);letter-spacing:var(--font-body-letter-spacing);text-transform:uppercase;color:rgba(255,255,255,0.82);">{{ 'custom.brands.price' | t }}</label>
+    <input type="range" id="brand-price-slider" min="0" max="100" value="100" oninput="updatePrice(this.value)" />
+    <span id="brand-price-label">{{ 'custom.brands.all' | t }}</span>
+  </div>
+
+  <span class="brand-result-count" id="brand-result-count"></span>
+</div>
+
+
+<!-- PRODUCTS -->
+<div style="background:#ffffff;padding:40px 24px 64px;">
+  <div style="max-width:1300px;margin:0 auto;">
+    <div id="brand-product-grid" class="product-list" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;">
+      {% for product in brand_col.products %}
+        {%- comment -%} Wrapper keeps the filter JS hooks (.brand-product-card + data-*); native product-card gives the same card + hover-image as the store. {%- endcomment -%}
+        <div class="brand-product-card"
+          data-title="{{ product.title | downcase }}"
+          data-type="{{ product.type | downcase }}"
+          data-tags="{{ product.tags | join: ',' | downcase }}"
+          data-price="{{ product.price }}"
+          data-gender="{{ product.metafields.custom.gender | default: '' | downcase }}"
+          data-category="{{ product.metafields.custom.category | default: product.type | downcase }}">
+          {%- render 'product-card', product: product, show_secondary_image: true -%}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div id="brand-no-results" style="display:none;text-align:center;padding:60px 0;">
+      <p style="font-family:var(--font-body-family);font-size:var(--font-body-size);color:#9a8c7e;letter-spacing:var(--font-body-letter-spacing);">{{ 'custom.brands.no_products' | t }}</p>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
+<script>
+(function(){
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.brand-product-card'));
+  var activeFilters = { gender: 'all', category: 'all' };
+  var maxPrice = 0;
+
+  cards.forEach(function(c){
+    var p = parseInt(c.dataset.price);
+    if(p > maxPrice) maxPrice = p;
+  });
+
+  var currentMaxPrice = maxPrice;
+
+  window.updatePrice = function(val){
+    currentMaxPrice = Math.round((val / 100) * maxPrice);
+    document.getElementById('brand-price-label').textContent = val == 100 ? 'All' : 'AED ' + Math.round(currentMaxPrice / 100);
+    applyFilters();
+  };
+
+  window.setFilter = function(group, value, btn){
+    activeFilters[group] = value;
+    document.querySelectorAll('[data-filter="'+group+'"]').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    applyFilters();
+  };
+
+  function applyFilters(){
+    var visible = 0;
+    cards.forEach(function(c){
+      var price = parseInt(c.dataset.price);
+      var tags = c.dataset.tags;
+      var gender = c.dataset.gender;
+      var category = c.dataset.category;
+
+      var matchGender = activeFilters.gender === 'all' ||
+        gender.includes(activeFilters.gender) ||
+        tags.includes(activeFilters.gender);
+
+      var matchCategory = activeFilters.category === 'all' ||
+        category.includes(activeFilters.category) ||
+        tags.includes(activeFilters.category) ||
+        (activeFilters.category === 'hair' && (tags.includes('hair') || tags.includes('body'))) ||
+        (activeFilters.category === 'home' && (tags.includes('home') || tags.includes('candle') || tags.includes('diffuser')));
+
+      var matchPrice = price <= currentMaxPrice;
+      var show = matchGender && matchCategory && matchPrice;
+      c.style.display = show ? '' : 'none';
+      if(show) visible++;
+    });
+
+    document.getElementById('brand-no-results').style.display = visible === 0 ? 'block' : 'none';
+    var countEl = document.getElementById('brand-result-count');
+    countEl.textContent = visible < cards.length ? visible + ' / ' + cards.length : '';
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Brand Page",
+  "presets": [{ "name": "Brand Page" }]
+}
+{% endschema %}

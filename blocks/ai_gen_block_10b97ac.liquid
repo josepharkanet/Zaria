@@ -1,0 +1,250 @@
+{% doc %}
+  @prompt
+    Create a 3-section image grid block with no spacing or gaps between sections. Layout: 1 tall image on the left half, and 2 equal images stacked vertically on the right half. No text, no overlays, no captions — images only. All sections flush with zero padding, zero margin, and zero gap. Each image customizable via theme editor settings. Left image fills full block height, two right images each take 50% of block height.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-image-grid-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+  }
+
+  .ai-image-grid-container-{{ ai_gen_id }} {
+    display: flex;
+    width: 100%;
+    height: {{ block.settings.grid_height }}px;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+  }
+
+  .ai-image-grid-left-{{ ai_gen_id }} {
+    flex: 0 0 50%;
+    width: 50%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .ai-image-grid-left-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ai-image-grid-left-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-image-grid-left-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-image-grid-right-{{ ai_gen_id }} {
+    flex: 0 0 50%;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+  }
+
+  .ai-image-grid-right-top-{{ ai_gen_id }},
+  .ai-image-grid-right-bottom-{{ ai_gen_id }} {
+    flex: 0 0 50%;
+    height: 50%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .ai-image-grid-right-top-{{ ai_gen_id }} img,
+  .ai-image-grid-right-bottom-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ai-image-grid-right-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-image-grid-right-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-image-grid-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-image-grid-container-{{ ai_gen_id }} {
+      height: {{ block.settings.grid_height_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-image-grid-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-image-grid-container-{{ ai_gen_id }}">
+    <div class="ai-image-grid-left-{{ ai_gen_id }}">
+      {% if block.settings.image_left %}
+        <img
+          src="{{ block.settings.image_left | image_url: width: 2000 }}"
+          alt="{{ block.settings.image_left.alt | escape }}"
+          loading="lazy"
+          width="{{ block.settings.image_left.width }}"
+          height="{{ block.settings.image_left.height }}"
+        >
+      {% else %}
+        <div class="ai-image-grid-left-placeholder-{{ ai_gen_id }}">
+          {{ 'image' | placeholder_svg_tag }}
+          <div class="ai-image-grid-empty-state-{{ ai_gen_id }}">
+            Add left image
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="ai-image-grid-right-{{ ai_gen_id }}">
+      <div class="ai-image-grid-right-top-{{ ai_gen_id }}">
+        {% if block.settings.image_right_top %}
+          <img
+            src="{{ block.settings.image_right_top | image_url: width: 2000 }}"
+            alt="{{ block.settings.image_right_top.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.image_right_top.width }}"
+            height="{{ block.settings.image_right_top.height }}"
+          >
+        {% else %}
+          <div class="ai-image-grid-right-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+            <div class="ai-image-grid-empty-state-{{ ai_gen_id }}">
+              Add top right image
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="ai-image-grid-right-bottom-{{ ai_gen_id }}">
+        {% if block.settings.image_right_bottom %}
+          <img
+            src="{{ block.settings.image_right_bottom | image_url: width: 2000 }}"
+            alt="{{ block.settings.image_right_bottom.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.image_right_bottom.width }}"
+            height="{{ block.settings.image_right_bottom.height }}"
+          >
+        {% else %}
+          <div class="ai-image-grid-right-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+            <div class="ai-image-grid-empty-state-{{ ai_gen_id }}">
+              Add bottom right image
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "3-section image grid",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_left",
+      "label": "Left image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_right_top",
+      "label": "Right top image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_right_bottom",
+      "label": "Right bottom image"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "grid_height",
+      "label": "Grid height (desktop)",
+      "min": 300,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "grid_height_mobile",
+      "label": "Grid height (mobile)",
+      "min": 200,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "3-section image grid"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,61 @@
+{
+  "sections": {
+    "hero": { "type": "h3-hero", "settings": {} },
+    "strip": {
+      "type": "h3-collections-strip",
+      "blocks": {
+        "s1": { "type": "collection", "settings": { "collection": "women", "label": "Women" } },
+        "s2": { "type": "collection", "settings": { "collection": "men", "label": "Men" } },
+        "s3": { "type": "collection", "settings": { "collection": "unisex", "label": "Unisex" } }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    },
+    "arrivals": {
+      "type": "h3-products",
+      "settings": { "collection": "unisex", "products_limit": 8, "eyebrow": "Just Arrived", "heading": "New Arrivals" }
+    },
+    "editorial": { "type": "h3-editorial", "settings": { "image_position": "left" } },
+    "curated": {
+      "type": "h3-curated",
+      "settings": { "collection": "women", "eyebrow": "The Connoisseur's Choice", "heading": "Most Coveted" }
+    },
+    "banner1": {
+      "type": "h3-banner",
+      "settings": {
+        "collection": "sale", "eyebrow": "Limited Season", "heading": "Luxury Fragrances, Now on Sale",
+        "text": "Icons from the world's finest houses, at exceptional prices — while stocks last.",
+        "cta_label": "Shop the Sale", "overlay": 40
+      }
+    },
+    "categories": {
+      "type": "h3-categories",
+      "blocks": {
+        "t1": { "type": "category", "settings": { "collection": "women", "label": "Women" } },
+        "t2": { "type": "category", "settings": { "collection": "men", "label": "Men" } },
+        "t3": { "type": "category", "settings": { "collection": "unisex", "label": "Unisex" } },
+        "t4": { "type": "category", "settings": { "collection": "sets-kits", "label": "Gift Sets" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4"]
+    },
+    "banner2": {
+      "type": "h3-banner",
+      "settings": {
+        "collection": "arabic-fragrance", "eyebrow": "Exclusive", "heading": "The Arabian Collection",
+        "text": "Opulent oud, amber and rose — the soul of Arabian perfumery.",
+        "cta_label": "Discover", "overlay": 30, "bg_color": "#f7f4ef"
+      }
+    },
+    "values": {
+      "type": "h3-values",
+      "blocks": {
+        "v1": { "type": "value", "settings": { "icon": "authentic", "title": "100% Authentic", "text": "Sourced directly from the houses." } },
+        "v2": { "type": "value", "settings": { "icon": "sample", "title": "Complimentary Samples", "text": "A discovery vial with every order." } },
+        "v3": { "type": "value", "settings": { "icon": "delivery", "title": "UAE Delivery", "text": "Swift, tracked, beautifully packaged." } }
+      },
+      "block_order": ["v1", "v2", "v3"]
+    },
+    "newsletter": { "type": "h3-newsletter", "settings": {} },
+    "closing": { "type": "h3-closing", "settings": {} }
+  },
+  "order": ["hero", "strip", "arrivals", "editorial", "curated", "banner1", "categories", "banner2", "values", "newsletter", "closing"]
+}
