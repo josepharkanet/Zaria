@@ -1,0 +1,76 @@
+{% comment %}Zaria - FAQ accordion - Arkanet Technologies{% endcomment %}
+{%- assign sc = section.settings -%}
+<style>
+  #shopify-section-{{ section.id }} .zfaq{background:{% if sc.scheme == 'soft' %}#fafafa{% else %}#fff{% endif %};color:#111;
+    font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:{{ sc.padding_top }}px clamp(20px,4vw,48px) {{ sc.padding_bottom }}px}
+  #shopify-section-{{ section.id }} .zfaq *{box-sizing:border-box}
+  #shopify-section-{{ section.id }} .zfaq__head{max-width:760px;margin:0 auto 40px;text-align:center}
+  #shopify-section-{{ section.id }} .zfaq__eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#6a6a6a;margin:0 0 14px}
+  #shopify-section-{{ section.id }} .zfaq__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;font-size:clamp(24px,3.2vw,38px);margin:0}
+  #shopify-section-{{ section.id }} .zfaq__list{max-width:{{ sc.max_width }}px;margin:0 auto}
+  #shopify-section-{{ section.id }} .zfaq__item{border-top:1px solid #e8e8e8}
+  #shopify-section-{{ section.id }} .zfaq__item:last-child{border-bottom:1px solid #e8e8e8}
+  #shopify-section-{{ section.id }} .zfaq__q{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:20px;
+    padding:22px 4px;font-size:15px;letter-spacing:.02em;color:#111;font-weight:500}
+  #shopify-section-{{ section.id }} .zfaq__q::-webkit-details-marker{display:none}
+  #shopify-section-{{ section.id }} .zfaq__q::after{content:"";flex:none;width:13px;height:13px;position:relative;
+    background:linear-gradient(#111,#111),linear-gradient(#111,#111);background-size:13px 1px,1px 13px;background-position:center,center;
+    background-repeat:no-repeat;transition:transform .3s ease}
+  #shopify-section-{{ section.id }} details[open] .zfaq__q::after{transform:rotate(45deg)}
+  #shopify-section-{{ section.id }} .zfaq__a{padding:0 4px 26px;color:#5f5f5f;font-size:14px;line-height:1.85;max-width:60ch}
+  #shopify-section-{{ section.id }} .zfaq__a p{margin:0 0 12px}
+  #shopify-section-{{ section.id }} .zfaq__a a{color:#111}
+</style>
+<section class="zfaq">
+  {%- if sc.eyebrow != blank or sc.heading != blank -%}
+    <div class="zfaq__head">
+      {%- if sc.eyebrow != blank -%}<p class="zfaq__eyebrow">{{ sc.eyebrow }}</p>{%- endif -%}
+      {%- if sc.heading != blank -%}<h2 class="zfaq__title">{{ sc.heading }}</h2>{%- endif -%}
+    </div>
+  {%- endif -%}
+  <div class="zfaq__list">
+    {%- for block in section.blocks -%}
+      <div class="zfaq__item" {{ block.shopify_attributes }}>
+        <details {% if block.settings.open %}open{% endif %}>
+          <summary class="zfaq__q">{{ block.settings.question }}</summary>
+          <div class="zfaq__a">{{ block.settings.answer }}</div>
+        </details>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Zaria FAQ",
+  "settings": [
+    { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
+    { "type": "text", "id": "eyebrow", "label": "Overline", "default": "Client Care" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Questions, answered" },
+    { "type": "range", "id": "max_width", "label": "Width", "min": 560, "max": 960, "step": 20, "unit": "px", "default": 760 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 88 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 88 }
+  ],
+  "blocks": [
+    {
+      "type": "item", "name": "Question", "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "How does made to measure work?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Share your measurements and vision through Design Your Look, and a designer will refine the piece with you before it is cut and finished by hand.</p>" },
+        { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "Zaria FAQ",
+      "blocks": [
+        { "type": "item", "settings": { "question": "How does made to measure work?", "open": true } },
+        { "type": "item", "settings": { "question": "What are your shipping times?" } },
+        { "type": "item", "settings": { "question": "Can I book a private appointment?" } },
+        { "type": "item", "settings": { "question": "What is your returns policy?" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
