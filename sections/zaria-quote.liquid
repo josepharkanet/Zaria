@@ -1,0 +1,51 @@
+{% comment %}Zaria - editorial pull quote - Arkanet Technologies{% endcomment %}
+{%- assign sc = section.settings -%}
+{%- assign has_img = false -%}{%- if sc.image != blank -%}{%- assign has_img = true -%}{%- endif -%}
+{%- assign fg = '#111' -%}{%- assign bg = '#ffffff' -%}
+{%- if sc.scheme == 'soft' -%}{%- assign bg = '#fafafa' -%}{%- endif -%}
+{%- if sc.scheme == 'ink' or has_img -%}{%- assign fg = '#ffffff' -%}{%- assign bg = '#111111' -%}{%- endif -%}
+<style>
+  #shopify-section-{{ section.id }} .zq{position:relative;overflow:hidden;background:{{ bg }};color:{{ fg }};
+    font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:{{ sc.padding_top }}px clamp(24px,5vw,64px) {{ sc.padding_bottom }}px}
+  #shopify-section-{{ section.id }} .zq *{box-sizing:border-box}
+  #shopify-section-{{ section.id }} .zq__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  #shopify-section-{{ section.id }} .zq__veil{position:absolute;inset:0;background:#000;opacity:{{ sc.overlay | divided_by: 100.0 }}}
+  #shopify-section-{{ section.id }} .zq__inner{position:relative;z-index:1;max-width:{{ sc.max_width }}px;margin:0 auto;text-align:center}
+  #shopify-section-{{ section.id }} .zq__eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;opacity:.7;margin:0 0 26px}
+  #shopify-section-{{ section.id }} .zq__text{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
+    font-size:clamp(22px,3.4vw,40px);line-height:1.32;letter-spacing:.005em;margin:0}
+  #shopify-section-{{ section.id }} .zq__by{font-size:11px;letter-spacing:.24em;text-transform:uppercase;opacity:.6;margin:30px 0 0}
+  #shopify-section-{{ section.id }} .zq__rule{width:40px;height:1px;background:currentColor;opacity:.4;margin:30px auto 0}
+</style>
+<section class="zq">
+  {%- if has_img -%}
+    <img class="zq__bg" src="{{ sc.image | image_url: width: 2200 }}" alt="{{ sc.image.alt | escape }}" width="{{ sc.image.width }}" height="{{ sc.image.height }}" loading="lazy">
+    <div class="zq__veil"></div>
+  {%- endif -%}
+  <div class="zq__inner">
+    {%- if sc.eyebrow != blank -%}<p class="zq__eyebrow">{{ sc.eyebrow }}</p>{%- endif -%}
+    {%- if sc.quote != blank -%}<p class="zq__text">{{ sc.quote }}</p>{%- endif -%}
+    {%- if sc.attribution != blank -%}
+      <div class="zq__rule"></div>
+      <p class="zq__by">{{ sc.attribution }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Zaria Quote",
+  "settings": [
+    { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" }, { "value": "ink", "label": "Black" } ], "default": "soft" },
+    { "type": "image_picker", "id": "image", "label": "Background image (optional)" },
+    { "type": "range", "id": "overlay", "label": "Image overlay", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 40 },
+    { "type": "text", "id": "eyebrow", "label": "Overline", "default": "The philosophy" },
+    { "type": "textarea", "id": "quote", "label": "Quote", "default": "True luxury is a garment that fits only you, made to be worn for years, not seasons." },
+    { "type": "text", "id": "attribution", "label": "Attribution", "default": "Zaria Atelier" },
+    { "type": "range", "id": "max_width", "label": "Text width", "min": 500, "max": 1000, "step": 20, "unit": "px", "default": 820 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 40, "max": 200, "step": 4, "unit": "px", "default": 120 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 40, "max": 200, "step": 4, "unit": "px", "default": 120 }
+  ],
+  "presets": [ { "name": "Zaria Quote" } ]
+}
+{% endschema %}
