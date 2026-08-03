@@ -1,72 +1,32 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "main": {
-      "type": "main-page",
-      "disabled": true,
+    "story": {
+      "type": "zaria-feature",
       "settings": {
-        "color_scheme": "scheme-2",
-        "show_title": false,
-        "page_width": "full"
+        "scheme": "white",
+        "image_side": "left",
+        "eyebrow": "The House of Zaria",
+        "heading": "A study in modern couture",
+        "body": "<p>Zaria is a design-led couture house built on considered silhouettes and refined tailoring. Every piece is drawn, cut, and finished by hand, made to be worn and kept.</p><p>We believe true luxury is a garment that fits only you.</p>",
+        "link_label": "Design your look",
+        "link_url": "/"
       }
     },
-    "17810067545bdc9cb9": {
-      "type": "_blocks",
-      "settings": {
-        "color_scheme": "",
-        "separate_section_with_border": true,
-        "remove_vertical_spacing": true,
-        "remove_horizontal_spacing": true
-      }
-    },
-    "1781007849d3a3566a": {
-      "type": "_blocks",
-      "settings": {
-        "color_scheme": "",
-        "separate_section_with_border": true,
-        "remove_vertical_spacing": true,
-        "remove_horizontal_spacing": true
-      }
-    },
-    "1781008131e959cad8": {
-      "type": "_blocks",
+    "values": {
+      "type": "zaria-values",
+      "settings": { "scheme": "soft", "eyebrow": "Why Zaria", "heading": "The house standard", "marker": "icon", "columns": "4" },
       "blocks": {
-        "ai_gen_block_06dba32_WxhbCH": {
-          "type": "ai_gen_block_06dba32",
-          "settings": {
-            "md_photo": "shopify://shop_images/grok-image-fefbd175-a642-4d4b-b1ca-849e0d7a5ea6.jpg",
-            "md_name": "Chadi Douaihy",
-            "md_bio": "<p>With decades of experience at the helm of one of the Middle East's leading prestige beauty houses, our Chairman has spent a career bringing the world's most coveted brands to the region's most discerning clientele. Elixir is the realisation of a more personal vision a house devoted entirely to artistic perfumery, where the rarest and most expressive fragrances are presented with the care and reverence they deserve.</p><p>Every house in our collection is chosen by hand. Every bottle is a testament to a single belief that true luxury lies in authenticity, artistry, and distinction. Under his guidance, Elixir is more than a store; it is an invitation to discover fragrance as an art form, and to find the scent that tells your story.</p><p>His philosophy is simple: a fragrance should never be ordinary. It should move you, mark a moment, and stay with those around you long after you leave the room. That conviction shapes every decision at Elixir from the maisons we choose to partner with, to the way each scent is presented in our boutique and online.</p><p>It is this pursuit of the exceptional  the rare, the refined, the unforgettable that defines Elixir, and the standard to which we hold every fragrance we are proud to carry.</p>",
-            "cta_link": "https://www.elixirbeauty.com/collections/all",
-            "desktop_width_percent": 100,
-            "hero_video": "shopify://files/videos/grok-video-0146e3ec-2a79-40c8-9e12-7036443c3459 (1).mp4"
-          },
-          "blocks": {}
-        }
+        "v1": { "type": "value", "settings": { "icon": "scissors", "title": "Bespoke tailoring", "text": "Each piece is cut and fitted to your measurements." } },
+        "v2": { "type": "value", "settings": { "icon": "needle", "title": "Hand finished", "text": "Finished by hand in our atelier, detail by detail." } },
+        "v3": { "type": "value", "settings": { "icon": "globe", "title": "Worldwide delivery", "text": "Considered packaging, shipped wherever you are." } },
+        "v4": { "type": "value", "settings": { "icon": "calendar", "title": "Private appointments", "text": "Design consultations in person or by video." } }
       },
-      "block_order": [
-        "ai_gen_block_06dba32_WxhbCH"
-      ],
-      "settings": {
-        "color_scheme": "",
-        "separate_section_with_border": false,
-        "remove_vertical_spacing": true,
-        "remove_horizontal_spacing": true
-      }
+      "block_order": ["v1", "v2", "v3", "v4"]
+    },
+    "quote": {
+      "type": "zaria-quote",
+      "settings": { "scheme": "ink", "eyebrow": "The philosophy", "quote": "True luxury is a garment that fits only you, made to be worn for years, not seasons.", "attribution": "Zaria Atelier" }
     }
   },
-  "order": [
-    "main",
-    "17810067545bdc9cb9",
-    "1781007849d3a3566a",
-    "1781008131e959cad8"
-  ]
+  "order": ["story", "values", "quote"]
 }

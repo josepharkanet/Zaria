@@ -56,6 +56,21 @@
       }
     }
   {%- endif -%}
+
+  /* Zaria couture header: uppercase, letter-spaced nav + serif wordmark */
+  #shopify-section-{{ section.id }} .header__primary-nav a,
+  #shopify-section-{{ section.id }} .header__primary-nav-item > a {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 400;
+    font-size: 12px;
+  }
+  #shopify-section-{{ section.id }} .header__logo-text {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-weight: 400;
+    font-family: var(--heading-font-family), Georgia, serif;
+  }
 </style>
 
 <height-observer variable="header">
