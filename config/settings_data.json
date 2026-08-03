@@ -9,13 +9,6 @@
  */
 {
   "current": {
-    "social_facebook": "https://www.facebook.com/ElixirBeautyOfficial",
-    "social_instagram": "https://www.instagram.com/elixirbeautyofficial",
-    "social_linkedin": "https://www.linkedin.com/company/elixir-beauty-official/",
-    "social_twitter": "https://x.com/ElixirBeautyOfl",
-    "social_snapchat": "https://www.snapchat.com/@elixirbeautyofl",
-    "social_youtube": "https://www.youtube.com/@ElixirBeautyOfficial",
-    "social_pinterest": "https://www.pinterest.com/ElixirBeautyOfficial/",
     "icon_stroke_width": 1,
     "section_vertical_spacing": "md",
     "default_color_scheme": "scheme-2",
@@ -45,8 +38,15 @@
     "product_color_display": "hide",
     "show_product_rating": false,
     "discount_mode": "percentage",
+    "social_facebook": "https://www.facebook.com/ElixirBeautyOfficial",
+    "social_twitter": "https://x.com/ElixirBeautyOfl",
+    "social_pinterest": "https://www.pinterest.com/ElixirBeautyOfficial/",
+    "social_instagram": "https://www.instagram.com/elixirbeautyofficial",
+    "social_youtube": "https://www.youtube.com/@ElixirBeautyOfficial",
+    "social_linkedin": "https://www.linkedin.com/company/elixir-beauty-official/",
+    "social_snapchat": "https://www.snapchat.com/@elixirbeautyofl",
     "favicon": "shopify://shop_images/ChatGPT_Image_May_23_2026_07_15_36_PM.png",
-    "ai_assistant_enabled": true,
+    "ai_assistant_enabled": false,
     "ai_assistant_endpoint": "https://elixir-assistant.arkanet.workers.dev",
     "gift_offer_collection": "maison-crivelli",
     "gift_offer_threshold": 1,
@@ -55,13 +55,6 @@
     "gift_offer_pdp_text": "<p>Add any 2 fragrances to your bag and a complimentary gift is yours automatically applied at checkout.</p>",
     "gift_offer_gift_product": "chocs-olfactifs-6-x-5ml-extraits",
     "content_for_index": [],
-    "blocks": {
-      "13768625480086291342": {
-        "type": "shopify://apps/forms/blocks/forms/8744a304-fcb1-4347-b211-bb6b4759a76a",
-        "disabled": false,
-        "settings": {}
-      }
-    },
     "color_schemes": {
       "scheme-1": {
         "settings": {

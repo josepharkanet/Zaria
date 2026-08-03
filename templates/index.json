@@ -1,40 +1,172 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "hero": { "type": "zaria-hero", "settings": { "text_color": "dark" } },
+    "hero": {
+      "type": "zaria-hero",
+      "settings": {
+        "text_color": "dark"
+      }
+    },
     "marquee": {
       "type": "zaria-marquee",
       "blocks": {
-        "m1": { "type": "item", "settings": { "text": "Made to measure" } },
-        "m2": { "type": "item", "settings": { "text": "Hand finished in atelier" } },
-        "m3": { "type": "item", "settings": { "text": "Worldwide shipping" } },
-        "m4": { "type": "item", "settings": { "text": "Private appointments" } }
+        "m1": {
+          "type": "item",
+          "settings": {
+            "text": "Made to measure"
+          }
+        },
+        "m2": {
+          "type": "item",
+          "settings": {
+            "text": "Hand finished in atelier"
+          }
+        },
+        "m3": {
+          "type": "item",
+          "settings": {
+            "text": "Worldwide shipping"
+          }
+        },
+        "m4": {
+          "type": "item",
+          "settings": {
+            "text": "Private appointments"
+          }
+        }
       },
-      "block_order": ["m1", "m2", "m3", "m4"]
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4"
+      ],
+      "settings": {}
     },
     "collections": {
       "type": "zaria-collections",
-      "blocks": { "c1": { "type": "collection" }, "c2": { "type": "collection" }, "c3": { "type": "collection" } },
-      "block_order": ["c1", "c2", "c3"]
+      "blocks": {
+        "c1": {
+          "type": "collection",
+          "settings": {}
+        },
+        "c2": {
+          "type": "collection",
+          "settings": {}
+        },
+        "c3": {
+          "type": "collection",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3"
+      ],
+      "settings": {}
     },
-    "products": { "type": "zaria-products" },
-    "feature": { "type": "zaria-feature" },
+    "products": {
+      "type": "zaria-products",
+      "settings": {}
+    },
+    "feature": {
+      "type": "zaria-feature",
+      "settings": {}
+    },
     "lookbook": {
       "type": "zaria-lookbook",
-      "blocks": { "l1": { "type": "image" }, "l2": { "type": "image" }, "l3": { "type": "image" } },
-      "block_order": ["l1", "l2", "l3"]
+      "blocks": {
+        "l1": {
+          "type": "image",
+          "settings": {}
+        },
+        "l2": {
+          "type": "image",
+          "settings": {}
+        },
+        "l3": {
+          "type": "image",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "l1",
+        "l2",
+        "l3"
+      ],
+      "settings": {}
     },
-    "quote": { "type": "zaria-quote" },
+    "quote": {
+      "type": "zaria-quote",
+      "settings": {}
+    },
     "values": {
       "type": "zaria-values",
       "blocks": {
-        "v1": { "type": "value", "settings": { "icon": "scissors", "title": "Bespoke tailoring", "text": "Each piece is cut and fitted to your measurements." } },
-        "v2": { "type": "value", "settings": { "icon": "needle", "title": "Hand finished", "text": "Finished by hand in our atelier, detail by detail." } },
-        "v3": { "type": "value", "settings": { "icon": "globe", "title": "Worldwide delivery", "text": "Considered packaging, shipped wherever you are." } },
-        "v4": { "type": "value", "settings": { "icon": "calendar", "title": "Private appointments", "text": "Design consultations in person or by video." } }
+        "v1": {
+          "type": "value",
+          "settings": {
+            "icon": "scissors",
+            "title": "Bespoke tailoring",
+            "text": "Each piece is cut and fitted to your measurements."
+          }
+        },
+        "v2": {
+          "type": "value",
+          "settings": {
+            "icon": "needle",
+            "title": "Hand finished",
+            "text": "Finished by hand in our atelier, detail by detail."
+          }
+        },
+        "v3": {
+          "type": "value",
+          "settings": {
+            "icon": "globe",
+            "title": "Worldwide delivery",
+            "text": "Considered packaging, shipped wherever you are."
+          }
+        },
+        "v4": {
+          "type": "value",
+          "settings": {
+            "icon": "calendar",
+            "title": "Private appointments",
+            "text": "Design consultations in person or by video."
+          }
+        }
       },
-      "block_order": ["v1", "v2", "v3", "v4"]
+      "block_order": [
+        "v1",
+        "v2",
+        "v3",
+        "v4"
+      ],
+      "settings": {}
     },
-    "design_your_look": { "type": "design-your-look" }
+    "design_your_look": {
+      "type": "design-your-look",
+      "settings": {}
+    }
   },
-  "order": ["hero", "marquee", "collections", "products", "feature", "lookbook", "quote", "values", "design_your_look"]
+  "order": [
+    "hero",
+    "marquee",
+    "collections",
+    "products",
+    "feature",
+    "lookbook",
+    "quote",
+    "values",
+    "design_your_look"
+  ]
 }
