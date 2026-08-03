@@ -1,0 +1,110 @@
+{% comment %}Zaria - couture hero - Arkanet Technologies{% endcomment %}
+{%- assign sc = section.settings -%}
+{%- assign scheme = 'zhero--dark' -%}
+{%- if sc.text_color == 'light' -%}{%- assign scheme = 'zhero--light' -%}{%- endif -%}
+<style>
+  #shopify-section-{{ section.id }} .zhero{position:relative;display:flex;overflow:hidden;
+    min-height:{{ sc.height_mobile }}vh;background:{{ sc.fallback_bg }};
+    font-family:var(--text-font-family,'Jost'),'Jost',-apple-system,sans-serif}
+  #shopify-section-{{ section.id }} .zhero *{box-sizing:border-box}
+  #shopify-section-{{ section.id }} .zhero__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sc.focal }}}
+  #shopify-section-{{ section.id }} .zhero__veil{position:absolute;inset:0;background:#000;opacity:{{ sc.overlay | divided_by: 100.0 }}}
+  #shopify-section-{{ section.id }} .zhero__inner{position:relative;z-index:1;width:100%;max-width:1280px;margin:0 auto;
+    display:flex;flex-direction:column;padding:48px 24px;gap:0}
+  #shopify-section-{{ section.id }} .zhero--top .zhero__inner{justify-content:flex-start}
+  #shopify-section-{{ section.id }} .zhero--middle .zhero__inner{justify-content:center}
+  #shopify-section-{{ section.id }} .zhero--bottom .zhero__inner{justify-content:flex-end}
+  #shopify-section-{{ section.id }} .zhero--left .zhero__content{align-items:flex-start;text-align:left;margin-right:auto}
+  #shopify-section-{{ section.id }} .zhero--center .zhero__content{align-items:center;text-align:center;margin:0 auto}
+  #shopify-section-{{ section.id }} .zhero--right .zhero__content{align-items:flex-end;text-align:right;margin-left:auto}
+  #shopify-section-{{ section.id }} .zhero__content{display:flex;flex-direction:column;max-width:620px}
+  #shopify-section-{{ section.id }} .zhero--light .zhero__content{color:#fff}
+  #shopify-section-{{ section.id }} .zhero--dark .zhero__content{color:#111}
+  #shopify-section-{{ section.id }} .zhero__overline{font-size:12px;letter-spacing:.34em;text-transform:uppercase;margin:0 0 22px;opacity:.85}
+  #shopify-section-{{ section.id }} .zhero__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
+    font-size:clamp(34px,6vw,72px);line-height:1.06;letter-spacing:.01em;margin:0}
+  #shopify-section-{{ section.id }} .zhero__sub{font-size:clamp(14px,1.5vw,17px);line-height:1.7;margin:22px 0 0;max-width:46ch;opacity:.9}
+  #shopify-section-{{ section.id }} .zhero__actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  #shopify-section-{{ section.id }} .zhero__btn{display:inline-block;text-decoration:none;padding:15px 40px;font-size:12px;
+    letter-spacing:.22em;text-transform:uppercase;border:1px solid transparent;transition:opacity .2s ease,background .2s ease,color .2s ease}
+  #shopify-section-{{ section.id }} .zhero--light .zhero__btn--primary{background:#fff;color:#111;border-color:#fff}
+  #shopify-section-{{ section.id }} .zhero--dark .zhero__btn--primary{background:#111;color:#fff;border-color:#111}
+  #shopify-section-{{ section.id }} .zhero__btn--primary:hover{opacity:.85}
+  #shopify-section-{{ section.id }} .zhero--light .zhero__btn--ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.7)}
+  #shopify-section-{{ section.id }} .zhero--dark .zhero__btn--ghost{background:transparent;color:#111;border-color:rgba(17,17,17,.5)}
+  #shopify-section-{{ section.id }} .zhero__btn--ghost:hover{border-color:currentColor}
+  @media (min-width:750px){
+    #shopify-section-{{ section.id }} .zhero{min-height:{{ sc.height_desktop }}vh}
+    #shopify-section-{{ section.id }} .zhero__inner{padding:72px 48px}
+  }
+</style>
+<section class="zhero {{ scheme }} zhero--{{ sc.align }} zhero--{{ sc.vertical }}">
+  {%- if sc.image != blank -%}
+    <picture>
+      {%- if sc.image_mobile != blank -%}
+        <source media="(max-width: 749px)" srcset="{{ sc.image_mobile | image_url: width: 1000 }}">
+      {%- endif -%}
+      <img class="zhero__bg" src="{{ sc.image | image_url: width: 2400 }}" alt="{{ sc.image.alt | escape }}"
+        width="{{ sc.image.width }}" height="{{ sc.image.height }}" loading="eager" fetchpriority="high">
+    </picture>
+    <div class="zhero__veil"></div>
+  {%- endif -%}
+  <div class="zhero__inner">
+    <div class="zhero__content">
+      {%- if sc.overline != blank -%}<p class="zhero__overline">{{ sc.overline }}</p>{%- endif -%}
+      {%- if sc.heading != blank -%}<h1 class="zhero__title">{{ sc.heading }}</h1>{%- endif -%}
+      {%- if sc.subheading != blank -%}<p class="zhero__sub">{{ sc.subheading }}</p>{%- endif -%}
+      {%- if sc.button_1_label != blank or sc.button_2_label != blank -%}
+        <div class="zhero__actions">
+          {%- if sc.button_1_label != blank -%}
+            <a class="zhero__btn zhero__btn--primary" href="{{ sc.button_1_url | default: '#' }}">{{ sc.button_1_label }}</a>
+          {%- endif -%}
+          {%- if sc.button_2_label != blank -%}
+            <a class="zhero__btn zhero__btn--ghost" href="{{ sc.button_2_url | default: '#' }}">{{ sc.button_2_label }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Zaria Hero",
+  "settings": [
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image (optional)" },
+    { "type": "text", "id": "focal", "label": "Image focal point", "default": "center", "info": "e.g. center, top, 50% 30%" },
+    { "type": "color", "id": "fallback_bg", "label": "Fallback background", "default": "#f3f0ec" },
+    { "type": "range", "id": "overlay", "label": "Image overlay", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 25 },
+    { "type": "header", "content": "Text" },
+    {
+      "type": "select", "id": "text_color", "label": "Text colour",
+      "options": [ { "value": "light", "label": "Light (on dark image)" }, { "value": "dark", "label": "Dark (on light image)" } ],
+      "default": "light"
+    },
+    { "type": "text", "id": "overline", "label": "Overline", "default": "Couture Atelier" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Made only for you" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Considered silhouettes and refined tailoring, cut by hand for the modern wardrobe." },
+    { "type": "text", "id": "button_1_label", "label": "Primary button label", "default": "Explore the collection" },
+    { "type": "url", "id": "button_1_url", "label": "Primary button link" },
+    { "type": "text", "id": "button_2_label", "label": "Secondary button label", "default": "Design your look" },
+    { "type": "url", "id": "button_2_url", "label": "Secondary button link" },
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select", "id": "align", "label": "Horizontal alignment",
+      "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" } ],
+      "default": "center"
+    },
+    {
+      "type": "select", "id": "vertical", "label": "Vertical position",
+      "options": [ { "value": "top", "label": "Top" }, { "value": "middle", "label": "Middle" }, { "value": "bottom", "label": "Bottom" } ],
+      "default": "bottom"
+    },
+    { "type": "range", "id": "height_desktop", "label": "Height (desktop)", "min": 50, "max": 100, "step": 2, "unit": "vh", "default": 86 },
+    { "type": "range", "id": "height_mobile", "label": "Height (mobile)", "min": 50, "max": 100, "step": 2, "unit": "vh", "default": 78 }
+  ],
+  "presets": [ { "name": "Zaria Hero" } ]
+}
+{% endschema %}
