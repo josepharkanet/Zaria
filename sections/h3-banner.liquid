@@ -4,7 +4,7 @@
   assign img = section.settings.image | default: c.image | default: c.products.first.featured_image -%}
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,600&display=swap');
-  #shopify-section-{{ section.id }} { --g:#B87253; --ink:#1a1a1a; --serif: var(--heading-font-family); }
+  #shopify-section-{{ section.id }} { --g:#1a1a1a; --ink:#1a1a1a; --serif: var(--heading-font-family); }
   .h2pb { background: {{ section.settings.bg_color }}; font-family: var(--text-font-family); padding: clamp(2.5rem,5vw,4.5rem) clamp(1rem,4vw,3rem); }
   .h2pb__frame { position: relative; max-width: 1280px; margin: 0 auto; min-height: {{ section.settings.height }}px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; background: #efe9e0; }
   .h2pb__bg { position: absolute; inset: 0; }
