@@ -59,8 +59,8 @@
      card's original values as fallbacks — so these match the product-card badges.
      The style shape (pill/outline/minimal/stacked) is applied by elx-design-vars. */
   .bls__badge--gift { background: var(--elx-badge-gift-bg, #1a1a1a); color: var(--elx-badge-fg, #fff); }
-  .bls__badge--gift svg { color: var(--elx-badge-sale-bg, #B87253); }
-  .bls__badge--sale { background: var(--elx-badge-sale-bg, #B87253); color: var(--elx-badge-fg, #fff); }
+  .bls__badge--gift svg { color: var(--elx-badge-sale-bg, #1a1a1a); }
+  .bls__badge--sale { background: var(--elx-badge-sale-bg, #1a1a1a); color: var(--elx-badge-fg, #fff); }
   @media (max-width: 600px) {
     .bls__badge { font-size: 10px; padding: 5px 10px; gap: 6px; }
     .bls__badge svg { width: 12px; height: 12px; }
@@ -96,7 +96,7 @@
     left: 50%;
     width: 0;
     height: 1px;
-    background: #B87253;
+    background: #1a1a1a;
     transform: translateX(-50%);
     transition: width .4s ease;
     pointer-events: none;
@@ -168,7 +168,7 @@
     text-decoration: none; line-height: 1.3;
     display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
   }
-  .bls-panel__price { font-size: 12px; font-weight: 600; color: #B87253; }
+  .bls-panel__price { font-size: 12px; font-weight: 600; color: #1a1a1a; }
 
   .bls-panel__atc, .bls-panel__soldout {
     flex: 0 0 auto;
@@ -183,7 +183,7 @@
     text-align: center;
   }
   .bls-panel__atc { background: #f2f0ec; color: #1a1a1a; cursor: pointer; transition: background 0.25s ease, color 0.25s ease; }
-  .bls-panel__atc:hover { background: #B87253; color: #fff; }
+  .bls-panel__atc:hover { background: #1a1a1a; color: #fff; }
   .bls-panel__soldout { background: transparent; color: #9a8c7e; border: 1px solid rgba(255, 255, 255, 0.25); }
 
   @media (max-width: 768px) {
@@ -218,7 +218,7 @@
 <div style="background:#fafaf8;padding:1.25rem 20px 56px;">
 
   <div class="bls-intro">
-    <p style="font-size:11px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#B87253;margin:0;">{{ 'custom.brands.grid_heading' | t }}</p>
+    <p style="font-size:11px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#1a1a1a;margin:0;">{{ 'custom.brands.grid_heading' | t }}</p>
   </div>
 
   <div class="bls-grid">

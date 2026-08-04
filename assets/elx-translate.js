@@ -23,12 +23,12 @@
     var gs = document.createElement('style');
     gs.textContent = '.elxt-banner{position:fixed;top:0;left:0;right:0;z-index:99999;' +
       'background:#1a1a1a;color:#fff;font:13px/1.4 sans-serif;padding:8px 16px;' +
-      'text-align:center;letter-spacing:.04em}.elxt-banner b{color:#B87253}';
+      'text-align:center;letter-spacing:.04em}.elxt-banner b{color:#1a1a1a}';
     document.head.appendChild(gs);
     var gate = document.createElement('div');
     gate.className = 'elxt-banner';
     gate.innerHTML = '<b>Translate mode</b> — for store admins only. ' +
-      '<a href="/account/login" style="color:#B87253;font-weight:600">Log in</a>,' +
+      '<a href="/account/login" style="color:#1a1a1a;font-weight:600">Log in</a>,' +
       ' then open <b>/translate</b> again.';
     document.body.appendChild(gate);
     return;
@@ -41,8 +41,8 @@
   var css = [
     '.elxt-banner{position:fixed;top:0;left:0;right:0;z-index:99999;background:#1a1a1a;color:#fff;',
     'font:13px/1.4 sans-serif;padding:8px 16px;text-align:center;letter-spacing:.04em}',
-    '.elxt-banner b{color:#B87253}',
-    '.elxt-hover{outline:2px dashed #B87253 !important;outline-offset:2px;cursor:pointer !important}',
+    '.elxt-banner b{color:#1a1a1a}',
+    '.elxt-hover{outline:2px dashed #1a1a1a !important;outline-offset:2px;cursor:pointer !important}',
     '.elxt-panel{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:99999;',
     'width:min(680px,calc(100vw - 24px));background:#fff;color:#1a1a1a;border:1px solid #ddd;',
     'border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.35);padding:16px;font:14px/1.5 sans-serif}',
@@ -53,7 +53,7 @@
     '.elxt-row{display:flex;gap:8px;justify-content:flex-end;margin-top:10px;align-items:center}',
     '.elxt-status{margin-right:auto;font-size:12px;color:#666}',
     '.elxt-btn{border:0;border-radius:8px;padding:9px 18px;font:600 13px sans-serif;cursor:pointer}',
-    '.elxt-save{background:#B87253;color:#fff}.elxt-close{background:#eee;color:#333}',
+    '.elxt-save{background:#1a1a1a;color:#fff}.elxt-close{background:#eee;color:#333}',
     '.elxt-banner .elxt-btn{margin-left:10px;padding:4px 12px;font-size:12px;vertical-align:middle}',
     '.elxt-banner .elxt-ghost{background:#3a3a3a;color:#fff}',
     '.elxt-banner .elxt-ghost:hover{background:#4a4a4a}',

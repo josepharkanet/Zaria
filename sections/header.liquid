@@ -71,6 +71,20 @@
     font-weight: 400;
     font-family: var(--heading-font-family), Georgia, serif;
   }
+
+  /* Zaria: black header bar (override scheme vars so nav, icons + wordmark go white) */
+  #shopify-section-{{ section.id }} .header {
+    --background: 17 17 17 / 1.0;
+    --text-color: 255 255 255;
+    background-color: rgb(17 17 17);
+  }
+  #shopify-section-{{ section.id }} .header input,
+  #shopify-section-{{ section.id }} .header .search__input {
+    color: rgb(255 255 255);
+  }
+  #shopify-section-{{ section.id }} .header input::placeholder {
+    color: rgb(255 255 255 / 0.55);
+  }
 </style>
 
 <height-observer variable="header">

@@ -2384,9 +2384,9 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
 .product-card > .elx-badges .elx-badge:first-child {
   border-top-right-radius: var(--elx-badge-radius-tr, 12px);     /* matches the card corner */
 }
-.elx-badge--sale { background: var(--elx-badge-sale-bg, #B87253); color: var(--elx-badge-fg, #ffffff); }
+.elx-badge--sale { background: var(--elx-badge-sale-bg, #1a1a1a); color: var(--elx-badge-fg, #ffffff); }
 .elx-badge--gift { background: var(--elx-badge-gift-bg, #1a1a1a); color: var(--elx-badge-fg, #ffffff); }
-.elx-badge__icon { width: 12px; height: 12px; color: var(--elx-badge-sale-bg, #B87253); }
+.elx-badge__icon { width: 12px; height: 12px; color: var(--elx-badge-sale-bg, #1a1a1a); }
 @media (max-width: 600px) {
   /* On phones the cards are half-width, so scale the badge down from the app's
      chosen size to keep it as subtle as it looks on the desktop/laptop view. */
@@ -2400,7 +2400,7 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   align-items: center;
   gap: 5px;
   margin: 4px 0 0;
-  color: #B87253;
+  color: #1a1a1a;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
@@ -2426,10 +2426,10 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   place-items: center;
   border-radius: 50%;
   background: rgba(184, 114, 83, 0.12);
-  color: #B87253;
+  color: #1a1a1a;
   transition: background 0.25s ease, color 0.25s ease;
 }
-.cart-gift--unlocked .cart-gift__ic-wrap { background: #B87253; color: #fff; }
+.cart-gift--unlocked .cart-gift__ic-wrap { background: #1a1a1a; color: #fff; }
 .cart-gift__ic { width: 21px; height: 21px; }
 .cart-gift__text { font-size: 0.88rem; line-height: 1.4; }
 .cart-gift__text strong {
@@ -2451,7 +2451,7 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   display: block;
   height: 100%;
   border-radius: 999px;
-  background: #B87253;
+  background: #1a1a1a;
   transition: width 0.45s ease;
 }
 
@@ -2472,11 +2472,11 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   transition: fill .2s ease, stroke .2s ease, transform .2s cubic-bezier(.16, 1, .3, 1);
 }
 .elx-heart.is-saved {
-  color: #B87253 !important;                          /* saved = filled brass — clear active state on any background */
+  color: #1a1a1a !important;                          /* saved = filled brass — clear active state on any background */
 }
 .elx-heart.is-saved .elx-heart__icon {
-  fill: #B87253 !important;
-  stroke: #B87253 !important;
+  fill: #1a1a1a !important;
+  stroke: #1a1a1a !important;
 }
 .elx-heart--pulse .elx-heart__icon {
   transform: scale(1.28);
@@ -2543,7 +2543,7 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   height: 16px;
   padding: 0 4px;
   border-radius: 999px;
-  background: #B87253;
+  background: #1a1a1a;
   color: #fff;
   font-size: 10px;
   line-height: 16px;
@@ -8863,11 +8863,11 @@ ul {
   gap: 10px !important;
 }
 /* ============================================
-   ELIXIR — Gold Accent System (#B87253)
+   ELIXIR — Gold Accent System (#1a1a1a)
    ============================================ */
 
 :root {
-  --gold: #B87253;
+  --gold: #1a1a1a;
   --gold-light: rgba(184, 114, 83, 0.12);
   --gold-mid: rgba(184, 114, 83, 0.35);
 }
@@ -8904,7 +8904,7 @@ nav a::after {
   left: 0;
   width: 0;
   height: 1px;
-  background: #B87253;
+  background: #1a1a1a;
   transition: width 0.4s ease;
 }
 
@@ -9401,7 +9401,7 @@ html.theme-dark .theme-toggle__sun { display: inline-block; }
   padding: 6px 8px;
   transition: color 0.2s ease;
 }
-.header__lang-toggle .lang-toggle:hover { color: #B87253; }
+.header__lang-toggle .lang-toggle:hover { color: #1a1a1a; }
 
 /* Flip the theme's colour-scheme variables -> most native surfaces follow automatically */
 html.theme-dark .color-scheme {
@@ -9432,7 +9432,7 @@ html.theme-dark .product-card__figure {
 /* Brand logos have black artwork -> keep their backgrounds light in dark mode */
 html.theme-dark .brand-logo-card { background: #ffffff !important; }
 html.theme-dark .color-scheme--scheme-marquee-custom {
-  --background: 184 114 83 !important;   /* keep the brand marquee strip as-is (#B87253) */
+  --background: 184 114 83 !important;   /* keep the brand marquee strip as-is (#1a1a1a) */
   --text-color: 28 28 28 !important;
 }
 
@@ -9522,12 +9522,12 @@ html.theme-dark .color-scheme--scheme-marquee-custom {
 }
 #sort-by-popover .popover__value-option[aria-selected="true"] {
   background-color: rgba(184, 114, 83, .14);
-  color: #B87253;
+  color: #1a1a1a;
   font-weight: 600;
 }
 /* "Elixir Pick" — set apart from the standard sorts */
 #sort-by-popover .popover__value-option[data-elixir-pick] {
-  color: #B87253;
+  color: #1a1a1a;
   font-style: italic;
   letter-spacing: .1em;
   margin-bottom: 6px;
@@ -9622,7 +9622,7 @@ facets-drawer .button:hover {
 .product-card__info .price-list,
 .product-card__info .price-list *,
 .price-list--product .price-list__price {
-  color: #B87253 !important;
+  color: #1a1a1a !important;
 }
 
 
@@ -9663,7 +9663,7 @@ facets-drawer .button:hover {
 #sort-by-popover .popover__value-option .reversed-link { color: #ece7df !important; }
 #sort-by-popover .popover__value-option[aria-selected="true"] .reversed-link,
 #sort-by-popover .popover__value-option:hover .reversed-link {
-  color: #B87253 !important;
+  color: #1a1a1a !important;
 }
 
 /* ── Dark filter sidebar: bleed to edges + pull content toward the left ── */
@@ -9807,7 +9807,7 @@ facets-drawer .button:hover {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     font-size: 0.66rem;
-    color: #B87253;
+    color: #1a1a1a;
     margin-inline-end: 0.35rem;
   }
 
@@ -9897,7 +9897,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.34em;
   text-transform: uppercase;
-  color: #B87253;
+  color: #1a1a1a;
   margin-bottom: 1.1rem;
 }
 /* heading: airier tracking + a fine brass rule beneath */
@@ -9911,7 +9911,7 @@ body {
   width: 64px;
   height: 1px;
   margin: 1.4rem auto 0;
-  background: linear-gradient(to right, transparent, #B87253 30%, #B87253 70%, transparent);
+  background: linear-gradient(to right, transparent, #1a1a1a 30%, #1a1a1a 70%, transparent);
 }
 /* body copy: calmer measure */
 [id$="__image_with_text_overlay_4fKA4Q"] .prose p:not(.h1):not(.h6) {
