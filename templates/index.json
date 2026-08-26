@@ -187,8 +187,8 @@
   "order": [
     "hero",
     "marquee",
-    "collections",
     "story",
+    "collections",
     "lookbook",
     "products",
     "fragrance",
