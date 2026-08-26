@@ -279,13 +279,13 @@
                       aria-current="page"
                     {% endif %}
                   >
-                    {{- link.title -}}
+                    {{- link.title | replace: '-', ' ' -}}
                   </a>
                 {%- else -%}
                   {%- capture disclosure_content -%}
                     <details class="header__menu-disclosure">
                       <summary data-follow-link="{{ link.url }}" {% if section.settings.menu_text_font == 'heading' %}class="h6"{% endif %} data-title="{{ link.title | escape }}">
-                        {{- link.title -}}
+                        {{- link.title | replace: '-', ' ' -}}
                       </summary>
 
                       {%- if zaria_mega_links != blank -%}

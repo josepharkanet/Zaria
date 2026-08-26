@@ -10022,7 +10022,7 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .product-card:hover{box-shadow:none!important;transform:none!important;}
 .product-card:hover .product-card__media > img,
 .product-card:hover .product-card__image{transform:none!important;opacity:1!important;}
-.product-card .product-card__image--secondary{display:none!important;}
+.product-card .product-card__image--secondary{opacity:0!important;transition:opacity .5s ease;}
 
 /* ===== Zaria: colour filter as visual swatches (grid, wraps vertically, no h-scroll) ===== */
 .elx-swatches{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:16px 6px;padding-top:6px;max-height:none!important;overflow:visible!important;}
