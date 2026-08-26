@@ -50,6 +50,11 @@
     assign is_garment = true
   endif
 
+  comment
+    Zaria Design Studio (Coolify). Temporary sslip.io domain — swap this one line when a permanent domain is set.
+  endcomment
+  assign studio_url = 'http://sc25oof3tkoifl6da9udzu3p.2.24.130.10.sslip.io'
+
   if is_fragrance
     assign relcol = product.collections | where: 'handle', 'fragrance' | first
   else
@@ -290,7 +295,7 @@
         <a class="zpdp__buynow" href="/checkout?variant={{ fv.id }}&quantity=1">Buy it Now</a>
       {%- endif -%}
 
-      {%- unless is_fragrance or is_garment -%}<a class="zpdp__studio" href="{{ routes.root_url }}collections/ready-to-wear">Design your look with this fabric</a>{%- endunless -%}
+      {%- unless is_fragrance or is_garment -%}<a class="zpdp__studio" href="{{ studio_url }}?fabric={{ product.title | url_encode }}&product={{ product.handle }}" target="_blank" rel="noopener">Design your look with this fabric</a>{%- endunless -%}
       {%- if is_garment -%}<div class="zpdp__sizechart">{% render 'zaria-size-chart' %}</div>{%- endif -%}
 
       <div class="zpdp__acc" style="margin-top:28px">
