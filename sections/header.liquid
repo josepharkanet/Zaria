@@ -29,7 +29,7 @@
           --header-grid: "logo primary-nav secondary-nav" / minmax(max-content, 1fr) auto minmax(max-content, 1fr);
 
         {%- when 'logo_center_navigation_below' -%}
-          --header-grid: ". logo secondary-nav" "primary-nav primary-nav primary-nav" / minmax(0, 1fr) auto minmax(0, 1fr);
+          --header-grid: "nav-left logo nav-right" / minmax(0, 1fr) auto minmax(0, 1fr);
       {%- endcase -%}
     }
   }
@@ -91,6 +91,25 @@
     width: auto;
     max-height: 66px;
   }
+
+  /* Zaria: single-line header — menu split around a centered logo, icons floated right */
+  @media screen and (min-width: 1000px) {
+    #shopify-section-{{ section.id }} .header.zaria-header-split { position: relative; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__primary-nav { display: contents; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half {
+      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 2.4rem; margin: 0; padding: 0; list-style: none;
+    }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: center; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: center; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__logo { grid-area: logo; justify-self: center; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav {
+      position: absolute; inset-inline-end: 0; top: 50%; transform: translateY(-50%); z-index: 6;
+    }
+  }
+  /* Zaria: smaller, refined header icons */
+  #shopify-section-{{ section.id }} .header__nav-icon { width: 1.15rem; height: auto; }
+  #shopify-section-{{ section.id }} .header__secondary-nav { column-gap: .95rem; }
+  #shopify-section-{{ section.id }} .header__lang-toggle .lang-toggle { font-size: 12px; letter-spacing: .1em; }
 </style>
 
 <height-observer variable="header">
@@ -98,7 +117,7 @@
     {% if section.settings.hide_on_scroll and section.settings.enable_sticky %}
       hide-on-scroll
     {% endif %}
-    class="header color-scheme color-scheme--{{ section.settings.color_scheme.id }}"
+    class="header color-scheme color-scheme--{{ section.settings.color_scheme.id }}{% if section.settings.layout == 'logo_center_navigation_below' %} zaria-header-split{% endif %}"
   >
     {%- comment -%}
       --------------------------------------------------------------------------------------------------------------------
@@ -158,7 +177,9 @@
         </button>
 
         {%- if menu.links.size > 0 and section.settings.layout != 'drawer' -%}
-          <ul class="contents unstyled-list md-max:hidden">
+          {%- assign nav_left_buf = '' -%}
+          {%- assign nav_right_buf = '' -%}
+          {%- assign nav_half = menu.links.size | plus: 1 | divided_by: 2 -%}
             {%- for link in menu.links -%}
               {% liquid
                 assign link_title_downcase = link.title | strip | downcase
@@ -274,6 +295,7 @@
                 {%- endcase -%}
               {%- endcapture -%}
 
+              {%- capture nav_li -%}
               <li class="header__primary-nav-item">
            {%- if link.levels == 0 and mega_menu_block == '' and zaria_mega_links == blank -%}
                   <a
@@ -347,8 +369,15 @@
 
                 {%- endif -%}
               </li>
+              {%- endcapture -%}
+              {%- if forloop.index0 < nav_half -%}
+                {%- assign nav_left_buf = nav_left_buf | append: nav_li -%}
+              {%- else -%}
+                {%- assign nav_right_buf = nav_right_buf | append: nav_li -%}
+              {%- endif -%}
             {%- endfor -%}
-          </ul>
+          <ul class="unstyled-list md-max:hidden header__nav-half header__nav-half--left">{{ nav_left_buf }}</ul>
+          <ul class="unstyled-list md-max:hidden header__nav-half header__nav-half--right">{{ nav_right_buf }}</ul>
         {%- endif -%}
       </nav>
     {%- endif -%}
