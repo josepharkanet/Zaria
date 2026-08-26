@@ -10035,3 +10035,8 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 
 /* ===== Zaria: neutralize leftover Elixir gold accent in facets -> couture black ===== */
 :root{--elx-gold:#1a1a1a !important;}
+
+/* ===== Zaria: product image edge-to-edge on the card (kill the theme's card padding) ===== */
+.product-card{padding:0!important;}
+.product-card__figure{padding:0!important;margin:0!important;}
+.product-card__info{padding:14px 12px 16px!important;}
