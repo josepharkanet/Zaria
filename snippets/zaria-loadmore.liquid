@@ -7,7 +7,7 @@
 {%- if paginate.pages > 1 -%}
   <div class="zaria-more" data-zaria-more data-total="{{ paginate.items }}">
     {%- if paginate.next.is_link -%}
-      <a class="zaria-more__btn" href="{{ paginate.next.url }}" data-zaria-more-next rel="next">{{ 'general.pagination.load_more' | t | default: 'Load more' }}</a>
+      <a class="zaria-more__btn" href="{{ paginate.next.url }}" data-zaria-more-next rel="next">Load more</a>
     {%- endif -%}
     <p class="zaria-more__count" data-zaria-count></p>
     <noscript>{%- render 'pagination', paginate: paginate, facet: facet -%}</noscript>
