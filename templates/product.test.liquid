@@ -1,5 +1,2 @@
-{%- comment -%} Zaria alternate-template routing test — confirms .liquid product templates render (bypasses a broken editor-owned product.json) {%- endcomment -%}
-<div style="padding:140px 24px;text-align:center;font-family:'Jost',sans-serif">
-  <h1 style="letter-spacing:.2em;text-transform:uppercase">Zaria PDP routing OK</h1>
-  <p style="margin-top:16px;font-size:18px">{{ product.title }} — {{ product.price | money }}</p>
-</div>
+{%- comment -%} Zaria: routing test — render the standard product section via an alternate .liquid template (bypasses broken product.json) {%- endcomment -%}
+{% section 'main-product' %}
