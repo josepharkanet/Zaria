@@ -251,7 +251,7 @@
     {%- comment -%} Buy N & Get a Gift — auto-adds/removes the free gift as the cart qualifies {%- endcomment -%}
     {%- render 'gift-offer-autogift' -%}
 
-    {%- comment -%} App-managed home-page promo banners — auto-placed per banner (Elixir Promotions app) {%- endcomment -%}
+    {%- comment -%} App-managed home-page promo banners — auto-placed per banner (promotions app) {%- endcomment -%}
     {%- if request.page_type == 'index' -%}{%- render 'elx-promo-banners' -%}{%- endif -%}
 
     {%- comment -%} AI concierge (Gemini via Cloudflare Worker) {%- endcomment -%}

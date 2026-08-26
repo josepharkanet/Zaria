@@ -1,18 +1,18 @@
 {% doc %}
   @prompt
-    Rebuild the complete About page for "Elixir" luxury perfumery (Dubai, 2024). Use ONLY var(--font-heading-family) and var(--font-body-family). Background #fafaf8. Accent #B87253. Zero top margin on wrapper. Full width all sections.
+    Rebuild the complete About page for "Zaria" luxury perfumery (Dubai, 2024). Use ONLY var(--font-heading-family) and var(--font-body-family). Background #fafaf8. Accent #1a1a1a. Zero top margin on wrapper. Full width all sections.
     
-    SECTION 1 HERO: bg #fafaf8, padding 80px 60px, centered. H2 "OUR STORY" 32px uppercase letter-spacing 4px fw400 color #1a1a1a. Thin 40px 1px #B87253 line below centered. Paragraph "Founded in Dubai in 2024, Elixir is a modern house of luxury perfumery, blending timeless artistry with contemporary elegance." 12px ls 0.08em color #666 max-width 560px centered line-height 1.9.
+    SECTION 1 HERO: bg #fafaf8, padding 80px 60px, centered. H2 "OUR STORY" 32px uppercase letter-spacing 4px fw400 color #1a1a1a. Thin 40px 1px #1a1a1a line below centered. Paragraph "Founded in Dubai in 2024, Zaria is a modern house of luxury perfumery, blending timeless artistry with contemporary elegance." 12px ls 0.08em color #666 max-width 560px centered line-height 1.9.
     
-    SECTION 2 MD PROFILE: bg #ffffff, padding 100px 60px. Two equal columns with gap 60px. Left column: Shopify image picker (schema type image_picker, id md_photo, label "MD Photo") displayed as portrait aspect ratio 3:4 object-fit cover full column width. If no image selected show placeholder bg #eeeeee. Right column: label "MANAGING DIRECTOR" color #B87253 10px ls 0.2em uppercase. Name field (schema text id md_name label "Name" default "Your Name") 24px uppercase ls 0.15em color #1a1a1a mt 12px. Bio (schema richtext id md_bio label "Biography") 12px ls 0.03em color #444 line-height 1.9 mt 20px. Thin 1px #B87253 vertical line between columns.
+    SECTION 2 MD PROFILE: bg #ffffff, padding 100px 60px. Two equal columns with gap 60px. Left column: Shopify image picker (schema type image_picker, id md_photo, label "MD Photo") displayed as portrait aspect ratio 3:4 object-fit cover full column width. If no image selected show placeholder bg #eeeeee. Right column: label "MANAGING DIRECTOR" color #1a1a1a 10px ls 0.2em uppercase. Name field (schema text id md_name label "Name" default "Your Name") 24px uppercase ls 0.15em color #1a1a1a mt 12px. Bio (schema richtext id md_bio label "Biography") 12px ls 0.03em color #444 line-height 1.9 mt 20px. Thin 1px #1a1a1a vertical line between columns.
     
-    SECTION 3 PHILOSOPHY: bg #fafaf8, padding 100px 60px. Two columns. Left: label "OUR PHILOSOPHY" #B87253 10px ls 0.2em, heading "ARTISTRY MEETS SOUL" 24px uppercase ls 0.15em color #1a1a1a mt 16px. Right: "At Elixir, we believe fragrance is more than a scent — it is an expression of individuality, emotion and memory." 12px ls 0.03em color #444 line-height 1.9. Thin 1px #B87253 vertical divider between columns.
+    SECTION 3 PHILOSOPHY: bg #fafaf8, padding 100px 60px. Two columns. Left: label "OUR PHILOSOPHY" #1a1a1a 10px ls 0.2em, heading "ARTISTRY MEETS SOUL" 24px uppercase ls 0.15em color #1a1a1a mt 16px. Right: "At Zaria, we believe fragrance is more than a scent — it is an expression of individuality, emotion and memory." 12px ls 0.03em color #444 line-height 1.9. Thin 1px #1a1a1a vertical divider between columns.
     
-    SECTION 4 PILLARS: bg #ffffff, padding 100px 60px. Label "WHAT WE STAND FOR" #B87253 10px ls 0.2em centered mb 60px. 3 columns each: 2px #B87253 top border, pt 28px, title 13px uppercase ls 0.15em #1a1a1a, text 11px ls 0.03em #666 mt 12px lh 1.8. (1)CRAFTSMANSHIP (2)AUTHENTICITY (3)DISTINCTION.
+    SECTION 4 PILLARS: bg #ffffff, padding 100px 60px. Label "WHAT WE STAND FOR" #1a1a1a 10px ls 0.2em centered mb 60px. 3 columns each: 2px #1a1a1a top border, pt 28px, title 13px uppercase ls 0.15em #1a1a1a, text 11px ls 0.03em #666 mt 12px lh 1.8. (1)CRAFTSMANSHIP (2)AUTHENTICITY (3)DISTINCTION.
     
-    SECTION 5 QUOTE: bg #212121, padding 80px 60px centered. Italic quote 18px #B87253 ls 0.08em max-width 680px. "Fragrance is the unseen, unforgettable, ultimate accessory — it heralds your arrival and prolongs your departure."
+    SECTION 5 QUOTE: bg #212121, padding 80px 60px centered. Italic quote 18px #1a1a1a ls 0.08em max-width 680px. "Fragrance is the unseen, unforgettable, ultimate accessory — it heralds your arrival and prolongs your departure."
     
-    SECTION 6 CTA: bg #ffffff, padding 100px 60px centered. Label "OUR COLLECTIONS" #B87253 10px ls 0.2em. Heading "A CURATED WORLD OF SCENT" 28px uppercase ls 0.15em #1a1a1a mt 16px mb 24px. Text 12px ls 0.03em #444 max-width 560px centered lh 1.9. Button: 1px solid #B87253, color #B87253, transparent bg, uppercase ls 0.18em 11px, padding 14px 48px, no border-radius. Hover: bg #B87253 color #fff. Text "EXPLORE NOW".
+    SECTION 6 CTA: bg #ffffff, padding 100px 60px centered. Label "OUR COLLECTIONS" #1a1a1a 10px ls 0.2em. Heading "A CURATED WORLD OF SCENT" 28px uppercase ls 0.15em #1a1a1a mt 16px mb 24px. Text 12px ls 0.03em #444 max-width 560px centered lh 1.9. Button: 1px solid #1a1a1a, color #1a1a1a, transparent bg, uppercase ls 0.18em 11px, padding 14px 48px, no border-radius. Hover: bg #1a1a1a color #fff. Text "EXPLORE NOW".
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 
@@ -44,7 +44,7 @@
   .ai-about-hero-divider-{{ ai_gen_id }} {
     width: 40px;
     height: 1px;
-    background-color: #B87253;
+    background-color: #1a1a1a;
     margin: 0 auto 24px auto;
   }
 
@@ -96,12 +96,12 @@
 
   .ai-about-md-divider-{{ ai_gen_id }} {
     width: 1px;
-    background-color: #B87253;
+    background-color: #1a1a1a;
   }
 
   .ai-about-md-label-{{ ai_gen_id }} {
     font-family: var(--font-body-family);
-    color: #B87253;
+    color: #1a1a1a;
     font-size: 10px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -142,12 +142,12 @@
 
   .ai-about-philosophy-divider-{{ ai_gen_id }} {
     width: 1px;
-    background-color: #B87253;
+    background-color: #1a1a1a;
   }
 
   .ai-about-philosophy-label-{{ ai_gen_id }} {
     font-family: var(--font-body-family);
-    color: #B87253;
+    color: #1a1a1a;
     font-size: 10px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -180,7 +180,7 @@
 
   .ai-about-pillars-label-{{ ai_gen_id }} {
     font-family: var(--font-body-family);
-    color: #B87253;
+    color: #1a1a1a;
     font-size: 10px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -197,7 +197,7 @@
   }
 
   .ai-about-pillar-{{ ai_gen_id }} {
-    border-top: 2px solid #B87253;
+    border-top: 2px solid #1a1a1a;
     padding-top: 28px;
   }
 
@@ -230,7 +230,7 @@
     font-family: var(--font-body-family);
     font-style: italic;
     font-size: 18px;
-    color: #B87253;
+    color: #1a1a1a;
     letter-spacing: 0.08em;
     max-width: 680px;
     margin: 0 auto;
@@ -246,7 +246,7 @@
 
   .ai-about-cta-label-{{ ai_gen_id }} {
     font-family: var(--font-body-family);
-    color: #B87253;
+    color: #1a1a1a;
     font-size: 10px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -274,8 +274,8 @@
 
   .ai-about-cta-button-{{ ai_gen_id }} {
     display: inline-block;
-    border: 1px solid #B87253;
-    color: #B87253;
+    border: 1px solid #1a1a1a;
+    color: #1a1a1a;
     background-color: transparent;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -289,7 +289,7 @@
   }
 
   .ai-about-cta-button-{{ ai_gen_id }}:hover {
-    background-color: #B87253;
+    background-color: #1a1a1a;
     color: #fff;
   }
 
@@ -496,7 +496,7 @@
 
 {% schema %}
 {
-  "name": "Elixir about page",
+  "name": "Zaria about page",
   "settings": [
     {
       "type": "header",
@@ -546,7 +546,7 @@
     ],
     "presets": [
       {
-        "name": "Elixir about page"
+        "name": "Zaria about page"
       }
     ]
   }

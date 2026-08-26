@@ -512,12 +512,12 @@
   "custom": {
     "about_page": {
       "story_heading": "OUR STORY",
-      "story_text": "Founded in Dubai, Elixir is a modern house of luxury perfumery, blending timeless artistry with contemporary elegance. It is the newest venture from the leadership behind Extravaganza one of the Middle East's most established names in prestige beauty born of that same expertise, but devoted to something more intimate: the world's finest niche fragrance houses, and the collectors who seek them.",
+      "story_text": "Founded in Dubai, Zaria is a modern house of luxury perfumery, blending timeless artistry with contemporary elegance. It is the newest venture from the leadership behind Extravaganza one of the Middle East's most established names in prestige beauty born of that same expertise, but devoted to something more intimate: the world's finest niche fragrance houses, and the collectors who seek them.",
       "md_role": "CHAIRMAN",
       "md_intro": "With a passion for artistry and a commitment to excellence, our Managing Director has curated a collection that celebrates the finest in luxury perfumery. Each fragrance tells a story, and every bottle is a testament to our dedication to quality and distinction.",
       "philosophy_heading": "OUR PHILOSOPHY",
       "artistry_heading": "ARTISTRY MEETS SOUL",
-      "philosophy_text": "At Elixir, we believe fragrance is more than a scent — it is an expression of individuality, emotion, and memory. We bring the refinement of French perfumery together with the warmth and fragrance heritage of the UAE.",
+      "philosophy_text": "At Zaria, we believe fragrance is more than a scent — it is an expression of individuality, emotion, and memory. We bring the refinement of French perfumery together with the warmth and fragrance heritage of the UAE.",
       "pillars_heading": "WHAT WE STAND FOR",
       "pillar_2_title": "CRAFTSMANSHIP",
       "pillar_2_text": "Every fragrance is a masterpiece, crafted with precision and passion by the world's finest perfumers.",
@@ -555,12 +555,12 @@
       "arabic_fragrance": "Arabic Fragrance",
       "sets_kits": "Sets & Kits",
       "company": "Company",
-      "about": "About Elixir",
+      "about": "About Zaria",
       "contact": "Contact",
       "partner": "Partner With Us",
       "careers": "Careers",
       "designed_by": "Designed by",
-      "copyright": "{{ year }} Elixir All rights reserved."
+      "copyright": "{{ year }} Zaria All rights reserved."
     },
     "pdp": {
       "free_gift_with": "Free Gift with this product",
@@ -642,7 +642,7 @@
       "faq_heading": "Frequently Asked Questions",
       "stores_heading": "Visit Our Boutiques",
       "directions": "Get directions",
-      "faq_q1": "What is Elixir's return policy?",
+      "faq_q1": "What is Zaria's return policy?",
       "faq_a1": "You can find our return policy on our website, or by contacting us directly.",
       "faq_q2": "How do I track my order?",
       "faq_a2": "Once your order ships, you'll receive an email with tracking information.",
