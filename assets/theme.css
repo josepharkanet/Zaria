@@ -9956,3 +9956,8 @@ body {
 /* Zaria: elegant flat title font (Jost) instead of serif */
 :root{--heading-font-family:"Jost",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;}
 h1,h2,h3,h4,h5,h6,.h0,.h1,.h2,.h3,.h4,.h5,.h6{font-family:"Jost",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;}
+
+/* Zaria: uppercase, letter-spaced, smaller section titles */
+.zhero__title,.zcol__title,.zpr__title,.zft__title,.zval__title,.zlb__title,.zdl__heading,.zct__title,.zfaq__title{text-transform:uppercase!important;letter-spacing:.1em!important}
+.zhero__title{font-size:clamp(24px,4vw,46px)!important;line-height:1.14!important}
+.zcol__title,.zpr__title,.zft__title,.zval__title,.zlb__title,.zdl__heading,.zct__title,.zfaq__title{font-size:clamp(18px,2.3vw,27px)!important}
