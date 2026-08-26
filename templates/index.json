@@ -96,6 +96,10 @@
         "columns": "4"
       }
     },
+    "fragrance": {
+      "type": "zaria-fragrance",
+      "settings": {}
+    },
     "feature": {
       "type": "zaria-feature",
       "settings": {}
@@ -181,6 +185,7 @@
     "marquee",
     "collections",
     "products",
+    "fragrance",
     "feature",
     "lookbook",
     "quote",
