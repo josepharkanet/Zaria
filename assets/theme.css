@@ -10060,10 +10060,12 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 
 /* ===== Zaria: mega menus (full-width dark panels, promo image + minimal wine accent) ===== */
 .zaria-mega{background:#111!important;box-shadow:0 24px 40px rgba(0,0,0,.26);width:100%;padding:0!important;border:0!important;--zaria-wine:#7a1f34;}
-.zaria-mega__grid{max-width:1340px;margin:0 auto;display:flex;align-items:stretch;gap:28px 60px;padding:26px 48px 30px;flex-wrap:nowrap;}
-.zaria-mega__col{display:flex;flex-direction:column;gap:12px;min-width:148px;}
-.zaria-mega__head{position:relative;font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.2em;font-size:12px;font-weight:500;color:#fff!important;padding-bottom:12px;margin-bottom:3px;text-decoration:none;}
-.zaria-mega__head::after{content:"";position:absolute;left:0;bottom:0;width:24px;height:2px;background:var(--zaria-wine);}
+.zaria-mega__grid{max-width:1180px;margin:0 auto;display:flex;align-items:flex-start;justify-content:center;gap:26px 76px;padding:32px 48px 36px;flex-wrap:wrap;}
+.zaria-mega__col{display:flex;flex-direction:column;gap:13px;min-width:150px;}
+.zaria-mega__head{position:relative;display:inline-flex;align-items:center;gap:10px;font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:500;color:#fff!important;padding-bottom:13px;margin-bottom:5px;text-decoration:none;}
+.zaria-mega__head::after{content:"";position:absolute;left:0;bottom:0;width:28px;height:1px;background:var(--zaria-wine);}
+.zaria-mega__ico{display:inline-flex;flex:none;color:var(--zaria-wine);}
+.zaria-mega__ico svg{width:18px;height:18px;display:block;}
 .zaria-mega__col a{font-family:"Jost",sans-serif!important;font-size:13px;letter-spacing:.02em;color:rgba(255,255,255,.6)!important;text-decoration:none;transition:color .15s ease;}
 .zaria-mega__col a.zaria-mega__head{color:#fff!important;}
 .zaria-mega__col a:not(.zaria-mega__head):hover{color:#fff!important;}
