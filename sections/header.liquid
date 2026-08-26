@@ -109,6 +109,19 @@
   #shopify-section-{{ section.id }} .header__nav-icon { width: 1.15rem; height: auto; }
   #shopify-section-{{ section.id }} .header__secondary-nav { column-gap: .95rem; }
   #shopify-section-{{ section.id }} .header__lang-toggle .lang-toggle { font-size: 12px; letter-spacing: .1em; }
+
+  /* Zaria: white header bar, dark nav + icons, colour logo */
+  #shopify-section-{{ section.id }} .header { background: #ffffff !important; }
+  #shopify-section-{{ section.id }} .header__primary-nav a,
+  #shopify-section-{{ section.id }} .header__primary-nav summary,
+  #shopify-section-{{ section.id }} .header__nav-half a,
+  #shopify-section-{{ section.id }} .header__nav-half summary,
+  #shopify-section-{{ section.id }} .header__secondary-nav a,
+  #shopify-section-{{ section.id }} .header__secondary-nav button,
+  #shopify-section-{{ section.id }} .header__lang-toggle .lang-toggle { color: #1a1a1a !important; }
+  #shopify-section-{{ section.id }} .header__nav-icon { color: #1a1a1a; }
+  #shopify-section-{{ section.id }} .header__logo-image--transparent { display: none !important; }
+  #shopify-section-{{ section.id }} .header__logo-image--zaria-color { width: auto; max-height: 58px; }
 </style>
 
 <height-observer variable="header">
@@ -131,7 +144,8 @@
 
         <span class="sr-only">{{ shop.name }}</span>
         {%- assign alt_text = section.settings.logo.alt | default: shop.name -%}
-        {{- section.settings.logo | image_url: width: section.settings.logo.width | image_tag: sizes: sizes, alt: alt_text, widths: widths, class: 'header__logo-image' -}}
+        <img src="{{ 'zaria-logo-color.png' | asset_url }}" alt="{{ alt_text | escape }}" class="header__logo-image header__logo-image--zaria-color" width="368" height="157" loading="eager">
+        {%- comment -%}original theme logo kept for reference: {{ section.settings.logo | image_url: width: 40 }}{%- endcomment -%}
 
         {%- if section.settings.transparent_logo -%}
           {{- section.settings.transparent_logo | image_url: width: section.settings.transparent_logo.width | image_tag: sizes: sizes, widths: widths, class: 'header__logo-image header__logo-image--transparent' -}}
