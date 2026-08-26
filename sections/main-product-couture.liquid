@@ -375,15 +375,17 @@
     <div class="zpdp__rel-grid">
       {%- assign shown = 0 -%}
       {%- for rp in relcol.products -%}
-        {%- if rp.id != product.id and shown < 4 -%}
-          {%- assign shown = shown | plus: 1 -%}
-          {%- assign rp_img = rp.images[1] | default: rp.featured_image -%}
-          <a class="zpdp__rel" href="{{ rp.url }}">
-            <div class="zpdp__rel-img">{{ rp_img | image_url: width: 500 | image_tag: loading: 'lazy', alt: rp.title, widths: '250,400,500' }}</div>
-            <div class="zpdp__rel-t">{{ rp.title | truncatewords: 6 }}</div>
-            <div class="zpdp__rel-p">{{ rp.price | money }}</div>
-          </a>
-        {%- endif -%}
+        {%- if shown >= 4 -%}{%- break -%}{%- endif -%}
+        {%- if rp.id == product.id -%}{%- continue -%}{%- endif -%}
+        {%- if rp.tags contains 'no-photo' -%}{%- continue -%}{%- endif -%}
+        {%- assign rp_img = rp.images[1] | default: rp.featured_image -%}
+        {%- if rp_img == blank -%}{%- continue -%}{%- endif -%}
+        {%- assign shown = shown | plus: 1 -%}
+        <a class="zpdp__rel" href="{{ rp.url }}">
+          <div class="zpdp__rel-img">{{ rp_img | image_url: width: 500 | image_tag: loading: 'lazy', alt: rp.title, widths: '250,400,500' }}</div>
+          <div class="zpdp__rel-t">{{ rp.title | truncatewords: 6 }}</div>
+          <div class="zpdp__rel-p">{{ rp.price | money }}</div>
+        </a>
       {%- endfor -%}
     </div>
   </div>
