@@ -85,6 +85,10 @@
   #shopify-section-{{ section.id }} .header input::placeholder {
     color: rgb(255 255 255 / 0.55);
   }
+  #shopify-section-{{ section.id }} .header__logo-image--zaria {
+    width: auto;
+    max-height: 48px;
+  }
 </style>
 
 <height-observer variable="header">
@@ -113,7 +117,8 @@
           {{- section.settings.transparent_logo | image_url: width: section.settings.transparent_logo.width | image_tag: sizes: sizes, widths: widths, class: 'header__logo-image header__logo-image--transparent' -}}
         {%- endif -%}
       {%- else -%}
-        <span class="header__logo-text h5">{{ shop.name }}</span>
+        <span class="sr-only">{{ shop.name }}</span>
+        <img src="{{ 'zaria-wordmark-white.png' | asset_url }}" alt="{{ shop.name | escape }}" class="header__logo-image header__logo-image--zaria" width="368" height="135" loading="eager">
       {%- endif -%}
     {%- endcapture -%}
 
