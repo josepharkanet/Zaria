@@ -55,6 +55,38 @@
   endcomment
   assign studio_url = 'http://sc25oof3tkoifl6da9udzu3p.2.24.130.10.sslip.io'
 
+  assign attr_count = 0
+  if is_fragrance
+    if fr_family != blank
+      assign attr_count = attr_count | plus: 1
+    endif
+    if fr_conc != blank
+      assign attr_count = attr_count | plus: 1
+    endif
+    if fr_size != blank
+      assign attr_count = attr_count | plus: 1
+    endif
+    if fr_char != blank
+      assign attr_count = attr_count | plus: 1
+    endif
+  else
+    if ftype != blank
+      assign attr_count = attr_count | plus: 1
+    endif
+    if colours != blank
+      assign attr_count = attr_count | plus: 1
+    endif
+    if patterns != blank
+      assign attr_count = attr_count | plus: 1
+    endif
+    if origin != blank
+      assign attr_count = attr_count | plus: 1
+    endif
+  endif
+  if attr_count < 1
+    assign attr_count = 1
+  endif
+
   if is_fragrance
     assign relcol = product.collections | where: 'handle', 'fragrance' | first
   else
@@ -73,7 +105,7 @@
   #shopify-section-{{ section.id }} .zpdp__crumb a{color:#8a8a8a;text-decoration:none}
   #shopify-section-{{ section.id }} .zpdp__crumb a:hover{color:#161616}
   #shopify-section-{{ section.id }} .zpdp__grid{display:grid;grid-template-columns:1fr;gap:40px}
-  @media (min-width:1000px){#shopify-section-{{ section.id }} .zpdp__grid{grid-template-columns:minmax(0,520px) 1fr;gap:clamp(40px,4vw,72px);align-items:start}}
+  @media (min-width:1000px){#shopify-section-{{ section.id }} .zpdp__grid{grid-template-columns:minmax(0,440px) 1fr;gap:clamp(40px,4vw,72px);align-items:start}}
 
   /* gallery */
   #shopify-section-{{ section.id }} .zpdp__gallery{display:grid;grid-template-columns:72px 1fr;gap:14px}
@@ -107,11 +139,16 @@
   #shopify-section-{{ section.id }} .zpdp__desc p{margin:0 0 10px}
 
   /* attribute list */
-  #shopify-section-{{ section.id }} .zpdp__attrs{display:grid;grid-template-columns:1fr 1fr;margin:6px 0 30px;border-top:1px solid #ece8e2;border-bottom:1px solid #ece8e2}
-  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:flex-start;gap:13px;padding:22px 0}
-  #shopify-section-{{ section.id }} .zpdp__attr:nth-child(odd){border-right:1px solid #ece8e2;padding-right:24px}
-  #shopify-section-{{ section.id }} .zpdp__attr:nth-child(even){padding-left:24px}
-  #shopify-section-{{ section.id }} .zpdp__attr:nth-child(n+3){border-top:1px solid #ece8e2}
+  #shopify-section-{{ section.id }} .zpdp__attrs{display:grid;grid-template-columns:repeat(var(--zpdp-cols,2),minmax(0,1fr));margin:6px 0 30px;border-top:1px solid #ece8e2;border-bottom:1px solid #ece8e2}
+  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:flex-start;gap:12px;padding:22px 20px}
+  #shopify-section-{{ section.id }} .zpdp__attr:first-child{padding-left:0}
+  #shopify-section-{{ section.id }} .zpdp__attr:last-child{padding-right:0}
+  #shopify-section-{{ section.id }} .zpdp__attr:not(:last-child){border-right:1px solid #ece8e2}
+  @media (max-width:600px){
+    #shopify-section-{{ section.id }} .zpdp__attrs{grid-template-columns:1fr}
+    #shopify-section-{{ section.id }} .zpdp__attr{padding:15px 0}
+    #shopify-section-{{ section.id }} .zpdp__attr:not(:last-child){border-right:0;border-bottom:1px solid #ece8e2}
+  }
   #shopify-section-{{ section.id }} .zpdp__attr-ic{flex:none;color:var(--wine);margin-top:1px;display:inline-flex}
   #shopify-section-{{ section.id }} .zpdp__attr-ic svg{width:22px;height:22px;display:block}
   #shopify-section-{{ section.id }} .zpdp__attr-l{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#a89f94;margin-bottom:5px}
@@ -210,7 +247,7 @@
         <div class="zpdp__desc">{{ product.description }}</div>
       {%- endif -%}
 
-      <div class="zpdp__attrs">
+      <div class="zpdp__attrs" style="--zpdp-cols:{{ attr_count }}">
         {%- if is_fragrance -%}
           {%- if fr_family != blank -%}
           <div class="zpdp__attr">
