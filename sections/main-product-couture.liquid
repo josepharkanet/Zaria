@@ -157,10 +157,13 @@
   /* form */
   #shopify-section-{{ section.id }} .zpdp__form{margin:0 0 18px}
   #shopify-section-{{ section.id }} .zpdp__buy-row{display:flex;gap:12px;margin:0 0 12px}
-  #shopify-section-{{ section.id }} .zpdp__variant,
-  #shopify-section-{{ section.id }} .zpdp__qty{border:1px solid #d7d2ca;background:#fff;height:54px;padding:0 14px;font-family:inherit;font-size:13px;letter-spacing:.05em;color:#161616;border-radius:0}
-  #shopify-section-{{ section.id }} .zpdp__variant{width:100%;margin:0 0 12px}
-  #shopify-section-{{ section.id }} .zpdp__qty{width:88px;flex:none;text-align:center}
+  #shopify-section-{{ section.id }} .zpdp__variant{border:1px solid #d7d2ca;background:#fff;height:54px;padding:0 14px;font-family:inherit;font-size:13px;letter-spacing:.05em;color:#161616;border-radius:0;width:100%;margin:0 0 12px}
+  #shopify-section-{{ section.id }} .zpdp__qty-wrap{display:flex;align-items:center;border:1px solid #d7d2ca;background:#fff;height:54px;flex:none}
+  #shopify-section-{{ section.id }} .zpdp__qbtn{width:42px;height:100%;border:0;background:none;cursor:pointer;font-size:17px;line-height:1;color:#161616;display:flex;align-items:center;justify-content:center;padding:0;transition:color .2s}
+  #shopify-section-{{ section.id }} .zpdp__qbtn:hover{color:var(--wine)}
+  #shopify-section-{{ section.id }} .zpdp__qty{border:0;background:none;width:34px;height:100%;text-align:center;font-family:inherit;font-size:14px;color:#161616;padding:0;-moz-appearance:textfield}
+  #shopify-section-{{ section.id }} .zpdp__qty::-webkit-outer-spin-button,
+  #shopify-section-{{ section.id }} .zpdp__qty::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
   #shopify-section-{{ section.id }} .zpdp__atc{flex:1;height:54px;background:#161616;color:#fff;border:1px solid #161616;font-family:inherit;
     font-size:12px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s;border-radius:0}
   #shopify-section-{{ section.id }} .zpdp__atc:hover{background:#2e2e2e}
@@ -321,7 +324,11 @@
           <input type="hidden" name="id" value="{{ fv.id }}">
         {%- endunless -%}
         <div class="zpdp__buy-row">
-          <input type="number" name="quantity" class="zpdp__qty" value="1" min="1" inputmode="numeric" aria-label="Quantity">
+          <div class="zpdp__qty-wrap">
+            <button type="button" class="zpdp__qbtn" data-qstep="-1" aria-label="Decrease quantity">&minus;</button>
+            <input type="number" name="quantity" class="zpdp__qty" value="1" min="1" inputmode="numeric" aria-label="Quantity">
+            <button type="button" class="zpdp__qbtn" data-qstep="1" aria-label="Increase quantity">+</button>
+          </div>
           <button type="submit" name="add" class="zpdp__atc" {% unless product.available %}disabled{% endunless %}>
             {%- if product.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}
           </button>
@@ -383,6 +390,10 @@
 {%- endif -%}
 
 <script>
+(function(){
+  var f=document.getElementById('zpdp-form');
+  if(f){f.querySelectorAll('[data-qstep]').forEach(function(b){b.addEventListener('click',function(){var i=f.querySelector('.zpdp__qty');var v=parseInt(i.value||'1',10)+parseInt(b.getAttribute('data-qstep'),10);i.value=v<1?1:v;});});}
+})();
 (function(){
   var root=document.getElementById('zpdp-gal-{{ section.id }}');
   if(!root)return;
