@@ -10057,3 +10057,10 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .zaria-more__btn:hover{background:#1a1a1a;color:#fff;}
 .zaria-more__btn.is-loading{opacity:.6;pointer-events:none;}
 .zaria-more__count{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9a9a9a;margin:0;}
+
+/* ===== Zaria: Fabrics mega menu ===== */
+.zaria-mega{padding:28px 40px;}
+.zaria-mega__cols{display:grid;grid-template-columns:repeat(3,minmax(140px,1fr));gap:16px 44px;margin:0;padding:0;}
+.zaria-mega__cols li{list-style:none;}
+.zaria-mega__cols a{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:400;color:#1a1a1a;text-decoration:none;transition:opacity .15s ease;}
+.zaria-mega__cols a:hover{opacity:.55;}
