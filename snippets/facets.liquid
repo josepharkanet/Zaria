@@ -214,7 +214,7 @@
 
               {%- elsif dl contains 'colour' or dl contains 'color' -%}
                 {%- comment -%}Zaria: colour filter rendered as visual swatches{%- endcomment -%}
-                <div class="elx-facet__values elx-swatches {% if filter.values.size > 12 %}elx-facet__values--scroll{% endif %}">
+                <div class="elx-facet__values elx-swatches">
                   {%- for filter_value in filter.values -%}
                     {%- assign cn = filter_value.label | downcase | strip -%}
                     {%- assign chex = '' -%}
