@@ -29,7 +29,7 @@
           --header-grid: "logo primary-nav secondary-nav" / minmax(max-content, 1fr) auto minmax(max-content, 1fr);
 
         {%- when 'logo_center_navigation_below' -%}
-          --header-grid: "nav-left logo nav-right" / minmax(0, 1fr) auto minmax(0, 1fr);
+          --header-grid: "zhedge nav-left logo nav-right secondary-nav" / 152px minmax(0, 1fr) auto minmax(0, 1fr) 152px;
       {%- endcase -%}
     }
   }
@@ -102,9 +102,7 @@
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: center; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: center; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__logo { grid-area: logo; justify-self: center; }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav {
-      position: absolute; inset-inline-end: 0; top: 50%; transform: translateY(-50%); z-index: 6;
-    }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav { grid-area: secondary-nav; justify-self: end; }
   }
   /* Zaria: smaller, refined header icons */
   #shopify-section-{{ section.id }} .header__nav-icon { width: 1.15rem; height: auto; }
