@@ -10071,3 +10071,7 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .product-card:hover .product-card__media,
 .product-card:focus-within .product-card__media{transform:none!important;filter:none!important;}
 .card-wrapper:hover,.product-card-wrapper:hover,.card:hover{border-top-color:transparent!important;border-bottom-color:transparent!important;}
+
+/* ===== Zaria: lifestyle model image on card hover (colour-matched, no lift/shadow) ===== */
+.product-card__image--model{position:absolute!important;inset:0;width:100%!important;height:100%!important;object-fit:cover!important;opacity:0;transition:opacity .45s ease;z-index:2;pointer-events:none;border-radius:0!important;}
+.product-card:hover .product-card__image--model{opacity:1;}
