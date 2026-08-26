@@ -171,8 +171,25 @@
                 endfor
               %}
 
+              {%- comment -%} Zaria: hardcoded category mega-menus (no menu nesting needed) {%- endcomment -%}
+              {%- capture zaria_mega_links -%}
+                {%- case link_title_downcase -%}
+                  {%- when 'fabrics' -%}
+                    <div class="mega-menu zaria-mega">
+                      <ul class="mega-menu__linklist unstyled-list zaria-mega__cols">
+                        <li><a href="{{ routes.root_url }}collections/silk" class="h6">Silk</a></li>
+                        <li><a href="{{ routes.root_url }}collections/cotton" class="h6">Cotton</a></li>
+                        <li><a href="{{ routes.root_url }}collections/chiffon" class="h6">Chiffon</a></li>
+                        <li><a href="{{ routes.root_url }}collections/velvet" class="h6">Velvet</a></li>
+                        <li><a href="{{ routes.root_url }}collections/embellished" class="h6">Embellished &amp; Occasion</a></li>
+                        <li><a href="{{ routes.root_url }}collections/all-fabrics" class="h6">All Fabrics</a></li>
+                      </ul>
+                    </div>
+                {%- endcase -%}
+              {%- endcapture -%}
+
               <li class="header__primary-nav-item">
-           {%- if link.levels == 0 and mega_menu_block == '' -%}
+           {%- if link.levels == 0 and mega_menu_block == '' and zaria_mega_links == blank -%}
                   <a
                     href="{{ link.url }}"
                     data-title="{{ link.title | escape }}"
@@ -190,7 +207,9 @@
                         {{- link.title -}}
                       </summary>
 
-                      {%- if link_title_downcase == 'brands' -%}
+                      {%- if zaria_mega_links != blank -%}
+  {{- zaria_mega_links -}}
+{%- elsif link_title_downcase == 'brands' -%}
 
   {%- render 'mega-menu-brands' -%}
 {%- elsif mega_menu_block != '' -%}
@@ -229,7 +248,7 @@
                     </details>
                   {%- endcapture -%}
 
-                 {%- if link_title_downcase == 'brands' or mega_menu_block != blank -%}
+                 {%- if zaria_mega_links != blank or link_title_downcase == 'brands' or mega_menu_block != blank -%}
 
             <mega-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}" class="contents">
     {{- disclosure_content -}}
