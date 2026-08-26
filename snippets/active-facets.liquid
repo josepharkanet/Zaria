@@ -30,7 +30,116 @@
       {%- endif -%}
     {%- else -%}
       {%- for active_value in filter.active_values -%}
-        <div class="removable-facet">
+        {%- liquid
+          assign fl = filter.label | downcase
+          assign chex = ''
+          assign is_light = false
+          assign is_multi = false
+          if fl contains 'colour' or fl contains 'color'
+            assign cn = active_value.label | downcase | strip
+            case cn
+              when 'black'
+                assign chex = '#1a1a1a'
+              when 'white'
+                assign chex = '#f2efe9'
+                assign is_light = true
+              when 'ecru'
+                assign chex = '#e8dfcb'
+                assign is_light = true
+              when 'beige'
+                assign chex = '#d8c6a6'
+                assign is_light = true
+              when 'sand'
+                assign chex = '#d9c19a'
+                assign is_light = true
+              when 'nude'
+                assign chex = '#e2c9b6'
+                assign is_light = true
+              when 'brown'
+                assign chex = '#7a4a2b'
+              when 'grey'
+                assign chex = '#9b9b9b'
+                assign is_light = true
+              when 'silver'
+                assign chex = '#c9cdd2'
+                assign is_light = true
+              when 'pink'
+                assign chex = '#e4a3b6'
+                assign is_light = true
+              when 'petal'
+                assign chex = '#f0c6d2'
+                assign is_light = true
+              when 'red'
+                assign chex = '#bf2f2a'
+              when 'cherry'
+                assign chex = '#a11d33'
+              when 'magenta'
+                assign chex = '#b0338a'
+              when 'burgundy'
+                assign chex = '#6d1a2d'
+              when 'wine'
+                assign chex = '#5e1f2d'
+              when 'orange'
+                assign chex = '#df7a37'
+              when 'coral'
+                assign chex = '#e97b62'
+              when 'peach'
+                assign chex = '#f2b28c'
+                assign is_light = true
+              when 'yellow'
+                assign chex = '#e7c65e'
+                assign is_light = true
+              when 'lemon'
+                assign chex = '#efe07a'
+                assign is_light = true
+              when 'mustard'
+                assign chex = '#cf9f3a'
+              when 'gold'
+                assign chex = '#c6a24a'
+                assign is_light = true
+              when 'acid'
+                assign chex = '#c9d14a'
+                assign is_light = true
+              when 'green'
+                assign chex = '#4e7a4e'
+              when 'emerald'
+                assign chex = '#1f7a55'
+              when 'mint'
+                assign chex = '#9fd3b8'
+                assign is_light = true
+              when 'olive'
+                assign chex = '#79792f'
+              when 'teal'
+                assign chex = '#2f8f8f'
+              when 'turquoise'
+                assign chex = '#2fb3ac'
+              when 'blue'
+                assign chex = '#3f6fb0'
+              when 'sky'
+                assign chex = '#8fb8de'
+                assign is_light = true
+              when 'navy'
+                assign chex = '#22315a'
+              when 'indigo'
+                assign chex = '#33406e'
+              when 'purple'
+                assign chex = '#6b3f8f'
+              when 'violet'
+                assign chex = '#7a4fb0'
+              when 'eggplant'
+                assign chex = '#4b2545'
+              when 'lavender'
+                assign chex = '#b3a3d4'
+                assign is_light = true
+              when 'lilac'
+                assign chex = '#c3aede'
+                assign is_light = true
+              when 'multicolour'
+                assign is_multi = true
+            endcase
+          endif
+        -%}
+        <div class="removable-facet{% if chex != blank %} removable-facet--swatch{% if is_light %} is-light{% endif %}{% endif %}{% if is_multi %} removable-facet--multi{% endif %}"{% if chex != blank %} style="--facet-chip:{{ chex }}"{% endif %}>
           <facet-link>
             <a href="{{ active_value.url_to_remove }}" class="tap-area link-faded" aria-label="{{ 'collection.faceting.remove_filter' | t: name: active_value.label }}" data-no-instant>
               {%- render 'icon' with 'close', width: 10 -%}

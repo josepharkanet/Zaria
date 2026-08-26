@@ -1,0 +1,47 @@
+{%- comment -%}
+  Zaria: a "Load more" button (AJAX append) in place of numbered pagination
+  on the collection grid. Falls back to standard pagination without JS.
+  @param {object} paginate
+  @param {boolean} [facet]
+{%- endcomment -%}
+{%- if paginate.pages > 1 -%}
+  <div class="zaria-more" data-zaria-more data-total="{{ paginate.items }}">
+    {%- if paginate.next.is_link -%}
+      <a class="zaria-more__btn" href="{{ paginate.next.url }}" data-zaria-more-next rel="next">{{ 'general.pagination.load_more' | t | default: 'Load more' }}</a>
+    {%- endif -%}
+    <p class="zaria-more__count" data-zaria-count></p>
+    <noscript>{%- render 'pagination', paginate: paginate, facet: facet -%}</noscript>
+  </div>
+  <script>
+    (function(){
+      var wrap = document.querySelector('[data-zaria-more]');
+      if (!wrap || wrap.dataset.zBound) return; wrap.dataset.zBound = '1';
+      var total = parseInt(wrap.getAttribute('data-total'), 10) || 0;
+      var list = document.querySelector('product-list.product-list') || document.querySelector('.product-list');
+      var countEl = wrap.querySelector('[data-zaria-count]');
+      function shown(){ return list ? list.querySelectorAll('product-card, .product-card').length : 0; }
+      function refresh(){ if (countEl && total) countEl.textContent = 'Showing ' + shown() + ' of ' + total; }
+      refresh();
+      var btn = wrap.querySelector('[data-zaria-more-next]');
+      if (btn) btn.addEventListener('click', function(e){
+        e.preventDefault();
+        var url = btn.getAttribute('href');
+        btn.classList.add('is-loading'); btn.textContent = 'Loading…';
+        fetch(url).then(function(r){ return r.text(); }).then(function(html){
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var src = doc.querySelector('product-list.product-list') || doc.querySelector('.product-list');
+          if (src && list) {
+            Array.prototype.forEach.call(src.querySelectorAll('product-card, .product-card'), function(c){
+              list.appendChild(document.importNode(c, true));
+            });
+          }
+          var nb = doc.querySelector('[data-zaria-more-next]');
+          if (nb) { btn.setAttribute('href', nb.getAttribute('href')); btn.classList.remove('is-loading'); btn.textContent = 'Load more'; }
+          else { btn.remove(); }
+          try { history.replaceState(null, '', url); } catch (e) {}
+          refresh();
+        }).catch(function(){ btn.classList.remove('is-loading'); btn.textContent = 'Load more'; });
+      });
+    })();
+  </script>
+{%- endif -%}
