@@ -50,7 +50,7 @@
 </style>
 <section class="zhero {{ scheme }} zhero--{{ sc.align }} zhero--{{ sc.vertical }}">
   {%- if hero_video != blank -%}
-    <video class="zhero__bg zhero__video" autoplay muted loop playsinline preload="metadata" poster="{{ hero_poster | asset_url }}">
+    <video class="zhero__bg zhero__video" autoplay muted loop playsinline preload="auto" poster="{{ hero_poster | asset_url }}">
       <source src="{{ hero_video | asset_url }}" type="video/mp4">
     </video>
     <div class="zhero__veil"></div>
