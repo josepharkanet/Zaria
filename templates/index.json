@@ -104,6 +104,10 @@
       "type": "zaria-feature",
       "settings": {}
     },
+    "story": {
+      "type": "zaria-story",
+      "settings": {}
+    },
     "lookbook": {
       "type": "zaria-lookbook",
       "blocks": {
@@ -184,10 +188,11 @@
     "hero",
     "marquee",
     "collections",
+    "lookbook",
     "products",
     "fragrance",
     "feature",
-    "lookbook",
+    "story",
     "quote",
     "values",
     "design_your_look"

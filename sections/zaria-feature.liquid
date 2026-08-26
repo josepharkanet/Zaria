@@ -6,9 +6,10 @@
     padding:{{ sc.padding_top }}px clamp(20px,4vw,48px) {{ sc.padding_bottom }}px}
   #shopify-section-{{ section.id }} .zft *{box-sizing:border-box}
   #shopify-section-{{ section.id }} .zft__inner{max-width:1240px;margin:0 auto;display:grid;
-    grid-template-columns:0.82fr 1.18fr;gap:clamp(28px,5vw,64px);align-items:center}
+    grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,60px);align-items:center}
   #shopify-section-{{ section.id }} .zft--right .zft__media{order:2}
   #shopify-section-{{ section.id }} .zft__media img{display:block;width:100%;height:auto}
+  #shopify-section-{{ section.id }} .zft__video{display:block;width:100%;aspect-ratio:{{ sc.ratio | default: '4/5' }};object-fit:cover;background:#f0ece7}
   #shopify-section-{{ section.id }} .zft__ph{width:100%;aspect-ratio:{{ sc.ratio }};background:linear-gradient(135deg,#ececec,#f6f6f6)}
   #shopify-section-{{ section.id }} .zft__eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#6a6a6a;margin:0 0 18px}
   #shopify-section-{{ section.id }} .zft__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
@@ -26,7 +27,12 @@
 <section class="zft {% if sc.image_side == 'right' %}zft--right{% endif %}">
   <div class="zft__inner">
     <div class="zft__media">
-      {%- if sc.image != blank -%}
+      {%- assign zft_vid = sc.video_asset | default: 'zaria-hero-model.mp4' -%}
+      {%- if zft_vid != blank -%}
+        <video class="zft__video" autoplay muted loop playsinline preload="metadata" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1200 }}{% else %}{{ 'zaria-feature.jpg' | asset_url }}{% endif %}">
+          <source src="{{ zft_vid | asset_url }}" type="video/mp4">
+        </video>
+      {%- elsif sc.image != blank -%}
         <img src="{{ sc.image | image_url: width: 1200 }}" alt="{{ sc.image.alt | escape }}" width="{{ sc.image.width }}" height="{{ sc.image.height }}" loading="lazy">
       {%- else -%}
         <img class="zft__default" src="{{ 'zaria-feature.jpg' | asset_url }}" alt="Zaria modern couture" width="1500" height="1113" loading="lazy">
@@ -46,7 +52,8 @@
   "name": "Zaria Feature",
   "settings": [
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
-    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "image_picker", "id": "image", "label": "Image (used as video poster / fallback)" },
+    { "type": "text", "id": "video_asset", "label": "Video file in assets", "default": "zaria-hero-model.mp4", "info": "e.g. zaria-hero-model.mp4 — leave blank to show the image instead" },
     {
       "type": "select", "id": "image_side", "label": "Image side",
       "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ],
@@ -62,8 +69,8 @@
     { "type": "richtext", "id": "body", "label": "Text", "default": "<p>Zaria is a design-led couture house built on considered silhouettes and refined tailoring. Every piece is drawn, cut, and finished by hand, made to be worn and kept.</p>" },
     { "type": "text", "id": "link_label", "label": "Link label", "default": "Discover the house" },
     { "type": "url", "id": "link_url", "label": "Link" },
-    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 96 },
-    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 96 }
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 60 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 60 }
   ],
   "presets": [ { "name": "Zaria Feature" } ]
 }

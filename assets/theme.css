@@ -10077,6 +10077,9 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .zaria-mega__promo-cap::before{content:"";display:block;width:20px;height:2px;background:var(--zaria-wine);margin-bottom:8px;}
 @media (max-width:1100px){.zaria-mega__promo{display:none;}.zaria-mega__grid{flex-wrap:wrap;}}
 
+/* ===== Zaria: hide section overlines/eyebrows on the homepage ===== */
+.zcol__eyebrow,.zpr__eyebrow,.zfr__eyebrow,.zft__eyebrow,.zlb__eyebrow,.zval__eyebrow,.zq__eyebrow,.zdl__overline{display:none!important;}
+
 /* ===== Zaria: fully static cards on hover (kill drop-shadow FILTER + lift + gold border) ===== */
 .product-list .product-card:hover .product-card__media,
 .product-list .product-card:focus-within .product-card__media,
