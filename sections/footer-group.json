@@ -3,7 +3,7 @@
   "name": "Footer group",
   "sections": {
     "custom_footer_redesign_AUWdj3": {
-      "type": "Custom-footer-redesign",
+      "type": "custom-footer-redesign",
       "name": "Zaria Footer",
       "settings": {}
     }
