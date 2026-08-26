@@ -1,6 +1,6 @@
-/* Global heading/title font -> Bodoni Moda (loaded in theme.liquid head) */
+/* Global heading/title font -> Jost (loaded in theme.liquid head) */
 :root {
-  --heading-font-family: 'Bodoni Moda', Georgia, 'Times New Roman', serif !important;
+  --heading-font-family: 'Jost', Georgia, 'Times New Roman', serif !important;
 }
 
 *, :before, :after {
@@ -9100,7 +9100,7 @@ footer .gold-divider,
 
 /* --- PRODUCT TITLE --- */
 .lpdp__title {
-  font-family: 'Bodoni Moda', var(--heading-font-family), serif !important;  /* Font face */
+  font-family: 'Jost', var(--heading-font-family), serif !important;  /* Font face */
   font-weight: 500 !important;                         /* Thickness: 100=thin, 400=normal, 700=bold */
   font-size: 30px !important;                          /* Size - desktop */
   font-style: normal !important;                       /* normal / italic */
