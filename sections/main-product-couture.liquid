@@ -45,6 +45,11 @@
   assign fr_heart = product.metafields.custom.heart_notes.value
   assign fr_base = product.metafields.custom.base_notes.value
 
+  assign is_garment = false
+  if product.tags contains 'Abaya' or product.tags contains 'Kaftan' or product.tags contains 'Sheila' or product.tags contains 'Shawl'
+    assign is_garment = true
+  endif
+
   if is_fragrance
     assign relcol = product.collections | where: 'handle', 'fragrance' | first
   else
@@ -124,6 +129,7 @@
   #shopify-section-{{ section.id }} .zpdp__studio{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:14px;padding:14px;
     border:1px solid var(--wine);color:var(--wine);font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;transition:background .2s,color .2s}
   #shopify-section-{{ section.id }} .zpdp__studio:hover{background:var(--wine);color:#fff}
+  #shopify-section-{{ section.id }} .zpdp__sizechart{margin-top:16px;padding-top:16px;border-top:1px solid #ece8e2}
 
   /* accordions */
   #shopify-section-{{ section.id }} .zpdp__acc{border-top:1px solid #ece8e2}
@@ -284,7 +290,8 @@
         <a class="zpdp__buynow" href="/checkout?variant={{ fv.id }}&quantity=1">Buy it Now</a>
       {%- endif -%}
 
-      {%- unless is_fragrance -%}<a class="zpdp__studio" href="{{ routes.root_url }}collections/ready-to-wear">Design your look with this fabric</a>{%- endunless -%}
+      {%- unless is_fragrance or is_garment -%}<a class="zpdp__studio" href="{{ routes.root_url }}collections/ready-to-wear">Design your look with this fabric</a>{%- endunless -%}
+      {%- if is_garment -%}<div class="zpdp__sizechart">{% render 'zaria-size-chart' %}</div>{%- endif -%}
 
       <div class="zpdp__acc" style="margin-top:28px">
         <details open>
