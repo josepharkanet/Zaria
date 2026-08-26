@@ -33,7 +33,7 @@
         "sidebar_text_font": "heading",
         "sidebar_show_dividers": true,
         "sidebar_open_second_level_menus": false,
-        "layout": "logo_center_navigation_inline",
+        "layout": "logo_center_navigation_below",
         "show_icons": true,
         "show_country_selector": false,
         "show_country_name": false,

@@ -10006,15 +10006,17 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 @media (min-width:700px) and (max-width:999px){.collection .product-list{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row!important;}}
 @media (max-width:699px){.collection .product-list{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row!important;gap:3px!important;}}
 
-/* ===== Zaria: couture Sort By dropdown ===== */
-.collection-toolbar__button{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.18em;font-size:11px;color:#1a1a1a;}
-#sort-by-popover{border:1px solid #ececec;border-radius:0;box-shadow:0 18px 50px rgba(0,0,0,.12);}
+/* ===== Zaria: couture Sort By (dark dropdown -> light, legible text) ===== */
+.collection-toolbar__button{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.18em;font-size:11px;}
+#sort-by-popover{border-radius:0;box-shadow:0 18px 50px rgba(0,0,0,.35);}
 #sort-by-popover [slot="header"],#sort-by-popover .h4{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.16em;font-size:13px;}
-#sort-by-popover .popover__value-option{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#4a4a4a;padding:11px 22px;border-radius:0;}
-#sort-by-popover .popover__value-option:hover{background:#f5f2ef;color:#1a1a1a;}
-#sort-by-popover .popover__value-option[aria-selected="true"]{background:transparent;color:#1a1a1a;}
-#sort-by-popover .popover__value-option[data-zaria-pick]{font-style:normal;color:#1a1a1a;font-weight:500;letter-spacing:.16em;border-bottom:1px solid #ececec;border-radius:0;margin-bottom:4px;padding-bottom:13px;}
-#sort-by-popover .popover__value-option[data-zaria-pick]:hover{background:#f5f2ef;}
+#sort-by-popover .popover__value-option{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.14em;font-size:11px;padding:11px 22px;border-radius:0;color:rgba(255,255,255,.72)!important;opacity:1!important;}
+#sort-by-popover .popover__value-option .reversed-link{color:inherit!important;}
+#sort-by-popover .popover__value-option:hover{background:rgba(255,255,255,.09)!important;color:#fff!important;}
+#sort-by-popover .popover__value-option[aria-selected="true"]{background:transparent!important;color:#fff!important;}
+#sort-by-popover .popover__value-option[data-zaria-pick]{color:#fff!important;font-weight:500;letter-spacing:.18em;border-bottom:1px solid rgba(255,255,255,.18);border-radius:0;margin-bottom:4px;padding-bottom:13px;}
+#sort-by-popover .popover__value-option[data-zaria-pick] .reversed-link{color:#fff!important;}
+#sort-by-popover .popover__value-option[data-zaria-pick]:hover{background:rgba(255,255,255,.09)!important;}
 
 /* ===== Zaria: catalog cards stay static on hover (no zoom, shadow, or image swap) ===== */
 .product-card:hover{box-shadow:none!important;transform:none!important;}
