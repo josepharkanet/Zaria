@@ -9961,3 +9961,26 @@ h1,h2,h3,h4,h5,h6,.h0,.h1,.h2,.h3,.h4,.h5,.h6{font-family:"Jost",-apple-system,B
 .zhero__title,.zcol__title,.zpr__title,.zft__title,.zval__title,.zlb__title,.zdl__heading,.zct__title,.zfaq__title{text-transform:uppercase!important;letter-spacing:.1em!important}
 .zhero__title{font-size:clamp(19px,2.6vw,32px)!important;line-height:1.18!important}
 .zcol__title,.zpr__title,.zft__title,.zval__title,.zlb__title,.zdl__heading,.zct__title,.zfaq__title{font-size:clamp(14px,1.5vw,19px)!important}
+
+/* ===== Zaria: couture product card (distinct from the Elixir/Prestige card) ===== */
+/* Editorial and flat: no card chrome, portrait image with hover swap, quiet type. */
+.product-card{position:relative;background:transparent;border:0;border-radius:0;box-shadow:none;}
+.product-card__figure{margin:0;border-radius:0;overflow:hidden;background:#f2efec;}
+.product-card__media{display:block;position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:0;}
+.product-card__image{width:100%;height:100%;object-fit:cover;border-radius:0;transition:opacity .6s ease,transform 1.3s ease;}
+.product-card__image--secondary{position:absolute;inset:0;opacity:0;}
+.product-card:hover .product-card__image--primary{opacity:0;}
+.product-card:hover .product-card__image--secondary{opacity:1;}
+.product-card:hover .product-card__image{transform:scale(1.05);}
+.product-card__info{padding:18px 8px 6px;text-align:center;}
+.product-card__main{gap:6px;}
+.product-card .product-title{font-family:"Jost",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important;text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:400;color:#1a1a1a;line-height:1.55;}
+.product-card .price,.product-card .price-list{font-family:"Jost",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important;font-size:12px;letter-spacing:.06em;color:#6a6a6a;justify-content:center;}
+.product-card .price--on-sale .price__sale,.product-card .price__sale{color:#1a1a1a;}
+/* strip the Elixir commerce clutter on cards for a clean couture grid */
+.product-card .elx-heart,
+.product-card .elx-badges,
+.product-card .product-card__quick-add-button,
+.product-card__brand,
+.product-card__brand--logo,
+.product-card .vendor{display:none!important;}
