@@ -10022,7 +10022,7 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .product-card:hover{box-shadow:none!important;transform:none!important;}
 .product-card:hover .product-card__media > img,
 .product-card:hover .product-card__image{transform:none!important;opacity:1!important;}
-.product-card .product-card__image--secondary{opacity:0!important;transition:opacity .5s ease;}
+.product-card .product-card__image--secondary{opacity:0!important;transition:opacity .18s ease;}
 
 /* ===== Zaria: colour filter as visual swatches (grid, wraps vertically, no h-scroll) ===== */
 .elx-swatches{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:16px 6px;padding-top:6px;max-height:none!important;overflow:visible!important;}
@@ -10059,8 +10059,8 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .zaria-more__count{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9a9a9a;margin:0;}
 
 /* ===== Zaria: mega menus (full-width dark panels, promo image + minimal wine accent) ===== */
-.zaria-mega{background:#111!important;box-shadow:0 26px 44px rgba(0,0,0,.28);width:100%;--zaria-wine:#7a1f34;}
-.zaria-mega__grid{max-width:1340px;margin:0 auto;display:flex;align-items:stretch;gap:32px 60px;padding:44px 48px;flex-wrap:nowrap;}
+.zaria-mega{background:#111!important;box-shadow:0 24px 40px rgba(0,0,0,.26);width:100%;padding:0!important;border:0!important;--zaria-wine:#7a1f34;}
+.zaria-mega__grid{max-width:1340px;margin:0 auto;display:flex;align-items:stretch;gap:28px 60px;padding:26px 48px 30px;flex-wrap:nowrap;}
 .zaria-mega__col{display:flex;flex-direction:column;gap:12px;min-width:148px;}
 .zaria-mega__head{position:relative;font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.2em;font-size:12px;font-weight:500;color:#fff!important;padding-bottom:12px;margin-bottom:3px;text-decoration:none;}
 .zaria-mega__head::after{content:"";position:absolute;left:0;bottom:0;width:24px;height:2px;background:var(--zaria-wine);}
