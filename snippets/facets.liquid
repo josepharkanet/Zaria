@@ -212,6 +212,41 @@
                   {%- endfor -%}
                 </div>
 
+              {%- elsif dl contains 'colour' or dl contains 'color' -%}
+                {%- comment -%}Zaria: colour filter rendered as visual swatches{%- endcomment -%}
+                <div class="elx-facet__values elx-swatches {% if filter.values.size > 12 %}elx-facet__values--scroll{% endif %}">
+                  {%- for filter_value in filter.values -%}
+                    {%- assign cn = filter_value.label | downcase | strip -%}
+                    {%- assign chex = '' -%}
+                    {%- case cn -%}
+                      {%- when 'black' -%}{%- assign chex = '#1a1a1a' -%}
+                      {%- when 'white' -%}{%- assign chex = '#f2efe9' -%}
+                      {%- when 'beige' -%}{%- assign chex = '#d8c6a6' -%}
+                      {%- when 'brown' -%}{%- assign chex = '#7a4a2b' -%}
+                      {%- when 'grey' -%}{%- assign chex = '#9b9b9b' -%}
+                      {%- when 'pink' -%}{%- assign chex = '#e4a3b6' -%}
+                      {%- when 'red' -%}{%- assign chex = '#c0392b' -%}
+                      {%- when 'burgundy' -%}{%- assign chex = '#6d1a2d' -%}
+                      {%- when 'orange' -%}{%- assign chex = '#df7a37' -%}
+                      {%- when 'peach' -%}{%- assign chex = '#f2b28c' -%}
+                      {%- when 'yellow' -%}{%- assign chex = '#e7c65e' -%}
+                      {%- when 'gold' -%}{%- assign chex = '#c6a24a' -%}
+                      {%- when 'green' -%}{%- assign chex = '#4e7a4e' -%}
+                      {%- when 'olive' -%}{%- assign chex = '#79792f' -%}
+                      {%- when 'teal' -%}{%- assign chex = '#2f8f8f' -%}
+                      {%- when 'blue' -%}{%- assign chex = '#3f6fb0' -%}
+                      {%- when 'navy' -%}{%- assign chex = '#1f2d55' -%}
+                      {%- when 'purple' -%}{%- assign chex = '#6b3f8f' -%}
+                      {%- when 'lavender' -%}{%- assign chex = '#b3a3d4' -%}
+                    {%- endcase -%}
+                    <label class="elx-swatch {% if filter_value.active %}is-active{% endif %}{% if cn contains 'multicol' %} elx-swatch--multi{% endif %}" title="{{ filter_value.label | escape }}">
+                      <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>
+                      <span class="elx-swatch__chip"{% if chex != '' %} style="background:{{ chex }}"{% endif %}></span>
+                      <span class="elx-swatch__label">{{ filter_value.label }}</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+
               {%- else -%}
                 <div class="elx-facet__values {% if filter.values.size > 8 %}elx-facet__values--scroll{% endif %}">
                   {%- for filter_value in filter.values -%}

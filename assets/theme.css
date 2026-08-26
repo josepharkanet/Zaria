@@ -10021,3 +10021,17 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .product-card:hover .product-card__media > img,
 .product-card:hover .product-card__image{transform:none!important;opacity:1!important;}
 .product-card .product-card__image--secondary{display:none!important;}
+
+/* ===== Zaria: colour filter as visual swatches ===== */
+.elx-swatches{display:flex;flex-wrap:wrap;gap:14px 12px;padding-top:4px;}
+.elx-swatch{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;width:50px;text-align:center;}
+.elx-swatch input{position:absolute;opacity:0;width:0;height:0;pointer-events:none;}
+.elx-swatch__chip{width:26px;height:26px;border-radius:50%;background:#ddd;border:1px solid rgba(0,0,0,.22);box-shadow:inset 0 0 0 2px #fff;transition:transform .15s ease,box-shadow .15s ease;}
+.elx-swatch--multi .elx-swatch__chip{background:conic-gradient(from 0deg,#c0392b,#e7c65e,#4e7a4e,#3f6fb0,#6b3f8f,#c0392b)!important;}
+.elx-swatch__label{font-size:10.5px;letter-spacing:.03em;color:#6a6a6a;line-height:1.2;}
+.elx-swatch:hover .elx-swatch__chip{transform:scale(1.09);}
+.elx-swatch.is-active .elx-swatch__chip{box-shadow:inset 0 0 0 2px #fff,0 0 0 2px #1a1a1a;}
+.elx-swatch.is-active .elx-swatch__label{color:#1a1a1a;font-weight:500;}
+
+/* ===== Zaria: neutralize leftover Elixir gold accent in facets -> couture black ===== */
+:root{--elx-gold:#1a1a1a !important;}
