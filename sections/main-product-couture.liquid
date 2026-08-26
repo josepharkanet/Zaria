@@ -33,7 +33,23 @@
     endif
   endfor
 
-  assign relcol = product.collections | where: 'handle', 'all-fabrics' | first
+  assign is_fragrance = false
+  if product.metafields.custom.top_notes.value != blank or product.metafields.custom.fragrance_family.value != blank or product.tags contains 'Perfume' or product.tags contains 'Home Fragrance' or product.tags contains 'Gift Set' or product.tags contains 'Fragrance Accessory'
+    assign is_fragrance = true
+  endif
+  assign fr_family = product.metafields.custom.fragrance_family.value
+  assign fr_conc = product.metafields.custom.concentration.value
+  assign fr_size = product.metafields.custom.fragrance_size.value
+  assign fr_char = product.metafields.custom.character.value
+  assign fr_top = product.metafields.custom.top_notes.value
+  assign fr_heart = product.metafields.custom.heart_notes.value
+  assign fr_base = product.metafields.custom.base_notes.value
+
+  if is_fragrance
+    assign relcol = product.collections | where: 'handle', 'fragrance' | first
+  else
+    assign relcol = product.collections | where: 'handle', 'all-fabrics' | first
+  endif
   unless relcol
     assign relcol = product.collections.first
   endunless
@@ -131,11 +147,17 @@
   #shopify-section-{{ section.id }} .zpdp__rel:hover .zpdp__rel-img img{transform:scale(1.04)}
   #shopify-section-{{ section.id }} .zpdp__rel-t{font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-align:center;line-height:1.5}
   #shopify-section-{{ section.id }} .zpdp__rel-p{font-size:11px;color:#7a7a7a;text-align:center;margin-top:3px}
+  #shopify-section-{{ section.id }} .zpdp__notes{margin:2px 0 30px}
+  #shopify-section-{{ section.id }} .zpdp__notes-h{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#a89f94;margin:0 0 8px}
+  #shopify-section-{{ section.id }} .zpdp__note{display:grid;grid-template-columns:66px 1fr;gap:16px;padding:13px 0;border-bottom:1px solid #f0ece6;align-items:baseline}
+  #shopify-section-{{ section.id }} .zpdp__note:last-child{border-bottom:0}
+  #shopify-section-{{ section.id }} .zpdp__note-t{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--wine)}
+  #shopify-section-{{ section.id }} .zpdp__note-v{font-size:14px;color:#2a2a2a;line-height:1.55}
 </style>
 
 <div class="zpdp">
   <p class="zpdp__crumb">
-    <a href="{{ routes.root_url }}">Home</a> / <a href="{{ routes.root_url }}collections/all-fabrics">Fabrics</a> / {{ product.title }}
+    <a href="{{ routes.root_url }}">Home</a> / {% if is_fragrance %}<a href="{{ routes.root_url }}collections/fragrance">Fragrance</a>{% else %}<a href="{{ routes.root_url }}collections/all-fabrics">Fabrics</a>{% endif %} / {{ product.title }}
   </p>
 
   <div class="zpdp__grid">
@@ -162,7 +184,7 @@
 
     <!-- INFO -->
     <div class="zpdp__info">
-      <p class="zpdp__eyebrow">{% if ftype != blank %}{{ ftype }}{% else %}Zaria Fabric{% endif %}{% if origin != blank %} &middot; {{ origin }}{% endif %}</p>
+      <p class="zpdp__eyebrow">{% if is_fragrance %}{% if fr_conc != blank %}{{ fr_conc }}{% else %}Zaria Fragrance{% endif %}{% if fr_family != blank %} &middot; {{ fr_family }}{% endif %}{% else %}{% if ftype != blank %}{{ ftype }}{% else %}Zaria Fabric{% endif %}{% if origin != blank %} &middot; {{ origin }}{% endif %}{% endif %}</p>
       <h1 class="zpdp__title">{{ product.title }}</h1>
 
       <div class="zpdp__price">
@@ -171,38 +193,74 @@
         {%- endif -%}
         {{ product.price | money }}
       </div>
-      <p class="zpdp__tax">Price per unit &middot; taxes included where applicable</p>
+      <p class="zpdp__tax">{% if is_fragrance %}Taxes included where applicable{% else %}Price per unit &middot; taxes included where applicable{% endif %}</p>
 
       {%- if product.description != blank -%}
         <div class="zpdp__desc">{{ product.description }}</div>
       {%- endif -%}
 
       <div class="zpdp__attrs">
-        {%- if ftype != blank -%}
+        {%- if is_fragrance -%}
+          {%- if fr_family != blank -%}
+          <div class="zpdp__attr">
+            <span class="zpdp__attr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M12 10.7V21M12 15.2c-2.4 0-4-1.6-4-3.7M12 15.2c2.4 0 4-1.6 4-3.7"/></svg></span>
+            <span><span class="zpdp__attr-l">Family</span><span class="zpdp__attr-v">{{ fr_family }}</span></span>
+          </div>
+          {%- endif -%}
+          {%- if fr_conc != blank -%}
+          <div class="zpdp__attr">
+            <span class="zpdp__attr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.6h4v2.4h-4z"/><path d="M9.2 5h5.6l.8 2.6V19a2 2 0 0 1-2 2h-3.2a2 2 0 0 1-2-2V7.6z"/><path d="M8.7 11h6.6"/></svg></span>
+            <span><span class="zpdp__attr-l">Concentration</span><span class="zpdp__attr-v">{{ fr_conc }}</span></span>
+          </div>
+          {%- endif -%}
+          {%- if fr_size != blank -%}
+          <div class="zpdp__attr">
+            <span class="zpdp__attr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.6 6 10.5a6 6 0 0 1-12 0C6 9.6 12 3 12 3z"/></svg></span>
+            <span><span class="zpdp__attr-l">Size</span><span class="zpdp__attr-v">{{ fr_size }}</span></span>
+          </div>
+          {%- endif -%}
+          {%- if fr_char != blank -%}
+          <div class="zpdp__attr">
+            <span class="zpdp__attr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5.6 20c0-3.5 2.9-6.4 6.4-6.4s6.4 2.9 6.4 6.4"/></svg></span>
+            <span><span class="zpdp__attr-l">Character</span><span class="zpdp__attr-v">{{ fr_char }}</span></span>
+          </div>
+          {%- endif -%}
+        {%- else -%}
+          {%- if ftype != blank -%}
           <div class="zpdp__attr">
             <span class="zpdp__attr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7c3-2.5 6 2.5 9 0s6-2.5 9 0M3 12c3-2.5 6 2.5 9 0s6-2.5 9 0M3 17c3-2.5 6 2.5 9 0s6-2.5 9 0"/></svg></span>
             <span><span class="zpdp__attr-l">Fabric</span><span class="zpdp__attr-v">{{ ftype }}</span></span>
           </div>
-        {%- endif -%}
-        {%- if colours != blank -%}
+          {%- endif -%}
+          {%- if colours != blank -%}
           <div class="zpdp__attr">
             <span class="zpdp__attr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.6 6 10.5a6 6 0 0 1-12 0C6 9.6 12 3 12 3z"/></svg></span>
             <span><span class="zpdp__attr-l">Colour</span><span class="zpdp__attr-v">{{ colours | join: ', ' }}</span></span>
           </div>
-        {%- endif -%}
-        {%- if patterns != blank -%}
+          {%- endif -%}
+          {%- if patterns != blank -%}
           <div class="zpdp__attr">
             <span class="zpdp__attr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><rect x="4" y="4" width="6.4" height="6.4" rx="1"/><rect x="13.6" y="4" width="6.4" height="6.4" rx="1"/><rect x="4" y="13.6" width="6.4" height="6.4" rx="1"/><rect x="13.6" y="13.6" width="6.4" height="6.4" rx="1"/></svg></span>
             <span><span class="zpdp__attr-l">Pattern</span><span class="zpdp__attr-v">{{ patterns | join: ', ' }}</span></span>
           </div>
-        {%- endif -%}
-        {%- if origin != blank -%}
+          {%- endif -%}
+          {%- if origin != blank -%}
           <div class="zpdp__attr">
             <span class="zpdp__attr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.8 2.6 15.2 0 18M12 3c-2.6 2.8-2.6 15.2 0 18"/></svg></span>
             <span><span class="zpdp__attr-l">Origin</span><span class="zpdp__attr-v">{{ origin }}</span></span>
           </div>
+          {%- endif -%}
         {%- endif -%}
       </div>
+
+      {%- if fr_top != blank or fr_heart != blank or fr_base != blank -%}
+        <div class="zpdp__notes">
+          <div class="zpdp__notes-h">The Notes</div>
+          {%- if fr_top != blank -%}<div class="zpdp__note"><span class="zpdp__note-t">Top</span><span class="zpdp__note-v">{{ fr_top }}</span></div>{%- endif -%}
+          {%- if fr_heart != blank -%}<div class="zpdp__note"><span class="zpdp__note-t">Heart</span><span class="zpdp__note-v">{{ fr_heart }}</span></div>{%- endif -%}
+          {%- if fr_base != blank -%}<div class="zpdp__note"><span class="zpdp__note-t">Base</span><span class="zpdp__note-v">{{ fr_base }}</span></div>{%- endif -%}
+        </div>
+      {%- endif -%}
 
       {%- form 'product', product, id: 'zpdp-form', class: 'zpdp__form' -%}
         {%- unless product.has_only_default_variant -%}
@@ -226,21 +284,25 @@
         <a class="zpdp__buynow" href="/checkout?variant={{ fv.id }}&quantity=1">Buy it Now</a>
       {%- endif -%}
 
-      <a class="zpdp__studio" href="{{ routes.root_url }}collections/ready-to-wear">Design your look with this fabric</a>
+      {%- unless is_fragrance -%}<a class="zpdp__studio" href="{{ routes.root_url }}collections/ready-to-wear">Design your look with this fabric</a>{%- endunless -%}
 
       <div class="zpdp__acc" style="margin-top:28px">
         <details open>
-          <summary>Fabric Details</summary>
+          <summary>{% if is_fragrance %}The Fragrance{% else %}Fabric Details{% endif %}</summary>
           <div class="zpdp__acc-body">
-            {% if ftype != blank %}A {{ ftype | downcase }} fabric{% else %}A premium fabric{% endif %}{% if origin != blank %}, woven in {{ origin }}{% endif %}.
-            {% if colours != blank %} Available in {{ colours | join: ', ' | downcase }}.{% endif %}
-            {% if patterns != blank %} {{ patterns | join: ', ' }} pattern.{% endif %}
-            Sold by the piece; contact us for bulk lengths and bespoke orders.
+            {%- if is_fragrance -%}
+              {% if fr_family != blank %}{{ fr_family }} composition.{% endif %} {% if fr_conc != blank %}{{ fr_conc }}{% endif %}{% if fr_size != blank %} &middot; {{ fr_size }}{% endif %}. A Zaria signature scent; contact us for gifting and bespoke sets.
+            {%- else -%}
+              {% if ftype != blank %}A {{ ftype | downcase }} fabric{% else %}A premium fabric{% endif %}{% if origin != blank %}, woven in {{ origin }}{% endif %}.
+              {% if colours != blank %} Available in {{ colours | join: ', ' | downcase }}.{% endif %}
+              {% if patterns != blank %} {{ patterns | join: ', ' }} pattern.{% endif %}
+              Sold by the piece; contact us for bulk lengths and bespoke orders.
+            {%- endif -%}
           </div>
         </details>
         <details>
-          <summary>Care</summary>
-          <div class="zpdp__acc-body">Dry clean recommended to preserve colour and finish. Warm iron on the reverse. Store away from direct sunlight.</div>
+          <summary>{% if is_fragrance %}How to Wear{% else %}Care{% endif %}</summary>
+          <div class="zpdp__acc-body">{% if is_fragrance %}Apply to pulse points: the wrists, neck and behind the ears. Do not rub, to preserve the notes. Store away from heat and direct light.{% else %}Dry clean recommended to preserve colour and finish. Warm iron on the reverse. Store away from direct sunlight.{% endif %}</div>
         </details>
         <details>
           <summary>Delivery</summary>
