@@ -29,7 +29,7 @@
           --header-grid: "logo primary-nav secondary-nav" / minmax(max-content, 1fr) auto minmax(max-content, 1fr);
 
         {%- when 'logo_center_navigation_below' -%}
-          --header-grid: "zhedge nav-left logo nav-right secondary-nav" / 152px minmax(0, 1fr) auto minmax(0, 1fr) 152px;
+          --header-grid: "zhedge nav-left logo nav-right secondary-nav" / 130px minmax(0, 1fr) auto minmax(0, 1fr) 130px;
       {%- endcase -%}
     }
   }
@@ -63,9 +63,10 @@
   #shopify-section-{{ section.id }} .header__primary-nav-item > mega-menu-disclosure summary,
   #shopify-section-{{ section.id }} .header__primary-nav-item summary {
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.11em;
     font-weight: 400;
     font-size: 12px;
+    white-space: nowrap;
   }
   #shopify-section-{{ section.id }} .header__logo-text {
     text-transform: uppercase;
@@ -97,7 +98,7 @@
     #shopify-section-{{ section.id }} .header.zaria-header-split { position: relative; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__primary-nav { display: contents; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half {
-      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 2.4rem; margin: 0; padding: 0; list-style: none;
+      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 1.7rem; margin: 0; padding: 0; list-style: none;
     }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: center; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: center; }
