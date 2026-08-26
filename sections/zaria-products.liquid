@@ -43,7 +43,11 @@
   </div>
   <div class="zpr__grid">
     {%- if coll != blank and coll.products.size > 0 -%}
-      {%- for product in coll.products limit: sc.limit -%}
+      {%- assign zpr_shown = 0 -%}
+      {%- for product in coll.products -%}
+        {%- if zpr_shown >= sc.limit -%}{%- break -%}{%- endif -%}
+        {%- if product.tags contains 'no-photo' -%}{%- continue -%}{%- endif -%}
+        {%- assign zpr_shown = zpr_shown | plus: 1 -%}
         {%- assign brand = product.metafields.custom.brand.value.name.value | first -%}
         <a href="{{ product.url }}" class="zpr__card">
           <span class="zpr__media">
