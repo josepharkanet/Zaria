@@ -10064,3 +10064,10 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .zaria-mega__cols li{list-style:none;}
 .zaria-mega__cols a{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:400;color:#1a1a1a;text-decoration:none;transition:opacity .15s ease;}
 .zaria-mega__cols a:hover{opacity:.55;}
+
+/* ===== Zaria: fully static cards on hover (kill drop-shadow FILTER + lift + gold border) ===== */
+.product-list .product-card:hover .product-card__media,
+.product-list .product-card:focus-within .product-card__media,
+.product-card:hover .product-card__media,
+.product-card:focus-within .product-card__media{transform:none!important;filter:none!important;}
+.card-wrapper:hover,.product-card-wrapper:hover,.card:hover{border-top-color:transparent!important;border-bottom-color:transparent!important;}
