@@ -89,10 +89,10 @@
     "products": {
       "type": "zaria-products",
       "settings": {
-        "eyebrow": "New In",
-        "heading": "New arrivals",
+        "eyebrow": "",
+        "heading": "New Arrivals",
         "collection": "all-fabrics",
-        "limit": 8,
+        "limit": 4,
         "columns": "4"
       }
     },
