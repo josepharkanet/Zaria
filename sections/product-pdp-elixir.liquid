@@ -67,6 +67,7 @@
     <nav class="lpdp__crumbs" aria-label="{{ 'general.breadcrumb.label' | t }}">
       <ol>
         <li><a href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a></li>
+        <li><a href="{{ routes.root_url }}collections/fragrance">Fragrance</a></li>
         {%- if bc_gender_url != blank -%}<li><a href="{{ bc_gender_url }}">{{ bc_gender_label }}</a></li>{%- endif -%}
         {%- if bc_brand_url != blank -%}<li><a href="{{ bc_brand_url }}">{{ brand_ref.name.value }}</a></li>{%- endif -%}
         <li aria-current="page"><span>{{ product.title }}</span></li>
@@ -599,15 +600,15 @@
   padding: 0;
 }
 
-.lpdp__crumbs { grid-area: crumbs; background: #F1F0ED; width: fit-content; padding: 9px clamp(16px, 3vw, 36px); }
-.lpdp__crumbs ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 0; padding: 0; font-size: 12px; letter-spacing: 0.03em; }
+.lpdp__crumbs { grid-area: crumbs; background: transparent; padding: 0 0 22px; }
+.lpdp__crumbs ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 0; padding: 0; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a8a8a; }
 .lpdp__crumbs li { display: inline-flex; align-items: center; gap: 9px; }
 .lpdp__crumbs li + li::before { content: "/"; color: #c3c3c3; font-size: 11px; }
 .lpdp__crumbs a { color: #8a8a8a; text-decoration: none; transition: color .2s ease; }
 .lpdp__crumbs a:hover { color: var(--lpdp-gold); }
 .lpdp__crumbs [aria-current] span { color: #1a1a1a; font-weight: 500; }
 @media (max-width: 749px) {
-  .lpdp__crumbs { padding: 8px 16px; }
+  .lpdp__crumbs { padding: 0 0 16px; }
   .lpdp__crumbs ol { font-size: 11px; gap: 7px; }
   .lpdp__crumbs li { gap: 7px; }
 }
