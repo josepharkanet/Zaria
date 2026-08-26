@@ -33,24 +33,28 @@
   {%- endif -%}
   <div class="zlb__grid">
     {%- if section.blocks.size > 0 -%}
+      {%- assign zlb_imgs = 'zaria-model-blue.jpg,zaria-model-gold.jpg,zaria-model-purple.jpg,zaria-model-neutral.jpg' | split: ',' -%}
+      {%- assign zlb_overs = 'Ready to Wear,Ready to Wear,Ready to Wear,The Atelier' | split: ',' -%}
+      {%- assign zlb_names = 'Abayas,Kaftans,Sheilas and Shawls,The Maison' | split: ',' -%}
+      {%- assign zlb_links = 'collections/abayas,collections/kaftans,collections/accessories,collections/ready-to-wear' | split: ',' -%}
       {%- for block in section.blocks -%}
         {%- assign bs = block.settings -%}
+        {%- assign zi = forloop.index0 | modulo: zlb_imgs.size -%}
+        {%- assign z_over = bs.overline | default: zlb_overs[zi] -%}
+        {%- assign z_name = bs.caption | default: zlb_names[zi] -%}
+        {%- assign z_link = bs.link -%}
+        {%- if z_link == blank -%}{%- assign z_link = routes.root_url | append: zlb_links[zi] -%}{%- endif -%}
         {%- capture inner -%}
           <span class="zlb__media">
-            {%- if bs.image != blank -%}<img src="{{ bs.image | image_url: width: 1000 }}" alt="{{ bs.caption | escape }}" width="{{ bs.image.width }}" height="{{ bs.image.height }}" loading="lazy">{%- endif -%}
+            {%- if bs.image != blank -%}<img src="{{ bs.image | image_url: width: 1000 }}" alt="{{ z_name | escape }}" width="{{ bs.image.width }}" height="{{ bs.image.height }}" loading="lazy">
+            {%- else -%}<img src="{{ zlb_imgs[zi] | asset_url }}" alt="{{ z_name | escape }}" width="864" height="1152" loading="lazy">{%- endif -%}
           </span>
-          {%- if bs.caption != blank or bs.overline != blank -%}
-            <span class="zlb__cap">
-              {%- if bs.overline != blank -%}<span class="zlb__cap-over">{{ bs.overline }}</span>{%- endif -%}
-              {%- if bs.caption != blank -%}<span class="zlb__cap-name">{{ bs.caption }}</span>{%- endif -%}
-            </span>
-          {%- endif -%}
+          <span class="zlb__cap">
+            <span class="zlb__cap-over">{{ z_over }}</span>
+            <span class="zlb__cap-name">{{ z_name }}</span>
+          </span>
         {%- endcapture -%}
-        {%- if bs.link != blank -%}
-          <a class="zlb__cell {% if bs.tall %}zlb__cell--tall{% endif %}" href="{{ bs.link }}" {{ block.shopify_attributes }}>{{ inner }}</a>
-        {%- else -%}
-          <div class="zlb__cell {% if bs.tall %}zlb__cell--tall{% endif %}" {{ block.shopify_attributes }}>{{ inner }}</div>
-        {%- endif -%}
+        <a class="zlb__cell {% if bs.tall %}zlb__cell--tall{% endif %}" href="{{ z_link }}" {{ block.shopify_attributes }}>{{ inner }}</a>
       {%- endfor -%}
     {%- else -%}
       <div class="zlb__empty">Add image blocks in the editor</div>
