@@ -4,9 +4,9 @@
 {%- endcomment -%}
 {%- liquid
   assign fv = product.selected_or_first_available_variant
-  assign m = product.media
+  assign gimgs = product.images
   assign hero_index = 0
-  if m.size > 1
+  if gimgs.size > 1
     assign hero_index = 1
   endif
   assign colours = product.metafields.custom.colour.value
@@ -135,19 +135,19 @@
     <!-- GALLERY -->
     <div class="zpdp__gallery" id="zpdp-gal-{{ section.id }}">
       <div class="zpdp__thumbs">
-        {%- for media in m -%}
+        {%- for image in gimgs -%}
           <button type="button" class="zpdp__thumb {% if forloop.index0 == hero_index %}is-active{% endif %}" data-i="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}">
-            {{ media.preview_image | image_url: width: 150 | image_tag: loading: 'lazy', alt: product.title, widths: '80,150,220' }}
+            {{ image | image_url: width: 150 | image_tag: loading: 'lazy', alt: product.title, widths: '80,150,220' }}
           </button>
         {%- endfor -%}
       </div>
       <div class="zpdp__stage">
-        {%- for media in m -%}
+        {%- for image in gimgs -%}
           <img class="zpdp__img {% if forloop.index0 == hero_index %}is-active{% endif %}" data-i="{{ forloop.index0 }}"
-            src="{{ media.preview_image | image_url: width: 1100 }}" alt="{{ product.title | escape }}"
+            src="{{ image | image_url: width: 1100 }}" alt="{{ product.title | escape }}"
             {% if forloop.index0 == hero_index %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
             sizes="(min-width:1000px) 55vw, 100vw"
-            srcset="{{ media.preview_image | image_url: width: 600 }} 600w, {{ media.preview_image | image_url: width: 900 }} 900w, {{ media.preview_image | image_url: width: 1300 }} 1300w">
+            srcset="{{ image | image_url: width: 600 }} 600w, {{ image | image_url: width: 900 }} 900w, {{ image | image_url: width: 1300 }} 1300w">
         {%- endfor -%}
       </div>
     </div>
@@ -241,9 +241,9 @@
       {%- for rp in relcol.products -%}
         {%- if rp.id != product.id and shown < 4 -%}
           {%- assign shown = shown | plus: 1 -%}
-          {%- assign rp_media = rp.media[1] | default: rp.featured_media -%}
+          {%- assign rp_img = rp.images[1] | default: rp.featured_image -%}
           <a class="zpdp__rel" href="{{ rp.url }}">
-            <div class="zpdp__rel-img">{{ rp_media.preview_image | image_url: width: 500 | image_tag: loading: 'lazy', alt: rp.title, widths: '250,400,500' }}</div>
+            <div class="zpdp__rel-img">{{ rp_img | image_url: width: 500 | image_tag: loading: 'lazy', alt: rp.title, widths: '250,400,500' }}</div>
             <div class="zpdp__rel-t">{{ rp.title | truncatewords: 6 }}</div>
             <div class="zpdp__rel-p">{{ rp.price | money }}</div>
           </a>
