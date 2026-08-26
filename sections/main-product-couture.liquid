@@ -1,0 +1,275 @@
+{%- comment -%}
+  Zaria — couture FABRIC product page (self-contained; used via templates/product.couture.liquid
+  to bypass the broken editor-owned product.json). Mauzan-inspired: large gallery + quiet info column.
+{%- endcomment -%}
+{%- liquid
+  assign fv = product.selected_or_first_available_variant
+  assign m = product.media
+  assign hero_index = 0
+  if m.size > 1
+    assign hero_index = 1
+  endif
+  assign colours = product.metafields.custom.colour.value
+  assign patterns = product.metafields.custom.pattern.value
+  assign t = product.title | downcase
+
+  assign origin = ''
+  assign origins = 'Turkish,Portuguese,Italian,Japanese,Greek,Spanish,British,Indian,Thai,Korean,French' | split: ','
+  for o in origins
+    assign ol = o | downcase
+    if t contains ol
+      assign origin = o
+      break
+    endif
+  endfor
+
+  assign ftype = ''
+  assign ftypes = 'Silk Satin,Satin,Silk,Cotton,Chiffon,Velvet,Tulle,Linen,Organza,Crepe,Tweed,Jacquard,Sequin' | split: ','
+  for f in ftypes
+    assign fl = f | downcase
+    if t contains fl
+      assign ftype = f
+      break
+    endif
+  endfor
+
+  assign relcol = product.collections | where: 'handle', 'all-fabrics' | first
+  unless relcol
+    assign relcol = product.collections.first
+  endunless
+-%}
+
+<style>
+  #shopify-section-{{ section.id }} .zpdp{--wine:#7a1f34;color:#161616;font-family:var(--text-font-family,'Jost'),'Jost',-apple-system,sans-serif;
+    max-width:1360px;margin:0 auto;padding:28px clamp(16px,3vw,44px) 24px}
+  #shopify-section-{{ section.id }} .zpdp *{box-sizing:border-box}
+  #shopify-section-{{ section.id }} .zpdp__crumb{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8a8a;margin:0 0 22px}
+  #shopify-section-{{ section.id }} .zpdp__crumb a{color:#8a8a8a;text-decoration:none}
+  #shopify-section-{{ section.id }} .zpdp__crumb a:hover{color:#161616}
+  #shopify-section-{{ section.id }} .zpdp__grid{display:grid;grid-template-columns:1fr;gap:40px}
+  @media (min-width:1000px){#shopify-section-{{ section.id }} .zpdp__grid{grid-template-columns:1.15fr .85fr;gap:clamp(36px,4vw,72px);align-items:start}}
+
+  /* gallery */
+  #shopify-section-{{ section.id }} .zpdp__gallery{display:grid;grid-template-columns:72px 1fr;gap:14px}
+  #shopify-section-{{ section.id }} .zpdp__thumbs{display:flex;flex-direction:column;gap:10px}
+  #shopify-section-{{ section.id }} .zpdp__thumb{border:1px solid #e6e2dc;padding:0;background:#f4f1ec;cursor:pointer;aspect-ratio:3/4;overflow:hidden;border-radius:0}
+  #shopify-section-{{ section.id }} .zpdp__thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  #shopify-section-{{ section.id }} .zpdp__thumb.is-active{border-color:var(--wine)}
+  #shopify-section-{{ section.id }} .zpdp__stage{position:relative;background:#f4f1ec;aspect-ratio:3/4;overflow:hidden}
+  #shopify-section-{{ section.id }} .zpdp__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
+  #shopify-section-{{ section.id }} .zpdp__img.is-active{opacity:1}
+  @media (max-width:999px){
+    #shopify-section-{{ section.id }} .zpdp__gallery{grid-template-columns:1fr}
+    #shopify-section-{{ section.id }} .zpdp__thumbs{flex-direction:row;order:2;overflow-x:auto}
+    #shopify-section-{{ section.id }} .zpdp__thumb{width:64px;flex:0 0 auto}
+  }
+
+  /* info */
+  #shopify-section-{{ section.id }} .zpdp__info{position:sticky;top:100px}
+  @media (max-width:999px){#shopify-section-{{ section.id }} .zpdp__info{position:static}}
+  #shopify-section-{{ section.id }} .zpdp__eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--wine);margin:0 0 14px}
+  #shopify-section-{{ section.id }} .zpdp__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
+    font-size:clamp(24px,2.6vw,34px);line-height:1.2;letter-spacing:.01em;margin:0 0 16px;text-transform:uppercase}
+  #shopify-section-{{ section.id }} .zpdp__price{font-size:19px;letter-spacing:.04em;color:#161616;margin:0 0 4px}
+  #shopify-section-{{ section.id }} .zpdp__price .zpdp__cut{color:#a0a0a0;text-decoration:line-through;margin-right:10px}
+  #shopify-section-{{ section.id }} .zpdp__tax{font-size:11px;letter-spacing:.08em;color:#9a9a9a;margin:0 0 22px}
+  #shopify-section-{{ section.id }} .zpdp__rule{border:0;border-top:1px solid #ece8e2;margin:22px 0}
+  #shopify-section-{{ section.id }} .zpdp__desc{font-size:14px;line-height:1.85;color:#57534e;margin:0 0 22px}
+  #shopify-section-{{ section.id }} .zpdp__desc p{margin:0 0 10px}
+
+  /* attribute list */
+  #shopify-section-{{ section.id }} .zpdp__attrs{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;margin:0 0 26px}
+  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;flex-direction:column;gap:4px}
+  #shopify-section-{{ section.id }} .zpdp__attr-l{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#a0998f}
+  #shopify-section-{{ section.id }} .zpdp__attr-v{font-size:13px;letter-spacing:.03em;color:#2a2a2a}
+  #shopify-section-{{ section.id }} .zpdp__sw{display:inline-block;width:12px;height:12px;border-radius:50%;border:1px solid #d9d3cb;vertical-align:-1px;margin-right:6px}
+
+  /* form */
+  #shopify-section-{{ section.id }} .zpdp__form{margin:0 0 18px}
+  #shopify-section-{{ section.id }} .zpdp__qty-row{display:flex;gap:12px;margin:0 0 12px}
+  #shopify-section-{{ section.id }} .zpdp__variant,
+  #shopify-section-{{ section.id }} .zpdp__qty{border:1px solid #d7d2ca;background:#fff;height:52px;padding:0 14px;font-family:inherit;font-size:13px;letter-spacing:.05em;color:#161616;border-radius:0}
+  #shopify-section-{{ section.id }} .zpdp__variant{flex:1}
+  #shopify-section-{{ section.id }} .zpdp__qty{width:84px;text-align:center}
+  #shopify-section-{{ section.id }} .zpdp__atc{width:100%;height:54px;background:#161616;color:#fff;border:1px solid #161616;font-family:inherit;
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s;border-radius:0}
+  #shopify-section-{{ section.id }} .zpdp__atc:hover{background:#2e2e2e}
+  #shopify-section-{{ section.id }} .zpdp__atc[disabled]{background:#c9c9c9;border-color:#c9c9c9;cursor:not-allowed}
+  #shopify-section-{{ section.id }} .zpdp__buynow{display:block;text-align:center;width:100%;height:54px;line-height:54px;margin-top:10px;
+    background:transparent;color:#161616;border:1px solid #161616;font-size:12px;letter-spacing:.22em;text-transform:uppercase;text-decoration:none}
+  #shopify-section-{{ section.id }} .zpdp__buynow:hover{background:#161616;color:#fff}
+  #shopify-section-{{ section.id }} .zpdp__studio{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:14px;padding:14px;
+    border:1px solid var(--wine);color:var(--wine);font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;transition:background .2s,color .2s}
+  #shopify-section-{{ section.id }} .zpdp__studio:hover{background:var(--wine);color:#fff}
+
+  /* accordions */
+  #shopify-section-{{ section.id }} .zpdp__acc{border-top:1px solid #ece8e2}
+  #shopify-section-{{ section.id }} .zpdp__acc details{border-bottom:1px solid #ece8e2}
+  #shopify-section-{{ section.id }} .zpdp__acc summary{list-style:none;cursor:pointer;padding:16px 0;font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+  #shopify-section-{{ section.id }} .zpdp__acc summary::-webkit-details-marker{display:none}
+  #shopify-section-{{ section.id }} .zpdp__acc summary::after{content:"+";font-size:16px;color:#8a8a8a}
+  #shopify-section-{{ section.id }} .zpdp__acc details[open] summary::after{content:"\2013"}
+  #shopify-section-{{ section.id }} .zpdp__acc-body{padding:0 0 18px;font-size:13px;line-height:1.85;color:#57534e}
+
+  /* related */
+  #shopify-section-{{ section.id }} .zpdp__related{max-width:1360px;margin:60px auto 10px;padding:0 clamp(16px,3vw,44px)}
+  #shopify-section-{{ section.id }} .zpdp__related h2{font-family:var(--heading-font-family,'Jost'),'Jost',serif;font-weight:400;text-align:center;
+    font-size:clamp(20px,2.4vw,28px);text-transform:uppercase;letter-spacing:.12em;margin:0 0 28px}
+  #shopify-section-{{ section.id }} .zpdp__rel-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media (min-width:750px){#shopify-section-{{ section.id }} .zpdp__rel-grid{grid-template-columns:repeat(4,1fr)}}
+  #shopify-section-{{ section.id }} .zpdp__rel{text-decoration:none;color:#161616}
+  #shopify-section-{{ section.id }} .zpdp__rel-img{aspect-ratio:3/4;overflow:hidden;background:#f4f1ec;margin-bottom:10px}
+  #shopify-section-{{ section.id }} .zpdp__rel-img img{width:100%;height:100%;object-fit:cover;transition:transform 1s ease}
+  #shopify-section-{{ section.id }} .zpdp__rel:hover .zpdp__rel-img img{transform:scale(1.04)}
+  #shopify-section-{{ section.id }} .zpdp__rel-t{font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-align:center;line-height:1.5}
+  #shopify-section-{{ section.id }} .zpdp__rel-p{font-size:11px;color:#7a7a7a;text-align:center;margin-top:3px}
+</style>
+
+<div class="zpdp">
+  <p class="zpdp__crumb">
+    <a href="{{ routes.root_url }}">Home</a> / <a href="{{ routes.root_url }}collections/all-fabrics">Fabrics</a> / {{ product.title }}
+  </p>
+
+  <div class="zpdp__grid">
+    <!-- GALLERY -->
+    <div class="zpdp__gallery" id="zpdp-gal-{{ section.id }}">
+      <div class="zpdp__thumbs">
+        {%- for media in m -%}
+          <button type="button" class="zpdp__thumb {% if forloop.index0 == hero_index %}is-active{% endif %}" data-i="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}">
+            {{ media.preview_image | image_url: width: 150 | image_tag: loading: 'lazy', alt: product.title, widths: '80,150,220' }}
+          </button>
+        {%- endfor -%}
+      </div>
+      <div class="zpdp__stage">
+        {%- for media in m -%}
+          <img class="zpdp__img {% if forloop.index0 == hero_index %}is-active{% endif %}" data-i="{{ forloop.index0 }}"
+            src="{{ media.preview_image | image_url: width: 1100 }}" alt="{{ product.title | escape }}"
+            {% if forloop.index0 == hero_index %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+            sizes="(min-width:1000px) 55vw, 100vw"
+            srcset="{{ media.preview_image | image_url: width: 600 }} 600w, {{ media.preview_image | image_url: width: 900 }} 900w, {{ media.preview_image | image_url: width: 1300 }} 1300w">
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="zpdp__info">
+      <p class="zpdp__eyebrow">{% if ftype != blank %}{{ ftype }}{% else %}Zaria Fabric{% endif %}{% if origin != blank %} &middot; {{ origin }}{% endif %}</p>
+      <h1 class="zpdp__title">{{ product.title }}</h1>
+
+      <div class="zpdp__price">
+        {%- if product.compare_at_price > product.price -%}
+          <span class="zpdp__cut">{{ product.compare_at_price | money }}</span>
+        {%- endif -%}
+        {{ product.price | money }}
+      </div>
+      <p class="zpdp__tax">Price per unit &middot; taxes included where applicable</p>
+
+      {%- if product.description != blank -%}
+        <div class="zpdp__desc">{{ product.description }}</div>
+      {%- endif -%}
+
+      <hr class="zpdp__rule">
+
+      <div class="zpdp__attrs">
+        {%- if ftype != blank -%}
+          <div class="zpdp__attr"><span class="zpdp__attr-l">Fabric</span><span class="zpdp__attr-v">{{ ftype }}</span></div>
+        {%- endif -%}
+        {%- if colours != blank -%}
+          <div class="zpdp__attr"><span class="zpdp__attr-l">Colour</span><span class="zpdp__attr-v">{{ colours | join: ', ' }}</span></div>
+        {%- endif -%}
+        {%- if patterns != blank -%}
+          <div class="zpdp__attr"><span class="zpdp__attr-l">Pattern</span><span class="zpdp__attr-v">{{ patterns | join: ', ' }}</span></div>
+        {%- endif -%}
+        {%- if origin != blank -%}
+          <div class="zpdp__attr"><span class="zpdp__attr-l">Origin</span><span class="zpdp__attr-v">Woven in {{ origin }}</span></div>
+        {%- endif -%}
+      </div>
+
+      {%- form 'product', product, id: 'zpdp-form', class: 'zpdp__form' -%}
+        <div class="zpdp__qty-row">
+          {%- unless product.has_only_default_variant -%}
+            <select name="id" class="zpdp__variant">
+              {%- for v in product.variants -%}
+                <option value="{{ v.id }}" {% unless v.available %}disabled{% endunless %} {% if v == fv %}selected{% endif %}>{{ v.title }} &middot; {{ v.price | money }}</option>
+              {%- endfor -%}
+            </select>
+          {%- else -%}
+            <input type="hidden" name="id" value="{{ fv.id }}">
+          {%- endunless -%}
+          <input type="number" name="quantity" class="zpdp__qty" value="1" min="1" inputmode="numeric" aria-label="Quantity">
+        </div>
+        <button type="submit" name="add" class="zpdp__atc" {% unless product.available %}disabled{% endunless %}>
+          {%- if product.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}
+        </button>
+      {%- endform -%}
+
+      {%- if product.available -%}
+        <a class="zpdp__buynow" href="/checkout?variant={{ fv.id }}&quantity=1">Buy it Now</a>
+      {%- endif -%}
+
+      <a class="zpdp__studio" href="{{ routes.root_url }}collections/ready-to-wear">Design your look with this fabric</a>
+
+      <div class="zpdp__acc" style="margin-top:28px">
+        <details open>
+          <summary>Fabric Details</summary>
+          <div class="zpdp__acc-body">
+            {% if ftype != blank %}A {{ ftype | downcase }} fabric{% else %}A premium fabric{% endif %}{% if origin != blank %}, woven in {{ origin }}{% endif %}.
+            {% if colours != blank %} Available in {{ colours | join: ', ' | downcase }}.{% endif %}
+            {% if patterns != blank %} {{ patterns | join: ', ' }} pattern.{% endif %}
+            Sold by the piece; contact us for bulk lengths and bespoke orders.
+          </div>
+        </details>
+        <details>
+          <summary>Care</summary>
+          <div class="zpdp__acc-body">Dry clean recommended to preserve colour and finish. Warm iron on the reverse. Store away from direct sunlight.</div>
+        </details>
+        <details>
+          <summary>Delivery</summary>
+          <div class="zpdp__acc-body">Complimentary UAE delivery on every order. Worldwide shipping calculated at checkout.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- if relcol and relcol.products.size > 1 -%}
+  <div class="zpdp__related">
+    <h2>You may also like</h2>
+    <div class="zpdp__rel-grid">
+      {%- assign shown = 0 -%}
+      {%- for rp in relcol.products -%}
+        {%- if rp.id != product.id and shown < 4 -%}
+          {%- assign shown = shown | plus: 1 -%}
+          {%- assign rp_media = rp.media[1] | default: rp.featured_media -%}
+          <a class="zpdp__rel" href="{{ rp.url }}">
+            <div class="zpdp__rel-img">{{ rp_media.preview_image | image_url: width: 500 | image_tag: loading: 'lazy', alt: rp.title, widths: '250,400,500' }}</div>
+            <div class="zpdp__rel-t">{{ rp.title | truncatewords: 6 }}</div>
+            <div class="zpdp__rel-p">{{ rp.price | money }}</div>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+<script>
+(function(){
+  var root=document.getElementById('zpdp-gal-{{ section.id }}');
+  if(!root)return;
+  var thumbs=root.querySelectorAll('.zpdp__thumb');
+  var imgs=root.querySelectorAll('.zpdp__img');
+  thumbs.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var i=btn.getAttribute('data-i');
+      thumbs.forEach(function(t){t.classList.remove('is-active')});
+      btn.classList.add('is-active');
+      imgs.forEach(function(im){im.classList.toggle('is-active',im.getAttribute('data-i')===i)});
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{ "name": "Couture Fabric PDP", "settings": [], "presets": [ { "name": "Couture Fabric PDP" } ] }
+{% endschema %}
