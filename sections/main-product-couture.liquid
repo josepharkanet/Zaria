@@ -337,7 +337,7 @@
         <a class="zpdp__buynow" href="/checkout?variant={{ fv.id }}&quantity=1">Buy it Now</a>
       {%- endif -%}
 
-      {%- unless is_fragrance or is_garment -%}<a class="zpdp__studio" href="{{ studio_url }}?fabric={{ product.title | url_encode }}&product={{ product.handle }}" target="zariaStudio" rel="noopener" data-zaria-studio>Design your look with this fabric</a>{%- endunless -%}
+      {%- unless is_fragrance or is_garment -%}{% render 'zaria-design-form', product: product, variant: fv %}{%- endunless -%}
       {%- if is_garment -%}<div class="zpdp__sizechart">{% render 'zaria-size-chart' %}</div>{%- endif -%}
 
       <div class="zpdp__acc" style="margin-top:28px">
@@ -405,20 +405,6 @@
       thumbs.forEach(function(t){t.classList.remove('is-active')});
       btn.classList.add('is-active');
       imgs.forEach(function(im){im.classList.toggle('is-active',im.getAttribute('data-i')===i)});
-    });
-  });
-})();
-(function(){
-  var links=document.querySelectorAll('[data-zaria-studio]');
-  if(!links.length)return;
-  links.forEach(function(a){
-    a.addEventListener('click',function(e){
-      e.preventDefault();
-      var aw=screen.availWidth||window.innerWidth||1200, ah=screen.availHeight||window.innerHeight||900;
-      var w=Math.min(560,Math.floor(aw*0.94)), h=Math.min(880,Math.floor(ah*0.94));
-      var x=Math.max(0,Math.floor((aw-w)/2)+(screen.availLeft||0)), y=Math.max(0,Math.floor((ah-h)/2)+(screen.availTop||0));
-      var win=window.open(a.href,'zariaStudio','popup=yes,width='+w+',height='+h+',left='+x+',top='+y+',resizable=yes,scrollbars=yes');
-      if(win){try{win.focus();}catch(_){}}
     });
   });
 })();
