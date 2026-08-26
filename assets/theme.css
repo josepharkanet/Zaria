@@ -10015,3 +10015,9 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 #sort-by-popover .popover__value-option[aria-selected="true"]{background:transparent;color:#1a1a1a;}
 #sort-by-popover .popover__value-option[data-zaria-pick]{font-style:normal;color:#1a1a1a;font-weight:500;letter-spacing:.16em;border-bottom:1px solid #ececec;border-radius:0;margin-bottom:4px;padding-bottom:13px;}
 #sort-by-popover .popover__value-option[data-zaria-pick]:hover{background:#f5f2ef;}
+
+/* ===== Zaria: catalog cards stay static on hover (no zoom, shadow, or image swap) ===== */
+.product-card:hover{box-shadow:none!important;transform:none!important;}
+.product-card:hover .product-card__media > img,
+.product-card:hover .product-card__image{transform:none!important;opacity:1!important;}
+.product-card .product-card__image--secondary{display:none!important;}
