@@ -1,0 +1,48 @@
+{%- comment -%}
+  Zaria quick-zoom: a lightweight lightbox for the product catalogue.
+  Any element with [data-zoom-src] opens a full-screen zoomable view of that image.
+  Rendered once (from theme.liquid); the trigger buttons live on the product cards.
+{%- endcomment -%}
+<div class="zqz" id="zaria-quickzoom" aria-hidden="true" role="dialog" aria-label="Fabric preview">
+  <button class="zqz__close" type="button" aria-label="Close">&times;</button>
+  <div class="zqz__stage"><img class="zqz__img" alt="" src=""></div>
+  <span class="zqz__hint">Click image to zoom</span>
+</div>
+<style>
+  .zqz{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;background:rgba(17,17,17,.93);}
+  .zqz.is-open{display:flex;}
+  .zqz__stage{max-width:92vw;max-height:86vh;overflow:hidden;cursor:zoom-in;}
+  .zqz__img{display:block;max-width:92vw;max-height:86vh;object-fit:contain;transition:transform .25s ease;transform-origin:center center;}
+  .zqz.is-zoomed .zqz__stage{cursor:zoom-out;}
+  .zqz.is-zoomed .zqz__img{transform:scale(2.3);}
+  .zqz__close{position:fixed;top:20px;right:26px;background:none;border:0;color:#fff;font-size:36px;line-height:1;cursor:pointer;opacity:.85;}
+  .zqz__close:hover{opacity:1;}
+  .zqz__hint{position:fixed;bottom:22px;left:0;right:0;text-align:center;color:rgba(255,255,255,.7);font-size:11px;letter-spacing:.18em;text-transform:uppercase;}
+  .zqz.is-zoomed .zqz__hint{opacity:0;}
+  /* card zoom trigger (subtle, always visible so it doesn't rely on a card hover effect) */
+  .zaria-zoom{position:absolute;bottom:8px;right:8px;z-index:3;width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.82);color:#1a1a1a;display:grid;place-items:center;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.18);transition:background .15s ease,opacity .15s ease;opacity:.9;}
+  .zaria-zoom:hover{background:#fff;opacity:1;}
+  .zaria-zoom svg{width:15px;height:15px;}
+  @media (max-width:699px){.zaria-zoom{width:26px;height:26px;bottom:5px;right:5px;}.zaria-zoom svg{width:13px;height:13px;}}
+</style>
+<script>
+  (function(){
+    var lb=document.getElementById('zaria-quickzoom'); if(!lb) return;
+    var img=lb.querySelector('.zqz__img'), stage=lb.querySelector('.zqz__stage');
+    function open(src){ img.src=src; lb.classList.add('is-open'); lb.classList.remove('is-zoomed'); lb.setAttribute('aria-hidden','false'); document.documentElement.style.overflow='hidden'; }
+    function close(){ lb.classList.remove('is-open','is-zoomed'); lb.setAttribute('aria-hidden','true'); document.documentElement.style.overflow=''; img.style.transformOrigin='center center'; }
+    document.addEventListener('click', function(e){
+      var t=e.target.closest('[data-zoom-src]');
+      if(t){ e.preventDefault(); e.stopPropagation(); open(t.getAttribute('data-zoom-src')); }
+    });
+    lb.querySelector('.zqz__close').addEventListener('click', close);
+    lb.addEventListener('click', function(e){ if(e.target===lb) close(); });
+    stage.addEventListener('click', function(){ lb.classList.toggle('is-zoomed'); });
+    stage.addEventListener('mousemove', function(e){
+      if(!lb.classList.contains('is-zoomed')) return;
+      var r=stage.getBoundingClientRect();
+      img.style.transformOrigin=((e.clientX-r.left)/r.width*100)+'% '+((e.clientY-r.top)/r.height*100)+'%';
+    });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  })();
+</script>
