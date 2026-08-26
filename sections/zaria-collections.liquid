@@ -45,7 +45,14 @@
           {%- endcase -%}
         {%- endif -%}
         {%- assign img = block.settings.image | default: col.image -%}
-        {%- if img == blank and col != blank -%}{%- assign img = col.featured_image -%}{%- endif -%}
+        {%- comment -%} Zaria: collections without an uploaded image fall back to their first photographed product {%- endcomment -%}
+        {%- if img == blank and col != blank -%}
+          {%- for cp in col.products -%}
+            {%- if cp.tags contains 'no-photo' -%}{%- continue -%}{%- endif -%}
+            {%- assign img = cp.images[1] | default: cp.featured_image -%}
+            {%- if img != blank -%}{%- break -%}{%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
         {%- assign name = block.settings.title | default: col.title | default: 'Collection' -%}
         <a class="zcol__card" href="{{ col.url | default: '#' }}" {{ block.shopify_attributes }}>
           <span class="zcol__media">
