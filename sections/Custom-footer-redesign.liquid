@@ -11,6 +11,7 @@
   .zaria-footer__wordmark{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;
     font-size:30px;letter-spacing:.24em;text-transform:uppercase;font-weight:400;color:#111;line-height:1}
   .zaria-footer__logo{max-height:54px;width:auto;display:block;margin:0 auto}
+  .zaria-footer__logo--full{max-height:180px}
   .zaria-footer__tagline{max-width:544px;margin:0 auto 26px;color:#6a6a6a;font-size:14.5px;line-height:1.85;letter-spacing:.015em}
   .zaria-footer__contact{list-style:none;margin:0 auto 26px;padding:0;color:#6a6a6a;font-size:12.5px;letter-spacing:.05em}
   .zaria-footer__contact li{margin:3px 0}
@@ -75,7 +76,7 @@
         {%- if section.settings.show_logo_image and section.settings.logo != blank -%}
           <img class="zaria-footer__logo" src="{{ section.settings.logo | image_url: width: 440 }}" alt="{{ shop.name | escape }}" width="220" height="54" loading="lazy">
         {%- else -%}
-          <div class="zaria-footer__wordmark">{{ shop.name }}</div>
+          <img class="zaria-footer__logo zaria-footer__logo--full" src="{{ 'zaria-logo.png' | asset_url }}" alt="{{ shop.name | escape }}" width="320" height="322" loading="lazy">
         {%- endif -%}
       </div>
 
