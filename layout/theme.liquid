@@ -6,15 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, maximum-scale=5.0">
 
     <title>
-      {% if page_title == blank -%}
+      {%- if request.page_type == 'index' -%}
+        Zaria | Fine Fabrics &amp; Modest Couture, UAE Fabric House
+      {%- elsif page_title == blank -%}
         {{- shop.name -}}
       {%- else -%}
         {{- page_title -}}
         {%- if current_page != 1 %} &ndash; {{ 'general.page' | t: page: current_page }}{% endif -%}
-      {%- endif %}
+      {%- endif -%}
     </title>
 
-    {%- if page_description -%}
+    {%- if request.page_type == 'index' -%}
+      <meta name="description" content="Zaria is a UAE house of fine fabrics and modest couture. Premium silk, cotton, chiffon and embellished cloth by the metre, plus made-to-measure design.">
+    {%- elsif page_description -%}
       <meta name="description" content="{{ page_description | escape }}">
     {%- endif -%}
 
