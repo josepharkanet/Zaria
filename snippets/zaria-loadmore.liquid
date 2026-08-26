@@ -32,7 +32,10 @@
           var src = doc.querySelector('product-list.product-list') || doc.querySelector('.product-list');
           if (src && list) {
             Array.prototype.forEach.call(src.querySelectorAll('product-card, .product-card'), function(c){
-              list.appendChild(document.importNode(c, true));
+              var node = document.importNode(c, true);
+              node.removeAttribute('reveal-on-scroll');   // otherwise appended cards stay opacity:0
+              node.style.opacity = '1';
+              list.appendChild(node);
             });
           }
           var nb = doc.querySelector('[data-zaria-more-next]');
