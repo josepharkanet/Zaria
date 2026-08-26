@@ -10041,3 +10041,17 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .product-card{padding:0!important;}
 .product-card__figure{padding:0!important;margin:0!important;}
 .product-card__info{padding:14px 12px 16px!important;}
+
+/* ===== Zaria: active colour filter pills tinted with the selected colour ===== */
+.removable-facet--swatch{background:var(--facet-chip)!important;border-color:var(--facet-chip)!important;}
+.removable-facet--swatch .text-subdued,.removable-facet--swatch .link-faded,.removable-facet--swatch svg,.removable-facet--swatch a{color:#fff!important;}
+.removable-facet--swatch.is-light .text-subdued,.removable-facet--swatch.is-light .link-faded,.removable-facet--swatch.is-light svg,.removable-facet--swatch.is-light a{color:#1a1a1a!important;}
+.removable-facet--multi{background:conic-gradient(from 0deg,#c0392b,#e7c65e,#4e7a4e,#3f6fb0,#6b3f8f,#c0392b)!important;border-color:transparent!important;}
+.removable-facet--multi .text-subdued,.removable-facet--multi .link-faded,.removable-facet--multi svg,.removable-facet--multi a{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.45);}
+
+/* ===== Zaria: Load more button (collection catalogue) ===== */
+.zaria-more{display:flex;flex-direction:column;align-items:center;gap:14px;padding:44px 0 8px;}
+.zaria-more__btn{display:inline-block;font-family:"Jost",sans-serif;text-transform:uppercase;letter-spacing:.22em;font-size:11px;color:#1a1a1a;background:transparent;border:1px solid #1a1a1a;padding:14px 42px;text-decoration:none;cursor:pointer;transition:background .2s ease,color .2s ease;}
+.zaria-more__btn:hover{background:#1a1a1a;color:#fff;}
+.zaria-more__btn.is-loading{opacity:.6;pointer-events:none;}
+.zaria-more__count{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9a9a9a;margin:0;}
