@@ -59,7 +59,9 @@
 
   /* Zaria couture header: uppercase, letter-spaced nav + serif wordmark */
   #shopify-section-{{ section.id }} .header__primary-nav a,
-  #shopify-section-{{ section.id }} .header__primary-nav-item > a {
+  #shopify-section-{{ section.id }} .header__primary-nav-item > a,
+  #shopify-section-{{ section.id }} .header__primary-nav-item > mega-menu-disclosure summary,
+  #shopify-section-{{ section.id }} .header__primary-nav-item summary {
     text-transform: uppercase;
     letter-spacing: 0.14em;
     font-weight: 400;
@@ -175,16 +177,95 @@
               {%- capture zaria_mega_links -%}
                 {%- case link_title_downcase -%}
                   {%- when 'fabrics' -%}
-                    <div class="mega-menu zaria-mega">
-                      <ul class="mega-menu__linklist unstyled-list zaria-mega__cols">
-                        <li><a href="{{ routes.root_url }}collections/silk" class="h6">Silk</a></li>
-                        <li><a href="{{ routes.root_url }}collections/cotton" class="h6">Cotton</a></li>
-                        <li><a href="{{ routes.root_url }}collections/chiffon" class="h6">Chiffon</a></li>
-                        <li><a href="{{ routes.root_url }}collections/velvet" class="h6">Velvet</a></li>
-                        <li><a href="{{ routes.root_url }}collections/embellished" class="h6">Embellished &amp; Occasion</a></li>
-                        <li><a href="{{ routes.root_url }}collections/all-fabrics" class="h6">All Fabrics</a></li>
-                      </ul>
-                    </div>
+                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/silk" class="zaria-mega__head">Silk</a>
+                        <a href="{{ routes.root_url }}collections/silk">Pure Silk</a>
+                        <a href="{{ routes.root_url }}collections/silk">Matte &amp; Jacquard</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/cotton" class="zaria-mega__head">Cotton</a>
+                        <a href="{{ routes.root_url }}collections/cotton">Swiss &amp; Soft</a>
+                        <a href="{{ routes.root_url }}collections/cotton">Pure Cotton</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/chiffon" class="zaria-mega__head">Chiffon</a>
+                        <a href="{{ routes.root_url }}collections/chiffon">Printed</a>
+                        <a href="{{ routes.root_url }}collections/chiffon">Ombr&eacute;</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/embellished" class="zaria-mega__head">Occasion</a>
+                        <a href="{{ routes.root_url }}collections/velvet">Velvet</a>
+                        <a href="{{ routes.root_url }}collections/embellished">Embellished &amp; Tulle</a>
+                        <a href="{{ routes.root_url }}collections/all-fabrics">All Fabrics</a>
+                      </div>
+                    </div></div>
+                  {%- when 'fragrance' -%}
+                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/perfumes" class="zaria-mega__head">Perfumes</a>
+                        <a href="{{ routes.root_url }}collections/perfumes">Signature</a>
+                        <a href="{{ routes.root_url }}collections/perfumes">Oud</a>
+                        <a href="{{ routes.root_url }}collections/perfumes">Attar</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/home-fragrance" class="zaria-mega__head">Home Fragrance</a>
+                        <a href="{{ routes.root_url }}collections/home-fragrance">Bakhoor &amp; Oud</a>
+                        <a href="{{ routes.root_url }}collections/home-fragrance">Home Mist</a>
+                        <a href="{{ routes.root_url }}collections/home-fragrance">Diffusers</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/gift-sets" class="zaria-mega__head">Gift Sets</a>
+                        <a href="{{ routes.root_url }}collections/gift-sets">Discovery Set</a>
+                        <a href="{{ routes.root_url }}collections/gift-sets">Signature Set</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/fragrance-accessories" class="zaria-mega__head">Accessories</a>
+                        <a href="{{ routes.root_url }}collections/fragrance-accessories">Incense Burner</a>
+                        <a href="{{ routes.root_url }}collections/fragrance-accessories">Diffuser Refill</a>
+                      </div>
+                    </div></div>
+                  {%- when 'ready-to-wear' -%}
+                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/abayas" class="zaria-mega__head">Abayas</a>
+                        <a href="{{ routes.root_url }}collections/abayas">Classic</a>
+                        <a href="{{ routes.root_url }}collections/abayas">Occasion</a>
+                        <a href="{{ routes.root_url }}collections/abayas">Bridal</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/kaftans" class="zaria-mega__head">Kaftans</a>
+                        <a href="{{ routes.root_url }}collections/kaftans">Signature</a>
+                        <a href="{{ routes.root_url }}collections/kaftans">Occasion</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">Sheilas &amp; Shawls</a>
+                        <a href="{{ routes.root_url }}collections/accessories">Silk Sheila</a>
+                        <a href="{{ routes.root_url }}collections/accessories">Modal Shawl</a>
+                      </div>
+                    </div></div>
+                  {%- when 'accessories' -%}
+                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">Sheilas</a>
+                        <a href="{{ routes.root_url }}collections/accessories">Silk Sheila</a>
+                        <a href="{{ routes.root_url }}collections/accessories">Modal Sheila</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">Shawls &amp; Wraps</a>
+                        <a href="{{ routes.root_url }}collections/accessories">Modal Shawl</a>
+                        <a href="{{ routes.root_url }}collections/accessories">Chiffon Wrap</a>
+                      </div>
+                    </div></div>
+                  {%- when 'sale' -%}
+                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/sale" class="zaria-mega__head">Sale</a>
+                        <a href="{{ routes.root_url }}collections/sale">Fabrics</a>
+                        <a href="{{ routes.root_url }}collections/sale">Fashion</a>
+                        <a href="{{ routes.root_url }}collections/sale">Fragrance</a>
+                      </div>
+                    </div></div>
                 {%- endcase -%}
               {%- endcapture -%}
 
