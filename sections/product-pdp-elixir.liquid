@@ -733,7 +733,7 @@ h1.lpdp__title {
 .lpdp__price { display: flex; align-items: center; gap: 0.75rem; }
 
 /* Gift offer card — below the description: gift image left, details right, corner ribbon */
-/* The var() fallbacks are this card's original look; the Elixir Promotions app's
+/* The var() fallbacks are this card's original look; the Zaria Promotions app's
    Storefront design page overrides them via elx-design-vars.liquid. The default
    background stays a gradient because the app only offers one colour, so a flat
    --elx-pdp-bg is applied ONLY when the merchant picks one. */
@@ -745,9 +745,9 @@ h1.lpdp__title {
   gap: 1rem;
   margin: var(--elx-pdp-mt, 0.25rem) 0 var(--elx-pdp-mb, 0.25rem);
   padding: var(--elx-pdp-padding, 0);
-  border: 1px solid var(--elx-pdp-border, rgba(184, 114, 83, 0.35));
+  border: 1px solid var(--elx-pdp-border, rgba(26, 26, 26, 0.35));
   border-radius: var(--elx-pdp-radius, 12px);
-  background: var(--elx-pdp-bg, linear-gradient(180deg, rgba(184,114,83,0.06), rgba(184,114,83,0.02)));
+  background: var(--elx-pdp-bg, linear-gradient(180deg, rgba(26, 26, 26,0.06), rgba(26, 26, 26,0.02)));
 }
 
 /* Gift image: fixed square panel flush to the card's left/top/bottom edges */
@@ -779,11 +779,11 @@ h1.lpdp__title {
   border-radius: 50%;
   background:
     radial-gradient(circle at 50% 42%,
-      rgba(184,114,83,0.26), rgba(184,114,83,0.12) 46%, rgba(184,114,83,0.04) 62%, transparent 68%),
+      rgba(26, 26, 26,0.26), rgba(26, 26, 26,0.12) 46%, rgba(26, 26, 26,0.04) 62%, transparent 68%),
     radial-gradient(circle,
-      transparent 62.4%, rgba(184,114,83,0.40) 63.2%, rgba(184,114,83,0.40) 64.2%, transparent 65%),
+      transparent 62.4%, rgba(26, 26, 26,0.40) 63.2%, rgba(26, 26, 26,0.40) 64.2%, transparent 65%),
     radial-gradient(circle,
-      transparent 69.4%, rgba(184,114,83,0.18) 70.2%, rgba(184,114,83,0.18) 71%, transparent 71.8%);
+      transparent 69.4%, rgba(26, 26, 26,0.18) 70.2%, rgba(26, 26, 26,0.18) 71%, transparent 71.8%);
   -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 14%, transparent 32%, transparent 68%, #000 86%, #000 100%);
   mask-image: linear-gradient(90deg, #000 0%, #000 14%, transparent 32%, transparent 68%, #000 86%, #000 100%);
 }
@@ -1235,20 +1235,20 @@ h1.lpdp__title {
 
 /* Always-visible gold framing (reads at rest, not only on hover) */
 .lpdp__notes,
-.lpdp__attrs { border-color: rgba(184, 114, 83, 0.45); }
+.lpdp__attrs { border-color: rgba(26, 26, 26, 0.45); }
 .lpdp__notes-label {
-  background: rgba(184, 114, 83, 0.14);
-  border-right-color: rgba(184, 114, 83, 0.3);
+  background: rgba(26, 26, 26, 0.14);
+  border-right-color: rgba(26, 26, 26, 0.3);
 }
 .lpdp__notes-label span { color: var(--lpdp-gold); }
-.lpdp__attr { border-right-color: rgba(184, 114, 83, 0.22); }
+.lpdp__attr { border-right-color: rgba(26, 26, 26, 0.22); }
 .lpdp__attr-label { color: var(--lpdp-gold); }
 
 .lpdp__notes { transition: border-color 0.3s ease; }
-.lpdp__notes:hover { border-color: rgba(184, 114, 83, 0.7); }
+.lpdp__notes:hover { border-color: rgba(26, 26, 26, 0.7); }
 
 .lpdp__attr { transition: background 0.3s ease; }
-.lpdp__attr:hover { background: rgba(184, 114, 83, 0.10); }
+.lpdp__attr:hover { background: rgba(26, 26, 26, 0.10); }
 .lpdp__attr-icon { transition: color 0.3s ease; }
 .lpdp__attr:hover .lpdp__attr-icon { color: var(--lpdp-gold); }
 
@@ -1256,7 +1256,7 @@ h1.lpdp__title {
 .lpdp__option-btn input:checked + span {
   border-color: var(--lpdp-gold);
   color: #1a1a1a;
-  background: rgba(184, 114, 83, 0.12);
+  background: rgba(26, 26, 26, 0.12);
 }
 
 .lpdp__atc:hover {
@@ -1301,7 +1301,7 @@ h1.lpdp__title {
   .lpdp__thumbs::before {
     content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
     width: min(220px, 58%); height: 1px;
-    background: linear-gradient(to right, transparent, rgba(184,114,83,0.6) 20%, rgba(184,114,83,0.6) 80%, transparent);
+    background: linear-gradient(to right, transparent, rgba(26, 26, 26,0.6) 20%, rgba(26, 26, 26,0.6) 80%, transparent);
   }
   .lpdp__thumb { width: 64px; flex-shrink: 0; }
   .lpdp__related-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1330,10 +1330,10 @@ h1.lpdp__title {
 .lpdp__title::after { background: var(--lpdp-gold) !important; }
 .lpdp__price-current { color: var(--lpdp-gold); }
 .lpdp__price-compare { color: rgba(0,0,0,0.4); }
-.lpdp__desc { color: rgba(0,0,0,0.65); border-left-color: rgba(184,114,83,0.6); }
+.lpdp__desc { color: rgba(0,0,0,0.65); border-left-color: rgba(26, 26, 26,0.6); }
 
 /* Gift card on the light info panel */
-.lpdp__gift { border-color: rgba(184,114,83,0.45); background: linear-gradient(180deg, rgba(184,114,83,0.10), rgba(184,114,83,0.03)), #ffffff; }
+.lpdp__gift { border-color: rgba(26, 26, 26,0.45); background: linear-gradient(180deg, rgba(26, 26, 26,0.10), rgba(26, 26, 26,0.03)), #ffffff; }
 .lpdp__gift-heading { color: #1a1a1a; }
 .lpdp__gift-text { color: rgba(0,0,0,0.6); }
 .lpdp__gift-price s { color: rgba(0,0,0,0.4); }

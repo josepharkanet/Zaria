@@ -16,7 +16,7 @@
     
     CRITICAL logo uniformity: each logo must be wrapped in a div.marquee-logo-box with fixed width: 150px, height: 80px, display: flex, align-items: center, justify-content: center. The img inside must have max-width: 100%, max-height: 100%, width: auto, height: auto, object-fit: contain, object-position: center. This ensures ALL logos appear the same size box regardless of original dimensions.
     
-    Apply CSS filter: sepia(1) saturate(0.5) hue-rotate(5deg) brightness(0.85) on img for #B87253 gold tint. On hover filter: none for full color. Margin 0 30px between logo boxes.
+    Apply CSS filter: sepia(1) saturate(0.5) hue-rotate(5deg) brightness(0.85) on img for #1a1a1a gold tint. On hover filter: none for full color. Margin 0 30px between logo boxes.
     
     Seamless infinite horizontal scroll: duplicate the full logo list twice in a single flex row. CSS animation translateX(-50%) over 30s linear infinite. Fade gradient masks on left and right edges (width 120px) using ::before ::after pseudo elements. Full width section. Schema: heading text, color_scheme, padding_top range default 40, padding_bottom range default 40, scroll_duration range 10-60 default 30. No blocks.
 {% enddoc %}
@@ -167,7 +167,7 @@
     transition: color 0.4s ease, opacity 0.4s ease, transform 0.4s cubic-bezier(.16, 1, .3, 1);
   }
   .ai-brand-marquee-logo-link-{{ ai_gen_id }}:hover .ai-brand-marquee-name-{{ ai_gen_id }} {
-    color: #B87253;
+    color: #1a1a1a;
     opacity: 1;
     transform: scale(1.04);
   }
@@ -243,10 +243,10 @@
     overflow-x: auto;
     padding-bottom: 10px;
     scrollbar-width: thin;
-    scrollbar-color: #B87253 transparent;
+    scrollbar-color: #1a1a1a transparent;
   }
   .ai-brand-preview__row-{{ ai_gen_id }}::-webkit-scrollbar { height: 5px; }
-  .ai-brand-preview__row-{{ ai_gen_id }}::-webkit-scrollbar-thumb { background: #B87253; border-radius: 3px; }
+  .ai-brand-preview__row-{{ ai_gen_id }}::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 3px; }
   .ai-brand-preview__card-{{ ai_gen_id }} {
     flex: 0 0 auto;
     width: 132px;
@@ -269,7 +269,7 @@
   }
   .ai-brand-preview__price-{{ ai_gen_id }} {
     font-family: var(--text-font-family);
-    font-size: 11px; color: #B87253; margin: 0;
+    font-size: 11px; color: #1a1a1a; margin: 0;
   }
   @media (max-width: 749px) {
     .ai-brand-preview-wrap-{{ ai_gen_id }} { display: none !important; }

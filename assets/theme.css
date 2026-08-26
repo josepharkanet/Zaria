@@ -2410,13 +2410,13 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
 .cart-gift {
   margin: 1.25rem 0 1.35rem;                 /* breathing room above (below the CART header) and below */
   padding: 0.95rem 1.05rem;
-  border: 1px solid rgba(184, 114, 83, 0.28);
+  border: 1px solid rgba(26, 26, 26, 0.28);
   border-radius: 14px;
   background:
-    radial-gradient(120% 140% at 0% 0%, rgba(184,114,83,0.10), rgba(184,114,83,0) 60%),
-    linear-gradient(180deg, rgba(184,114,83,0.05), rgba(184,114,83,0.015));
+    radial-gradient(120% 140% at 0% 0%, rgba(26, 26, 26,0.10), rgba(26, 26, 26,0) 60%),
+    linear-gradient(180deg, rgba(26, 26, 26,0.05), rgba(26, 26, 26,0.015));
 }
-.cart-gift--unlocked { border-color: rgba(184, 114, 83, 0.5); }
+.cart-gift--unlocked { border-color: rgba(26, 26, 26, 0.5); }
 .cart-gift__row { display: flex; align-items: center; gap: 0.85rem; }
 .cart-gift__ic-wrap {
   flex: 0 0 auto;
@@ -2425,7 +2425,7 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: rgba(184, 114, 83, 0.12);
+  background: rgba(26, 26, 26, 0.12);
   color: #1a1a1a;
   transition: background 0.25s ease, color 0.25s ease;
 }
@@ -2444,7 +2444,7 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   margin-top: 0.7rem;
   height: 4px;
   border-radius: 999px;
-  background: rgba(184, 114, 83, 0.16);
+  background: rgba(26, 26, 26, 0.16);
   overflow: hidden;
 }
 .cart-gift__bar > span {
@@ -8868,8 +8868,8 @@ ul {
 
 :root {
   --gold: #1a1a1a;
-  --gold-light: rgba(184, 114, 83, 0.12);
-  --gold-mid: rgba(184, 114, 83, 0.35);
+  --gold-light: rgba(26, 26, 26, 0.12);
+  --gold-mid: rgba(26, 26, 26, 0.35);
 }
 
 /* ── Header — no bottom line (border + native separation removed) ── */
@@ -9487,7 +9487,7 @@ html.theme-dark .color-scheme--scheme-marquee-custom {
 
 /* ── Elegant Sort dropdown (collection toolbar) ── */
 #sort-by-popover::part(content) {
-  border: 1px solid rgba(184, 114, 83, .5);
+  border: 1px solid rgba(26, 26, 26, .5);
   border-radius: 0 0 0 12px;
   box-shadow: 0 16px 44px rgba(26, 18, 8, .16);
   overflow: hidden;
@@ -9516,27 +9516,27 @@ html.theme-dark .color-scheme--scheme-marquee-custom {
   background: none;
 }
 #sort-by-popover .popover__value-option:hover {
-  background-color: rgba(184, 114, 83, .12);
+  background-color: rgba(26, 26, 26, .12);
   color: rgb(var(--text-color));
   padding-inline-start: 20px;
 }
 #sort-by-popover .popover__value-option[aria-selected="true"] {
-  background-color: rgba(184, 114, 83, .14);
+  background-color: rgba(26, 26, 26, .14);
   color: #1a1a1a;
   font-weight: 600;
 }
-/* "Elixir Pick" — set apart from the standard sorts */
-#sort-by-popover .popover__value-option[data-elixir-pick] {
+/* "Zaria Pick" — set apart from the standard sorts */
+#sort-by-popover .popover__value-option[data-zaria-pick] {
   color: #1a1a1a;
   font-style: italic;
   letter-spacing: .1em;
   margin-bottom: 6px;
   padding-bottom: 13px;
-  border-bottom: 1px solid rgba(184, 114, 83, .28);
+  border-bottom: 1px solid rgba(26, 26, 26, .28);
   border-radius: 8px 8px 0 0;
 }
-#sort-by-popover .popover__value-option[data-elixir-pick]:hover {
-  background-color: rgba(184, 114, 83, .16);
+#sort-by-popover .popover__value-option[data-zaria-pick]:hover {
+  background-color: rgba(26, 26, 26, .16);
 }
 
 /* ── Offer ribbon (announcement bar) — dark #212121 ── */
@@ -9967,11 +9967,12 @@ h1,h2,h3,h4,h5,h6,.h0,.h1,.h2,.h3,.h4,.h5,.h6{font-family:"Jost",-apple-system,B
 .product-card{position:relative;background:transparent;border:0;border-radius:0;box-shadow:none;}
 .product-card__figure{margin:0;border-radius:0;overflow:hidden;background:#f2efec;}
 .product-card__media{display:block;position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:0;}
-.product-card__image{width:100%;height:100%;object-fit:cover;border-radius:0;transition:opacity .6s ease,transform 1.3s ease;}
-.product-card__image--secondary{position:absolute;inset:0;opacity:0;}
+/* both images absolutely fill the box -> no empty "mirror" strip under the image */
+.product-card__media > img,.product-card__image{position:absolute!important;inset:0;width:100%!important;height:100%!important;max-width:none;object-fit:cover!important;border-radius:0;transition:opacity .6s ease,transform 1.3s ease;}
+.product-card__image--secondary{opacity:0;}
 .product-card:hover .product-card__image--primary{opacity:0;}
 .product-card:hover .product-card__image--secondary{opacity:1;}
-.product-card:hover .product-card__image{transform:scale(1.05);}
+.product-card:hover .product-card__media > img{transform:scale(1.05);}
 .product-card__info{padding:18px 8px 6px;text-align:center;}
 .product-card__main{gap:6px;}
 .product-card .product-title{font-family:"Jost",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important;text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:400;color:#1a1a1a;line-height:1.55;}
@@ -9984,3 +9985,23 @@ h1,h2,h3,h4,h5,h6,.h0,.h1,.h2,.h3,.h4,.h5,.h6{font-family:"Jost",-apple-system,B
 .product-card__brand,
 .product-card__brand--logo,
 .product-card .vendor{display:none!important;}
+
+/* ===== Zaria: show the full product title on cards (no clamp/ellipsis) ===== */
+.product-card .product-title,
+.product-card .product-title.line-clamp{-webkit-line-clamp:unset!important;display:block!important;overflow:visible!important;max-height:none!important;white-space:normal;}
+.zpr__name{-webkit-line-clamp:unset!important;display:block!important;overflow:visible!important;}
+
+/* ===== Zaria: 5 product cards per row on the homepage rows ===== */
+.zpr__grid{grid-template-columns:repeat(5,1fr)!important;}
+@media (max-width:1200px){.zpr__grid{grid-template-columns:repeat(3,1fr)!important;}}
+@media (max-width:760px){.zpr__grid{grid-template-columns:repeat(2,1fr)!important;}}
+
+/* ===== Zaria: couture Sort By dropdown ===== */
+.collection-toolbar__button{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.18em;font-size:11px;color:#1a1a1a;}
+#sort-by-popover{border:1px solid #ececec;border-radius:0;box-shadow:0 18px 50px rgba(0,0,0,.12);}
+#sort-by-popover [slot="header"],#sort-by-popover .h4{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.16em;font-size:13px;}
+#sort-by-popover .popover__value-option{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#4a4a4a;padding:11px 22px;border-radius:0;}
+#sort-by-popover .popover__value-option:hover{background:#f5f2ef;color:#1a1a1a;}
+#sort-by-popover .popover__value-option[aria-selected="true"]{background:transparent;color:#1a1a1a;}
+#sort-by-popover .popover__value-option[data-zaria-pick]{font-style:normal;color:#1a1a1a;font-weight:500;letter-spacing:.16em;border-bottom:1px solid #ececec;border-radius:0;margin-bottom:4px;padding-bottom:13px;}
+#sort-by-popover .popover__value-option[data-zaria-pick]:hover{background:#f5f2ef;}

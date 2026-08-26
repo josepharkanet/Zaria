@@ -1,9 +1,9 @@
 {%- doc -%}
-  Elixir AI Assistant — floating concierge widget.
+  Zaria AI Assistant — floating concierge widget.
   Talks to the Cloudflare Worker (settings.ai_assistant_endpoint) which holds the
   Gemini key. Bilingual EN/عربي with RTL. Grounds on:
     - Knowledge base: the admin PAGE whose handle is settings.ai_assistant_kb_page.
-    - Offers: the Elixir Promotions shop metafields (elixir_promotions.gift_offer_*).
+    - Offers: the Zaria Promotions shop metafields (elixir_promotions.gift_offer_*).
     - Live catalog: the Worker searches the storefront directly.
   Renders replies + action buttons; executes add-to-cart via the AJAX cart and
   opens checkout on request.
@@ -19,7 +19,7 @@
   {%- assign ai_kb_handle = settings.ai_assistant_kb_page | default: 'assistant-knowledge' -%}
   {%- assign ai_kb_page = pages[ai_kb_handle] -%}
 
-  {%- comment -%} Offers summary from the Elixir Promotions metafields {%- endcomment -%}
+  {%- comment -%} Offers summary from the Zaria Promotions metafields {%- endcomment -%}
   {%- capture ai_offers -%}
     {%- if shop.metafields.elixir_promotions.gift_offer_active.value == true -%}
       {%- assign _m = shop.metafields.elixir_promotions.gift_offer_mode.value | default: 'quantity' -%}
@@ -42,7 +42,7 @@
   {%- assign ai_offers_col = shop.metafields.elixir_promotions.gift_offer_collection.value -%}
   {%- capture ai_links_json -%}
     {
-      "All fragrances": {{ routes.all_products_collection_url | json }},
+      "All fabrics": {{ routes.all_products_collection_url | json }},
       {% if ai_offers_col != blank %}"Offers": {{ ai_offers_col.url | json }},{% endif %}
       {% if pages['faq'] != blank %}"FAQ": {{ pages['faq'].url | json }},{% endif %}
       {% if pages['contact'] != blank %}"Contact": {{ pages['contact'].url | json }},{% endif %}
@@ -69,10 +69,10 @@
       <span class="elx-ai__fab-txt">AI</span>
     </button>
 
-    <div class="elx-ai__panel" role="dialog" aria-label="{% if ai_is_ar %}مساعد إليكسير{% else %}Elixir assistant{% endif %}">
+    <div class="elx-ai__panel" role="dialog" aria-label="{% if ai_is_ar %}مساعد زاريا{% else %}Zaria assistant{% endif %}">
       <div class="elx-ai__head">
         <div class="elx-ai__head-info">
-          <span class="elx-ai__head-title">{% if ai_is_ar %}مساعد إليكسير الذكي للتسوق{% else %}Elixir AI Shopping Assistant{% endif %}</span>
+          <span class="elx-ai__head-title">{% if ai_is_ar %}مساعد زاريا الذكي للتسوق{% else %}Zaria AI Shopping Assistant{% endif %}</span>
           <span class="elx-ai__head-sub"><span class="elx-ai__dot"></span>{% if ai_is_ar %}متصل الآن{% else %}Online now{% endif %}</span>
         </div>
         <button type="button" class="elx-ai__close" aria-label="{% if ai_is_ar %}إغلاق{% else %}Close{% endif %}" data-ai-toggle>&times;</button>
@@ -81,7 +81,7 @@
       <div class="elx-ai__quick" data-ai-quick></div>
       <form class="elx-ai__form" data-ai-form>
         <input class="elx-ai__input" type="text" autocomplete="off"
-          placeholder="{% if ai_is_ar %}اسأل عن العطور أو الطلبات…{% else %}Ask about scents, orders, offers…{% endif %}"
+          placeholder="{% if ai_is_ar %}اسأل عن الأقمشة أو الطلبات…{% else %}Ask about fabrics, orders, offers…{% endif %}"
           data-ai-input {% if ai_is_ar %}dir="rtl"{% endif %}>
         <button type="submit" class="elx-ai__send" aria-label="{% if ai_is_ar %}إرسال{% else %}Send{% endif %}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -99,7 +99,7 @@
       position: relative; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
       display: grid; place-items: center; overflow: visible;
       background: radial-gradient(circle at 35% 27%, #fffdfb 0%, #f5e9dd 38%, #e6cdb6 72%, #c99a78 100%);
-      border: 1px solid rgba(184,114,83,0.45);
+      border: 1px solid rgba(26, 26, 26,0.45);
       box-shadow: inset 0 2px 3px rgba(255,255,255,0.9), inset 0 -7px 11px rgba(122,63,40,0.28), 0 8px 18px -4px rgba(0,0,0,0.35);
       transition: transform .25s ease, box-shadow .25s ease;
     }
@@ -191,7 +191,7 @@
     .elx-ai__quick:empty { display: none; }
     .elx-ai__chip {
       display: inline-flex; align-items: center; gap: 7px; text-align: start;
-      padding: 9px 15px; border-radius: 8px; border: 1px solid rgba(184,114,83,0.45); background: #fff; color: #6b4a37;
+      padding: 9px 15px; border-radius: 8px; border: 1px solid rgba(26, 26, 26,0.45); background: #fff; color: #6b4a37;
       font-size: 0.82rem; line-height: 1.2; cursor: pointer;
       transition: background .2s ease, color .2s ease, border-color .2s ease;
     }
@@ -243,11 +243,11 @@
       var AR = cfg.isAr;
       var T = {
         greet: AR
-          ? 'أهلاً بك في إليكسير ✨ أنا مساعدك الشخصي للتسوّق — هنا لأساعدك في اختيار العطر المثالي وإتمام طلبك بكل سهولة. أخبرني بما تبحث عنه، أو اسألني أي شيء.'
-          : 'Hello, and welcome to Elixir ✨ I’m your personal shopping assistant — here to help you find the perfect scent and make buying effortless. Tell me what you’re looking for, or ask me anything.',
+          ? 'أهلاً بك في زاريا ✨ أنا مساعدك الشخصي في الأتيليه — هنا لأساعدك في اكتشاف القماش المثالي وإتمام اختيارك بكل سهولة. أخبرني بما تبحث عنه، أو اسألني أي شيء.'
+          : 'Hello, and welcome to Zaria ✨ I’m your personal atelier assistant — here to help you discover the perfect fabric and make your selection effortless. Tell me what you’re looking for, or ask me anything.',
         starters: AR
-          ? ['ما العطر المناسب لي؟', 'ما هي العروض الحالية؟', 'معلومات الشحن']
-          : ['Which perfume suits me?', 'What are the current offers?', 'Shipping info'],
+          ? ['ما القماش المناسب لتصميمي؟', 'ما هي العروض الحالية؟', 'معلومات الشحن']
+          : ['Which fabric suits my design?', 'What are the current offers?', 'Shipping info'],
         error: AR ? 'عذراً، حدث خطأ. حاول مرة أخرى.' : 'Sorry, something went wrong. Please try again.',
         added: AR ? 'أُضيف إلى السلة ✓' : 'Added to cart ✓'
       };

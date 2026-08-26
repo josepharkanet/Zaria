@@ -38,14 +38,14 @@
   endif
 -%}
 
-{%- comment -%}Default the All Products page to "Elixir Pick" (?elixir=1) when no sort is chosen{%- endcomment -%}
+{%- comment -%}Default the All Products page to "Zaria Pick" (?zaria=1) when no sort is chosen{%- endcomment -%}
 {%- unless request.design_mode -%}
   {%- if collection.handle == 'all' -%}
     <script>
       (function () {
         var p = new URLSearchParams(window.location.search);
-        if (!p.has('sort_by') && !p.has('elixir')) {
-          p.set('elixir', '1');
+        if (!p.has('sort_by') && !p.has('zaria')) {
+          p.set('zaria', '1');
           window.location.replace(window.location.pathname + '?' + p.toString());
         }
       })();
@@ -87,13 +87,13 @@
       {%- comment -%}Starting from 1000px it starts to get funky, as we can have or not the sidebar{%- endcomment -%}
 
       {%- if section.settings.filter_layout == 'sidebar' and show_filters -%}
-        --collection-items-per-row-compact: 4;
-        --collection-items-per-row-medium: 3;
-        --collection-items-per-row-large: 2;
+        --collection-items-per-row-compact: 5;
+        --collection-items-per-row-medium: 5;
+        --collection-items-per-row-large: 4;
       {%- else -%}
         --collection-items-per-row-compact: 6;
-        --collection-items-per-row-medium: 4;
-        --collection-items-per-row-large: 3;
+        --collection-items-per-row-medium: 5;
+        --collection-items-per-row-large: 4;
       {%- endif -%}
     }
 
@@ -110,8 +110,8 @@
 
       {%- if section.settings.filter_layout == 'sidebar' and show_filters -%}
         --collection-items-per-row-compact: 6;
-        --collection-items-per-row-medium: 4;
-        --collection-items-per-row-large: 3;
+        --collection-items-per-row-medium: 5;
+        --collection-items-per-row-large: 4;
       {%- endif -%}
     }
   }
@@ -169,12 +169,12 @@
                     <p class="h4" slot="header">{{ 'collection.faceting.sort_by' | t }}</p>
 
                     <a
-                      href="{{ collection.url }}?elixir=1"
+                      href="{{ collection.url }}?zaria=1"
                       class="popover__value-option group"
-                      data-elixir-pick
+                      data-zaria-pick
                       style="text-decoration: none;"
                     >
-                      <span class="reversed-link">Elixir Pick</span>
+                      <span class="reversed-link">Zaria Pick</span>
                     </a>
 
                     <x-listbox class="popover__value-list">
@@ -382,13 +382,13 @@
   </div>
 </div>
 
-{%- comment -%}Elixir Pick is the DEFAULT order: shuffle the loaded products randomly
+{%- comment -%}Zaria Pick is the DEFAULT order: shuffle the loaded products randomly
   unless the shopper has chosen a specific sort (?sort_by=...).{%- endcomment -%}
 <script>
   (function () {
     try {
       var params = new URLSearchParams(window.location.search);
-      // Respect an explicitly chosen sort; otherwise Elixir Pick (random) is the default.
+      // Respect an explicitly chosen sort; otherwise Zaria Pick (random) is the default.
       if (params.get('sort_by')) return;
 
       var list = document.getElementById('product-list-{{ section.id }}');
@@ -403,8 +403,8 @@
       }
       cards.forEach(function (c) { list.appendChild(c); });
 
-      // Mark Elixir Pick as the active sort option (and clear any other highlighted one).
-      var pick = document.querySelector('[data-elixir-pick]');
+      // Mark Zaria Pick as the active sort option (and clear any other highlighted one).
+      var pick = document.querySelector('[data-zaria-pick]');
       if (pick) {
         document.querySelectorAll('#sort-by-popover [aria-selected="true"]').forEach(function (el) {
           if (el !== pick) el.setAttribute('aria-selected', 'false');

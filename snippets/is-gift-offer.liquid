@@ -5,7 +5,7 @@
     {%- capture is_offer -%}{%- render 'is-gift-offer', product: product -%}{%- endcapture -%}
     {%- if is_offer contains 'true' -%} ... {%- endif -%}
 
-  Config comes exclusively from the Elixir Promotions app's shop metafields:
+  Config comes exclusively from the Zaria Promotions app's shop metafields:
     elixir_promotions.gift_offer_active     — master switch
     elixir_promotions.gift_offer_mode       — quantity | amount | bogo (gift families),
                                    discount (% / amount off, applied at the cart)
