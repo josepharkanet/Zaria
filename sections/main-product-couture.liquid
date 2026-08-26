@@ -56,6 +56,9 @@
   #shopify-section-{{ section.id }} .zpdp__thumb img{width:100%;height:100%;object-fit:cover;display:block}
   #shopify-section-{{ section.id }} .zpdp__thumb.is-active{border-color:var(--wine)}
   #shopify-section-{{ section.id }} .zpdp__stage{position:relative;background:#f4f1ec;aspect-ratio:3/4;overflow:hidden}
+  #shopify-section-{{ section.id }} .zpdp__gallery--single{grid-template-columns:1fr}
+  #shopify-section-{{ section.id }} .zpdp__gallery--single .zpdp__thumbs{display:none}
+  #shopify-section-{{ section.id }} .zpdp__noimg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#b8b0a5;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
   #shopify-section-{{ section.id }} .zpdp__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
   #shopify-section-{{ section.id }} .zpdp__img.is-active{opacity:1}
   @media (max-width:999px){
@@ -133,7 +136,7 @@
 
   <div class="zpdp__grid">
     <!-- GALLERY -->
-    <div class="zpdp__gallery" id="zpdp-gal-{{ section.id }}">
+    <div class="zpdp__gallery {% if gimgs.size <= 1 %}zpdp__gallery--single{% endif %}" id="zpdp-gal-{{ section.id }}">
       <div class="zpdp__thumbs">
         {%- for image in gimgs -%}
           <button type="button" class="zpdp__thumb {% if forloop.index0 == hero_index %}is-active{% endif %}" data-i="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}">
@@ -142,6 +145,7 @@
         {%- endfor -%}
       </div>
       <div class="zpdp__stage">
+        {%- if gimgs.size == 0 -%}<div class="zpdp__noimg"><span>Imagery coming soon</span></div>{%- endif -%}
         {%- for image in gimgs -%}
           <img class="zpdp__img {% if forloop.index0 == hero_index %}is-active{% endif %}" data-i="{{ forloop.index0 }}"
             src="{{ image | image_url: width: 1100 }}" alt="{{ product.title | escape }}"
