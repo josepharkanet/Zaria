@@ -3,9 +3,11 @@
 {%- assign scheme = 'zhero--dark' -%}
 {%- if sc.text_color == 'light' -%}{%- assign scheme = 'zhero--light' -%}{%- endif -%}
 {%- comment -%} Zaria: couture video hero (asset-based, renders without editor setup) {%- endcomment -%}
-{%- assign hero_video = 'zaria-hero.mp4' -%}
-{%- assign hero_poster = 'zaria-hero-poster.jpg' -%}
-{%- if hero_video != blank -%}{%- assign scheme = 'zhero--light' -%}{%- endif -%}
+{%- assign hero_v1 = 'zaria-hero-1.mp4' -%}
+{%- assign hero_v2 = 'zaria-hero-2.mp4' -%}
+{%- assign hero_poster = 'zaria-hero-1-poster.jpg' -%}
+{%- assign has_hero_video = true -%}
+{%- if has_hero_video -%}{%- assign scheme = 'zhero--light' -%}{%- endif -%}
 {%- assign btn1_url = sc.button_1_url -%}
 {%- if btn1_url == blank -%}{%- assign btn1_url = routes.root_url | append: 'collections/all-fabrics' -%}{%- endif -%}
 {%- assign btn2_url = sc.button_2_url -%}
@@ -19,6 +21,9 @@
   #shopify-section-{{ section.id }} .zhero__veil{position:absolute;inset:0;background:#000;opacity:{{ sc.overlay | divided_by: 100.0 }}}
   #shopify-section-{{ section.id }} .zhero__scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.62) 0%,rgba(0,0,0,.22) 40%,rgba(0,0,0,0) 70%)}
   #shopify-section-{{ section.id }} .zhero__video{border:0;background:#1a1a1a}
+  #shopify-section-{{ section.id }} .zhero__videos{position:absolute;inset:0}
+  #shopify-section-{{ section.id }} .zhero__v{opacity:0;transition:opacity 1.4s ease}
+  #shopify-section-{{ section.id }} .zhero__v.is-active{opacity:1}
   #shopify-section-{{ section.id }} .zhero__inner{position:relative;z-index:1;width:100%;max-width:1280px;margin:0 auto;
     display:flex;flex-direction:column;padding:48px 24px;gap:0}
   #shopify-section-{{ section.id }} .zhero--top .zhero__inner{justify-content:flex-start}
@@ -49,10 +54,15 @@
   }
 </style>
 <section class="zhero {{ scheme }} zhero--{{ sc.align }} zhero--{{ sc.vertical }}">
-  {%- if hero_video != blank -%}
-    <video class="zhero__bg zhero__video" autoplay muted loop playsinline preload="auto" poster="{{ hero_poster | asset_url }}">
-      <source src="{{ hero_video | asset_url }}" type="video/mp4">
-    </video>
+  {%- if has_hero_video -%}
+    <div class="zhero__videos" id="zhero-vids-{{ section.id }}">
+      <video class="zhero__bg zhero__video zhero__v is-active" data-i="0" autoplay muted loop playsinline preload="auto" poster="{{ hero_poster | asset_url }}">
+        <source src="{{ hero_v1 | asset_url }}" type="video/mp4">
+      </video>
+      <video class="zhero__bg zhero__video zhero__v" data-i="1" muted loop playsinline preload="none" poster="{{ 'zaria-hero-2-poster.jpg' | asset_url }}">
+        <source src="{{ hero_v2 | asset_url }}" type="video/mp4">
+      </video>
+    </div>
     <div class="zhero__veil"></div>
     <div class="zhero__scrim"></div>
   {%- elsif sc.image != blank -%}
@@ -83,6 +93,26 @@
     </div>
   </div>
 </section>
+
+<script>
+(function(){
+  var root=document.getElementById('zhero-vids-{{ section.id }}');
+  if(!root)return;
+  var vids=[].slice.call(root.querySelectorAll('.zhero__v'));
+  if(vids.length<2)return;
+  var cur=0, loaded1=false;
+  try{vids[0].play();}catch(e){}
+  setInterval(function(){
+    var next=(cur+1)%vids.length;
+    if(next===1&&!loaded1){try{vids[1].load();}catch(e){}loaded1=true;}
+    try{vids[next].currentTime=0;vids[next].play();}catch(e){}
+    vids[next].classList.add('is-active');
+    vids[cur].classList.remove('is-active');
+    var prev=cur;cur=next;
+    setTimeout(function(){try{vids[prev].pause();}catch(e){}},1500);
+  },8000);
+})();
+</script>
 
 {% schema %}
 {
