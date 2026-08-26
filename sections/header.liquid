@@ -138,7 +138,7 @@
     {%- endcomment -%}
 
     {%- capture logo_content -%}
-      {%- if section.settings.logo -%}
+      {%- if true -%}
         {%- capture sizes -%}{{ section.settings.logo_max_width }}px{%- endcapture -%}
         {%- capture widths -%}{{ section.settings.logo_max_width | times: 2 | at_most: section.settings.logo.width }}, {{ section.settings.logo_max_width | times: 3 | at_most: section.settings.logo.width }}{%- endcapture -%}
 
