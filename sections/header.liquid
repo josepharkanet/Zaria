@@ -100,8 +100,8 @@
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half {
       display: flex; align-items: center; flex-wrap: nowrap; gap: 0 1.7rem; margin: 0; padding: 0; list-style: none;
     }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: center; }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: center; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: end; padding-inline-end: 2.6rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 2.6rem; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__logo { grid-area: logo; justify-self: center; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav { grid-area: secondary-nav; justify-self: end; }
   }
@@ -182,6 +182,10 @@
             {%- for link in menu.links -%}
               {% liquid
                 assign link_title_downcase = link.title | strip | downcase
+                assign link_href = link.url
+                if link_title_downcase == 'catalog'
+                  assign link_href = routes.root_url | append: 'collections/all-fabrics'
+                endif
                 assign mega_menu_block = ''
                 for block in section.blocks
                   assign menu_item_downcase = block.settings.menu_item | strip | downcase
@@ -199,97 +203,92 @@
                   {%- when 'fabrics' -%}
                     <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/silk" class="zaria-mega__head">Silk</a>
+                        <a href="{{ routes.root_url }}collections/silk" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'silk' %}Silk</a>
                         <a href="{{ routes.root_url }}collections/silk">Pure Silk</a>
                         <a href="{{ routes.root_url }}collections/silk">Matte &amp; Jacquard</a>
                       </div>
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/cotton" class="zaria-mega__head">Cotton</a>
+                        <a href="{{ routes.root_url }}collections/cotton" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'cotton' %}Cotton</a>
                         <a href="{{ routes.root_url }}collections/cotton">Swiss &amp; Soft</a>
                         <a href="{{ routes.root_url }}collections/cotton">Pure Cotton</a>
                       </div>
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/chiffon" class="zaria-mega__head">Chiffon</a>
+                        <a href="{{ routes.root_url }}collections/chiffon" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'chiffon' %}Chiffon</a>
                         <a href="{{ routes.root_url }}collections/chiffon">Printed</a>
                         <a href="{{ routes.root_url }}collections/chiffon">Ombr&eacute;</a>
                       </div>
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/embellished" class="zaria-mega__head">Occasion</a>
+                        <a href="{{ routes.root_url }}collections/embellished" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'occasion' %}Occasion</a>
                         <a href="{{ routes.root_url }}collections/velvet">Velvet</a>
                         <a href="{{ routes.root_url }}collections/embellished">Embellished &amp; Tulle</a>
                         <a href="{{ routes.root_url }}collections/all-fabrics">All Fabrics</a>
                       </div>
-                      <a class="zaria-mega__promo" href="{{ routes.root_url }}collections/all-fabrics"><img src="{{ 'zaria-model-neutral.jpg' | asset_url }}" alt="" loading="lazy"><span class="zaria-mega__promo-cap">The Fabric House</span></a>
                     </div></div>
                   {%- when 'fragrance' -%}
                     <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/perfumes" class="zaria-mega__head">Perfumes</a>
+                        <a href="{{ routes.root_url }}collections/perfumes" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'perfume' %}Perfumes</a>
                         <a href="{{ routes.root_url }}collections/perfumes">Signature</a>
                         <a href="{{ routes.root_url }}collections/perfumes">Oud</a>
                         <a href="{{ routes.root_url }}collections/perfumes">Attar</a>
                       </div>
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/home-fragrance" class="zaria-mega__head">Home Fragrance</a>
+                        <a href="{{ routes.root_url }}collections/home-fragrance" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'home' %}Home Fragrance</a>
                         <a href="{{ routes.root_url }}collections/home-fragrance">Bakhoor &amp; Oud</a>
                         <a href="{{ routes.root_url }}collections/home-fragrance">Home Mist</a>
                         <a href="{{ routes.root_url }}collections/home-fragrance">Diffusers</a>
                       </div>
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/gift-sets" class="zaria-mega__head">Gift Sets</a>
+                        <a href="{{ routes.root_url }}collections/gift-sets" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'gift' %}Gift Sets</a>
                         <a href="{{ routes.root_url }}collections/gift-sets">Discovery Set</a>
                         <a href="{{ routes.root_url }}collections/gift-sets">Signature Set</a>
                       </div>
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/fragrance-accessories" class="zaria-mega__head">Accessories</a>
+                        <a href="{{ routes.root_url }}collections/fragrance-accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'diffuser' %}Accessories</a>
                         <a href="{{ routes.root_url }}collections/fragrance-accessories">Incense Burner</a>
                         <a href="{{ routes.root_url }}collections/fragrance-accessories">Diffuser Refill</a>
                       </div>
-                      <a class="zaria-mega__promo" href="{{ routes.root_url }}collections/fragrance"><img src="{{ 'zaria-model-gold.jpg' | asset_url }}" alt="" loading="lazy"><span class="zaria-mega__promo-cap">The Maison</span></a>
                     </div></div>
                   {%- when 'ready-to-wear' -%}
                     <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/abayas" class="zaria-mega__head">Abayas</a>
+                        <a href="{{ routes.root_url }}collections/abayas" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'abaya' %}Abayas</a>
                         <a href="{{ routes.root_url }}collections/abayas">Classic</a>
                         <a href="{{ routes.root_url }}collections/abayas">Occasion</a>
                         <a href="{{ routes.root_url }}collections/abayas">Bridal</a>
                       </div>
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/kaftans" class="zaria-mega__head">Kaftans</a>
+                        <a href="{{ routes.root_url }}collections/kaftans" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'kaftan' %}Kaftans</a>
                         <a href="{{ routes.root_url }}collections/kaftans">Signature</a>
                         <a href="{{ routes.root_url }}collections/kaftans">Occasion</a>
                       </div>
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">Sheilas &amp; Shawls</a>
+                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'veil' %}Sheilas &amp; Shawls</a>
                         <a href="{{ routes.root_url }}collections/accessories">Silk Sheila</a>
                         <a href="{{ routes.root_url }}collections/accessories">Modal Shawl</a>
                       </div>
-                      <a class="zaria-mega__promo" href="{{ routes.root_url }}collections/ready-to-wear"><img src="{{ 'zaria-model-purple.jpg' | asset_url }}" alt="" loading="lazy"><span class="zaria-mega__promo-cap">The Atelier</span></a>
                     </div></div>
                   {%- when 'accessories' -%}
                     <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">Sheilas</a>
+                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'veil' %}Sheilas</a>
                         <a href="{{ routes.root_url }}collections/accessories">Silk Sheila</a>
                         <a href="{{ routes.root_url }}collections/accessories">Modal Sheila</a>
                       </div>
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">Shawls &amp; Wraps</a>
+                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'shawl' %}Shawls &amp; Wraps</a>
                         <a href="{{ routes.root_url }}collections/accessories">Modal Shawl</a>
                         <a href="{{ routes.root_url }}collections/accessories">Chiffon Wrap</a>
                       </div>
-                      <a class="zaria-mega__promo" href="{{ routes.root_url }}collections/accessories"><img src="{{ 'zaria-model-blue.jpg' | asset_url }}" alt="" loading="lazy"><span class="zaria-mega__promo-cap">Finishing Touches</span></a>
                     </div></div>
                   {%- when 'sale' -%}
                     <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/sale" class="zaria-mega__head">Sale</a>
+                        <a href="{{ routes.root_url }}collections/sale" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'tag' %}Sale</a>
                         <a href="{{ routes.root_url }}collections/sale">Fabrics</a>
                         <a href="{{ routes.root_url }}collections/sale">Fashion</a>
                         <a href="{{ routes.root_url }}collections/sale">Fragrance</a>
                       </div>
-                      <a class="zaria-mega__promo" href="{{ routes.root_url }}collections/sale"><img src="{{ 'zaria-model-neutral.jpg' | asset_url }}" alt="" loading="lazy"><span class="zaria-mega__promo-cap">Shop the Sale</span></a>
                     </div></div>
                 {%- endcase -%}
               {%- endcapture -%}
@@ -298,7 +297,7 @@
               <li class="header__primary-nav-item">
            {%- if link.levels == 0 and mega_menu_block == '' and zaria_mega_links == blank -%}
                   <a
-                    href="{{ link.url }}"
+                    href="{{ link_href }}"
                     data-title="{{ link.title | escape }}"
                     class="block {% if section.settings.menu_text_font == 'heading' %}h6{% endif %}"
                     {% if link.current %}
