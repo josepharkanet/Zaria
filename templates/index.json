@@ -56,15 +56,21 @@
       "blocks": {
         "c1": {
           "type": "collection",
-          "settings": {}
+          "settings": {
+            "collection": "silk"
+          }
         },
         "c2": {
           "type": "collection",
-          "settings": {}
+          "settings": {
+            "collection": "cotton"
+          }
         },
         "c3": {
           "type": "collection",
-          "settings": {}
+          "settings": {
+            "collection": "chiffon"
+          }
         }
       },
       "block_order": [
@@ -72,11 +78,23 @@
         "c2",
         "c3"
       ],
-      "settings": {}
+      "settings": {
+        "eyebrow": "The Fabrics",
+        "heading": "Explore by fabric",
+        "link_label": "Explore",
+        "columns": "3",
+        "ratio": "3/4"
+      }
     },
     "products": {
       "type": "zaria-products",
-      "settings": {}
+      "settings": {
+        "eyebrow": "New In",
+        "heading": "New arrivals",
+        "collection": "all-fabrics",
+        "limit": 8,
+        "columns": "4"
+      }
     },
     "feature": {
       "type": "zaria-feature",
