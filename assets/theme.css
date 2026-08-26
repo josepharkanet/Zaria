@@ -9996,11 +9996,15 @@ h1,h2,h3,h4,h5,h6,.h0,.h1,.h2,.h3,.h4,.h5,.h6{font-family:"Jost",-apple-system,B
 @media (max-width:1200px){.zpr__grid{grid-template-columns:repeat(3,1fr)!important;}}
 @media (max-width:760px){.zpr__grid{grid-template-columns:repeat(2,1fr)!important;}}
 
-/* ===== Zaria: 5 product cards per row on collection/catalog pages ===== */
+/* ===== Zaria: square, edge-to-edge product cards (kill theme 12px rounding) ===== */
+product-card,.product-card,.product-card__figure,.product-card__media,.product-card__media img,.product-card__image,.zpr__media,.zpr__media img{border-radius:0!important;}
+
+/* ===== Zaria: 5 (desktop) / 3 (tablet+mobile) per row, edge-to-edge ===== */
 /* the theme's items-per-row variable chain caps columns, so set the grid directly */
+.collection .product-list{gap:4px!important;}
 @media (min-width:1000px){.collection .product-list{grid-template-columns:repeat(5,minmax(0,1fr))!important;grid-auto-flow:row!important;}}
 @media (min-width:700px) and (max-width:999px){.collection .product-list{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row!important;}}
-@media (max-width:699px){.collection .product-list{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-flow:row!important;}}
+@media (max-width:699px){.collection .product-list{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row!important;gap:3px!important;}}
 
 /* ===== Zaria: couture Sort By dropdown ===== */
 .collection-toolbar__button{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.18em;font-size:11px;color:#1a1a1a;}
