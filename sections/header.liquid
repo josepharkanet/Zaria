@@ -98,10 +98,10 @@
     #shopify-section-{{ section.id }} .header.zaria-header-split { position: relative; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__primary-nav { display: contents; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half {
-      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 1.7rem; margin: 0; padding: 0; list-style: none;
+      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 1.3rem; margin: 0; padding: 0; list-style: none;
     }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: end; padding-inline-end: 2.6rem; }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 2.6rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: end; padding-inline-end: 1.7rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 1.7rem; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__logo { grid-area: logo; justify-self: center; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav { grid-area: secondary-nav; justify-self: end; }
   }
@@ -279,15 +279,6 @@
                         <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'shawl' %}Shawls &amp; Wraps</a>
                         <a href="{{ routes.root_url }}collections/accessories">Modal Shawl</a>
                         <a href="{{ routes.root_url }}collections/accessories">Chiffon Wrap</a>
-                      </div>
-                    </div></div>
-                  {%- when 'sale' -%}
-                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/sale" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'tag' %}Sale</a>
-                        <a href="{{ routes.root_url }}collections/sale">Fabrics</a>
-                        <a href="{{ routes.root_url }}collections/sale">Fashion</a>
-                        <a href="{{ routes.root_url }}collections/sale">Fragrance</a>
                       </div>
                     </div></div>
                 {%- endcase -%}

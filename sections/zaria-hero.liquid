@@ -2,6 +2,14 @@
 {%- assign sc = section.settings -%}
 {%- assign scheme = 'zhero--dark' -%}
 {%- if sc.text_color == 'light' -%}{%- assign scheme = 'zhero--light' -%}{%- endif -%}
+{%- comment -%} Zaria: couture video hero (asset-based, renders without editor setup) {%- endcomment -%}
+{%- assign hero_video = 'zaria-hero.mp4' -%}
+{%- assign hero_poster = 'zaria-hero-poster.jpg' -%}
+{%- if hero_video != blank -%}{%- assign scheme = 'zhero--light' -%}{%- endif -%}
+{%- assign btn1_url = sc.button_1_url -%}
+{%- if btn1_url == blank -%}{%- assign btn1_url = routes.root_url | append: 'collections/all-fabrics' -%}{%- endif -%}
+{%- assign btn2_url = sc.button_2_url -%}
+{%- if btn2_url == blank -%}{%- assign btn2_url = routes.root_url | append: 'collections/ready-to-wear' -%}{%- endif -%}
 <style>
   #shopify-section-{{ section.id }} .zhero{position:relative;display:flex;overflow:hidden;
     min-height:{{ sc.height_mobile }}vh;background:{{ sc.fallback_bg }};
@@ -9,6 +17,8 @@
   #shopify-section-{{ section.id }} .zhero *{box-sizing:border-box}
   #shopify-section-{{ section.id }} .zhero__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sc.focal }}}
   #shopify-section-{{ section.id }} .zhero__veil{position:absolute;inset:0;background:#000;opacity:{{ sc.overlay | divided_by: 100.0 }}}
+  #shopify-section-{{ section.id }} .zhero__scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.62) 0%,rgba(0,0,0,.22) 40%,rgba(0,0,0,0) 70%)}
+  #shopify-section-{{ section.id }} .zhero__video{border:0;background:#1a1a1a}
   #shopify-section-{{ section.id }} .zhero__inner{position:relative;z-index:1;width:100%;max-width:1280px;margin:0 auto;
     display:flex;flex-direction:column;padding:48px 24px;gap:0}
   #shopify-section-{{ section.id }} .zhero--top .zhero__inner{justify-content:flex-start}
@@ -39,7 +49,13 @@
   }
 </style>
 <section class="zhero {{ scheme }} zhero--{{ sc.align }} zhero--{{ sc.vertical }}">
-  {%- if sc.image != blank -%}
+  {%- if hero_video != blank -%}
+    <video class="zhero__bg zhero__video" autoplay muted loop playsinline preload="metadata" poster="{{ hero_poster | asset_url }}">
+      <source src="{{ hero_video | asset_url }}" type="video/mp4">
+    </video>
+    <div class="zhero__veil"></div>
+    <div class="zhero__scrim"></div>
+  {%- elsif sc.image != blank -%}
     <picture>
       {%- if sc.image_mobile != blank -%}
         <source media="(max-width: 749px)" srcset="{{ sc.image_mobile | image_url: width: 1000 }}">
@@ -57,10 +73,10 @@
       {%- if sc.button_1_label != blank or sc.button_2_label != blank -%}
         <div class="zhero__actions">
           {%- if sc.button_1_label != blank -%}
-            <a class="zhero__btn zhero__btn--primary" href="{{ sc.button_1_url | default: '#' }}">{{ sc.button_1_label }}</a>
+            <a class="zhero__btn zhero__btn--primary" href="{{ btn1_url }}">{{ sc.button_1_label }}</a>
           {%- endif -%}
           {%- if sc.button_2_label != blank -%}
-            <a class="zhero__btn zhero__btn--ghost" href="{{ sc.button_2_url | default: '#' }}">{{ sc.button_2_label }}</a>
+            <a class="zhero__btn zhero__btn--ghost" href="{{ btn2_url }}">{{ sc.button_2_label }}</a>
           {%- endif -%}
         </div>
       {%- endif -%}
@@ -84,12 +100,12 @@
       "options": [ { "value": "light", "label": "Light (on dark image)" }, { "value": "dark", "label": "Dark (on light image)" } ],
       "default": "light"
     },
-    { "type": "text", "id": "overline", "label": "Overline", "default": "Couture Atelier" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Made only for you" },
-    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Considered silhouettes and refined tailoring, cut by hand for the modern wardrobe." },
-    { "type": "text", "id": "button_1_label", "label": "Primary button label", "default": "Explore the collection" },
+    { "type": "text", "id": "overline", "label": "Overline", "default": "Modern Emirati Elegance" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The Art of Fine Fabric" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Silk, cotton, chiffon and occasion fabrics, sourced for the modern wardrobe." },
+    { "type": "text", "id": "button_1_label", "label": "Primary button label", "default": "Explore the Collection" },
     { "type": "url", "id": "button_1_url", "label": "Primary button link" },
-    { "type": "text", "id": "button_2_label", "label": "Secondary button label", "default": "Design your look" },
+    { "type": "text", "id": "button_2_label", "label": "Secondary button label", "default": "Discover Ready to Wear" },
     { "type": "url", "id": "button_2_url", "label": "Secondary button link" },
     { "type": "header", "content": "Layout" },
     {

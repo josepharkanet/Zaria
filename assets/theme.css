@@ -9516,13 +9516,13 @@ html.theme-dark .color-scheme--scheme-marquee-custom {
   background: none;
 }
 #sort-by-popover .popover__value-option:hover {
-  background-color: rgba(26, 26, 26, .12);
-  color: rgb(var(--text-color));
+  background-color: rgba(255, 255, 255, .10);
+  color: #ffffff;
   padding-inline-start: 20px;
 }
 #sort-by-popover .popover__value-option[aria-selected="true"] {
-  background-color: rgba(26, 26, 26, .14);
-  color: #1a1a1a;
+  background-color: rgba(255, 255, 255, .12);
+  color: #ffffff;
   font-weight: 600;
 }
 /* "Zaria Pick" — set apart from the standard sorts */
@@ -9536,7 +9536,7 @@ html.theme-dark .color-scheme--scheme-marquee-custom {
   border-radius: 8px 8px 0 0;
 }
 #sort-by-popover .popover__value-option[data-zaria-pick]:hover {
-  background-color: rgba(26, 26, 26, .16);
+  background-color: rgba(255, 255, 255, .10);
 }
 
 /* ── Offer ribbon (announcement bar) — dark #212121 ── */
@@ -9663,7 +9663,7 @@ facets-drawer .button:hover {
 #sort-by-popover .popover__value-option .reversed-link { color: #ece7df !important; }
 #sort-by-popover .popover__value-option[aria-selected="true"] .reversed-link,
 #sort-by-popover .popover__value-option:hover .reversed-link {
-  color: #1a1a1a !important;
+  color: #ffffff !important;
 }
 
 /* ── Dark filter sidebar: bleed to edges + pull content toward the left ── */
