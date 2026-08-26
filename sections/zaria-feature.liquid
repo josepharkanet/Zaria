@@ -29,7 +29,7 @@
       {%- if sc.image != blank -%}
         <img src="{{ sc.image | image_url: width: 1200 }}" alt="{{ sc.image.alt | escape }}" width="{{ sc.image.width }}" height="{{ sc.image.height }}" loading="lazy">
       {%- else -%}
-        <div class="zft__ph"></div>
+        <img class="zft__default" src="{{ 'zaria-model-purple.jpg' | asset_url }}" alt="Zaria modern couture" width="864" height="1152" loading="lazy">
       {%- endif -%}
     </div>
     <div class="zft__text">
