@@ -137,18 +137,6 @@
             endif
           endif
         -%}
-
-        {%- comment -%} Zaria: lifestyle model image on hover, matched to the fabric colour {%- endcomment -%}
-        {%- if product.tags contains 'Fabric' -%}
-          {%- assign zaria_colour = product.metafields.custom.colour.value | first | downcase -%}
-          {%- assign zaria_model = 'zaria-model-neutral.jpg' -%}
-          {%- case zaria_colour -%}
-            {%- when 'blue', 'navy', 'teal', 'turquoise', 'sky', 'indigo', 'cobalt' -%}{%- assign zaria_model = 'zaria-model-blue.jpg' -%}
-            {%- when 'gold', 'yellow', 'beige', 'brown', 'orange', 'peach', 'mustard', 'ecru', 'sand', 'nude', 'lemon', 'olive' -%}{%- assign zaria_model = 'zaria-model-gold.jpg' -%}
-            {%- when 'purple', 'lavender', 'lilac', 'burgundy', 'wine', 'magenta', 'pink', 'red', 'cherry', 'petal', 'eggplant', 'violet' -%}{%- assign zaria_model = 'zaria-model-purple.jpg' -%}
-          {%- endcase -%}
-          <img class="product-card__image product-card__image--model" src="{{ zaria_model | asset_url }}" alt="" loading="lazy" aria-hidden="true">
-        {%- endif -%}
       </a>
 
       {%- comment -%}Zaria: quick-zoom trigger — opens a full-screen zoomable view of the fabric{%- endcomment -%}
