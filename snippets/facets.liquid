@@ -238,6 +238,29 @@
                       {%- when 'navy' -%}{%- assign chex = '#1f2d55' -%}
                       {%- when 'purple' -%}{%- assign chex = '#6b3f8f' -%}
                       {%- when 'lavender' -%}{%- assign chex = '#b3a3d4' -%}
+                      {%- when 'lilac' -%}{%- assign chex = '#c9a6d8' -%}
+                      {%- when 'violet' -%}{%- assign chex = '#7a4fbf' -%}
+                      {%- when 'eggplant','aubergine' -%}{%- assign chex = '#4a2540' -%}
+                      {%- when 'indigo' -%}{%- assign chex = '#3b3f8f' -%}
+                      {%- when 'magenta' -%}{%- assign chex = '#c72d8a' -%}
+                      {%- when 'fuchsia' -%}{%- assign chex = '#d6248f' -%}
+                      {%- when 'emerald' -%}{%- assign chex = '#217a54' -%}
+                      {%- when 'mint' -%}{%- assign chex = '#a6dfc4' -%}
+                      {%- when 'turquoise' -%}{%- assign chex = '#2ec2b6' -%}
+                      {%- when 'aqua' -%}{%- assign chex = '#4fc3d6' -%}
+                      {%- when 'acid' -%}{%- assign chex = '#c3d43a' -%}
+                      {%- when 'lemon' -%}{%- assign chex = '#efe14e' -%}
+                      {%- when 'mustard' -%}{%- assign chex = '#cf9b1b' -%}
+                      {%- when 'coral' -%}{%- assign chex = '#f0785f' -%}
+                      {%- when 'cherry' -%}{%- assign chex = '#9e1b32' -%}
+                      {%- when 'maroon','wine' -%}{%- assign chex = '#5c1a2b' -%}
+                      {%- when 'petal','blush','rose' -%}{%- assign chex = '#e9aeb9' -%}
+                      {%- when 'ecru','cream','ivory' -%}{%- assign chex = '#e3d8c0' -%}
+                      {%- when 'sand','nude' -%}{%- assign chex = '#cdb994' -%}
+                      {%- when 'khaki','camel','tan' -%}{%- assign chex = '#b79a68' -%}
+                      {%- when 'silver' -%}{%- assign chex = '#c6c8cc' -%}
+                      {%- when 'charcoal' -%}{%- assign chex = '#36393d' -%}
+                      {%- when 'mauve' -%}{%- assign chex = '#b48a9c' -%}
                     {%- endcase -%}
                     <label class="elx-swatch {% if filter_value.active %}is-active{% endif %}{% if cn contains 'multicol' %} elx-swatch--multi{% endif %}" title="{{ filter_value.label | escape }}">
                       <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>

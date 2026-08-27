@@ -1,0 +1,19 @@
+{%- comment -%}Zaria — mobile drawer sub-links for the hardcoded mega categories (menu has no children). Usage: {% render 'zaria-nav-sub', title: link.title %}{%- endcomment -%}
+{%- assign t = title | strip | downcase -%}
+{%- case t -%}
+  {%- when 'fabrics' -%}
+    <a href="{{ routes.root_url }}collections/silk">Silk</a>
+    <a href="{{ routes.root_url }}collections/cotton">Cotton</a>
+    <a href="{{ routes.root_url }}collections/chiffon">Chiffon</a>
+    <a href="{{ routes.root_url }}collections/embellished">Occasion</a>
+    <a href="{{ routes.root_url }}collections/all-fabrics">All Fabrics</a>
+  {%- when 'fragrance' -%}
+    <a href="{{ routes.root_url }}collections/perfumes">Perfumes</a>
+    <a href="{{ routes.root_url }}collections/home-fragrance">Home Fragrance</a>
+    <a href="{{ routes.root_url }}collections/gift-sets">Gift Sets</a>
+    <a href="{{ routes.root_url }}collections/fragrance-accessories">Accessories</a>
+  {%- when 'ready to wear','ready-to-wear' -%}
+    <a href="{{ routes.root_url }}collections/abayas">Abayas</a>
+    <a href="{{ routes.root_url }}collections/kaftans">Kaftans</a>
+    <a href="{{ routes.root_url }}collections/accessories">Sheilas &amp; Shawls</a>
+{%- endcase -%}
