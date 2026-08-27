@@ -48,7 +48,14 @@
 <section class="zct">
   {%- if sc.show_hero != false -%}
     <div class="zct__hero">
-      <img class="zct__hero-bg" src="{% if sc.image != blank %}{{ sc.image | image_url: width: 2000 }}{% else %}{{ 'zaria-dyl-bg.jpg' | asset_url }}{% endif %}" alt="" width="2000" height="1333" loading="lazy">
+      {%- assign zct_hero_vid = sc.hero_video | default: 'zaria-contact-video.mp4' -%}
+      {%- if zct_hero_vid != blank -%}
+        <video class="zct__hero-bg" autoplay muted loop playsinline preload="metadata" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1600 }}{% else %}{{ 'zaria-dyl-bg.jpg' | asset_url }}{% endif %}">
+          <source src="{{ zct_hero_vid | asset_url }}" type="video/mp4">
+        </video>
+      {%- else -%}
+        <img class="zct__hero-bg" src="{% if sc.image != blank %}{{ sc.image | image_url: width: 2000 }}{% else %}{{ 'zaria-dyl-bg.jpg' | asset_url }}{% endif %}" alt="" width="2000" height="1333" loading="lazy">
+      {%- endif -%}
       <div class="zct__hero-veil"></div>
       <div class="zct__hero-in">
         {%- if sc.eyebrow != blank -%}<p class="zct__hero-eyebrow">{{ sc.eyebrow }}</p>{%- endif -%}
@@ -103,7 +110,8 @@
   "settings": [
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
     { "type": "checkbox", "id": "show_hero", "label": "Show hero image band", "default": true },
-    { "type": "image_picker", "id": "image", "label": "Hero image (optional)" },
+    { "type": "image_picker", "id": "image", "label": "Hero image / video poster (optional)" },
+    { "type": "text", "id": "hero_video", "label": "Hero video file in assets", "default": "zaria-contact-video.mp4", "info": "e.g. zaria-contact-video.mp4 — leave blank to show the image instead" },
     { "type": "text", "id": "focal", "label": "Hero focal point", "default": "center" },
     { "type": "text", "id": "eyebrow", "label": "Overline", "default": "Contact" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Get in touch" },
