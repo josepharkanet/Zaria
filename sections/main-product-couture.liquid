@@ -155,7 +155,7 @@
 
   /* form */
   #shopify-section-{{ section.id }} .zpdp__form{margin:0 0 18px}
-  #shopify-section-{{ section.id }} .zpdp__buy-row{display:flex;gap:12px;margin:0 0 12px}
+  #shopify-section-{{ section.id }} .zpdp__buy-row{display:flex;gap:12px;margin:0 0 12px;flex-wrap:wrap}
   #shopify-section-{{ section.id }} .zpdp__variant{border:1px solid #d7d2ca;background:#fff;height:54px;padding:0 14px;font-family:inherit;font-size:13px;letter-spacing:.05em;color:#161616;border-radius:0;width:100%;margin:0 0 12px}
   #shopify-section-{{ section.id }} .zpdp__qty-wrap{display:flex;align-items:center;border:1px solid #d7d2ca;background:#fff;height:54px;flex:none}
   #shopify-section-{{ section.id }} .zpdp__qbtn{width:42px;height:100%;border:0;background:none;cursor:pointer;font-size:17px;line-height:1;color:#161616;display:flex;align-items:center;justify-content:center;padding:0;transition:color .2s}
@@ -163,11 +163,11 @@
   #shopify-section-{{ section.id }} .zpdp__qty{border:0;background:none;width:34px;height:100%;text-align:center;font-family:inherit;font-size:14px;color:#161616;padding:0;-moz-appearance:textfield}
   #shopify-section-{{ section.id }} .zpdp__qty::-webkit-outer-spin-button,
   #shopify-section-{{ section.id }} .zpdp__qty::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-  #shopify-section-{{ section.id }} .zpdp__atc{flex:1;height:54px;background:#161616;color:#fff;border:1px solid #161616;font-family:inherit;
+  #shopify-section-{{ section.id }} .zpdp__atc{flex:1 1 160px;height:54px;background:#161616;color:#fff;border:1px solid #161616;font-family:inherit;
     font-size:12px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s;border-radius:0}
   #shopify-section-{{ section.id }} .zpdp__atc:hover{background:#2e2e2e}
   #shopify-section-{{ section.id }} .zpdp__atc[disabled]{background:#c9c9c9;border-color:#c9c9c9;cursor:not-allowed}
-  #shopify-section-{{ section.id }} .zpdp__buynow{display:block;text-align:center;width:100%;height:54px;line-height:54px;margin-top:10px;
+  #shopify-section-{{ section.id }} .zpdp__buynow{display:flex;align-items:center;justify-content:center;flex:1 1 160px;height:54px;
     background:transparent;color:#161616;border:1px solid #161616;font-size:12px;letter-spacing:.22em;text-transform:uppercase;text-decoration:none}
   #shopify-section-{{ section.id }} .zpdp__buynow:hover{background:#161616;color:#fff}
   #shopify-section-{{ section.id }} .zpdp__studio{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:14px;padding:14px;
@@ -331,15 +331,14 @@
           <button type="submit" name="add" class="zpdp__atc" {% unless product.available %}disabled{% endunless %}>
             {%- if product.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}
           </button>
+          {%- if product.available -%}
+            <a class="zpdp__buynow" href="/checkout?variant={{ fv.id }}&quantity=1">Buy it Now</a>
+          {%- endif -%}
         </div>
       {%- endform -%}
 
-      {%- if product.available -%}
-        <a class="zpdp__buynow" href="/checkout?variant={{ fv.id }}&quantity=1">Buy it Now</a>
-      {%- endif -%}
-
       {%- unless is_fragrance or is_garment -%}{% render 'zaria-design-form', product: product, variant: fv %}{%- endunless -%}
-      {%- if is_garment -%}<div class="zpdp__sizechart">{% render 'zaria-size-chart' %}</div>{%- endif -%}
+      {%- unless is_fragrance -%}<div class="zpdp__sizechart">{% render 'zaria-size-chart' %}</div>{%- endunless -%}
 
       <div class="zpdp__acc" style="margin-top:28px">
         <details open>
