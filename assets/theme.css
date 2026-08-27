@@ -10017,6 +10017,14 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
   .collection .product-list[collection-mobile-layout="large"]{grid-template-columns:1fr!important;}
   .collection .product-list[collection-mobile-layout="medium"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;}}
 
+/* Zaria: larger, more readable body copy on mobile */
+@media (max-width:749px){
+  :root{--text-base:1rem !important; --text-sm:.9375rem !important;}
+  .rte,.rte p,.rte li{font-size:15.5px !important;line-height:1.75 !important}
+  .zst__body,.zst__body p,.zft__body,.zft__body p,.zfr__sub,.zdl__body,.zct__hero-intro,.zct__intro,.zct__v{font-size:15.5px !important;line-height:1.78 !important}
+  .zpr__name{font-size:14px !important}
+}
+
 /* ===== Zaria: couture Sort By (dark dropdown -> light, legible text) ===== */
 .collection-toolbar__button{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.18em;font-size:11px;}
 #sort-by-popover{border-radius:0;box-shadow:0 18px 50px rgba(0,0,0,.35);}

@@ -3,7 +3,7 @@
 {%- assign bg = sc.image | default: 'zaria-fragrance-banner.jpg' -%}
 <style>
   #shopify-section-{{ section.id }} .zfr{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;
-    min-height:{{ sc.height | default: 74 }}vh;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;background:#20161a}
+    min-height:{{ sc.height | default: 54 }}vh;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;background:#20161a}
   #shopify-section-{{ section.id }} .zfr__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sc.focal | default: 'center' }}}
   #shopify-section-{{ section.id }} .zfr__veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(250,246,242,.5),rgba(250,246,242,.1) 44%,rgba(250,246,242,0) 64%)}
   #shopify-section-{{ section.id }} .zfr__inner{position:relative;z-index:1;width:100%;max-width:1280px;margin:0 auto;padding:64px clamp(24px,5vw,64px);
@@ -44,7 +44,7 @@
     { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Oud, amber and rose, composed into a signature olfactory wardrobe, perfumes, bakhoor and home fragrance in the Zaria spirit." },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Discover Fragrance" },
     { "type": "url", "id": "button_url", "label": "Button link" },
-    { "type": "range", "id": "height", "label": "Height", "min": 50, "max": 92, "step": 2, "unit": "vh", "default": 74 }
+    { "type": "range", "id": "height", "label": "Height", "min": 40, "max": 92, "step": 2, "unit": "vh", "default": 54 }
   ],
   "presets": [ { "name": "Zaria Fragrance" } ]
 }

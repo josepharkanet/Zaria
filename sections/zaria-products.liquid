@@ -39,8 +39,11 @@
   #shopify-section-{{ section.id }} .zpr__empty{grid-column:1/-1;text-align:center;color:#b3b3b3;letter-spacing:.16em;
     text-transform:uppercase;font-size:12px;padding:48px 0;border:1px dashed #e2e2e2}
   @media (max-width:900px){
-    #shopify-section-{{ section.id }} .zpr__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 14px;overflow:visible}
-    #shopify-section-{{ section.id }} .zpr__card{flex:none;min-width:0;width:auto}
+    #shopify-section-{{ section.id }} .zpr__grid{display:flex;overflow-x:auto;gap:14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+    #shopify-section-{{ section.id }} .zpr__card{flex:0 0 calc(50% - 7px);min-width:0;width:auto;scroll-snap-align:start}
+  }
+  @media (max-width:600px){
+    #shopify-section-{{ section.id }} .zpr__card{flex:0 0 84%;scroll-snap-align:center}
   }
 </style>
 <section class="zpr">
@@ -81,6 +84,32 @@
   </div>
   {%- if coll != blank and sc.show_view_all -%}<div class="zpr__foot"><a class="zpr__all" href="{{ coll.url }}">{{ sc.view_all_label | default: 'View all' }}</a></div>{%- endif -%}
 </section>
+
+<script>
+  (function(){
+    var root = document.getElementById('shopify-section-{{ section.id }}');
+    if(!root) return;
+    var grid = root.querySelector('.zpr__grid');
+    if(!grid) return;
+    var mq = window.matchMedia('(max-width: 600px)');
+    var timer = null, paused = false;
+    function advance(){
+      if(!mq.matches || paused) return;
+      var cards = grid.querySelectorAll('.zpr__card');
+      if(cards.length < 2) return;
+      var step = cards[0].getBoundingClientRect().width + 14;
+      var maxLeft = grid.scrollWidth - grid.clientWidth;
+      if(grid.scrollLeft >= maxLeft - 8){ grid.scrollTo({left:0, behavior:'smooth'}); }
+      else { grid.scrollBy({left:step, behavior:'smooth'}); }
+    }
+    function start(){ stop(); if(mq.matches){ timer = setInterval(advance, 3500); } }
+    function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+    grid.addEventListener('touchstart', function(){ paused = true; }, {passive:true});
+    grid.addEventListener('touchend', function(){ setTimeout(function(){ paused = false; }, 4500); }, {passive:true});
+    if(mq.addEventListener){ mq.addEventListener('change', start); } else if(mq.addListener){ mq.addListener(start); }
+    start();
+  })();
+</script>
 
 {% schema %}
 {

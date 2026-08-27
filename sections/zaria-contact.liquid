@@ -9,9 +9,10 @@
   #shopify-section-{{ section.id }} .zct__hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
     min-height:clamp(300px,40vw,420px);text-align:center}
   #shopify-section-{{ section.id }} .zct__hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sc.focal | default: 'center' }}}
-  #shopify-section-{{ section.id }} .zct__hero-veil{position:absolute;inset:0;background:linear-gradient(rgba(20,14,16,.42),rgba(20,14,16,.58))}
+  #shopify-section-{{ section.id }} .zct__hero-veil{position:absolute;inset:0;background:linear-gradient(rgba(18,12,14,.5),rgba(18,12,14,.64)),radial-gradient(ellipse at center,rgba(18,12,14,.4),transparent 64%)}
   #shopify-section-{{ section.id }} .zct__hero-in{position:relative;z-index:1;max-width:640px;padding:56px clamp(24px,5vw,48px);color:#fff}
-  #shopify-section-{{ section.id }} .zct__hero-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#f0e6e8;margin:0 0 18px}
+  #shopify-section-{{ section.id }} .zct__hero-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#fff;margin:0 0 18px;text-shadow:0 1px 14px rgba(0,0,0,.6)}
+  #shopify-section-{{ section.id }} .zct__hero-title,#shopify-section-{{ section.id }} .zct__hero-intro{text-shadow:0 2px 20px rgba(0,0,0,.4)}
   #shopify-section-{{ section.id }} .zct__hero-title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     font-size:clamp(30px,4.4vw,52px);line-height:1.1;letter-spacing:.01em;margin:0}
   #shopify-section-{{ section.id }} .zct__hero-intro{color:rgba(255,255,255,.9);font-size:clamp(14px,1.5vw,16px);line-height:1.85;margin:20px auto 0;max-width:48ch}
