@@ -35,18 +35,26 @@
           "settings": {
             "collection": "chiffon"
           }
+        },
+        "c4": {
+          "type": "collection",
+          "settings": {
+            "collection": "embellished",
+            "title": "Occasion"
+          }
         }
       },
       "block_order": [
         "c1",
         "c2",
-        "c3"
+        "c3",
+        "c4"
       ],
       "settings": {
         "eyebrow": "The Fabrics",
         "heading": "Explore by fabric",
         "link_label": "Explore",
-        "columns": "3",
+        "columns": "4",
         "ratio": "3/4"
       }
     },

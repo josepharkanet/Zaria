@@ -1,24 +1,34 @@
-{%- comment -%}Zaria - Our Story (compact brand narrative) - Arkanet Technologies{%- endcomment -%}
+{%- comment -%}Zaria - Our Story (editorial brand narrative) - Arkanet Technologies{%- endcomment -%}
 {%- assign sc = section.settings -%}
 <style>
-  #shopify-section-{{ section.id }} .zst{background:{% if sc.scheme == 'soft' %}#faf8f6{% else %}#ffffff{% endif %};color:#1a1a1a;
-    font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:{{ sc.padding_top }}px clamp(20px,5vw,48px) {{ sc.padding_bottom }}px}
+  #shopify-section-{{ section.id }} .zst{background:{% if sc.scheme == 'white' %}#ffffff{% else %}#f6f1ea{% endif %};color:#1a1a1a;
+    font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:clamp(66px,9vw,120px) clamp(20px,5vw,48px);position:relative;overflow:hidden}
   #shopify-section-{{ section.id }} .zst *{box-sizing:border-box}
-  #shopify-section-{{ section.id }} .zst__inner{max-width:720px;margin:0 auto;text-align:center}
+  #shopify-section-{{ section.id }} .zst__mono{position:absolute;top:50%;left:50%;transform:translate(-50%,-48%);
+    font-family:var(--heading-font-family,'Jost'),'Jost',serif;font-weight:500;font-size:min(48vw,560px);line-height:1;
+    color:#7a1f34;opacity:.04;pointer-events:none;user-select:none;z-index:0}
+  #shopify-section-{{ section.id }} .zst__inner{position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center}
   #shopify-section-{{ section.id }} .zst__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
-    font-size:clamp(26px,3.4vw,40px);line-height:1.12;letter-spacing:.04em;margin:0 0 22px;text-transform:uppercase}
-  #shopify-section-{{ section.id }} .zst__rule{width:42px;height:1px;background:#7a1f34;margin:0 auto 26px}
-  #shopify-section-{{ section.id }} .zst__body{color:#5a5a5a;font-size:clamp(15px,1.4vw,16px);line-height:1.95}
-  #shopify-section-{{ section.id }} .zst__body p{margin:0 0 14px}
-  #shopify-section-{{ section.id }} .zst__link{display:inline-block;margin-top:22px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+    letter-spacing:.04em;text-transform:uppercase;color:#7a1f34;margin:0 0 20px}
+  #shopify-section-{{ section.id }} .zst__rule{width:38px;height:1px;background:#c8a24a;margin:0 auto 30px}
+  #shopify-section-{{ section.id }} .zst__lead{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:300;
+    font-size:clamp(23px,3.3vw,38px);line-height:1.32;letter-spacing:.008em;color:#221b18;max-width:19ch;margin:0 auto 32px}
+  #shopify-section-{{ section.id }} .zst__body{color:#63594f;font-size:clamp(14.5px,1.35vw,16px);line-height:1.98;max-width:58ch;margin:0 auto}
+  #shopify-section-{{ section.id }} .zst__body p{margin:0 0 15px}
+  #shopify-section-{{ section.id }} .zst__sign{margin:32px 0 0;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#a99c8c}
+  #shopify-section-{{ section.id }} .zst__link{display:inline-block;margin-top:30px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
     color:#7a1f34;text-decoration:none;border-bottom:1px solid #7a1f34;padding-bottom:5px;transition:opacity .2s ease}
   #shopify-section-{{ section.id }} .zst__link:hover{opacity:.55}
+  @media(max-width:600px){#shopify-section-{{ section.id }} .zst__mono{font-size:86vw}}
 </style>
 <section class="zst">
+  <div class="zst__mono" aria-hidden="true">Z</div>
   <div class="zst__inner">
     {%- if sc.heading != blank -%}<h2 class="zst__title">{{ sc.heading }}</h2>{%- endif -%}
     <div class="zst__rule"></div>
+    {%- if sc.lead != blank -%}<p class="zst__lead">{{ sc.lead }}</p>{%- endif -%}
     {%- if sc.body != blank -%}<div class="zst__body">{{ sc.body }}</div>{%- endif -%}
+    {%- if sc.signature != blank -%}<p class="zst__sign">{{ sc.signature }}</p>{%- endif -%}
     {%- if sc.link_label != blank -%}<a class="zst__link" href="{{ sc.link_url | default: '#' }}">{{ sc.link_label }}</a>{%- endif -%}
   </div>
 </section>
@@ -26,13 +36,15 @@
 {
   "name": "Zaria Story",
   "settings": [
-    { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft cream" } ], "default": "soft" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Our Story" },
-    { "type": "richtext", "id": "body", "label": "Text", "default": "<p>Zaria was born in the UAE from a love of fine cloth and the quiet, enduring elegance of couture. We travel the world to source the most beautiful fabrics, from Portuguese and Turkish cottons to silks, chiffons and hand-worked textiles.</p><p>Each length is chosen with intention, then brought to life as pieces made to your measure and made to last, drawn, cut and finished by hand in our atelier. This is modest dressing composed with grace, for the woman who wears her elegance quietly.</p>" },
+    { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "cream", "label": "Warm cream" }, { "value": "white", "label": "White" } ], "default": "cream" },
+    { "type": "text", "id": "heading", "label": "Overline", "default": "Our Story" },
+    { "type": "textarea", "id": "lead", "label": "Lead statement", "default": "Born in the UAE, from a love of fine cloth and the quiet, enduring elegance of couture." },
+    { "type": "richtext", "id": "body", "label": "Text", "default": "<p>We travel the world to source the most beautiful fabrics, from Portuguese and Turkish cottons to silks, chiffons and hand-worked textiles.</p><p>Each length is chosen with intention, then brought to life as pieces made to your measure and made to last, drawn, cut and finished by hand in our atelier. This is modest dressing composed with grace, for the woman who wears her elegance quietly.</p>" },
+    { "type": "text", "id": "signature", "label": "Signature line", "default": "The House of Zaria — Dubai" },
     { "type": "text", "id": "link_label", "label": "Link label", "default": "Read our story" },
     { "type": "url", "id": "link_url", "label": "Link" },
-    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 24, "max": 140, "step": 4, "unit": "px", "default": 60 },
-    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 24, "max": 140, "step": 4, "unit": "px", "default": 60 }
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 96 }
   ],
   "presets": [ { "name": "Zaria Story" } ]
 }
