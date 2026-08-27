@@ -1,0 +1,374 @@
+{% comment %}Zaria Footer - western-classical couture footer - Arkanet Technologies{% endcomment %}
+<style>
+  .zaria-footer{background:#ffffff;color:#111111;border-top:1px solid #ededed;
+    font-family:var(--text-font-family,'Jost'),'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+  .zaria-footer *{box-sizing:border-box}
+  .zaria-footer__inner{max-width:1200px;margin:0 auto;padding:74px 40px 30px}
+
+  /* Masthead */
+  .zaria-footer__masthead{text-align:center}
+  .zaria-footer__brandmark{display:inline-block;margin:0 0 22px}
+  .zaria-footer__wordmark{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;
+    font-size:30px;letter-spacing:.24em;text-transform:uppercase;font-weight:400;color:#111;line-height:1}
+  .zaria-footer__logo{max-height:54px;width:auto;display:block;margin:0 auto}
+  .zaria-footer__logo--full{max-height:180px}
+  .zaria-footer__tagline{max-width:544px;margin:0 auto 26px;color:#6a6a6a;font-size:14.5px;line-height:1.85;letter-spacing:.015em}
+  .zaria-footer__contact{list-style:none;margin:0 auto 26px;padding:0;color:#6a6a6a;font-size:12.5px;letter-spacing:.05em}
+  .zaria-footer__contact li{margin:3px 0}
+
+  /* Newsletter */
+  .zaria-newsletter{max-width:430px;margin:0 auto 32px}
+  .zaria-newsletter__overline{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#111;margin:0 0 12px}
+  .zaria-newsletter__text{color:#6a6a6a;font-size:13.5px;line-height:1.75;margin:0 0 16px}
+  .zaria-newsletter__form{display:flex;align-items:center;border-bottom:1px solid #111}
+  .zaria-newsletter__form input[type=email]{flex:1;border:0;background:transparent;padding:10px 2px;font:inherit;
+    font-size:13px;letter-spacing:.03em;color:#111;outline:none}
+  .zaria-newsletter__form input[type=email]::placeholder{color:#9a9a9a;letter-spacing:.06em}
+  .zaria-newsletter__form button{border:0;background:transparent;padding:8px 2px 8px 10px;cursor:pointer;color:#111;
+    display:flex;align-items:center;transition:transform .2s ease}
+  .zaria-newsletter__form button:hover{transform:translateX(3px)}
+  .zaria-newsletter__form button svg{width:22px;height:22px}
+  .zaria-newsletter__note{font-size:12px;color:#111;letter-spacing:.04em;margin:0}
+
+  /* Social */
+  .zaria-social{display:flex;justify-content:center;align-items:center;gap:22px;margin:2px 0 0}
+  .zaria-social a{color:#111;opacity:.55;display:inline-flex;transition:opacity .2s ease,transform .2s ease}
+  .zaria-social a:hover{opacity:1;transform:translateY(-2px)}
+  .zaria-social svg{width:18px;height:18px}
+
+  /* Rule */
+  .zaria-footer__rule{height:1px;background:#ededed;border:0;margin:54px 0}
+
+  /* Columns */
+  .zaria-footer__columns{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;text-align:left}
+  .zaria-footer__col h4{margin:0 0 18px;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#111}
+  .zaria-footer__col ul{list-style:none;margin:0;padding:0}
+  .zaria-footer__col li{margin:0 0 11px}
+  .zaria-footer__col a{color:#6a6a6a;text-decoration:none;font-size:13.5px;letter-spacing:.03em;transition:color .2s ease}
+  .zaria-footer__col a:hover{color:#111}
+
+  /* Bottom bar */
+  .zaria-footer__bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    padding-top:24px;margin-top:54px;border-top:1px solid #ededed}
+  .zaria-footer__copyright{color:#8a8a8a;font-size:11px;letter-spacing:.07em;text-transform:uppercase}
+  .zaria-footer__payment{color:#9a9a9a;font-size:11px;letter-spacing:.09em}
+  .zaria-footer__credit{color:#9a9a9a;font-size:11px;letter-spacing:.06em}
+  .zaria-footer__credit a{color:#6a6a6a;text-decoration:none}
+  .zaria-footer__credit a:hover{color:#111}
+
+  @media (max-width:749px){
+    .zaria-footer__inner{padding:52px 22px 26px}
+    .zaria-footer__wordmark{font-size:24px}
+    .zaria-footer__rule{margin:40px 0}
+    .zaria-footer__columns{grid-template-columns:1fr 1fr;gap:28px 24px}
+    .zaria-footer__bottom{flex-direction:column;text-align:center;gap:12px;margin-top:40px}
+  }
+  @media (max-width:420px){
+    .zaria-footer__columns{grid-template-columns:1fr}
+  }
+</style>
+
+<footer class="zaria-footer">
+  <div class="zaria-footer__inner">
+
+    <div class="zaria-footer__masthead">
+      <div class="zaria-footer__brandmark">
+        {%- if section.settings.show_logo_image and section.settings.logo != blank -%}
+          <img class="zaria-footer__logo" src="{{ section.settings.logo | image_url: width: 440 }}" alt="{{ shop.name | escape }}" width="220" height="54" loading="lazy">
+        {%- else -%}
+          <img class="zaria-footer__logo zaria-footer__logo--full" src="{{ 'zaria-logo.png' | asset_url }}" alt="{{ shop.name | escape }}" width="320" height="322" loading="lazy">
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.tagline != blank -%}
+        <p class="zaria-footer__tagline">{{ section.settings.tagline }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.contact_line_1 != blank or section.settings.contact_line_2 != blank or section.settings.contact_line_3 != blank -%}
+        <ul class="zaria-footer__contact">
+          {%- if section.settings.contact_line_1 != blank -%}<li>{{ section.settings.contact_line_1 }}</li>{%- endif -%}
+          {%- if section.settings.contact_line_2 != blank -%}<li>{{ section.settings.contact_line_2 }}</li>{%- endif -%}
+          {%- if section.settings.contact_line_3 != blank -%}<li>{{ section.settings.contact_line_3 }}</li>{%- endif -%}
+        </ul>
+      {%- endif -%}
+
+      <div class="zaria-newsletter">
+        {%- if section.settings.newsletter_heading != blank -%}
+          <p class="zaria-newsletter__overline">{{ section.settings.newsletter_heading }}</p>
+        {%- endif -%}
+        {%- if section.settings.newsletter_text != blank -%}
+          <p class="zaria-newsletter__text">{{ section.settings.newsletter_text }}</p>
+        {%- endif -%}
+        {%- form 'customer', id: 'zaria-newsletter-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {%- if form.posted_successfully? -%}
+            <p class="zaria-newsletter__note">Thank you. You are on the list.</p>
+          {%- else -%}
+            <div class="zaria-newsletter__form">
+              <input type="email" name="contact[email]" placeholder="Email address" aria-label="Email address" required>
+              <button type="submit" aria-label="Subscribe">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>
+              </button>
+            </div>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+
+      {%- assign s_instagram = section.settings.instagram -%}
+      {%- assign s_facebook = section.settings.facebook -%}
+      {%- assign s_x = section.settings.x -%}
+      {%- assign s_pinterest = section.settings.pinterest -%}
+      {%- assign s_youtube = section.settings.youtube -%}
+      {%- assign s_linkedin = section.settings.linkedin -%}
+      {%- assign s_snapchat = section.settings.snapchat -%}
+      {%- if s_instagram != blank or s_facebook != blank or s_x != blank or s_pinterest != blank or s_youtube != blank or s_linkedin != blank or s_snapchat != blank -%}
+        <div class="zaria-social">
+          {%- if s_instagram != blank -%}
+            <a href="{{ s_instagram }}" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if s_facebook != blank -%}
+            <a href="{{ s_facebook }}" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if s_x != blank -%}
+            <a href="{{ s_x }}" target="_blank" rel="noopener" aria-label="X">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.65l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if s_pinterest != blank -%}
+            <a href="{{ s_pinterest }}" target="_blank" rel="noopener" aria-label="Pinterest">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.04-2.83.18-.77 1.22-5.17 1.22-5.17s-.31-.62-.31-1.54c0-1.45.84-2.53 1.88-2.53.89 0 1.32.67 1.32 1.47 0 .9-.57 2.24-.87 3.48-.25 1.04.52 1.88 1.54 1.88 1.85 0 3.27-1.95 3.27-4.76 0-2.49-1.79-4.23-4.34-4.23-2.96 0-4.69 2.22-4.69 4.51 0 .89.34 1.85.77 2.37.08.1.09.19.07.29-.08.32-.25 1.04-.28 1.18-.04.19-.14.23-.32.14-1.25-.58-2.03-2.42-2.03-3.89 0-3.15 2.29-6.05 6.61-6.05 3.47 0 6.16 2.47 6.16 5.77 0 3.45-2.17 6.22-5.19 6.22-1.01 0-1.97-.53-2.3-1.15l-.62 2.33c-.23.87-.84 1.96-1.25 2.62.94.29 1.94.45 2.97.45 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if s_youtube != blank -%}
+            <a href="{{ s_youtube }}" target="_blank" rel="noopener" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if s_linkedin != blank -%}
+            <a href="{{ s_linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if s_snapchat != blank -%}
+            <a href="{{ s_snapchat }}" target="_blank" rel="noopener" aria-label="Snapchat">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 2c2.65.017 4.548 1.87 4.74 4.516.06.83.02 1.67.03 2.5.003.2.06.27.28.32.36.09.74.12 1.06.32.3.2.28.5.02.74-.28.26-.66.36-1.02.46-.5.14-.66.42-.45.9.62 1.44 1.62 2.52 3.06 3.16.28.12.58.2.86.32.32.14.4.36.24.66-.36.68-1.9.98-2.62 1.06-.14.02-.2.1-.22.24-.04.2-.08.4-.14.6-.08.26-.24.34-.5.28-.5-.12-1-.22-1.52-.2-.66.02-1.24.28-1.74.72-.66.58-1.4 1-2.3 1.02-.9-.02-1.64-.44-2.3-1.02-.5-.44-1.08-.7-1.74-.72-.52-.02-1.02.08-1.52.2-.26.06-.42-.02-.5-.28-.06-.2-.1-.4-.14-.6-.02-.14-.08-.22-.22-.24-.72-.08-2.26-.38-2.62-1.06-.16-.3-.08-.52.24-.66.28-.12.58-.2.86-.32 1.44-.64 2.44-1.72 3.06-3.16.2-.48.05-.76-.45-.9-.36-.1-.74-.2-1.02-.46-.26-.24-.28-.54.02-.74.32-.2.7-.23 1.06-.32.22-.05.28-.12.28-.32.01-.83-.03-1.67.03-2.5C7.47 3.87 9.367 2.017 12.017 2z"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <hr class="zaria-footer__rule">
+
+    <div class="zaria-footer__columns">
+      <div class="zaria-footer__col">
+        <h4>{{ section.settings.col1_title | default: 'Shop' }}</h4>
+        <ul>
+          <li><a href="{{ routes.all_products_collection_url }}">Shop All</a></li>
+          <li><a href="{{ routes.collections_url }}">Collections</a></li>
+          {%- if section.settings.design_url != blank -%}
+            <li><a href="{{ section.settings.design_url }}">Design Your Look</a></li>
+          {%- endif -%}
+        </ul>
+      </div>
+      <div class="zaria-footer__col">
+        <h4>{{ section.settings.col2_title | default: 'The House' }}</h4>
+        <ul>
+          <li><a href="/pages/about">About</a></li>
+          <li><a href="/pages/contact">Contact</a></li>
+          <li><a href="/pages/careers">Careers</a></li>
+        </ul>
+      </div>
+      <div class="zaria-footer__col">
+        <h4>{{ section.settings.col3_title | default: 'Client Care' }}</h4>
+        <ul>
+          <li><a href="/policies/shipping-policy">Shipping</a></li>
+          <li><a href="/policies/refund-policy">Returns</a></li>
+          <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
+          <li><a href="/policies/terms-of-service">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="zaria-footer__bottom">
+      <div class="zaria-footer__copyright">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</div>
+      {%- if section.settings.show_payment and section.settings.payment_text != blank -%}
+        <div class="zaria-footer__payment">{{ section.settings.payment_text }}</div>
+      {%- endif -%}
+      {%- if section.settings.credit_text != blank -%}
+        <div class="zaria-footer__credit">
+          {%- if section.settings.credit_url != blank -%}
+            <a href="{{ section.settings.credit_url }}" target="_blank" rel="noopener">{{ section.settings.credit_text }}</a>
+          {%- else -%}
+            {{ section.settings.credit_text }}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Zaria Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_logo_image",
+      "label": "Use logo image instead of store name",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Footer logo (use a dark logo on the light footer)"
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "A design-led couture house. Considered silhouettes, refined tailoring, and pieces made to be kept."
+    },
+    {
+      "type": "text",
+      "id": "contact_line_1",
+      "label": "Info line 1"
+    },
+    {
+      "type": "text",
+      "id": "contact_line_2",
+      "label": "Info line 2"
+    },
+    {
+      "type": "text",
+      "id": "contact_line_3",
+      "label": "Info line 3"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter text",
+      "default": "Receive early access to new collections and private appointments."
+    },
+    {
+      "type": "header",
+      "content": "Columns"
+    },
+    {
+      "type": "text",
+      "id": "col1_title",
+      "label": "Column 1 title",
+      "default": "Shop"
+    },
+    {
+      "type": "text",
+      "id": "col2_title",
+      "label": "Column 2 title",
+      "default": "The House"
+    },
+    {
+      "type": "text",
+      "id": "col3_title",
+      "label": "Column 3 title",
+      "default": "Client Care"
+    },
+    {
+      "type": "url",
+      "id": "design_url",
+      "label": "Design Your Look URL (Design Studio app)"
+    },
+    {
+      "type": "header",
+      "content": "Social media",
+      "info": "Add Zaria's links. Each icon appears only when its URL is set."
+    },
+    {
+      "type": "url",
+      "id": "instagram",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "x",
+      "label": "X (Twitter) URL"
+    },
+    {
+      "type": "url",
+      "id": "pinterest",
+      "label": "Pinterest URL"
+    },
+    {
+      "type": "url",
+      "id": "youtube",
+      "label": "YouTube URL"
+    },
+    {
+      "type": "url",
+      "id": "linkedin",
+      "label": "LinkedIn URL"
+    },
+    {
+      "type": "url",
+      "id": "snapchat",
+      "label": "Snapchat URL"
+    },
+    {
+      "type": "header",
+      "content": "Bottom bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment",
+      "label": "Show payment line",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "payment_text",
+      "label": "Payment line",
+      "default": "Visa · Mastercard · American Express · Apple Pay"
+    },
+    {
+      "type": "text",
+      "id": "credit_text",
+      "label": "Credit text",
+      "default": "Designed by Arkanet Technologies"
+    },
+    {
+      "type": "url",
+      "id": "credit_url",
+      "label": "Credit URL",
+      "default": "https://www.arkanet.ae"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Zaria Footer"
+    }
+  ]
+}
+{% endschema %}
