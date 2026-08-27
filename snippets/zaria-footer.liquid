@@ -5,7 +5,7 @@
 {%- assign zf_news_text = 'First looks, private appointments and atelier notes.' -%}
 {%- assign zf_design_url = '/collections/all-fabrics' -%}
 {%- assign zf_credit = 'Arkanet Technologies' -%}
-{%- assign zf_credit_url = '' -%}
+{%- assign zf_credit_url = 'https://arkanet.ae' -%}
 {%- comment -%} Social — set a URL to reveal the icon (blank hides it). Placeholders point nowhere until Zaria's real handles are added. {%- endcomment -%}
 {%- assign zf_instagram = '' -%}
 {%- assign zf_tiktok = '' -%}
@@ -18,33 +18,29 @@
   .zaria-footer *{box-sizing:border-box}
   .zaria-footer__inner{max-width:1220px;margin:0 auto;padding:48px 40px 26px}
 
-  /* Grid: brand spans both rows on the left; nav columns top-right; newsletter band fills bottom-right */
-  .zaria-footer__grid{display:grid;grid-template-columns:1.55fr 1fr 1fr 1fr;
-    grid-template-areas:"brand shop house care" "brand news news news";
-    gap:32px 48px;align-items:stretch}
+  /* Columns: content-width tracks spread edge to edge = equal gaps everywhere */
+  .zaria-footer__grid{display:grid;grid-template-columns:auto auto auto auto;
+    justify-content:space-between;column-gap:40px;align-items:start}
 
   /* Brand block (left) with vertical separator */
-  .zaria-footer__brand{grid-area:brand;max-width:424px;display:flex;flex-direction:column;
+  .zaria-footer__brand{display:flex;flex-direction:column;max-width:360px;
     border-right:1px solid #ececec;padding-right:52px}
   /* high specificity + !important: theme sets `.zaria-footer img{width:100%}` which was squashing the square logo */
-  .zaria-footer__brand .zaria-footer__logo{width:128px!important;height:auto!important;max-width:128px;
-    object-fit:contain;display:block;margin:0 0 18px}
-  .zaria-footer__tagline{color:#6c6c6c;font-size:13.5px;line-height:1.8;letter-spacing:.012em;margin:0 0 18px;max-width:34ch}
-  .zaria-footer__loc{margin:auto 0 0;color:#a6a6a6;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase}
+  .zaria-footer__brand .zaria-footer__logo{width:104px!important;height:auto!important;max-width:104px;
+    object-fit:contain;display:block;margin:0 0 16px}
+  .zaria-footer__tagline{color:#6c6c6c;font-size:13.5px;line-height:1.8;letter-spacing:.012em;margin:0 0 16px;max-width:32ch}
+  .zaria-footer__loc{margin:0;color:#a6a6a6;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase}
 
   /* Nav columns */
-  .zaria-footer__eyebrow{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#141414;margin:0 0 16px}
-  .zaria-footer__col--shop{grid-area:shop}
-  .zaria-footer__col--house{grid-area:house}
-  .zaria-footer__col--care{grid-area:care}
+  .zaria-footer__eyebrow{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#141414;margin:0 0 16px;white-space:nowrap}
   .zaria-footer__col ul{list-style:none;margin:0;padding:0}
   .zaria-footer__col li{margin:0 0 11px}
-  .zaria-footer__col a{color:#6c6c6c;text-decoration:none;font-size:13.5px;letter-spacing:.02em;transition:color .2s ease}
+  .zaria-footer__col a{color:#6c6c6c;text-decoration:none;font-size:13.5px;letter-spacing:.02em;white-space:nowrap;transition:color .2s ease}
   .zaria-footer__col a:hover{color:#141414}
 
-  /* Newsletter — horizontal band filling the lower columns, left-aligned */
-  .zaria-footer__news{grid-area:news;display:flex;align-items:center;justify-content:flex-start;
-    gap:20px 56px;flex-wrap:wrap;border-top:1px solid #ececec;padding-top:24px;align-self:end}
+  /* Newsletter — full-width band below the columns, left-aligned */
+  .zaria-footer__news{display:flex;align-items:center;justify-content:flex-start;gap:18px 56px;flex-wrap:wrap;
+    border-top:1px solid #ececec;margin-top:30px;padding-top:26px}
   .zaria-footer__news-intro{max-width:48ch}
   .zaria-footer__news-intro .zaria-footer__eyebrow{margin:0 0 9px}
   .zaria-news__text{color:#6c6c6c;font-size:13px;line-height:1.7;margin:0;max-width:46ch}
@@ -64,38 +60,33 @@
   .zaria-social a:hover{opacity:1;transform:translateY(-2px);color:#7a1f34}
   .zaria-social svg{width:18px;height:18px}
 
-  /* Aside — Elixir-style: copyright left, payment icons right */
+  /* Aside — copyright (left) · payment icons (centre) · credit (right) */
   .zaria-footer__aside{display:grid;gap:16px;justify-items:center;text-align:center;
-    margin-top:30px;padding-top:24px;border-top:1px solid #ececec}
-  .zaria-footer__legal{display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:3px 11px}
-  .zaria-footer__sep{color:#d3d3d3;font-size:11px;line-height:1}
+    margin-top:26px;padding-top:24px;border-top:1px solid #ececec}
   .zaria-footer__copyright{color:#9a9a9a;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin:0}
   .zaria-footer__credit{color:#bcbcbc;font-size:10.5px;letter-spacing:.05em;margin:0}
   .zaria-footer__credit a{color:#8a8a8a;text-decoration:none;transition:color .2s ease}
-  .zaria-footer__credit a:hover{color:#141414}
+  .zaria-footer__credit a:hover{color:#7a1f34}
   .zaria-payments{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.5rem;margin:0;padding:0;list-style:none}
   .zaria-payments li{display:flex}
   .zaria-payments svg,.zaria-payments img{height:23px;width:auto;display:block}
 
   @media (min-width:1000px){
-    .zaria-footer__aside{grid-auto-flow:column;justify-content:space-between;align-items:center;text-align:left}
-    .zaria-footer__legal{align-items:baseline;justify-content:flex-start}
-    .zaria-payments{justify-content:flex-end}
+    .zaria-footer__aside{grid-auto-flow:column;grid-template-columns:1fr auto 1fr;align-items:center}
+    .zaria-footer__copyright{justify-self:start;text-align:left}
+    .zaria-footer__credit{justify-self:end;text-align:right}
   }
   @media (max-width:900px){
-    .zaria-footer__grid{grid-template-columns:1fr 1fr;
-      grid-template-areas:"brand brand" "shop house" "care news";gap:30px 40px}
-    .zaria-footer__brand{max-width:none;border-right:0;padding-right:0}
-    .zaria-footer__news{border-top:0;padding-top:0;flex-direction:column;align-items:flex-start;gap:14px}
+    .zaria-footer__grid{grid-template-columns:1fr 1fr;justify-content:normal;gap:32px 40px}
+    .zaria-footer__brand{grid-column:1 / -1;max-width:none;border-right:0;padding-right:0}
+    .zaria-footer__news{flex-direction:column;align-items:flex-start;gap:14px}
     .zaria-news__form{width:100%;max-width:420px}
   }
   @media (max-width:749px){
     .zaria-footer__inner{padding:40px 22px 26px}
-    .zaria-footer__aside{margin-top:28px}
   }
   @media (max-width:560px){
-    .zaria-footer__grid{grid-template-columns:1fr;
-      grid-template-areas:"brand" "shop" "house" "care" "news";gap:28px}
+    .zaria-footer__grid{grid-template-columns:1fr;gap:26px}
   }
 </style>
 
@@ -170,42 +161,30 @@
         </ul>
       </div>
 
-      <div class="zaria-footer__news">
-        <div class="zaria-footer__news-intro">
-          {%- if zf_news_heading != blank -%}<p class="zaria-footer__eyebrow">{{ zf_news_heading }}</p>{%- endif -%}
-          {%- if zf_news_text != blank -%}<p class="zaria-news__text">{{ zf_news_text }}</p>{%- endif -%}
-        </div>
-        {%- form 'customer', id: 'zaria-newsletter-form' -%}
-          <input type="hidden" name="contact[tags]" value="newsletter">
-          {%- if form.posted_successfully? -%}
-            <p class="zaria-news__note">Thank you. You are on the list.</p>
-          {%- else -%}
-            <div class="zaria-news__form">
-              <input type="email" name="contact[email]" placeholder="Email address" aria-label="Email address" required>
-              <button type="submit" aria-label="Subscribe">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>
-              </button>
-            </div>
-          {%- endif -%}
-        {%- endform -%}
-      </div>
+    </div>
 
+    <div class="zaria-footer__news">
+      <div class="zaria-footer__news-intro">
+        {%- if zf_news_heading != blank -%}<p class="zaria-footer__eyebrow">{{ zf_news_heading }}</p>{%- endif -%}
+        {%- if zf_news_text != blank -%}<p class="zaria-news__text">{{ zf_news_text }}</p>{%- endif -%}
+      </div>
+      {%- form 'customer', id: 'zaria-newsletter-form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        {%- if form.posted_successfully? -%}
+          <p class="zaria-news__note">Thank you. You are on the list.</p>
+        {%- else -%}
+          <div class="zaria-news__form">
+            <input type="email" name="contact[email]" placeholder="Email address" aria-label="Email address" required>
+            <button type="submit" aria-label="Subscribe">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>
+            </button>
+          </div>
+        {%- endif -%}
+      {%- endform -%}
     </div>
 
     <div class="zaria-footer__aside">
-      <div class="zaria-footer__legal">
-        <p class="zaria-footer__copyright">&copy; {{ 'now' | date: '%Y' }} - {{ shop.name }}</p>
-        {%- if zf_credit != blank -%}
-          <span class="zaria-footer__sep" aria-hidden="true">&middot;</span>
-          <p class="zaria-footer__credit">
-            {%- if zf_credit_url != blank -%}
-              Crafted by <a href="{{ zf_credit_url }}" target="_blank" rel="noopener">{{ zf_credit }}</a>
-            {%- else -%}
-              Crafted by {{ zf_credit }}
-            {%- endif -%}
-          </p>
-        {%- endif -%}
-      </div>
+      <p class="zaria-footer__copyright">&copy; {{ 'now' | date: '%Y' }} - {{ shop.name }}</p>
 
       {%- if shop.enabled_payment_types.size >= 2 -%}
         <ul class="zaria-payments">
@@ -228,6 +207,16 @@
             <svg viewBox="0 0 38 24" width="38" height="24" role="img" aria-label="Apple Pay"><rect width="38" height="24" rx="4" fill="#fff"/><rect x=".5" y=".5" width="37" height="23" rx="3.5" fill="none" stroke="#ececec"/><path d="M12.05 9.05c-.28.34-.74.6-1.19.56-.06-.46.17-.94.42-1.24.28-.34.77-.59 1.17-.6.05.47-.13.94-.4 1.28zm.39.62c-.65-.04-1.2.37-1.51.37-.31 0-.79-.35-1.3-.34-.67.01-1.28.39-1.63.99-.69 1.2-.18 2.98.49 3.96.33.48.72 1.02 1.24 1 .49-.02.68-.32 1.28-.32.6 0 .77.32 1.3.31.54-.01.88-.49 1.21-.97.38-.55.54-1.09.55-1.12-.01-.01-1.05-.41-1.06-1.6-.01-1 .82-1.48.85-1.5-.47-.69-1.19-.76-1.44-.78z" fill="#000"/><text x="20.5" y="15.8" font-family="Arial,Helvetica,sans-serif" font-weight="600" font-size="8.4" fill="#000">Pay</text></svg>
           </li>
         </ul>
+      {%- endif -%}
+
+      {%- if zf_credit != blank -%}
+        <p class="zaria-footer__credit">
+          {%- if zf_credit_url != blank -%}
+            Crafted by <a href="{{ zf_credit_url }}" target="_blank" rel="noopener">{{ zf_credit }}</a>
+          {%- else -%}
+            Crafted by {{ zf_credit }}
+          {%- endif -%}
+        </p>
       {%- endif -%}
     </div>
 
