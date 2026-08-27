@@ -10013,7 +10013,9 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .collection .product-list{gap:4px!important;}
 @media (min-width:1000px){.collection .product-list{grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-flow:row!important;}}
 @media (min-width:700px) and (max-width:999px){.collection .product-list{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row!important;}}
-@media (max-width:699px){.collection .product-list{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row!important;gap:3px!important;}}
+@media (max-width:699px){.collection .product-list{grid-auto-flow:row!important;gap:7px!important;}
+  .collection .product-list[collection-mobile-layout="large"]{grid-template-columns:1fr!important;}
+  .collection .product-list[collection-mobile-layout="medium"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;}}
 
 /* ===== Zaria: couture Sort By (dark dropdown -> light, legible text) ===== */
 .collection-toolbar__button{font-family:"Jost",sans-serif!important;text-transform:uppercase;letter-spacing:.18em;font-size:11px;}

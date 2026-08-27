@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "intro": {
+      "type": "zaria-feature",
+      "settings": {
+        "scheme": "white",
+        "image_side": "right",
+        "eyebrow": "Careers",
+        "heading": "Join the House of Zaria",
+        "body": "<p>We are a small, design-led atelier in Dubai, building a modest couture house with care. We look for people who love craft, detail and quiet excellence, from pattern cutters and tailors to stylists, client advisors and digital talent.</p><p>If that sounds like you, we would love to hear from you, even if there is no role listed today.</p>",
+        "link_label": "Email the studio",
+        "link_url": "mailto:careers@zariacollections.com"
+      }
+    },
+    "values": {
+      "type": "zaria-values",
+      "settings": { "scheme": "soft", "eyebrow": "Working at Zaria", "heading": "What we offer", "marker": "icon", "columns": "3" },
+      "blocks": {
+        "v1": { "type": "value", "settings": { "icon": "scissors", "title": "Real craft", "text": "Hands-on work with the finest fabrics and finishing." } },
+        "v2": { "type": "value", "settings": { "icon": "needle", "title": "Room to grow", "text": "A small team where your work is seen and shapes the house." } },
+        "v3": { "type": "value", "settings": { "icon": "calendar", "title": "Considered pace", "text": "Quality over volume, with time to do things properly." } }
+      },
+      "block_order": ["v1", "v2", "v3"]
+    },
+    "cta": {
+      "type": "zaria-quote",
+      "settings": { "scheme": "ink", "eyebrow": "Open applications", "quote": "Send your portfolio or CV to careers@zariacollections.com. We read every message.", "attribution": "The House of Zaria, Dubai" }
+    }
+  },
+  "order": ["intro", "values", "cta"]
+}
