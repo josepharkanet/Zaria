@@ -5,8 +5,8 @@
     font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:clamp(66px,9vw,120px) clamp(20px,5vw,48px);position:relative;overflow:hidden}
   #shopify-section-{{ section.id }} .zst *{box-sizing:border-box}
   #shopify-section-{{ section.id }} .zst__mono{position:absolute;top:50%;left:50%;transform:translate(-50%,-48%);
-    font-family:var(--heading-font-family,'Jost'),'Jost',serif;font-weight:500;font-size:min(48vw,560px);line-height:1;
-    color:#7a1f34;opacity:.04;pointer-events:none;user-select:none;z-index:0}
+    width:min(60vw,600px);aspect-ratio:1580/1239;
+    background:url('{{ 'zaria-flora.png' | asset_url }}') center/contain no-repeat;opacity:.07;pointer-events:none;user-select:none;z-index:0}
   #shopify-section-{{ section.id }} .zst__inner{position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center}
   #shopify-section-{{ section.id }} .zst__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     letter-spacing:.04em;text-transform:uppercase;color:#1a1a1a;margin:0 0 20px}
@@ -19,10 +19,10 @@
   #shopify-section-{{ section.id }} .zst__link{display:inline-block;margin-top:30px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
     color:#7a1f34;text-decoration:none;border-bottom:1px solid #7a1f34;padding-bottom:5px;transition:opacity .2s ease}
   #shopify-section-{{ section.id }} .zst__link:hover{opacity:.55}
-  @media(max-width:600px){#shopify-section-{{ section.id }} .zst__mono{font-size:86vw}}
+  @media(max-width:600px){#shopify-section-{{ section.id }} .zst__mono{width:90vw}}
 </style>
 <section class="zst">
-  <div class="zst__mono" aria-hidden="true">Z</div>
+  <div class="zst__mono" aria-hidden="true"></div>
   <div class="zst__inner">
     {%- if sc.heading != blank -%}<h2 class="zst__title">{{ sc.heading }}</h2>{%- endif -%}
     <div class="zst__rule"></div>
@@ -41,7 +41,7 @@
     { "type": "textarea", "id": "lead", "label": "Lead statement", "default": "Born in the UAE, from a love of fine cloth and the quiet, enduring elegance of couture." },
     { "type": "richtext", "id": "body", "label": "Text", "default": "<p>We travel the world to source the most beautiful fabrics, from Portuguese and Turkish cottons to silks, chiffons and hand-worked textiles.</p><p>Each length is chosen with intention, then brought to life as pieces made to your measure and made to last, drawn, cut and finished by hand in our atelier. This is modest dressing composed with grace, for the woman who wears her elegance quietly.</p>" },
     { "type": "text", "id": "signature", "label": "Signature line", "default": "The House of Zaria — Dubai" },
-    { "type": "text", "id": "link_label", "label": "Link label", "default": "Read our story" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Read more" },
     { "type": "url", "id": "link_url", "label": "Link" },
     { "type": "range", "id": "padding_top", "label": "Padding top", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 96 },
     { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 96 }
