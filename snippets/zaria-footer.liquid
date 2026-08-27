@@ -2,7 +2,7 @@
 {%- assign zf_tagline = 'A design-led couture house. Considered silhouettes, refined tailoring, and pieces made to be worn and kept.' -%}
 {%- assign zf_loc = 'Dubai, United Arab Emirates' -%}
 {%- assign zf_news_heading = 'The Zaria List' -%}
-{%- assign zf_news_text = 'First looks, private appointments and atelier notes.' -%}
+{%- assign zf_news_text = 'First looks, private appointments and atelier notes, direct to you.' -%}
 {%- assign zf_design_url = '/collections/all-fabrics' -%}
 {%- assign zf_credit = 'Arkanet Technologies' -%}
 {%- assign zf_credit_url = '' -%}
@@ -23,13 +23,10 @@
     grid-template-areas:"brand shop house care" "brand news news news";
     gap:44px 48px;align-items:stretch}
 
-  /* Brand block (left) with vertical separator */
-  .zaria-footer__brand{grid-area:brand;max-width:424px;display:flex;flex-direction:column;
-    border-right:1px solid #ececec;padding-right:52px}
-  /* high specificity + !important: theme sets `.zaria-footer img{width:100%}` which was squashing the square logo */
-  .zaria-footer__brand .zaria-footer__logo{width:132px!important;height:auto!important;max-width:132px;
-    object-fit:contain;display:block;margin:0 0 22px}
-  .zaria-footer__tagline{color:#6c6c6c;font-size:13.5px;line-height:1.8;letter-spacing:.012em;margin:0 0 22px;max-width:34ch}
+  /* Brand block (left) */
+  .zaria-footer__brand{grid-area:brand;max-width:400px;display:flex;flex-direction:column}
+  .zaria-footer__logo{height:108px;width:auto;display:block;margin:0 0 20px}
+  .zaria-footer__tagline{color:#6c6c6c;font-size:13.5px;line-height:1.8;letter-spacing:.012em;margin:0 0 22px;max-width:40ch}
   .zaria-footer__loc{margin:auto 0 0;color:#a6a6a6;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase}
 
   /* Nav columns */
@@ -84,7 +81,7 @@
   @media (max-width:900px){
     .zaria-footer__grid{grid-template-columns:1fr 1fr;
       grid-template-areas:"brand brand" "shop house" "care news";gap:34px 40px}
-    .zaria-footer__brand{max-width:none;border-right:0;padding-right:0}
+    .zaria-footer__brand{max-width:none}
     .zaria-footer__news{border-top:0;padding-top:0;flex-direction:column;align-items:flex-start;gap:14px}
     .zaria-news__form{width:100%;max-width:420px}
   }
