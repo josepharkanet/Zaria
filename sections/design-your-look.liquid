@@ -1,150 +1,49 @@
-{% comment %}Zaria - Design Your Look CTA - Arkanet Technologies{% endcomment %}
-{%- assign zdl_bg = '#ffffff' -%}
-{%- if section.settings.background == 'soft' -%}{%- assign zdl_bg = '#fafafa' -%}{%- endif -%}
-{%- assign zdl_url = section.settings.button_url | default: '#' -%}
+{% comment %}Zaria - Design Your Look CTA (full-bleed banner) - Arkanet Technologies{% endcomment %}
+{%- assign zdl_url = section.settings.button_url | default: '/collections/all-fabrics' -%}
 <style>
-  .zdl{font-family:var(--text-font-family,'Jost'),'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111}
-  .zdl *{box-sizing:border-box}
-  .zdl__inner{max-width:1100px;margin:0 auto;padding-left:24px;padding-right:24px}
-  .zdl--split .zdl__inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
-  .zdl__overline{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#6a6a6a;margin:0 0 18px}
-  .zdl__heading{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;font-size:clamp(30px,4.4vw,44px);line-height:1.12;letter-spacing:.01em;margin:0 0 18px}
-  .zdl__body{color:#6a6a6a;font-size:15px;line-height:1.85;max-width:48ch;margin:0 0 30px}
-  .zdl__content--center .zdl__body{margin-left:auto;margin-right:auto}
-  .zdl__btn{display:inline-block;background:#111;color:#fff;text-decoration:none;padding:15px 38px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;border:1px solid #111;transition:opacity .2s ease}
-  .zdl__btn:hover{opacity:.85}
-  .zdl__media img{display:block;width:100%;height:auto}
-  @media (max-width:749px){
-    .zdl--split .zdl__inner{grid-template-columns:1fr;gap:32px}
-    .zdl--split .zdl__media{order:-1}
-  }
+  #shopify-section-{{ section.id }} .zdl{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+    min-height:{{ section.settings.height | default: 62 }}vh;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;background:#1c1518}
+  #shopify-section-{{ section.id }} .zdl__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ section.settings.focal | default: 'center' }}}
+  #shopify-section-{{ section.id }} .zdl__veil{position:absolute;inset:0;background:linear-gradient(rgba(18,12,14,.5),rgba(18,12,14,.64))}
+  #shopify-section-{{ section.id }} .zdl__inner{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:70px clamp(24px,5vw,48px);text-align:center;color:#fff}
+  #shopify-section-{{ section.id }} .zdl__overline{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#ecdde1;margin:0 0 20px}
+  #shopify-section-{{ section.id }} .zdl__heading{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
+    line-height:1.14;letter-spacing:.02em;margin:0 0 20px}
+  #shopify-section-{{ section.id }} .zdl__body{color:rgba(255,255,255,.85);font-size:clamp(14.5px,1.4vw,16px);line-height:1.9;max-width:46ch;margin:0 auto 34px}
+  #shopify-section-{{ section.id }} .zdl__btn{display:inline-block;background:#fff;color:#161616;text-decoration:none;padding:16px 46px;
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;border:1px solid #fff;transition:background .2s ease,color .2s ease}
+  #shopify-section-{{ section.id }} .zdl__btn:hover{background:transparent;color:#fff}
 </style>
-<section class="zdl{% if section.settings.image != blank %} zdl--split{% endif %}" style="background:{{ zdl_bg }};padding-top:{{ section.settings.padding_top }}px;padding-bottom:{{ section.settings.padding_bottom }}px">
+<section class="zdl">
+  {%- if section.settings.image != blank -%}
+    <img class="zdl__bg" src="{{ section.settings.image | image_url: width: 2200 }}" alt="" width="2200" height="1237" loading="lazy">
+  {%- else -%}
+    <img class="zdl__bg" src="{{ 'zaria-feature.jpg' | asset_url }}" alt="" width="1500" height="1113" loading="lazy">
+  {%- endif -%}
+  <div class="zdl__veil"></div>
   <div class="zdl__inner">
-    {%- if section.settings.image != blank and section.settings.image_position == 'left' -%}
-      <div class="zdl__media"><img src="{{ section.settings.image | image_url: width: 1400 }}" alt="{{ section.settings.image.alt | escape }}" width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" loading="lazy"></div>
-    {%- endif -%}
-    <div class="zdl__content{% if section.settings.text_align == 'center' %} zdl__content--center{% endif %}" style="text-align:{{ section.settings.text_align }}">
-      {%- if section.settings.overline != blank -%}<p class="zdl__overline">{{ section.settings.overline }}</p>{%- endif -%}
-      {%- if section.settings.heading != blank -%}<h2 class="zdl__heading">{{ section.settings.heading }}</h2>{%- endif -%}
-      {%- if section.settings.body != blank -%}<div class="zdl__body">{{ section.settings.body | newline_to_br }}</div>{%- endif -%}
-      {%- if section.settings.button_label != blank -%}
-        <a class="zdl__btn" href="{{ zdl_url }}"{% if section.settings.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ section.settings.button_label }}</a>
-      {%- endif -%}
-    </div>
-    {%- if section.settings.image != blank and section.settings.image_position == 'right' -%}
-      <div class="zdl__media"><img src="{{ section.settings.image | image_url: width: 1400 }}" alt="{{ section.settings.image.alt | escape }}" width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" loading="lazy"></div>
+    {%- if section.settings.overline != blank -%}<p class="zdl__overline">{{ section.settings.overline }}</p>{%- endif -%}
+    {%- if section.settings.heading != blank -%}<h2 class="zdl__heading">{{ section.settings.heading }}</h2>{%- endif -%}
+    {%- if section.settings.body != blank -%}<div class="zdl__body">{{ section.settings.body | newline_to_br }}</div>{%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <a class="zdl__btn" href="{{ zdl_url }}"{% if section.settings.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ section.settings.button_label }}</a>
     {%- endif -%}
   </div>
 </section>
-
 {% schema %}
 {
   "name": "Design Your Look",
   "settings": [
-    {
-      "type": "select",
-      "id": "background",
-      "label": "Background",
-      "options": [
-        { "value": "white", "label": "White" },
-        { "value": "soft", "label": "Soft grey" }
-      ],
-      "default": "soft"
-    },
-    {
-      "type": "text",
-      "id": "overline",
-      "label": "Overline",
-      "default": "The Atelier"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Design your look"
-    },
-    {
-      "type": "textarea",
-      "id": "body",
-      "label": "Text",
-      "default": "Commission a piece made only for you. Share your vision, your measurements, and your occasion, and our designers will bring it to life."
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button label",
-      "default": "Start your design"
-    },
-    {
-      "type": "url",
-      "id": "button_url",
-      "label": "Button link (your deployed Design Studio URL)"
-    },
-    {
-      "type": "checkbox",
-      "id": "open_in_new_tab",
-      "label": "Open in a new tab",
-      "default": true
-    },
-    {
-      "type": "select",
-      "id": "text_align",
-      "label": "Text alignment",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" }
-      ],
-      "default": "center"
-    },
-    {
-      "type": "header",
-      "content": "Optional image"
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image"
-    },
-    {
-      "type": "select",
-      "id": "image_position",
-      "label": "Image position",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "right"
-    },
-    {
-      "type": "header",
-      "content": "Spacing"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "label": "Padding top",
-      "min": 32,
-      "max": 160,
-      "step": 4,
-      "unit": "px",
-      "default": 96
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "label": "Padding bottom",
-      "min": 32,
-      "max": 160,
-      "step": 4,
-      "unit": "px",
-      "default": 96
-    }
+    { "type": "image_picker", "id": "image", "label": "Background image (optional)" },
+    { "type": "text", "id": "focal", "label": "Image focal point", "default": "center" },
+    { "type": "range", "id": "height", "label": "Height", "min": 44, "max": 90, "step": 2, "unit": "vh", "default": 62 },
+    { "type": "text", "id": "overline", "label": "Overline", "default": "The Atelier" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Design your look" },
+    { "type": "textarea", "id": "body", "label": "Text", "default": "Commission a piece made only for you. Share your vision, your measurements and your occasion, and our designers will bring it to life." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Start your design" },
+    { "type": "url", "id": "button_url", "label": "Button link" },
+    { "type": "checkbox", "id": "open_in_new_tab", "label": "Open in a new tab", "default": false }
   ],
-  "presets": [
-    {
-      "name": "Design Your Look"
-    }
-  ]
+  "presets": [ { "name": "Design Your Look" } ]
 }
 {% endschema %}

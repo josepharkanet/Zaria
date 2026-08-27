@@ -494,7 +494,7 @@
               >
             {%- endif -%}
 
-            <cart-dot class="header__cart-dot {% unless cart.empty? %}is-visible{% endunless %} {% unless section.settings.show_icons %}md:hidden{% endunless %}"></cart-dot>
+            <cart-dot class="header__cart-dot {% unless cart.empty? %}is-visible{% endunless %} {% unless section.settings.show_icons %}md:hidden{% endunless %}"><cart-count>{{ cart.item_count }}</cart-count></cart-dot>
           </a>
         </li>
 
