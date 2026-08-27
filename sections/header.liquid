@@ -112,6 +112,7 @@
 
   /* Zaria: white header bar, dark nav + icons, colour logo */
   #shopify-section-{{ section.id }} .header { background: #ffffff !important; }
+  #shopify-section-{{ section.id }} .header.header--line { border-bottom: 1px solid #ececec; }
   #shopify-section-{{ section.id }} .header__primary-nav a,
   #shopify-section-{{ section.id }} .header__primary-nav summary,
   #shopify-section-{{ section.id }} .header__nav-half a,
@@ -134,7 +135,7 @@
     {% if section.settings.hide_on_scroll and section.settings.enable_sticky %}
       hide-on-scroll
     {% endif %}
-    class="header color-scheme color-scheme--{{ section.settings.color_scheme.id }}{% if section.settings.layout == 'logo_center_navigation_below' %} zaria-header-split{% endif %}"
+    class="header color-scheme color-scheme--{{ section.settings.color_scheme.id }}{% if section.settings.layout == 'logo_center_navigation_below' %} zaria-header-split{% endif %}{% unless request.page_type == 'index' %} header--line{% endunless %}"
   >
     {%- comment -%}
       --------------------------------------------------------------------------------------------------------------------
