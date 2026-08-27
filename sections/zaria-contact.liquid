@@ -1,43 +1,83 @@
-{% comment %}Zaria - couture contact (form + details) - Arkanet Technologies{% endcomment %}
+{% comment %}Zaria - couture contact (atmospheric hero + details + form) - Arkanet Technologies{% endcomment %}
 {%- assign sc = section.settings -%}
 <style>
   #shopify-section-{{ section.id }} .zct{background:{% if sc.scheme == 'soft' %}#fafafa{% else %}#fff{% endif %};color:#111;
-    font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:{{ sc.padding_top }}px clamp(20px,4vw,48px) {{ sc.padding_bottom }}px}
+    font-family:var(--text-font-family,'Jost'),'Jost',sans-serif}
   #shopify-section-{{ section.id }} .zct *{box-sizing:border-box}
-  #shopify-section-{{ section.id }} .zct__inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:0.85fr 1.15fr;gap:clamp(32px,6vw,80px);align-items:start}
-  #shopify-section-{{ section.id }} .zct__eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#6a6a6a;margin:0 0 16px}
-  #shopify-section-{{ section.id }} .zct__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;font-size:clamp(28px,3.6vw,44px);line-height:1.12;margin:0 0 20px}
-  #shopify-section-{{ section.id }} .zct__intro{color:#5f5f5f;font-size:15px;line-height:1.85;margin:0 0 30px;max-width:42ch}
-  #shopify-section-{{ section.id }} .zct__dl{display:grid;gap:18px}
-  #shopify-section-{{ section.id }} .zct__k{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#9a9a9a;margin:0 0 5px}
-  #shopify-section-{{ section.id }} .zct__v{font-size:15px;color:#111;margin:0}
-  #shopify-section-{{ section.id }} .zct__v a{color:#111;text-decoration:none;border-bottom:1px solid #ddd}
-  #shopify-section-{{ section.id }} .zct__v a:hover{border-color:#111}
+
+  /* Hero band */
+  #shopify-section-{{ section.id }} .zct__hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+    min-height:clamp(300px,40vw,420px);text-align:center}
+  #shopify-section-{{ section.id }} .zct__hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sc.focal | default: 'center' }}}
+  #shopify-section-{{ section.id }} .zct__hero-veil{position:absolute;inset:0;background:linear-gradient(rgba(20,14,16,.42),rgba(20,14,16,.58))}
+  #shopify-section-{{ section.id }} .zct__hero-in{position:relative;z-index:1;max-width:640px;padding:56px clamp(24px,5vw,48px);color:#fff}
+  #shopify-section-{{ section.id }} .zct__hero-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#f0e6e8;margin:0 0 18px}
+  #shopify-section-{{ section.id }} .zct__hero-title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
+    font-size:clamp(30px,4.4vw,52px);line-height:1.1;letter-spacing:.01em;margin:0}
+  #shopify-section-{{ section.id }} .zct__hero-intro{color:rgba(255,255,255,.9);font-size:clamp(14px,1.5vw,16px);line-height:1.85;margin:20px auto 0;max-width:48ch}
+
+  /* Body */
+  #shopify-section-{{ section.id }} .zct__inner{max-width:1120px;margin:0 auto;
+    padding:{{ sc.padding_top | default: 76 }}px clamp(20px,4vw,48px) {{ sc.padding_bottom | default: 92 }}px;
+    display:grid;grid-template-columns:0.8fr 1.2fr;gap:clamp(36px,6vw,88px);align-items:start}
+  #shopify-section-{{ section.id }} .zct__eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#141414;margin:0 0 22px;font-weight:600}
+  #shopify-section-{{ section.id }} .zct__dl{display:grid;gap:22px}
+  #shopify-section-{{ section.id }} .zct__k{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#a2a2a2;margin:0 0 6px}
+  #shopify-section-{{ section.id }} .zct__v{font-size:15px;color:#161616;margin:0;line-height:1.6}
+  #shopify-section-{{ section.id }} .zct__v a{color:#161616;text-decoration:none;border-bottom:1px solid #e0ddd7;transition:border-color .2s}
+  #shopify-section-{{ section.id }} .zct__v a:hover{border-color:#7a1f34}
+  #shopify-section-{{ section.id }} .zct__social{display:flex;gap:20px;margin:6px 0 0}
+  #shopify-section-{{ section.id }} .zct__social a{color:#161616;opacity:.55;transition:opacity .2s,transform .2s}
+  #shopify-section-{{ section.id }} .zct__social a:hover{opacity:1;transform:translateY(-2px);color:#7a1f34}
+  #shopify-section-{{ section.id }} .zct__social svg{width:18px;height:18px}
+
+  #shopify-section-{{ section.id }} .zct__form-head{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;font-size:22px;margin:0 0 20px}
   #shopify-section-{{ section.id }} .zct__field{margin-bottom:18px}
   #shopify-section-{{ section.id }} .zct__row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  #shopify-section-{{ section.id }} .zct label{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#6a6a6a;margin:0 0 8px}
-  #shopify-section-{{ section.id }} .zct input,#shopify-section-{{ section.id }} .zct textarea{width:100%;padding:12px 13px;border:1px solid #e6e6e6;border-radius:2px;background:#fff;font:inherit;font-size:15px;color:#111}
-  #shopify-section-{{ section.id }} .zct input:focus,#shopify-section-{{ section.id }} .zct textarea:focus{outline:none;border-color:#111;box-shadow:0 0 0 3px rgba(17,17,17,.07)}
-  #shopify-section-{{ section.id }} .zct textarea{min-height:130px;resize:vertical;line-height:1.6}
-  #shopify-section-{{ section.id }} .zct__btn{display:inline-block;background:#111;color:#fff;border:none;border-radius:2px;padding:15px 40px;font-family:inherit;font-size:12px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:opacity .2s ease;margin-top:4px}
-  #shopify-section-{{ section.id }} .zct__btn:hover{opacity:.85}
-  #shopify-section-{{ section.id }} .zct__note{background:#111;color:#fff;padding:14px 18px;font-size:13px;letter-spacing:.03em;margin:0 0 22px}
-  @media (max-width:749px){#shopify-section-{{ section.id }} .zct__inner{grid-template-columns:1fr;gap:36px}#shopify-section-{{ section.id }} .zct__row{grid-template-columns:1fr}}
+  #shopify-section-{{ section.id }} .zct label{display:block;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8a8a8a;margin:0 0 8px}
+  #shopify-section-{{ section.id }} .zct input,#shopify-section-{{ section.id }} .zct textarea{width:100%;padding:13px 14px;border:1px solid #e6e2db;border-radius:2px;background:#fff;font:inherit;font-size:15px;color:#111;transition:border-color .2s,box-shadow .2s}
+  #shopify-section-{{ section.id }} .zct input:focus,#shopify-section-{{ section.id }} .zct textarea:focus{outline:none;border-color:#7a1f34;box-shadow:0 0 0 3px rgba(122,31,52,.08)}
+  #shopify-section-{{ section.id }} .zct textarea{min-height:140px;resize:vertical;line-height:1.6}
+  #shopify-section-{{ section.id }} .zct__btn{display:inline-block;background:#161616;color:#fff;border:none;border-radius:2px;padding:16px 44px;font-family:inherit;font-size:12px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:background .2s;margin-top:6px}
+  #shopify-section-{{ section.id }} .zct__btn:hover{background:#7a1f34}
+  #shopify-section-{{ section.id }} .zct__note{background:#f4efe9;border:1px solid #e7ddd0;color:#161616;padding:14px 18px;font-size:13px;letter-spacing:.02em;margin:0 0 22px;border-radius:2px}
+  @media (max-width:849px){#shopify-section-{{ section.id }} .zct__inner{grid-template-columns:1fr;gap:40px}#shopify-section-{{ section.id }} .zct__row{grid-template-columns:1fr}}
 </style>
+
 <section class="zct">
+  {%- if sc.show_hero != false -%}
+    <div class="zct__hero">
+      <img class="zct__hero-bg" src="{% if sc.image != blank %}{{ sc.image | image_url: width: 2000 }}{% else %}{{ 'zaria-dyl-bg.jpg' | asset_url }}{% endif %}" alt="" width="2000" height="1333" loading="lazy">
+      <div class="zct__hero-veil"></div>
+      <div class="zct__hero-in">
+        {%- if sc.eyebrow != blank -%}<p class="zct__hero-eyebrow">{{ sc.eyebrow }}</p>{%- endif -%}
+        {%- if sc.heading != blank -%}<h1 class="zct__hero-title">{{ sc.heading }}</h1>{%- endif -%}
+        {%- if sc.intro != blank -%}<p class="zct__hero-intro">{{ sc.intro }}</p>{%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
   <div class="zct__inner">
     <div class="zct__info">
-      {%- if sc.eyebrow != blank -%}<p class="zct__eyebrow">{{ sc.eyebrow }}</p>{%- endif -%}
-      {%- if sc.heading != blank -%}<h2 class="zct__title">{{ sc.heading }}</h2>{%- endif -%}
-      {%- if sc.intro != blank -%}<p class="zct__intro">{{ sc.intro }}</p>{%- endif -%}
+      <p class="zct__eyebrow">Reach the atelier</p>
       <div class="zct__dl">
         {%- if sc.email != blank -%}<div><p class="zct__k">Email</p><p class="zct__v"><a href="mailto:{{ sc.email }}">{{ sc.email }}</a></p></div>{%- endif -%}
         {%- if sc.phone != blank -%}<div><p class="zct__k">{{ sc.phone_label | default: 'Phone / WhatsApp' }}</p><p class="zct__v"><a href="tel:{{ sc.phone | remove: ' ' }}">{{ sc.phone }}</a></p></div>{%- endif -%}
         {%- if sc.hours != blank -%}<div><p class="zct__k">Hours</p><p class="zct__v">{{ sc.hours }}</p></div>{%- endif -%}
         {%- if sc.address != blank -%}<div><p class="zct__k">Atelier</p><p class="zct__v">{{ sc.address }}</p></div>{%- endif -%}
+        {%- if sc.instagram != blank or sc.tiktok != blank -%}
+          <div>
+            <p class="zct__k">Follow</p>
+            <div class="zct__social">
+              {%- if sc.instagram != blank -%}<a href="{{ sc.instagram }}" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>{%- endif -%}
+              {%- if sc.tiktok != blank -%}<a href="{{ sc.tiktok }}" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.1 1.6 3.7 3.7 4v2.6c-1.4.1-2.7-.3-3.9-1v5.9c0 3.5-2.9 6.2-6.3 5.5-2.4-.5-4.2-2.6-4.3-5.1-.1-3 2.3-5.5 5.3-5.5.3 0 .5 0 .8.1v2.7c-.3-.1-.5-.1-.8-.1-1.5 0-2.7 1.4-2.4 3 .2 1 1 1.8 2 2 1.5.2 2.8-.9 2.8-2.4V3z"/></svg></a>{%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
       </div>
     </div>
     <div class="zct__form">
+      <p class="zct__form-head">{{ sc.form_heading | default: 'Send us a message' }}</p>
       {%- form 'contact', id: 'zaria-contact-form' -%}
         {%- if form.posted_successfully? -%}
           <p class="zct__note">Thank you. Your message has reached the studio and we will reply shortly.</p>
@@ -61,17 +101,23 @@
   "name": "Zaria Contact",
   "settings": [
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
+    { "type": "checkbox", "id": "show_hero", "label": "Show hero image band", "default": true },
+    { "type": "image_picker", "id": "image", "label": "Hero image (optional)" },
+    { "type": "text", "id": "focal", "label": "Hero focal point", "default": "center" },
     { "type": "text", "id": "eyebrow", "label": "Overline", "default": "Contact" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Get in touch" },
-    { "type": "textarea", "id": "intro", "label": "Intro", "default": "For appointments, bespoke commissions, or any question, our studio will be glad to help." },
-    { "type": "text", "id": "email", "label": "Email", "default": "hello@zaria.com" },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "For private appointments, bespoke commissions, fabric enquiries or press, our Dubai atelier will be glad to help." },
+    { "type": "text", "id": "form_heading", "label": "Form heading", "default": "Send us a message" },
+    { "type": "text", "id": "email", "label": "Email", "default": "hello@zariacollections.com" },
     { "type": "text", "id": "phone", "label": "Phone / WhatsApp" },
     { "type": "text", "id": "phone_label", "label": "Phone label", "default": "Phone / WhatsApp" },
     { "type": "text", "id": "hours", "label": "Hours", "default": "Sunday to Thursday, 10am to 7pm" },
     { "type": "text", "id": "address", "label": "Atelier address" },
+    { "type": "text", "id": "instagram", "label": "Instagram URL" },
+    { "type": "text", "id": "tiktok", "label": "TikTok URL" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Send message" },
-    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 96 },
-    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 96 }
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 76 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 32, "max": 160, "step": 4, "unit": "px", "default": 92 }
   ],
   "presets": [ { "name": "Zaria Contact" } ]
 }

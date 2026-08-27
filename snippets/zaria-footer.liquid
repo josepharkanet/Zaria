@@ -88,8 +88,11 @@
     .zaria-footer__inner{padding:40px 22px 26px}
     .zaria-footer__nav{gap:26px 32px}
   }
-  @media (max-width:520px){
-    .zaria-footer__nav{flex-direction:column;gap:26px}
+  @media (max-width:600px){
+    .zaria-footer__nav{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 10px}
+    .zaria-footer__col a{white-space:normal;font-size:12px}
+    .zaria-footer__eyebrow{font-size:9.5px;letter-spacing:.12em}
+    .zaria-footer__col li{margin:0 0 9px}
   }
 </style>
 

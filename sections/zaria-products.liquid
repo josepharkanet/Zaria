@@ -38,7 +38,10 @@
   #shopify-section-{{ section.id }} .zpr__price s{color:#b0b0b0;margin-right:8px}
   #shopify-section-{{ section.id }} .zpr__empty{grid-column:1/-1;text-align:center;color:#b3b3b3;letter-spacing:.16em;
     text-transform:uppercase;font-size:12px;padding:48px 0;border:1px dashed #e2e2e2}
-  @media (max-width:900px){#shopify-section-{{ section.id }} .zpr__grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:900px){
+    #shopify-section-{{ section.id }} .zpr__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 14px;overflow:visible}
+    #shopify-section-{{ section.id }} .zpr__card{flex:none;min-width:0;width:auto}
+  }
 </style>
 <section class="zpr">
   <div class="zpr__head">
