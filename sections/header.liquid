@@ -149,7 +149,7 @@
 
         <span class="sr-only">{{ shop.name }}</span>
         {%- assign alt_text = section.settings.logo.alt | default: shop.name -%}
-        <img src="{{ 'zaria-logo-color.png' | asset_url }}" alt="{{ alt_text | escape }}" class="header__logo-image header__logo-image--zaria-color" width="368" height="157" loading="eager">
+        <img src="{{ 'zaria-logo-black.png' | asset_url }}" alt="{{ alt_text | escape }}" class="header__logo-image header__logo-image--zaria-color" width="368" height="157" loading="eager">
         {%- comment -%}original theme logo kept for reference: {{ section.settings.logo | image_url: width: 40 }}{%- endcomment -%}
 
         {%- if section.settings.transparent_logo -%}
