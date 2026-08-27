@@ -15,42 +15,6 @@
         "text_color": "dark"
       }
     },
-    "marquee": {
-      "type": "zaria-marquee",
-      "blocks": {
-        "m1": {
-          "type": "item",
-          "settings": {
-            "text": "Made to measure"
-          }
-        },
-        "m2": {
-          "type": "item",
-          "settings": {
-            "text": "Hand finished in atelier"
-          }
-        },
-        "m3": {
-          "type": "item",
-          "settings": {
-            "text": "Worldwide shipping"
-          }
-        },
-        "m4": {
-          "type": "item",
-          "settings": {
-            "text": "Private appointments"
-          }
-        }
-      },
-      "block_order": [
-        "m1",
-        "m2",
-        "m3",
-        "m4"
-      ],
-      "settings": {}
-    },
     "collections": {
       "type": "zaria-collections",
       "blocks": {
@@ -129,10 +93,6 @@
         "l2",
         "l3"
       ],
-      "settings": {}
-    },
-    "quote": {
-      "type": "zaria-quote",
       "settings": {}
     },
     "values": {
