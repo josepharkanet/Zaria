@@ -2,7 +2,7 @@
 {%- assign zf_tagline = 'A design-led couture house. Considered silhouettes, refined tailoring, and pieces made to be worn and kept.' -%}
 {%- assign zf_loc = 'Dubai, United Arab Emirates' -%}
 {%- assign zf_news_heading = 'The Zaria List' -%}
-{%- assign zf_news_text = 'First looks, private appointments and atelier notes, direct to you.' -%}
+{%- assign zf_news_text = 'First looks, private appointments and atelier notes.' -%}
 {%- assign zf_design_url = '/collections/all-fabrics' -%}
 {%- assign zf_credit = 'Arkanet Technologies' -%}
 {%- assign zf_credit_url = '' -%}
@@ -16,17 +16,20 @@
   .zaria-footer{background:#ffffff;color:#141414;border-top:1px solid #ececec;
     font-family:var(--text-font-family,'Jost'),'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
   .zaria-footer *{box-sizing:border-box}
-  .zaria-footer__inner{max-width:1220px;margin:0 auto;padding:74px 40px 32px}
+  .zaria-footer__inner{max-width:1220px;margin:0 auto;padding:48px 40px 26px}
 
   /* Grid: brand spans both rows on the left; nav columns top-right; newsletter band fills bottom-right */
   .zaria-footer__grid{display:grid;grid-template-columns:1.55fr 1fr 1fr 1fr;
     grid-template-areas:"brand shop house care" "brand news news news";
-    gap:44px 48px;align-items:stretch}
+    gap:32px 48px;align-items:stretch}
 
-  /* Brand block (left) */
-  .zaria-footer__brand{grid-area:brand;max-width:400px;display:flex;flex-direction:column}
-  .zaria-footer__logo{height:108px;width:auto;display:block;margin:0 0 20px}
-  .zaria-footer__tagline{color:#6c6c6c;font-size:13.5px;line-height:1.8;letter-spacing:.012em;margin:0 0 22px;max-width:40ch}
+  /* Brand block (left) with vertical separator */
+  .zaria-footer__brand{grid-area:brand;max-width:424px;display:flex;flex-direction:column;
+    border-right:1px solid #ececec;padding-right:52px}
+  /* high specificity + !important: theme sets `.zaria-footer img{width:100%}` which was squashing the square logo */
+  .zaria-footer__brand .zaria-footer__logo{width:128px!important;height:auto!important;max-width:128px;
+    object-fit:contain;display:block;margin:0 0 18px}
+  .zaria-footer__tagline{color:#6c6c6c;font-size:13.5px;line-height:1.8;letter-spacing:.012em;margin:0 0 18px;max-width:34ch}
   .zaria-footer__loc{margin:auto 0 0;color:#a6a6a6;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase}
 
   /* Nav columns */
@@ -35,13 +38,13 @@
   .zaria-footer__col--house{grid-area:house}
   .zaria-footer__col--care{grid-area:care}
   .zaria-footer__col ul{list-style:none;margin:0;padding:0}
-  .zaria-footer__col li{margin:0 0 12px}
+  .zaria-footer__col li{margin:0 0 11px}
   .zaria-footer__col a{color:#6c6c6c;text-decoration:none;font-size:13.5px;letter-spacing:.02em;transition:color .2s ease}
   .zaria-footer__col a:hover{color:#141414}
 
-  /* Newsletter — horizontal band filling the lower columns */
+  /* Newsletter — horizontal band filling the lower columns, left-aligned */
   .zaria-footer__news{grid-area:news;display:flex;align-items:center;justify-content:flex-start;
-    gap:22px 56px;flex-wrap:wrap;border-top:1px solid #ececec;padding-top:28px;align-self:end}
+    gap:20px 56px;flex-wrap:wrap;border-top:1px solid #ececec;padding-top:24px;align-self:end}
   .zaria-footer__news-intro{max-width:48ch}
   .zaria-footer__news-intro .zaria-footer__eyebrow{margin:0 0 9px}
   .zaria-news__text{color:#6c6c6c;font-size:13px;line-height:1.7;margin:0;max-width:46ch}
@@ -62,8 +65,8 @@
   .zaria-social svg{width:18px;height:18px}
 
   /* Aside — Elixir-style: copyright left, payment icons right */
-  .zaria-footer__aside{display:grid;gap:18px;justify-items:center;text-align:center;
-    margin-top:48px;padding-top:26px;border-top:1px solid #ececec}
+  .zaria-footer__aside{display:grid;gap:16px;justify-items:center;text-align:center;
+    margin-top:30px;padding-top:24px;border-top:1px solid #ececec}
   .zaria-footer__legal{display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:3px 11px}
   .zaria-footer__sep{color:#d3d3d3;font-size:11px;line-height:1}
   .zaria-footer__copyright{color:#9a9a9a;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin:0}
@@ -81,18 +84,18 @@
   }
   @media (max-width:900px){
     .zaria-footer__grid{grid-template-columns:1fr 1fr;
-      grid-template-areas:"brand brand" "shop house" "care news";gap:34px 40px}
-    .zaria-footer__brand{max-width:none}
+      grid-template-areas:"brand brand" "shop house" "care news";gap:30px 40px}
+    .zaria-footer__brand{max-width:none;border-right:0;padding-right:0}
     .zaria-footer__news{border-top:0;padding-top:0;flex-direction:column;align-items:flex-start;gap:14px}
     .zaria-news__form{width:100%;max-width:420px}
   }
   @media (max-width:749px){
-    .zaria-footer__inner{padding:54px 22px 28px}
-    .zaria-footer__aside{margin-top:40px}
+    .zaria-footer__inner{padding:40px 22px 26px}
+    .zaria-footer__aside{margin-top:28px}
   }
   @media (max-width:560px){
     .zaria-footer__grid{grid-template-columns:1fr;
-      grid-template-areas:"brand" "shop" "house" "care" "news";gap:30px}
+      grid-template-areas:"brand" "shop" "house" "care" "news";gap:28px}
   }
 </style>
 
