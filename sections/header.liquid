@@ -121,7 +121,7 @@
   #shopify-section-{{ section.id }} .header__lang-toggle .lang-toggle { color: #1a1a1a !important; }
   #shopify-section-{{ section.id }} .header__nav-icon { color: #1a1a1a; }
   #shopify-section-{{ section.id }} .header__logo-image--transparent { display: none !important; }
-  #shopify-section-{{ section.id }} .header__logo-image--zaria-color { width: auto; max-height: 58px; }
+  #shopify-section-{{ section.id }} .header__logo-image--zaria-color { width: auto; max-height: 48px; }
   /* white mega panel: dark ink text, wine hover */
   #shopify-section-{{ section.id }} .zaria-mega .zaria-mega__col a { color: #6a6a6a !important; }
   #shopify-section-{{ section.id }} .zaria-mega .zaria-mega__head { color: #1a1a1a !important; }
@@ -149,7 +149,7 @@
 
         <span class="sr-only">{{ shop.name }}</span>
         {%- assign alt_text = section.settings.logo.alt | default: shop.name -%}
-        <img src="{{ 'zaria-logo-black.png' | asset_url }}" alt="{{ alt_text | escape }}" class="header__logo-image header__logo-image--zaria-color" width="368" height="157" loading="eager">
+        <img src="{{ 'zaria-logo-black.png' | asset_url }}" alt="{{ alt_text | escape }}" class="header__logo-image header__logo-image--zaria-color" width="1943" height="525" loading="eager">
         {%- comment -%}original theme logo kept for reference: {{ section.settings.logo | image_url: width: 40 }}{%- endcomment -%}
 
         {%- if section.settings.transparent_logo -%}
