@@ -9541,6 +9541,8 @@ html.theme-dark .color-scheme--scheme-marquee-custom {
 
 /* ── Offer ribbon (announcement bar) — dark #212121 ── */
 .shopify-section--announcement-bar { display: none !important; }
+/* Zaria: clean video hero — hide any text overlay (section-file sync was unreliable) */
+.zhero__overline, .zhero__title, .zhero__sub, .zhero__actions { display: none !important; }
 .shopify-section--announcement-bar .announcement-bar,
 .announcement-bar {
   background-color: #171717 !important;
