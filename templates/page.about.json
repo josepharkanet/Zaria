@@ -7,9 +7,9 @@
         "image_side": "left",
         "eyebrow": "The House of Zaria",
         "heading": "A study in modern couture",
-        "body": "<p>Zaria is a design-led couture house built on considered silhouettes and refined tailoring. Every piece is drawn, cut, and finished by hand, made to be worn and kept.</p><p>We believe true luxury is a garment that fits only you.</p>",
-        "link_label": "Design your look",
-        "link_url": "/"
+        "body": "<p>Zaria is a design-led couture house, founded in Dubai on considered silhouettes and refined tailoring. Every piece is drawn, cut, and finished by hand in our atelier, made to be worn and kept.</p><p>We believe modest dressing and modern luxury belong together. Working in the finest silks, cottons, chiffons and embellished fabrics, we cut for the woman who values quiet, lasting elegance over the passing season.</p>",
+        "link_label": "Explore the fabrics",
+        "link_url": "/collections/all-fabrics"
       }
     },
     "values": {
@@ -25,8 +25,20 @@
     },
     "quote": {
       "type": "zaria-quote",
-      "settings": { "scheme": "ink", "eyebrow": "The philosophy", "quote": "True luxury is a garment that fits only you, made to be worn for years, not seasons.", "attribution": "Zaria Atelier" }
+      "settings": { "scheme": "ink", "eyebrow": "The philosophy", "quote": "True luxury is a garment that fits only you, made to be worn for years, not seasons.", "attribution": "Zaria Atelier, Dubai" }
+    },
+    "cta": {
+      "type": "design-your-look",
+      "settings": {
+        "focal": "center",
+        "height": 56,
+        "overline": "The Atelier",
+        "heading": "Design your look",
+        "body": "Commission a piece made only for you. Share your vision, your measurements and your occasion, and our designers will bring it to life.",
+        "button_label": "Start your design",
+        "button_url": "/collections/all-fabrics"
+      }
     }
   },
-  "order": ["story", "values", "quote"]
+  "order": ["story", "values", "quote", "cta"]
 }

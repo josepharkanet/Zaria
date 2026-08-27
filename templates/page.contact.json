@@ -1,1 +1,22 @@
-{"sections":{"main":{"type":"main-page","disabled":true,"settings":{"color_scheme":"","show_title":true,"page_width":"xs"}},"contact-form":{"type":"contact","settings":{"color_scheme":"","separate_section_with_border":true,"subheading":"","title":"Contact","heading_style":"h2","content":""}}},"order":["main","contact-form"]}
+{
+  "sections": {
+    "contact": {
+      "type": "zaria-contact",
+      "settings": {
+        "scheme": "white",
+        "eyebrow": "Contact",
+        "heading": "Get in touch",
+        "intro": "For private appointments, bespoke commissions, fabric enquiries or press, our Dubai atelier will be glad to help. We reply within one business day.",
+        "email": "hello@zariacollections.com",
+        "phone": "+971 50 000 0000",
+        "phone_label": "Phone / WhatsApp",
+        "hours": "Saturday to Thursday, 10am to 8pm (GST)",
+        "address": "Dubai, United Arab Emirates. By appointment.",
+        "button_label": "Send message",
+        "padding_top": 84,
+        "padding_bottom": 92
+      }
+    }
+  },
+  "order": ["contact"]
+}
