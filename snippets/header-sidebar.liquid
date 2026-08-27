@@ -56,8 +56,21 @@
         </button>
       </form>
 
+      <style>
+        .zaria-msub{margin:0}
+        .zaria-msub > summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;width:100%}
+        .zaria-msub > summary::-webkit-details-marker{display:none}
+        .zaria-msub > summary .icon,.zaria-msub > summary svg{flex:none;transition:transform .2s ease}
+        .zaria-msub[open] > summary .icon,.zaria-msub[open] > summary svg{transform:rotate(90deg)}
+        .zaria-msub__panel{display:flex;flex-direction:column;padding:2px 0 12px 16px}
+        .zaria-msub__panel a{display:block;padding:9px 0;color:#6a6a6a;text-decoration:none;font-size:14px;letter-spacing:.02em}
+        .zaria-msub__panel a:active,.zaria-msub__panel a:hover{color:#1a1a1a}
+      </style>
       <ul class="header-sidebar__linklist {% if show_dividers %}divide-y{% endif %} unstyled-list" role="list">
         {%- for link in menu.links -%}
+          {%- assign zlt = link.title | strip | downcase -%}
+          {%- assign zsub = false -%}
+          {%- if zlt == 'fabrics' or zlt == 'fragrance' or zlt == 'ready to wear' or zlt == 'ready-to-wear' -%}{%- assign zsub = true -%}{%- endif -%}
           <li>
             {%- if link.links.size > 0 -%}
               <button
@@ -69,6 +82,14 @@
                 {{- link.title -}}
                 {%- render 'icon' with 'chevron-right', width: 12, direction_aware: true -%}
               </button>
+            {%- elsif zsub -%}
+              <details class="zaria-msub">
+                <summary class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">
+                  {{- link.title -}}
+                  {%- render 'icon' with 'chevron-right', width: 12, direction_aware: true -%}
+                </summary>
+                <div class="zaria-msub__panel">{%- render 'zaria-nav-sub', title: link.title -%}</div>
+              </details>
             {%- else -%}
               <a href="{{ link.url }}" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">
                 {{- link.title -}}
