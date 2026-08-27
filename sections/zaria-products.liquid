@@ -7,14 +7,14 @@
     color:#111;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;
     padding:{{ sc.padding_top }}px clamp(20px,4vw,48px) {{ sc.padding_bottom }}px}
   #shopify-section-{{ section.id }} .zpr *{box-sizing:border-box}
-  #shopify-section-{{ section.id }} .zpr__head{max-width:1320px;margin:0 auto 34px;display:flex;align-items:flex-end;
-    justify-content:space-between;gap:16px;border-bottom:1px solid #ededed;padding-bottom:18px}
+  #shopify-section-{{ section.id }} .zpr__head{max-width:1320px;margin:0 auto 30px;text-align:center}
   #shopify-section-{{ section.id }} .zpr__eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#6a6a6a;margin:0 0 10px}
   #shopify-section-{{ section.id }} .zpr__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     font-size:clamp(24px,3vw,36px);line-height:1.1;margin:0}
   #shopify-section-{{ section.id }} .zpr__all{flex:none;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#111;
     text-decoration:none;border-bottom:1px solid #111;padding-bottom:4px;white-space:nowrap}
   #shopify-section-{{ section.id }} .zpr__all:hover{opacity:.6}
+  #shopify-section-{{ section.id }} .zpr__foot{text-align:center;margin-top:34px}
   #shopify-section-{{ section.id }} .zpr__grid{max-width:1320px;margin:0 auto;display:flex;gap:clamp(14px,2vw,26px);
     overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:6px}
   #shopify-section-{{ section.id }} .zpr__grid::-webkit-scrollbar{display:none}
@@ -37,11 +37,7 @@
 </style>
 <section class="zpr">
   <div class="zpr__head">
-    <div>
-      {%- if sc.eyebrow != blank -%}<p class="zpr__eyebrow">{{ sc.eyebrow }}</p>{%- endif -%}
-      {%- if sc.heading != blank -%}<h2 class="zpr__title">{{ sc.heading }}</h2>{%- endif -%}
-    </div>
-    {%- if coll != blank and sc.show_view_all -%}<a class="zpr__all" href="{{ coll.url }}">{{ sc.view_all_label | default: 'View all' }}</a>{%- endif -%}
+    {%- if sc.heading != blank -%}<h2 class="zpr__title">{{ sc.heading }}</h2>{%- endif -%}
   </div>
   <div class="zpr__grid">
     {%- if coll != blank and coll.products.size > 0 -%}
@@ -74,6 +70,7 @@
       <div class="zpr__empty">Choose a collection in the editor</div>
     {%- endif -%}
   </div>
+  {%- if coll != blank and sc.show_view_all -%}<div class="zpr__foot"><a class="zpr__all" href="{{ coll.url }}">{{ sc.view_all_label | default: 'View all' }}</a></div>{%- endif -%}
 </section>
 
 {% schema %}

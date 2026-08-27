@@ -9542,7 +9542,7 @@ html.theme-dark .color-scheme--scheme-marquee-custom {
 /* ── Offer ribbon (announcement bar) — dark #212121 ── */
 .shopify-section--announcement-bar .announcement-bar,
 .announcement-bar {
-  background-color: #7a1f34 !important;
+  background-color: #171717 !important;
   border: none !important;
 }
 .shopify-section--announcement-bar .announcement-bar p,

@@ -186,14 +186,12 @@
   },
   "order": [
     "hero",
-    "marquee",
     "story",
     "collections",
     "fragrance",
     "lookbook",
     "products",
     "feature",
-    "quote",
     "values",
     "design_your_look"
   ]
