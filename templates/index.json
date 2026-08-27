@@ -12,7 +12,11 @@
     "hero": {
       "type": "zaria-hero",
       "settings": {
-        "text_color": "dark"
+        "text_color": "dark",
+        "subheading": "",
+        "button_1_label": "",
+        "button_2_label": "",
+        "vertical": "middle"
       }
     },
     "collections": {
