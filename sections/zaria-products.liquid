@@ -19,17 +19,22 @@
     overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:6px}
   #shopify-section-{{ section.id }} .zpr__grid::-webkit-scrollbar{display:none}
   #shopify-section-{{ section.id }} .zpr__card{flex:0 0 calc((100% - 3 * clamp(14px,2vw,26px)) / 4);min-width:210px;scroll-snap-align:start}
-  #shopify-section-{{ section.id }} .zpr__card{text-decoration:none;color:#111;display:flex;flex-direction:column}
-  #shopify-section-{{ section.id }} .zpr__media{position:relative;aspect-ratio:3/4;overflow:hidden;background:#f4f1ec;margin-bottom:14px}
-  #shopify-section-{{ section.id }} .zpr__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s ease,transform 1.1s ease}
+  #shopify-section-{{ section.id }} .zpr__card{text-decoration:none;color:#111;display:flex;flex-direction:column;align-items:center;text-align:center}
+  #shopify-section-{{ section.id }} .zpr__media{position:relative;aspect-ratio:3/4;overflow:hidden;background:#f4f1ec;margin-bottom:16px;width:100%}
+  #shopify-section-{{ section.id }} .zpr__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s ease,transform 1.2s ease}
   #shopify-section-{{ section.id }} .zpr__media .i2{opacity:0}
+  #shopify-section-{{ section.id }} .zpr__media::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(26,18,16,.42),rgba(26,18,16,0) 48%);opacity:0;transition:opacity .45s ease}
+  #shopify-section-{{ section.id }} .zpr__view{position:absolute;left:0;right:0;bottom:18px;z-index:2;color:#fff;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s ease;pointer-events:none}
+  #shopify-section-{{ section.id }} .zpr__view i{font-style:normal;border-bottom:1px solid rgba(255,255,255,.55);padding-bottom:4px}
   #shopify-section-{{ section.id }} .zpr__card:hover .i1{opacity:0}
   #shopify-section-{{ section.id }} .zpr__card:hover .i2{opacity:1}
-  #shopify-section-{{ section.id }} .zpr__card:hover .zpr__media img{transform:scale(1.04)}
-  #shopify-section-{{ section.id }} .zpr__brand{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9a9a9a;margin:0 0 6px}
-  #shopify-section-{{ section.id }} .zpr__name{font-size:14px;letter-spacing:.02em;line-height:1.4;margin:0 0 6px;
+  #shopify-section-{{ section.id }} .zpr__card:hover .zpr__media img{transform:scale(1.05)}
+  #shopify-section-{{ section.id }} .zpr__card:hover .zpr__media::after{opacity:1}
+  #shopify-section-{{ section.id }} .zpr__card:hover .zpr__view{opacity:1;transform:none}
+  #shopify-section-{{ section.id }} .zpr__brand{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#a99f94;margin:0 0 7px}
+  #shopify-section-{{ section.id }} .zpr__name{font-size:13.5px;letter-spacing:.03em;line-height:1.5;margin:0 0 8px;max-width:26ch;
     display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  #shopify-section-{{ section.id }} .zpr__price{font-size:13px;color:#555;letter-spacing:.02em}
+  #shopify-section-{{ section.id }} .zpr__price{font-size:12.5px;color:#6a6a6a;letter-spacing:.06em}
   #shopify-section-{{ section.id }} .zpr__price s{color:#b0b0b0;margin-right:8px}
   #shopify-section-{{ section.id }} .zpr__empty{grid-column:1/-1;text-align:center;color:#b3b3b3;letter-spacing:.16em;
     text-transform:uppercase;font-size:12px;padding:48px 0;border:1px dashed #e2e2e2}
@@ -57,6 +62,7 @@
             {%- if product.images[1] and product.featured_image -%}
               <img class="i2" src="{{ product.featured_image | image_url: width: 700 }}" alt="" width="700" height="933" loading="lazy" aria-hidden="true">
             {%- endif -%}
+            <span class="zpr__view"><i>Discover</i></span>
           </span>
           {%- if brand != blank -%}<span class="zpr__brand">{{ brand }}</span>{%- endif -%}
           <span class="zpr__name">{{ product.title }}</span>

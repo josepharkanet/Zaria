@@ -10,11 +10,11 @@
   #shopify-section-{{ section.id }} .zst__inner{position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center}
   #shopify-section-{{ section.id }} .zst__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     letter-spacing:.04em;text-transform:uppercase;color:#1a1a1a;margin:0 0 20px}
-  #shopify-section-{{ section.id }} .zst__rule{width:38px;height:1px;background:#c8a24a;margin:0 auto 30px}
+  #shopify-section-{{ section.id }} .zst__rule{width:38px;height:1px;background:#7a1f34;margin:0 auto 26px}
   #shopify-section-{{ section.id }} .zst__lead{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:300;
     font-size:clamp(23px,3.3vw,38px);line-height:1.32;letter-spacing:.008em;color:#221b18;max-width:19ch;margin:0 auto 32px}
-  #shopify-section-{{ section.id }} .zst__body{color:#63594f;font-size:clamp(14.5px,1.35vw,16px);line-height:1.98;max-width:58ch;margin:0 auto}
-  #shopify-section-{{ section.id }} .zst__body p{margin:0 0 15px}
+  #shopify-section-{{ section.id }} .zst__body{color:#63594f;font-size:clamp(14.5px,1.35vw,16px);line-height:1.85;max-width:58ch;margin:0 auto}
+  #shopify-section-{{ section.id }} .zst__body p{margin:0 0 5px}
   #shopify-section-{{ section.id }} .zst__sign{margin:32px 0 0;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#a99c8c}
   #shopify-section-{{ section.id }} .zst__link{display:inline-block;margin-top:30px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
     color:#7a1f34;text-decoration:none;border-bottom:1px solid #7a1f34;padding-bottom:5px;transition:opacity .2s ease}
@@ -22,7 +22,6 @@
   @media(max-width:600px){#shopify-section-{{ section.id }} .zst__mono{width:90vw}}
 </style>
 <section class="zst">
-  <div class="zst__mono" aria-hidden="true"></div>
   <div class="zst__inner">
     {%- if sc.heading != blank -%}<h2 class="zst__title">{{ sc.heading }}</h2>{%- endif -%}
     <div class="zst__rule"></div>
