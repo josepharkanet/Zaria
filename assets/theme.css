@@ -10011,7 +10011,7 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 /* ===== Zaria: 5 (desktop) / 3 (tablet+mobile) per row, edge-to-edge ===== */
 /* the theme's items-per-row variable chain caps columns, so set the grid directly */
 .collection .product-list{gap:4px!important;}
-@media (min-width:1000px){.collection .product-list{grid-template-columns:repeat(5,minmax(0,1fr))!important;grid-auto-flow:row!important;}}
+@media (min-width:1000px){.collection .product-list{grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-flow:row!important;}}
 @media (min-width:700px) and (max-width:999px){.collection .product-list{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row!important;}}
 @media (max-width:699px){.collection .product-list{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row!important;gap:3px!important;}}
 
