@@ -50,7 +50,7 @@
     <div class="zct__hero">
       {%- assign zct_hero_vid = sc.hero_video | default: 'zaria-contact-video.mp4' -%}
       {%- if zct_hero_vid != blank -%}
-        <video class="zct__hero-bg" autoplay muted loop playsinline preload="metadata" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1600 }}{% else %}{{ 'zaria-feature.jpg' | asset_url }}{% endif %}">
+        <video class="zct__hero-bg" autoplay muted loop playsinline preload="metadata" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1600 }}{% else %}{{ 'zaria-contact-poster.jpg' | asset_url }}{% endif %}">
           <source src="{{ zct_hero_vid | asset_url }}" type="video/mp4">
         </video>
       {%- else -%}
