@@ -1,27 +1,29 @@
 {% comment %}Zaria - editorial feature (image + text) - Arkanet Technologies{% endcomment %}
 {%- assign sc = section.settings -%}
 <style>
-  #shopify-section-{{ section.id }} .zft{background:{{ sc.bg_color | default: '#cdbfaa' }};
-    color:#2a2019;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;
-    padding:{{ sc.padding_top }}px clamp(20px,4vw,48px) {{ sc.padding_bottom }}px}
+  #shopify-section-{{ section.id }} .zft{background:{{ sc.bg_color | default: '#ffffff' }};
+    color:#1a1a1a;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:0}
   #shopify-section-{{ section.id }} .zft *{box-sizing:border-box}
-  #shopify-section-{{ section.id }} .zft__inner{max-width:1240px;margin:0 auto;display:grid;
-    grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,60px);align-items:center}
+  #shopify-section-{{ section.id }} .zft__inner{max-width:100%;margin:0;display:grid;
+    grid-template-columns:1fr 1fr;gap:0;align-items:stretch;min-height:clamp(460px,50vw,660px)}
   #shopify-section-{{ section.id }} .zft--right .zft__media{order:2}
-  #shopify-section-{{ section.id }} .zft__media img{display:block;width:100%;height:auto}
-  #shopify-section-{{ section.id }} .zft__video{display:block;width:100%;aspect-ratio:{{ sc.ratio | default: '4/5' }};object-fit:cover;background:#f0ece7}
-  #shopify-section-{{ section.id }} .zft__ph{width:100%;aspect-ratio:{{ sc.ratio }};background:linear-gradient(135deg,#ececec,#f6f6f6)}
+  #shopify-section-{{ section.id }} .zft__media{position:relative;overflow:hidden}
+  #shopify-section-{{ section.id }} .zft__media img,
+  #shopify-section-{{ section.id }} .zft__video{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;background:#efeae3}
+  #shopify-section-{{ section.id }} .zft__text{align-self:center;padding:clamp(40px,5vw,72px) clamp(24px,5.5vw,72px)}
   #shopify-section-{{ section.id }} .zft__eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#6a6a6a;margin:0 0 18px}
   #shopify-section-{{ section.id }} .zft__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     font-size:clamp(26px,3.4vw,42px);line-height:1.14;letter-spacing:.01em;margin:0 0 20px}
-  #shopify-section-{{ section.id }} .zft__body{color:#4a4038;font-size:15px;line-height:1.9}
+  #shopify-section-{{ section.id }} .zft__body{color:#5a5a5a;font-size:15px;line-height:1.9}
   #shopify-section-{{ section.id }} .zft__body p{margin:0 0 14px}
   #shopify-section-{{ section.id }} .zft__link{display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.2em;
     text-transform:uppercase;color:#111;text-decoration:none;border-bottom:1px solid #111;padding-bottom:5px;transition:opacity .2s ease}
   #shopify-section-{{ section.id }} .zft__link:hover{opacity:.6}
   @media (max-width:749px){
-    #shopify-section-{{ section.id }} .zft__inner{grid-template-columns:1fr;gap:28px}
+    #shopify-section-{{ section.id }} .zft__inner{grid-template-columns:1fr;gap:0;min-height:0}
+    #shopify-section-{{ section.id }} .zft__media{aspect-ratio:4/5}
     #shopify-section-{{ section.id }} .zft--right .zft__media{order:0}
+    #shopify-section-{{ section.id }} .zft__text{padding:34px 22px 44px}
   }
 </style>
 <section class="zft {% if sc.image_side == 'right' %}zft--right{% endif %}">
@@ -54,7 +56,7 @@
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
     { "type": "image_picker", "id": "image", "label": "Image (used as video poster / fallback)" },
     { "type": "text", "id": "video_asset", "label": "Video file in assets", "default": "zaria-feature.mp4", "info": "e.g. zaria-feature.mp4 — leave blank to show the image instead" },
-    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#cdbfaa" },
+    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#ffffff" },
     {
       "type": "select", "id": "image_side", "label": "Image side",
       "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ],
