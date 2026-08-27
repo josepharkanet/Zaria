@@ -155,7 +155,8 @@
           consecutive, and hence having a cleaner margin collapsing management.
       {%- endcomment -%}
       {%- if request.page_type != 'password' -%}
-        {%- sections 'footer-group' -%}
+        {%- comment -%} Zaria: footer-group renders nothing on this theme; render the footer section directly {%- endcomment -%}
+        {%- section 'zaria-footer' -%}
       {%- endif -%}
     </main>
 
