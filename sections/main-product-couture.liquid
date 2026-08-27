@@ -140,7 +140,8 @@
 
   /* attribute list */
   #shopify-section-{{ section.id }} .zpdp__attrs{display:grid;grid-template-columns:repeat(var(--zpdp-cols,2),minmax(0,1fr));margin:6px 0 30px;border:1px solid #ece8e2}
-  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:flex-start;gap:12px;padding:20px 22px}
+  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:flex-start;gap:8px;padding:18px 13px;min-width:0}
+  #shopify-section-{{ section.id }} .zpdp__attr>div{min-width:0}
   #shopify-section-{{ section.id }} .zpdp__attr:not(:last-child){border-right:1px solid #ece8e2}
   @media (max-width:600px){
     #shopify-section-{{ section.id }} .zpdp__attrs{grid-template-columns:1fr}
@@ -149,7 +150,7 @@
   }
   #shopify-section-{{ section.id }} .zpdp__attr-ic{flex:none;color:var(--wine);margin-top:1px;display:inline-flex}
   #shopify-section-{{ section.id }} .zpdp__attr-ic svg{width:22px;height:22px;display:block}
-  #shopify-section-{{ section.id }} .zpdp__attr-l{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#a89f94;margin-bottom:5px}
+  #shopify-section-{{ section.id }} .zpdp__attr-l{display:block;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:#a89f94;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #shopify-section-{{ section.id }} .zpdp__attr-v{display:block;font-size:14px;letter-spacing:.02em;color:#2a2a2a}
 
   /* form */
