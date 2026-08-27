@@ -26,7 +26,7 @@
   <div class="zst__inner">
     {%- if sc.heading != blank -%}<h2 class="zst__title">{{ sc.heading }}</h2>{%- endif -%}
     <div class="zst__rule"></div>
-    {%- if sc.lead != blank -%}<p class="zst__lead">{{ sc.lead }}</p>{%- endif -%}
+    {%- comment -%} lead statement removed per request {%- endcomment -%}
     {%- if sc.body != blank -%}<div class="zst__body">{{ sc.body }}</div>{%- endif -%}
     {%- if sc.signature != blank -%}<p class="zst__sign">{{ sc.signature }}</p>{%- endif -%}
     {%- if sc.link_label != blank -%}<a class="zst__link" href="{{ sc.link_url | default: '#' }}">{{ sc.link_label }}</a>{%- endif -%}
