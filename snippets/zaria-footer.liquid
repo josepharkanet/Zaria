@@ -3,7 +3,7 @@
 {%- assign zf_loc = 'Dubai, United Arab Emirates' -%}
 {%- assign zf_news_heading = 'The Zaria List' -%}
 {%- assign zf_news_text = 'First looks, private appointments and atelier notes, direct to you.' -%}
-{%- assign zf_payment = 'Visa · Mastercard · American Express · Apple Pay' -%}
+{%- assign zf_payment_fallback = 'Visa · Mastercard · American Express · Apple Pay' -%}
 {%- assign zf_design_url = '/collections/all-fabrics' -%}
 {%- assign zf_credit = 'Arkanet Technologies' -%}
 {%- assign zf_credit_url = '' -%}
@@ -17,24 +17,21 @@
   .zaria-footer{background:#ffffff;color:#141414;border-top:1px solid #ececec;
     font-family:var(--text-font-family,'Jost'),'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
   .zaria-footer *{box-sizing:border-box}
-  .zaria-footer__inner{max-width:1220px;margin:0 auto;padding:80px 40px 34px}
+  .zaria-footer__inner{max-width:1220px;margin:0 auto;padding:74px 40px 32px}
 
-  /* Masthead */
-  .zaria-footer__masthead{text-align:center;margin:0 auto}
-  .zaria-footer__logo{height:clamp(122px,14vw,162px);width:auto;display:block;margin:0 auto 20px}
-  .zaria-footer__tagline{max-width:496px;margin:0 auto;color:#6c6c6c;font-size:14px;line-height:1.85;letter-spacing:.012em}
-  .zaria-footer__loc{margin:16px 0 0;color:#a6a6a6;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase}
+  /* Grid: brand block + three nav columns */
+  .zaria-footer__grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:44px 48px;align-items:start}
 
-  /* Rule */
-  .zaria-footer__rule{height:1px;background:#ececec;border:0;margin:50px 0 48px}
-
-  /* Grid: newsletter + three nav columns */
-  .zaria-footer__grid{display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr;gap:40px 48px;align-items:start}
-  .zaria-footer__eyebrow{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#141414;margin:0 0 18px}
+  /* Brand block (left) */
+  .zaria-footer__brand{max-width:400px}
+  .zaria-footer__logo{height:112px;width:auto;display:block;margin:0 0 20px}
+  .zaria-footer__tagline{color:#6c6c6c;font-size:13.5px;line-height:1.8;letter-spacing:.012em;margin:0 0 14px;max-width:40ch}
+  .zaria-footer__loc{margin:0 0 26px;color:#a6a6a6;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase}
 
   /* Newsletter */
-  .zaria-news__text{color:#6c6c6c;font-size:13.5px;line-height:1.75;margin:0 0 20px;max-width:34ch}
-  .zaria-news__form{display:flex;align-items:center;border-bottom:1px solid #141414;max-width:346px}
+  .zaria-footer__eyebrow{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#141414;margin:0 0 16px}
+  .zaria-news__text{color:#6c6c6c;font-size:13px;line-height:1.7;margin:0 0 16px;max-width:36ch}
+  .zaria-news__form{display:flex;align-items:center;border-bottom:1px solid #141414;max-width:330px}
   .zaria-news__form input[type=email]{flex:1;border:0;background:transparent;padding:10px 2px;font:inherit;
     font-size:13px;letter-spacing:.03em;color:#141414;outline:none}
   .zaria-news__form input[type=email]::placeholder{color:#9a9a9a;letter-spacing:.06em}
@@ -45,7 +42,7 @@
   .zaria-news__note{font-size:12.5px;color:#141414;letter-spacing:.03em;margin:4px 0 0}
 
   /* Social */
-  .zaria-social{display:flex;align-items:center;gap:20px;margin:26px 0 0}
+  .zaria-social{display:flex;align-items:center;gap:20px;margin:24px 0 0}
   .zaria-social a{color:#141414;opacity:.5;display:inline-flex;transition:opacity .2s ease,transform .2s ease}
   .zaria-social a:hover{opacity:1;transform:translateY(-2px);color:#7a1f34}
   .zaria-social svg{width:18px;height:18px}
@@ -56,49 +53,49 @@
   .zaria-footer__col a{color:#6c6c6c;text-decoration:none;font-size:13.5px;letter-spacing:.02em;transition:color .2s ease}
   .zaria-footer__col a:hover{color:#141414}
 
-  /* Bottom bar */
-  .zaria-footer__bottom{display:flex;align-items:center;justify-content:space-between;gap:14px 26px;flex-wrap:wrap;
-    padding-top:26px;margin-top:54px;border-top:1px solid #ececec}
-  .zaria-footer__copyright{color:#8a8a8a;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
-  .zaria-footer__payment{color:#9a9a9a;font-size:11px;letter-spacing:.07em}
-  .zaria-footer__credit{color:#9a9a9a;font-size:11px;letter-spacing:.05em}
-  .zaria-footer__credit a{color:#6c6c6c;text-decoration:none}
+  /* Aside — Elixir-style: copyright left, payment icons right */
+  .zaria-footer__aside{display:grid;gap:18px;justify-items:center;text-align:center;
+    margin-top:56px;padding-top:26px;border-top:1px solid #ececec}
+  .zaria-footer__legal{display:flex;flex-direction:column;gap:5px}
+  .zaria-footer__copyright{color:#9a9a9a;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin:0}
+  .zaria-footer__credit{color:#bcbcbc;font-size:10.5px;letter-spacing:.05em;margin:0}
+  .zaria-footer__credit a{color:#8a8a8a;text-decoration:none;transition:color .2s ease}
   .zaria-footer__credit a:hover{color:#141414}
+  .zaria-payments{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.5rem;margin:0;padding:0;list-style:none}
+  .zaria-payments li{display:flex}
+  .zaria-payments svg,.zaria-payments img{height:23px;width:auto;display:block;border-radius:3px}
+  .zaria-payments--text{color:#9a9a9a;font-size:11px;letter-spacing:.07em}
 
+  @media (min-width:1000px){
+    .zaria-footer__aside{grid-auto-flow:column;justify-content:space-between;align-items:center;text-align:left}
+    .zaria-footer__legal{align-items:flex-start}
+    .zaria-payments{justify-content:flex-end}
+  }
   @media (max-width:900px){
     .zaria-footer__grid{grid-template-columns:1fr 1fr;gap:34px 40px}
-    .zaria-footer__news{grid-column:1 / -1}
+    .zaria-footer__brand{grid-column:1 / -1;max-width:none}
     .zaria-news__form{max-width:420px}
   }
   @media (max-width:749px){
-    .zaria-footer__inner{padding:56px 22px 28px}
-    .zaria-footer__rule{margin:40px 0 38px}
-    .zaria-footer__bottom{flex-direction:column;text-align:center;gap:12px;margin-top:42px}
+    .zaria-footer__inner{padding:54px 22px 28px}
+    .zaria-footer__aside{margin-top:44px}
   }
   @media (max-width:480px){
     .zaria-footer__grid{grid-template-columns:1fr;gap:30px}
-    .zaria-footer__news{grid-column:auto}
+    .zaria-footer__brand{grid-column:auto}
   }
 </style>
 
 <footer class="zaria-footer">
   <div class="zaria-footer__inner">
 
-    <div class="zaria-footer__masthead">
-      <img class="zaria-footer__logo" src="{{ 'zaria-logo-full.png' | asset_url }}" alt="{{ shop.name | escape }}" width="2150" height="2155" loading="lazy">
-      {%- if zf_tagline != blank -%}
-        <p class="zaria-footer__tagline">{{ zf_tagline }}</p>
-      {%- endif -%}
-      {%- if zf_loc != blank -%}
-        <p class="zaria-footer__loc">{{ zf_loc }}</p>
-      {%- endif -%}
-    </div>
-
-    <hr class="zaria-footer__rule">
-
     <div class="zaria-footer__grid">
 
-      <div class="zaria-footer__news">
+      <div class="zaria-footer__brand">
+        <img class="zaria-footer__logo" src="{{ 'zaria-logo-full.png' | asset_url }}" alt="{{ shop.name | escape }}" width="2150" height="2155" loading="lazy">
+        {%- if zf_tagline != blank -%}<p class="zaria-footer__tagline">{{ zf_tagline }}</p>{%- endif -%}
+        {%- if zf_loc != blank -%}<p class="zaria-footer__loc">{{ zf_loc }}</p>{%- endif -%}
+
         {%- if zf_news_heading != blank -%}<p class="zaria-footer__eyebrow">{{ zf_news_heading }}</p>{%- endif -%}
         {%- if zf_news_text != blank -%}<p class="zaria-news__text">{{ zf_news_text }}</p>{%- endif -%}
         {%- form 'customer', id: 'zaria-newsletter-form' -%}
@@ -177,19 +174,28 @@
 
     </div>
 
-    <div class="zaria-footer__bottom">
-      <div class="zaria-footer__copyright">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</div>
-      {%- if zf_payment != blank -%}
-        <div class="zaria-footer__payment">{{ zf_payment }}</div>
-      {%- endif -%}
-      {%- if zf_credit != blank -%}
-        <div class="zaria-footer__credit">
-          {%- if zf_credit_url != blank -%}
-            <a href="{{ zf_credit_url }}" target="_blank" rel="noopener">{{ zf_credit }}</a>
-          {%- else -%}
-            {{ zf_credit }}
-          {%- endif -%}
-        </div>
+    <div class="zaria-footer__aside">
+      <div class="zaria-footer__legal">
+        <p class="zaria-footer__copyright">&copy; {{ 'now' | date: '%Y' }} - {{ shop.name }}</p>
+        {%- if zf_credit != blank -%}
+          <p class="zaria-footer__credit">
+            {%- if zf_credit_url != blank -%}
+              Crafted by <a href="{{ zf_credit_url }}" target="_blank" rel="noopener">{{ zf_credit }}</a>
+            {%- else -%}
+              Crafted by {{ zf_credit }}
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+      </div>
+
+      {%- if shop.enabled_payment_types.size > 0 -%}
+        <ul class="zaria-payments">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- elsif zf_payment_fallback != blank -%}
+        <div class="zaria-payments--text">{{ zf_payment_fallback }}</div>
       {%- endif -%}
     </div>
 
