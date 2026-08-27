@@ -53,7 +53,7 @@
     #shopify-section-{{ section.id }} .zhero__inner{padding:72px 48px}
   }
 </style>
-<section class="zhero {{ scheme }} zhero--{{ sc.align }} zhero--{{ sc.vertical }}">
+<section class="zhero {{ scheme }} zhero--{{ sc.align }} zhero--middle">
   {%- if has_hero_video -%}
     <div class="zhero__videos" id="zhero-vids-{{ section.id }}">
       <video class="zhero__bg zhero__video zhero__v is-active" data-i="0" autoplay muted loop playsinline preload="auto" poster="{{ hero_poster | asset_url }}">
@@ -77,19 +77,7 @@
   {%- endif -%}
   <div class="zhero__inner">
     <div class="zhero__content">
-      {%- if sc.overline != blank -%}<p class="zhero__overline">{{ sc.overline }}</p>{%- endif -%}
-      {%- if sc.heading != blank -%}<h1 class="zhero__title">{{ sc.heading }}</h1>{%- endif -%}
-      {%- if sc.subheading != blank -%}<p class="zhero__sub">{{ sc.subheading }}</p>{%- endif -%}
-      {%- if sc.button_1_label != blank or sc.button_2_label != blank -%}
-        <div class="zhero__actions">
-          {%- if sc.button_1_label != blank -%}
-            <a class="zhero__btn zhero__btn--primary" href="{{ btn1_url }}">{{ sc.button_1_label }}</a>
-          {%- endif -%}
-          {%- if sc.button_2_label != blank -%}
-            <a class="zhero__btn zhero__btn--ghost" href="{{ btn2_url }}">{{ sc.button_2_label }}</a>
-          {%- endif -%}
-        </div>
-      {%- endif -%}
+      {%- comment -%} Zaria: clean video hero — all text overlay removed {%- endcomment -%}
     </div>
   </div>
 </section>
