@@ -5562,21 +5562,18 @@ product-rerender {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 3px;
-  box-shadow: 0 0 0 2px rgb(var(--background));
-  background-color: #171717;
-  color: #fff;
-  border-radius: 100px;
-  font-size: 9.5px;
-  font-weight: 500;
+  min-width: 13px;
+  height: 13px;
+  background-color: transparent;
+  color: #171717;
+  font-size: 10.5px;
+  font-weight: 600;
   line-height: 1;
   letter-spacing: 0;
   transition: transform .2s ease-in-out;
   position: absolute;
-  inset-block-start: -7px;
-  inset-inline-end: -9px;
+  inset-block-start: -6px;
+  inset-inline-end: -8px;
   transform: scale(0);
 }
 
