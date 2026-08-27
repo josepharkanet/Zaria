@@ -9958,9 +9958,9 @@ body {
 h1,h2,h3,h4,h5,h6,.h0,.h1,.h2,.h3,.h4,.h5,.h6{font-family:"Jost",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;}
 
 /* Zaria: uppercase, letter-spaced, smaller section titles */
-.zhero__title,.zcol__title,.zpr__title,.zft__title,.zval__title,.zlb__title,.zdl__heading,.zct__title,.zfaq__title{text-transform:uppercase!important;letter-spacing:.1em!important}
+.zhero__title,.zcol__title,.zpr__title,.zft__title,.zval__title,.zlb__title,.zst__title,.zdl__heading,.zct__title,.zfaq__title{text-transform:uppercase!important;letter-spacing:.1em!important}
 .zhero__title{font-size:clamp(19px,2.6vw,32px)!important;line-height:1.18!important}
-.zcol__title,.zpr__title,.zft__title,.zval__title,.zlb__title,.zdl__heading,.zct__title,.zfaq__title{font-size:clamp(14px,1.5vw,19px)!important}
+.zcol__title,.zpr__title,.zft__title,.zval__title,.zlb__title,.zst__title,.zdl__heading,.zct__title,.zfaq__title{font-size:clamp(14px,1.5vw,19px)!important}
 
 /* ===== Zaria: couture product card (distinct from the Elixir/Prestige card) ===== */
 /* Editorial and flat: no card chrome, portrait image with hover swap, quiet type. */
