@@ -40,12 +40,12 @@
   .zaria-footer__col a:hover{color:#141414}
 
   /* Newsletter — horizontal band filling the lower columns */
-  .zaria-footer__news{grid-area:news;display:flex;align-items:center;justify-content:space-between;
-    gap:22px 44px;flex-wrap:wrap;border-top:1px solid #ececec;padding-top:28px;align-self:end}
+  .zaria-footer__news{grid-area:news;display:flex;align-items:center;justify-content:flex-start;
+    gap:22px 56px;flex-wrap:wrap;border-top:1px solid #ececec;padding-top:28px;align-self:end}
   .zaria-footer__news-intro{max-width:48ch}
   .zaria-footer__news-intro .zaria-footer__eyebrow{margin:0 0 9px}
   .zaria-news__text{color:#6c6c6c;font-size:13px;line-height:1.7;margin:0;max-width:46ch}
-  .zaria-news__form{display:flex;align-items:center;border-bottom:1px solid #141414;width:min(340px,100%);flex:1 1 260px}
+  .zaria-news__form{display:flex;align-items:center;border-bottom:1px solid #141414;width:min(340px,100%);flex:0 1 auto}
   .zaria-news__form input[type=email]{flex:1;border:0;background:transparent;padding:10px 2px;font:inherit;
     font-size:13px;letter-spacing:.03em;color:#141414;outline:none}
   .zaria-news__form input[type=email]::placeholder{color:#9a9a9a;letter-spacing:.06em}
@@ -64,7 +64,8 @@
   /* Aside — Elixir-style: copyright left, payment icons right */
   .zaria-footer__aside{display:grid;gap:18px;justify-items:center;text-align:center;
     margin-top:48px;padding-top:26px;border-top:1px solid #ececec}
-  .zaria-footer__legal{display:flex;flex-direction:column;gap:5px}
+  .zaria-footer__legal{display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:3px 11px}
+  .zaria-footer__sep{color:#d3d3d3;font-size:11px;line-height:1}
   .zaria-footer__copyright{color:#9a9a9a;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin:0}
   .zaria-footer__credit{color:#bcbcbc;font-size:10.5px;letter-spacing:.05em;margin:0}
   .zaria-footer__credit a{color:#8a8a8a;text-decoration:none;transition:color .2s ease}
@@ -75,7 +76,7 @@
 
   @media (min-width:1000px){
     .zaria-footer__aside{grid-auto-flow:column;justify-content:space-between;align-items:center;text-align:left}
-    .zaria-footer__legal{align-items:flex-start}
+    .zaria-footer__legal{align-items:baseline;justify-content:flex-start}
     .zaria-payments{justify-content:flex-end}
   }
   @media (max-width:900px){
@@ -192,6 +193,7 @@
       <div class="zaria-footer__legal">
         <p class="zaria-footer__copyright">&copy; {{ 'now' | date: '%Y' }} - {{ shop.name }}</p>
         {%- if zf_credit != blank -%}
+          <span class="zaria-footer__sep" aria-hidden="true">&middot;</span>
           <p class="zaria-footer__credit">
             {%- if zf_credit_url != blank -%}
               Crafted by <a href="{{ zf_credit_url }}" target="_blank" rel="noopener">{{ zf_credit }}</a>
