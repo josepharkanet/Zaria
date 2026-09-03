@@ -1,0 +1,158 @@
+{%- comment -%}
+  Zaria - Made to Measure form for ready-to-wear garments (Abaya / Kaftan / Sheila).
+  Renders INSIDE the product form ({% form 'product' %}), so every choice is captured as a
+  line-item property and shows on the Shopify order + emails. Modelled on the Mauzan flow:
+  a Readymade / Customized toggle, a size dropdown for Readymade, and cm measurement
+  dropdowns for Customized, plus an optional Sheila choice (abayas) and a comment.
+  Usage (inside the product form): {% render 'zaria-measure-form', product: product %}
+{%- endcomment -%}
+
+{%- assign zmm_is_abaya = false -%}
+{%- if product.type == 'Abaya' or product.tags contains 'Abaya' -%}{%- assign zmm_is_abaya = true -%}{%- endif -%}
+
+{%- comment -%} field spec: "Label:half-cm-min:half-cm-max" (value = h / 2, so 0.5 cm steps) {%- endcomment -%}
+{%- assign zmm_fields = "Neck Opening:26:35,Shoulder:26:37,Sleeve Loose:12:24,Sleeve Length:52:68,Sleeve Opening:18:25,Bust Circumference:76:117,Waist Circumference:76:117,Hip Circumference:86:136,Full Length:100:130" | split: ',' -%}
+
+<style>
+  .zmm{border-top:1px solid #e3ded6;margin:6px 0 18px;padding:18px 0 4px}
+  .zmm__head{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#161616;margin:0 0 4px}
+  .zmm__sub{font-size:13px;color:#8a8a8a;margin:0 0 14px}
+  .zmm__modes{display:flex;gap:10px;margin:0 0 6px}
+  .zmm__mode{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;
+    border:1px solid #d7d2ca;background:#fff;padding:14px 12px;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:#4a4a4a;transition:border-color .15s ease,color .15s ease,background .15s ease}
+  .zmm__mode:hover{border-color:#161616;color:#161616}
+  .zmm__mode input{accent-color:var(--wine,#7a1f34);width:16px;height:16px;margin:0}
+  .zmm__mode.is-active{border-color:var(--wine,#7a1f34);color:#161616;background:#fbf7f8}
+  .zmm__panel{margin-top:16px}
+  .zmm__panel[hidden]{display:none}
+  .zmm__grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+  .zmm__field{display:flex;flex-direction:column}
+  .zmm__field--full{grid-column:1 / -1}
+  .zmm__label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6a;margin:0 0 6px}
+  .zmm__label .req{color:var(--wine,#7a1f34)}
+  .zmm select,.zmm textarea{width:100%;border:1px solid #d7d2ca;background:#fff;padding:13px 12px;font:inherit;
+    font-size:14px;color:#161616;border-radius:0;box-sizing:border-box}
+  .zmm select:focus,.zmm textarea:focus{outline:none;border-color:#161616}
+  .zmm textarea{min-height:76px;resize:vertical;line-height:1.6}
+  .zmm__hint{font-size:12px;color:#9a9a9a;margin:10px 0 0;line-height:1.6}
+  @media(max-width:560px){.zmm__grid{grid-template-columns:1fr}}
+</style>
+
+<div class="zmm" data-zmm>
+  <p class="zmm__head">Choose your size <span style="color:var(--wine,#7a1f34)">*</span></p>
+  <p class="zmm__sub" data-zmm-sub>Select Readymade for a standard size, or Customized to enter your measurements.</p>
+
+  <div class="zmm__modes">
+    <label class="zmm__mode" data-zmm-modelabel>
+      <input type="radio" name="properties[Size Type]" value="Readymade" data-zmm-mode="ready" required>
+      Readymade
+    </label>
+    <label class="zmm__mode" data-zmm-modelabel>
+      <input type="radio" name="properties[Size Type]" value="Customized" data-zmm-mode="custom">
+      Customized
+    </label>
+  </div>
+
+  {%- comment -%} READYMADE {%- endcomment -%}
+  <div class="zmm__panel" data-zmm-panel="ready" hidden>
+    <div class="zmm__grid">
+      <div class="zmm__field zmm__field--full">
+        <span class="zmm__label">Size <span class="req">*</span></span>
+        <select name="properties[Size]" data-zmm-req data-zmm-in="ready" disabled>
+          <option value="">-- Please select --</option>
+          <option value="36 / XS">36 / XS</option>
+          <option value="38 / S">38 / S</option>
+          <option value="40 / M">40 / M</option>
+          <option value="42 / L">42 / L</option>
+          <option value="44 / XL">44 / XL</option>
+          <option value="46 / XXL">46 / XXL</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} CUSTOMIZED {%- endcomment -%}
+  <div class="zmm__panel" data-zmm-panel="custom" hidden>
+    <div class="zmm__grid">
+      {%- for f in zmm_fields -%}
+        {%- assign fp = f | split: ':' -%}
+        {%- assign flabel = fp[0] -%}
+        {%- assign hmin = fp[1] | plus: 0 -%}
+        {%- assign hmax = fp[2] | plus: 0 -%}
+        <div class="zmm__field">
+          <span class="zmm__label">{{ flabel }} (cm) <span class="req">*</span></span>
+          <select name="properties[{{ flabel }}]" data-zmm-req data-zmm-in="custom" disabled>
+            <option value="">-- Please select --</option>
+            {%- for h in (hmin..hmax) -%}
+              {%- assign whole = h | divided_by: 2 -%}
+              {%- assign rem = h | modulo: 2 -%}
+              {%- if rem == 0 -%}{%- capture lab -%}{{ whole }}{%- endcapture -%}{%- else -%}{%- capture lab -%}{{ whole }}.5{%- endcapture -%}{%- endif -%}
+              <option value="{{ lab }} cm">{{ lab }}</option>
+            {%- endfor -%}
+          </select>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- comment -%} SHEILA (abayas) + COMMENT — always visible once a mode is chosen {%- endcomment -%}
+  <div class="zmm__panel" data-zmm-panel="extra" hidden>
+    <div class="zmm__grid" style="margin-top:14px">
+      {%- if zmm_is_abaya -%}
+      <div class="zmm__field zmm__field--full">
+        <span class="zmm__label">Sheila</span>
+        <select name="properties[Sheila]" data-zmm-in="extra" disabled>
+          <option value="With Sheila">With Sheila</option>
+          <option value="Without Sheila">Without Sheila</option>
+        </select>
+      </div>
+      {%- endif -%}
+      <div class="zmm__field zmm__field--full">
+        <span class="zmm__label">Comment / special request</span>
+        <textarea name="properties[Comment]" data-zmm-in="extra" rows="3" placeholder="Anything we should know (preferences, deadline, occasion)…" disabled></textarea>
+      </div>
+    </div>
+    <p class="zmm__hint">Made to order. Customized pieces are cut to your measurements and cannot be exchanged for fit.</p>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var root = document.currentScript && document.currentScript.previousElementSibling;
+    if(!root || !root.matches('[data-zmm]')){ root = document.querySelector('[data-zmm]'); }
+    if(!root) return;
+    var modes = root.querySelectorAll('input[data-zmm-mode]');
+    var labels = root.querySelectorAll('[data-zmm-modelabel]');
+    function panel(name){ return root.querySelector('[data-zmm-panel="'+name+'"]'); }
+    function setActive(which){
+      // panels
+      ['ready','custom'].forEach(function(n){ var p=panel(n); if(p) p.hidden = (n!==which); });
+      var extra = panel('extra'); if(extra) extra.hidden = false;
+      // enable only the fields belonging to the active mode + extra; disable the rest so they don't submit
+      root.querySelectorAll('[data-zmm-in]').forEach(function(el){
+        var grp = el.getAttribute('data-zmm-in');
+        var on = (grp === which) || (grp === 'extra');
+        el.disabled = !on;
+        if(el.hasAttribute('data-zmm-req')) el.required = on;
+      });
+      // active styling
+      labels.forEach(function(l){ var r=l.querySelector('input'); l.classList.toggle('is-active', !!(r&&r.checked)); });
+    }
+    modes.forEach(function(r){ r.addEventListener('change', function(){ setActive(r.getAttribute('data-zmm-mode')==='ready'?'ready':'custom'); }); });
+
+    // Block add-to-cart until a valid selection is made (theme uses ajax, native validity alone may not fire)
+    var form = root.closest('form');
+    if(form){
+      form.addEventListener('submit', function(e){
+        var chosen = root.querySelector('input[data-zmm-mode]:checked');
+        if(!chosen){ e.preventDefault(); e.stopImmediatePropagation(); alert('Please choose Readymade or Customized before adding to bag.'); return; }
+        var missing = null;
+        root.querySelectorAll('[data-zmm-req]').forEach(function(el){
+          if(!el.disabled && !el.value && !missing) missing = el;
+        });
+        if(missing){ e.preventDefault(); e.stopImmediatePropagation(); missing.focus(); alert('Please complete all required size fields.'); }
+      }, true);
+    }
+  })();
+</script>
