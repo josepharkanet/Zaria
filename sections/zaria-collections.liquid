@@ -53,7 +53,8 @@
             {%- when 4 -%}{%- assign col = collections['embellished'] -%}
           {%- endcase -%}
         {%- endif -%}
-        {%- assign img = block.settings.image | default: col.image -%}
+        {%- comment -%} Zaria: prefer the collection image (set per fabric family) over any block-level override {%- endcomment -%}
+        {%- assign img = col.image | default: block.settings.image -%}
         {%- comment -%} Zaria: collections without an uploaded image fall back to their first photographed product {%- endcomment -%}
         {%- if img == blank and col != blank -%}
           {%- for cp in col.products -%}
