@@ -11,7 +11,7 @@
 {%- if product.type == 'Abaya' or product.tags contains 'Abaya' -%}{%- assign zmm_is_abaya = true -%}{%- endif -%}
 
 {%- comment -%} field spec: "Label:half-cm-min:half-cm-max" (value = h / 2, so 0.5 cm steps). Order = diagram numbers. {%- endcomment -%}
-{%- assign zmm_fields = "Neck Opening:26:35,Shoulder:26:37,Sleeve Loose:12:24,Sleeve Length:52:68,Sleeve Opening:18:25,Bust Circumference:76:117,Waist Circumference:76:117,Hip Circumference:86:136,Full Length:100:130" | split: ',' -%}
+{%- assign zmm_fields = "Neck Open:26:35,Shoulder to Shoulder:26:37,Sleeve Loose:12:25,Sleeve Length:52:68,Sleeve Open:18:25,Bust:76:117,Waist:76:124,Hip:86:136,Length:100:130,Bottom Open:30:48" | split: ',' -%}
 
 <style>
   .zmm{margin:2px 0 18px;padding:4px 0}
@@ -114,29 +114,37 @@
   <div class="zmm__panel" data-zmm-panel="custom" hidden>
     <div class="zmm__visual">
       <div class="zmm__figure" aria-hidden="true">
-        <svg viewBox="0 0 300 468" fill="none" stroke="#151515" stroke-width="1.4" stroke-linejoin="round">
-          <path d="M124 66 L176 66 L266 450 Q150 468 34 450 Z" fill="#faf7f2"/>
-          <path d="M124 66 L52 234 L78 248 L140 120 Z" fill="#faf7f2"/>
-          <path d="M176 66 L248 234 L222 248 L160 120 Z" fill="#faf7f2"/>
-          <path d="M138 62 L150 86 L162 62"/>
-          <path d="M150 86 L150 458" stroke-dasharray="3 5" stroke="#c9c1b4" stroke-width="1"/>
+        <svg viewBox="0 0 300 500" fill="none" stroke="#151515" stroke-width="1.4" stroke-linejoin="round">
+          <!-- body A-line -->
+          <path d="M124 66 L176 66 L268 470 Q150 486 32 470 Z" fill="#faf7f2"/>
+          <!-- open front reveal -->
+          <path d="M148 92 L141 470 L159 470 L152 92 Z" fill="#efe7db"/>
+          <!-- sleeves -->
+          <path d="M124 66 L52 238 L80 252 L140 122 Z" fill="#faf7f2"/>
+          <path d="M176 66 L248 238 L220 252 L160 122 Z" fill="#faf7f2"/>
+          <!-- neckline + front edges -->
+          <path d="M138 64 L150 92 L162 64"/>
+          <path d="M148 92 L141 470M152 92 L159 470" stroke-width="1.1"/>
+          <!-- guide lines: bust / waist / hip / bottom -->
           <g stroke="#d9c9a4" stroke-dasharray="4 4" stroke-width="1">
-            <path d="M116 150 H196"/><path d="M104 214 H206"/><path d="M80 300 H224"/>
+            <path d="M114 154 H188"/><path d="M102 216 H202"/><path d="M80 302 H222"/><path d="M40 468 H260"/>
           </g>
+          <!-- length arrow -->
           <g stroke="#c9c1b4" stroke-width="1">
-            <path d="M22 74 L22 452" stroke-dasharray="3 5"/>
-            <path d="M18 80 L22 72 L26 80M18 446 L22 454 L26 446"/>
+            <path d="M22 74 L22 470" stroke-dasharray="3 5"/>
+            <path d="M18 80 L22 72 L26 80M18 464 L22 472 L26 464"/>
           </g>
           <g class="zmm__marks">
-            <g class="zmm__mark" data-zmm-mark="1"><circle cx="150" cy="78" r="10"/><text x="150" y="82" text-anchor="middle">1</text></g>
-            <g class="zmm__mark" data-zmm-mark="2"><circle cx="126" cy="72" r="10"/><text x="126" y="76" text-anchor="middle">2</text></g>
-            <g class="zmm__mark" data-zmm-mark="3"><circle cx="99" cy="164" r="10"/><text x="99" y="168" text-anchor="middle">3</text></g>
-            <g class="zmm__mark" data-zmm-mark="4"><circle cx="80" cy="206" r="10"/><text x="80" y="210" text-anchor="middle">4</text></g>
-            <g class="zmm__mark" data-zmm-mark="5"><circle cx="62" cy="242" r="10"/><text x="62" y="246" text-anchor="middle">5</text></g>
-            <g class="zmm__mark" data-zmm-mark="6"><circle cx="200" cy="150" r="10"/><text x="200" y="154" text-anchor="middle">6</text></g>
-            <g class="zmm__mark" data-zmm-mark="7"><circle cx="210" cy="214" r="10"/><text x="210" y="218" text-anchor="middle">7</text></g>
-            <g class="zmm__mark" data-zmm-mark="8"><circle cx="228" cy="300" r="10"/><text x="228" y="304" text-anchor="middle">8</text></g>
-            <g class="zmm__mark" data-zmm-mark="9"><circle cx="22" cy="262" r="10"/><text x="22" y="266" text-anchor="middle">9</text></g>
+            <g class="zmm__mark" data-zmm-mark="1"><circle cx="150" cy="80" r="10"/><text x="150" y="84" text-anchor="middle">1</text></g>
+            <g class="zmm__mark" data-zmm-mark="2"><circle cx="127" cy="71" r="10"/><text x="127" y="75" text-anchor="middle">2</text></g>
+            <g class="zmm__mark" data-zmm-mark="3"><circle cx="101" cy="167" r="10"/><text x="101" y="171" text-anchor="middle">3</text></g>
+            <g class="zmm__mark" data-zmm-mark="4"><circle cx="81" cy="209" r="10"/><text x="81" y="213" text-anchor="middle">4</text></g>
+            <g class="zmm__mark" data-zmm-mark="5"><circle cx="63" cy="245" r="10"/><text x="63" y="249" text-anchor="middle">5</text></g>
+            <g class="zmm__mark" data-zmm-mark="6"><circle cx="196" cy="154" r="10"/><text x="196" y="158" text-anchor="middle">6</text></g>
+            <g class="zmm__mark" data-zmm-mark="7"><circle cx="206" cy="216" r="10"/><text x="206" y="220" text-anchor="middle">7</text></g>
+            <g class="zmm__mark" data-zmm-mark="8"><circle cx="226" cy="302" r="10"/><text x="226" y="306" text-anchor="middle">8</text></g>
+            <g class="zmm__mark" data-zmm-mark="9"><circle cx="22" cy="272" r="10"/><text x="22" y="276" text-anchor="middle">9</text></g>
+            <g class="zmm__mark" data-zmm-mark="10"><circle cx="96" cy="468" r="11.5"/><text x="96" y="472" text-anchor="middle">10</text></g>
           </g>
         </svg>
         <p class="zmm__figcap">Where we measure</p>
@@ -153,7 +161,7 @@
             <div class="zmm__field" data-zmm-field="{{ forloop.index }}">
               <div class="zmm__fhead">
                 <span class="zmm__num">{{ forloop.index }}</span>
-                <span class="zmm__fname">{{ flabel }} <span class="u">(cm)</span></span>
+                <span class="zmm__fname">{{ flabel }} <span class="u">(in)</span></span>
               </div>
               <select name="properties[{{ flabel }}]" data-zmm-req data-zmm-in="custom" data-zmm-field-select="{{ forloop.index }}" disabled>
                 <option value="">-- Select --</option>
