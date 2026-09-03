@@ -129,9 +129,9 @@
     #shopify-section-{{ section.id }} .zpdp__thumb{width:64px;flex:0 0 auto}
   }
 
-  /* info */
-  #shopify-section-{{ section.id }} .zpdp__info{position:sticky;top:100px}
-  @media (max-width:999px){#shopify-section-{{ section.id }} .zpdp__info{position:static}}
+  /* Option A: image column pinned, details scroll; image switches to the 2nd photo partway down (desktop) */
+  @media (min-width:1000px){#shopify-section-{{ section.id }} .zpdp__gallery{position:sticky;top:100px;align-self:start}}
+  #shopify-section-{{ section.id }} .zpdp__info{position:static}
   #shopify-section-{{ section.id }} .zpdp__eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--wine);margin:0 0 14px}
   #shopify-section-{{ section.id }} .zpdp__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     font-size:clamp(18px,1.9vw,25px);line-height:1.3;letter-spacing:.02em;margin:0 0 16px;text-transform:uppercase}
@@ -406,16 +406,35 @@
 (function(){
   var root=document.getElementById('zpdp-gal-{{ section.id }}');
   if(!root)return;
+  var grid=root.closest('.zpdp__grid');
   var thumbs=root.querySelectorAll('.zpdp__thumb');
   var imgs=root.querySelectorAll('.zpdp__img');
+  function setActive(idx){
+    idx=Math.max(0,Math.min(imgs.length-1,idx));
+    thumbs.forEach(function(t){t.classList.toggle('is-active',t.getAttribute('data-i')===String(idx))});
+    imgs.forEach(function(im){im.classList.toggle('is-active',im.getAttribute('data-i')===String(idx))});
+  }
   thumbs.forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var i=btn.getAttribute('data-i');
-      thumbs.forEach(function(t){t.classList.remove('is-active')});
-      btn.classList.add('is-active');
-      imgs.forEach(function(im){im.classList.toggle('is-active',im.getAttribute('data-i')===i)});
-    });
+    btn.addEventListener('click',function(){setActive(parseInt(btn.getAttribute('data-i'),10)||0);});
   });
+  /* While the image column is pinned and the details scroll, reveal the next photo partway down (desktop). */
+  if(imgs.length>1){
+    var ticking=false;
+    function update(){
+      ticking=false;
+      if(window.innerWidth<1000||!grid)return;
+      var r=grid.getBoundingClientRect();
+      var range=r.height-root.offsetHeight;
+      if(range<=40)return;
+      var progress=(100-r.top)/range;
+      progress=Math.max(0,Math.min(0.999,progress));
+      setActive(Math.floor(progress*imgs.length));
+    }
+    function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(update);}}
+    window.addEventListener('scroll',onScroll,{passive:true});
+    window.addEventListener('resize',onScroll);
+    update();
+  }
 })();
 </script>
 
