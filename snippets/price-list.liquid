@@ -28,6 +28,25 @@
       assign compare_at_price_classes = base_text_class | append: 'h5 text-subdued line-through'
       assign unit_price_classes = base_text_class | append: 'h6 text-subdued'
   endcase
+
+  comment
+    Zaria: fabrics are sold by the metre, so show a "/ metre" unit next to the price.
+    Scoped to products tagged "Fabric" (perfumes / ready-to-wear are untagged and unaffected),
+    and only in browsing/PDP contexts (not the cart line item).
+  endcomment
+  assign uom_product = product
+  if uom_product == blank and variant != blank
+    assign uom_product = variant.product
+  endif
+  if uom_product == blank and line_item != blank
+    assign uom_product = line_item.product
+  endif
+  assign show_uom = false
+  if uom_product.tags contains 'Fabric'
+    if context == 'product' or context == 'card'
+      assign show_uom = true
+    endif
+  endif
 -%}
 
 <price-list class="price-list {% if context == 'product' %}price-list--product{% endif %}">
@@ -154,6 +173,10 @@
         {{- 4999 | money -}}
       {%- endif -%}
     </sale-price>
+  {%- endif -%}
+
+  {%- if show_uom -%}
+    <span class="price-uom text-subdued" style="font-size:.8em;margin-inline-start:.25em;letter-spacing:.02em;white-space:nowrap;">/ metre</span>
   {%- endif -%}
 
   {%- unless hide_unit_price -%}
