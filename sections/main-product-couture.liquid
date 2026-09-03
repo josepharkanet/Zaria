@@ -83,6 +83,10 @@
       assign attr_count = attr_count | plus: 1
     endif
   endif
+  assign has_attrs = false
+  if attr_count > 0
+    assign has_attrs = true
+  endif
   if attr_count < 1
     assign attr_count = 1
   endif
@@ -249,6 +253,7 @@
         <div class="zpdp__desc">{{ product.description }}</div>
       {%- endif -%}
 
+      {%- if has_attrs -%}
       <div class="zpdp__attrs" style="--zpdp-cols:{{ attr_count }}">
         {%- if is_fragrance -%}
           {%- if fr_family != blank -%}
@@ -302,6 +307,7 @@
           {%- endif -%}
         {%- endif -%}
       </div>
+      {%- endif -%}
 
       {%- if fr_top != blank or fr_heart != blank or fr_base != blank -%}
         <div class="zpdp__notes">
