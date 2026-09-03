@@ -1,47 +1,84 @@
 {%- comment -%}
   Zaria - Made to Measure form for ready-to-wear garments (Abaya / Kaftan / Sheila).
   Renders INSIDE the product form ({% form 'product' %}), so every choice is captured as a
-  line-item property and shows on the Shopify order + emails. Modelled on the Mauzan flow:
-  a Readymade / Customized toggle, a size dropdown for Readymade, and cm measurement
-  dropdowns for Customized, plus an optional Sheila choice (abayas) and a comment.
-  Usage (inside the product form): {% render 'zaria-measure-form', product: product %}
+  line-item property and shows on the Shopify order + emails.
+  Readymade -> a standard size + the Size Chart. Customized -> a visual couture sketch with
+  numbered measurement points that light up as each cm dropdown is completed. Usage:
+  {% render 'zaria-measure-form', product: product %}
 {%- endcomment -%}
 
 {%- assign zmm_is_abaya = false -%}
 {%- if product.type == 'Abaya' or product.tags contains 'Abaya' -%}{%- assign zmm_is_abaya = true -%}{%- endif -%}
 
-{%- comment -%} field spec: "Label:half-cm-min:half-cm-max" (value = h / 2, so 0.5 cm steps) {%- endcomment -%}
+{%- comment -%} field spec: "Label:half-cm-min:half-cm-max" (value = h / 2, so 0.5 cm steps). Order = diagram numbers. {%- endcomment -%}
 {%- assign zmm_fields = "Neck Opening:26:35,Shoulder:26:37,Sleeve Loose:12:24,Sleeve Length:52:68,Sleeve Opening:18:25,Bust Circumference:76:117,Waist Circumference:76:117,Hip Circumference:86:136,Full Length:100:130" | split: ',' -%}
 
 <style>
-  .zmm{margin:2px 0 18px;padding:6px 0 4px}
+  .zmm{margin:2px 0 18px;padding:4px 0}
+  .zmm__top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
   .zmm__head{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#161616;margin:0 0 4px}
-  .zmm__sub{font-size:13px;color:#8a8a8a;margin:0 0 14px}
-  .zmm__modes{display:flex;gap:10px;margin:0 0 6px}
+  .zmm__head .req{color:var(--wine,#7a1f34)}
+  .zmm__sub{font-size:13px;color:#8a8a8a;margin:0;max-width:46ch;line-height:1.6}
+  .zmm__modes{display:flex;gap:10px;margin:14px 0 0}
   .zmm__mode{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;
-    border:1px solid #d7d2ca;background:#fff;padding:14px 12px;font-size:12px;letter-spacing:.14em;
+    border:1px solid #d7d2ca;background:#fff;padding:15px 12px;font-size:12px;letter-spacing:.14em;
     text-transform:uppercase;color:#4a4a4a;transition:border-color .15s ease,color .15s ease,background .15s ease}
   .zmm__mode:hover{border-color:#161616;color:#161616}
   .zmm__mode input{accent-color:var(--wine,#7a1f34);width:16px;height:16px;margin:0}
   .zmm__mode.is-active{border-color:var(--wine,#7a1f34);color:#161616;background:#fbf7f8}
-  .zmm__panel{margin-top:16px}
+  .zmm__panel{margin-top:18px}
   .zmm__panel[hidden]{display:none}
-  .zmm__grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
-  .zmm__field{display:flex;flex-direction:column}
-  .zmm__field--full{grid-column:1 / -1}
-  .zmm__label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6a;margin:0 0 6px}
-  .zmm__label .req{color:var(--wine,#7a1f34)}
   .zmm select,.zmm textarea{width:100%;border:1px solid #d7d2ca;background:#fff;padding:13px 12px;font:inherit;
     font-size:14px;color:#161616;border-radius:0;box-sizing:border-box}
   .zmm select:focus,.zmm textarea:focus{outline:none;border-color:#161616}
   .zmm textarea{min-height:76px;resize:vertical;line-height:1.6}
-  .zmm__hint{font-size:12px;color:#9a9a9a;margin:10px 0 0;line-height:1.6}
-  @media(max-width:560px){.zmm__grid{grid-template-columns:1fr}}
+  .zmm__label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6a;margin:0 0 6px}
+  .zmm__label .req{color:var(--wine,#7a1f34)}
+  .zmm__hint{font-size:12px;color:#9a9a9a;margin:12px 0 0;line-height:1.6}
+
+  /* Readymade */
+  .zmm__ready-grid{display:grid;grid-template-columns:1fr;gap:6px;max-width:340px}
+
+  /* Customized - visual layout */
+  .zmm__visual{display:grid;grid-template-columns:210px 1fr;gap:clamp(18px,3vw,34px);align-items:start}
+  .zmm__figure{position:sticky;top:14px}
+  .zmm__figure svg{width:100%;height:auto;display:block}
+  .zmm__figcap{text-align:center;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#a79f93;margin:10px 0 0}
+  .zmm__mark{transition:transform .18s ease}
+  .zmm__mark circle{fill:#fff;stroke:#c9a86a;stroke-width:1.4;transition:fill .18s ease,stroke .18s ease}
+  .zmm__mark text{fill:#9a8a5a;font-family:'Jost',sans-serif;font-size:10px;font-weight:500;transition:fill .18s ease}
+  .zmm__mark.is-done circle{fill:var(--wine,#7a1f34);stroke:var(--wine,#7a1f34)}
+  .zmm__mark.is-done text{fill:#fff}
+  .zmm__mark.is-active{transform:scale(1.28)}
+  .zmm__mark.is-active circle{stroke:#161616}
+
+  .zmm__fields{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+  .zmm__field{display:flex;flex-direction:column;position:relative}
+  .zmm__field--full{grid-column:1 / -1}
+  .zmm__fhead{display:flex;align-items:center;gap:8px;margin:0 0 6px}
+  .zmm__num{flex:none;width:20px;height:20px;border-radius:50%;background:#f1ece3;color:#8a7a53;border:1px solid #e0d8c8;
+    font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;transition:background .18s ease,color .18s ease,border-color .18s ease}
+  .zmm__field.is-done .zmm__num{background:var(--wine,#7a1f34);color:#fff;border-color:var(--wine,#7a1f34)}
+  .zmm__fname{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5a5a5a}
+  .zmm__fname .u{color:#b3aca0;letter-spacing:.02em}
+  .zmm__prog{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8a8a;margin:2px 0 14px}
+  .zmm__prog b{color:var(--wine,#7a1f34);font-weight:500}
+
+  @media(max-width:620px){
+    .zmm__visual{grid-template-columns:1fr}
+    .zmm__figure{position:static;max-width:190px;margin:0 auto}
+    .zmm__fields{grid-template-columns:1fr}
+  }
 </style>
 
 <div class="zmm" data-zmm>
-  <p class="zmm__head">Choose your size <span style="color:var(--wine,#7a1f34)">*</span></p>
-  <p class="zmm__sub" data-zmm-sub>Select Readymade for a standard size, or Customized to enter your measurements.</p>
+  <div class="zmm__top">
+    <div>
+      <p class="zmm__head">Choose your size <span class="req">*</span></p>
+      <p class="zmm__sub" data-zmm-sub>Select Readymade for a standard size, or Customized to have it cut to your measurements.</p>
+    </div>
+    <div class="zmm__chart">{% render 'zaria-size-chart' %}</div>
+  </div>
 
   <div class="zmm__modes">
     <label class="zmm__mode" data-zmm-modelabel>
@@ -54,11 +91,11 @@
     </label>
   </div>
 
-  {%- comment -%} READYMADE {%- endcomment -%}
+  {%- comment -%} ===== READYMADE ===== {%- endcomment -%}
   <div class="zmm__panel" data-zmm-panel="ready" hidden>
-    <div class="zmm__grid">
-      <div class="zmm__field zmm__field--full">
-        <span class="zmm__label">Size <span class="req">*</span></span>
+    <div class="zmm__ready-grid">
+      <div>
+        <div class="zmm__label">Size <span class="req">*</span></div>
         <select name="properties[Size]" data-zmm-req data-zmm-in="ready" disabled>
           <option value="">-- Please select --</option>
           <option value="36 / XS">36 / XS</option>
@@ -70,38 +107,76 @@
         </select>
       </div>
     </div>
+    <p class="zmm__hint">Not sure of your size? Open the <b>Size Chart</b> above to match your measurements to a standard size.</p>
   </div>
 
-  {%- comment -%} CUSTOMIZED {%- endcomment -%}
+  {%- comment -%} ===== CUSTOMIZED (visual) ===== {%- endcomment -%}
   <div class="zmm__panel" data-zmm-panel="custom" hidden>
-    <div class="zmm__grid">
-      {%- for f in zmm_fields -%}
-        {%- assign fp = f | split: ':' -%}
-        {%- assign flabel = fp[0] -%}
-        {%- assign hmin = fp[1] | plus: 0 -%}
-        {%- assign hmax = fp[2] | plus: 0 -%}
-        <div class="zmm__field">
-          <span class="zmm__label">{{ flabel }} (cm) <span class="req">*</span></span>
-          <select name="properties[{{ flabel }}]" data-zmm-req data-zmm-in="custom" disabled>
-            <option value="">-- Please select --</option>
-            {%- for h in (hmin..hmax) -%}
-              {%- assign whole = h | divided_by: 2 -%}
-              {%- assign rem = h | modulo: 2 -%}
-              {%- if rem == 0 -%}{%- capture lab -%}{{ whole }}{%- endcapture -%}{%- else -%}{%- capture lab -%}{{ whole }}.5{%- endcapture -%}{%- endif -%}
-              <option value="{{ lab }} cm">{{ lab }}</option>
-            {%- endfor -%}
-          </select>
+    <div class="zmm__visual">
+      <div class="zmm__figure" aria-hidden="true">
+        <svg viewBox="0 0 300 468" fill="none" stroke="#151515" stroke-width="1.4" stroke-linejoin="round">
+          <path d="M124 66 L176 66 L266 450 Q150 468 34 450 Z" fill="#faf7f2"/>
+          <path d="M124 66 L52 234 L78 248 L140 120 Z" fill="#faf7f2"/>
+          <path d="M176 66 L248 234 L222 248 L160 120 Z" fill="#faf7f2"/>
+          <path d="M138 62 L150 86 L162 62"/>
+          <path d="M150 86 L150 458" stroke-dasharray="3 5" stroke="#c9c1b4" stroke-width="1"/>
+          <g stroke="#d9c9a4" stroke-dasharray="4 4" stroke-width="1">
+            <path d="M116 150 H196"/><path d="M104 214 H206"/><path d="M80 300 H224"/>
+          </g>
+          <g stroke="#c9c1b4" stroke-width="1">
+            <path d="M22 74 L22 452" stroke-dasharray="3 5"/>
+            <path d="M18 80 L22 72 L26 80M18 446 L22 454 L26 446"/>
+          </g>
+          <g class="zmm__marks">
+            <g class="zmm__mark" data-zmm-mark="1"><circle cx="150" cy="78" r="10"/><text x="150" y="82" text-anchor="middle">1</text></g>
+            <g class="zmm__mark" data-zmm-mark="2"><circle cx="126" cy="72" r="10"/><text x="126" y="76" text-anchor="middle">2</text></g>
+            <g class="zmm__mark" data-zmm-mark="3"><circle cx="99" cy="164" r="10"/><text x="99" y="168" text-anchor="middle">3</text></g>
+            <g class="zmm__mark" data-zmm-mark="4"><circle cx="80" cy="206" r="10"/><text x="80" y="210" text-anchor="middle">4</text></g>
+            <g class="zmm__mark" data-zmm-mark="5"><circle cx="62" cy="242" r="10"/><text x="62" y="246" text-anchor="middle">5</text></g>
+            <g class="zmm__mark" data-zmm-mark="6"><circle cx="200" cy="150" r="10"/><text x="200" y="154" text-anchor="middle">6</text></g>
+            <g class="zmm__mark" data-zmm-mark="7"><circle cx="210" cy="214" r="10"/><text x="210" y="218" text-anchor="middle">7</text></g>
+            <g class="zmm__mark" data-zmm-mark="8"><circle cx="228" cy="300" r="10"/><text x="228" y="304" text-anchor="middle">8</text></g>
+            <g class="zmm__mark" data-zmm-mark="9"><circle cx="22" cy="262" r="10"/><text x="22" y="266" text-anchor="middle">9</text></g>
+          </g>
+        </svg>
+        <p class="zmm__figcap">Where we measure</p>
+      </div>
+
+      <div>
+        <p class="zmm__prog"><b data-zmm-count>0</b> of {{ zmm_fields.size }} measurements added</p>
+        <div class="zmm__fields">
+          {%- for f in zmm_fields -%}
+            {%- assign fp = f | split: ':' -%}
+            {%- assign flabel = fp[0] -%}
+            {%- assign hmin = fp[1] | plus: 0 -%}
+            {%- assign hmax = fp[2] | plus: 0 -%}
+            <div class="zmm__field" data-zmm-field="{{ forloop.index }}">
+              <div class="zmm__fhead">
+                <span class="zmm__num">{{ forloop.index }}</span>
+                <span class="zmm__fname">{{ flabel }} <span class="u">(cm)</span></span>
+              </div>
+              <select name="properties[{{ flabel }}]" data-zmm-req data-zmm-in="custom" data-zmm-field-select="{{ forloop.index }}" disabled>
+                <option value="">-- Select --</option>
+                {%- for h in (hmin..hmax) -%}
+                  {%- assign whole = h | divided_by: 2 -%}
+                  {%- assign rem = h | modulo: 2 -%}
+                  {%- if rem == 0 -%}{%- capture lab -%}{{ whole }}{%- endcapture -%}{%- else -%}{%- capture lab -%}{{ whole }}.5{%- endcapture -%}{%- endif -%}
+                  <option value="{{ lab }} cm">{{ lab }}</option>
+                {%- endfor -%}
+              </select>
+            </div>
+          {%- endfor -%}
         </div>
-      {%- endfor -%}
+      </div>
     </div>
   </div>
 
-  {%- comment -%} SHEILA (abayas) + COMMENT — always visible once a mode is chosen {%- endcomment -%}
+  {%- comment -%} ===== SHEILA (abayas) + COMMENT ===== {%- endcomment -%}
   <div class="zmm__panel" data-zmm-panel="extra" hidden>
-    <div class="zmm__grid" style="margin-top:14px">
+    <div class="zmm__fields" style="margin-top:14px">
       {%- if zmm_is_abaya -%}
       <div class="zmm__field zmm__field--full">
-        <span class="zmm__label">Sheila</span>
+        <div class="zmm__fhead"><span class="zmm__fname">Sheila</span></div>
         <select name="properties[Sheila]" data-zmm-in="extra" disabled>
           <option value="With Sheila">With Sheila</option>
           <option value="Without Sheila">Without Sheila</option>
@@ -109,7 +184,7 @@
       </div>
       {%- endif -%}
       <div class="zmm__field zmm__field--full">
-        <span class="zmm__label">Comment / special request</span>
+        <div class="zmm__fhead"><span class="zmm__fname">Comment / special request</span></div>
         <textarea name="properties[Comment]" data-zmm-in="extra" rows="3" placeholder="Anything we should know (preferences, deadline, occasion)…" disabled></textarea>
       </div>
     </div>
@@ -124,24 +199,46 @@
     if(!root) return;
     var modes = root.querySelectorAll('input[data-zmm-mode]');
     var labels = root.querySelectorAll('[data-zmm-modelabel]');
+    var countEl = root.querySelector('[data-zmm-count]');
     function panel(name){ return root.querySelector('[data-zmm-panel="'+name+'"]'); }
+    function mark(n){ return root.querySelector('[data-zmm-mark="'+n+'"]'); }
+
+    function refreshProgress(){
+      var done = 0;
+      root.querySelectorAll('[data-zmm-field-select]').forEach(function(sel){
+        var n = sel.getAttribute('data-zmm-field-select');
+        var field = root.querySelector('[data-zmm-field="'+n+'"]');
+        var m = mark(n);
+        var filled = !!sel.value;
+        if(filled) done++;
+        if(field) field.classList.toggle('is-done', filled);
+        if(m) m.classList.toggle('is-done', filled);
+      });
+      if(countEl) countEl.textContent = done;
+    }
+
     function setActive(which){
-      // panels
       ['ready','custom'].forEach(function(n){ var p=panel(n); if(p) p.hidden = (n!==which); });
       var extra = panel('extra'); if(extra) extra.hidden = false;
-      // enable only the fields belonging to the active mode + extra; disable the rest so they don't submit
       root.querySelectorAll('[data-zmm-in]').forEach(function(el){
         var grp = el.getAttribute('data-zmm-in');
         var on = (grp === which) || (grp === 'extra');
         el.disabled = !on;
         if(el.hasAttribute('data-zmm-req')) el.required = on;
       });
-      // active styling
       labels.forEach(function(l){ var r=l.querySelector('input'); l.classList.toggle('is-active', !!(r&&r.checked)); });
+      if(which==='custom') refreshProgress();
     }
     modes.forEach(function(r){ r.addEventListener('change', function(){ setActive(r.getAttribute('data-zmm-mode')==='ready'?'ready':'custom'); }); });
 
-    // Block add-to-cart until a valid selection is made (theme uses ajax, native validity alone may not fire)
+    // per-field: update progress + light up the matching diagram point on focus
+    root.querySelectorAll('[data-zmm-field-select]').forEach(function(sel){
+      var n = sel.getAttribute('data-zmm-field-select');
+      sel.addEventListener('change', refreshProgress);
+      sel.addEventListener('focus', function(){ var m=mark(n); if(m) m.classList.add('is-active'); });
+      sel.addEventListener('blur', function(){ var m=mark(n); if(m) m.classList.remove('is-active'); });
+    });
+
     var form = root.closest('form');
     if(form){
       form.addEventListener('submit', function(e){
