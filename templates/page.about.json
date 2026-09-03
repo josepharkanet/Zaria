@@ -1,31 +1,31 @@
 {
   "sections": {
     "story": {
-      "type": "zaria-feature",
+      "type": "zaria-story",
       "settings": {
-        "scheme": "white",
-        "image_side": "left",
-        "eyebrow": "The House of Zaria",
-        "heading": "A study in modern couture",
-        "body": "<p>Zaria is a design-led couture house, founded in Dubai on considered silhouettes and refined tailoring. Every piece is drawn, cut, and finished by hand in our atelier, made to be worn and kept.</p><p>We believe modest dressing and modern luxury belong together. Working in the finest silks, cottons, chiffons and embellished fabrics, we cut for the woman who values quiet, lasting elegance over the passing season.</p>",
-        "link_label": "Explore the fabrics",
+        "scheme": "cream",
+        "heading": "Our Story",
+        "lead": "Every woman carries a story of strength, grace, and individuality. At ZARIA, we create fashion that reflects her story, with confidence, sophistication, and effortless elegance.",
+        "body": "<p>Born in the United Arab Emirates, ZARIA embodies Modern Emirati Elegance, where the grace of Arabian heritage meets the refinement of contemporary design. Inspired by the UAE's unique balance of tradition and modernity, our collections reinterpret modest fashion for today's woman.</p><p>Every ZARIA piece is thoughtfully created with premium fabrics, graceful silhouettes, refined tailoring, and elegant details. Our designs celebrate modesty without compromising individuality, allowing women to move effortlessly from everyday moments and business occasions to family gatherings and special celebrations.</p><p>For ZARIA, luxury is found in simplicity, quality, and exceptional craftsmanship. It is in the beauty of a perfect silhouette, the touch of a beautiful fabric, and the subtle details that make a piece feel truly special.</p><p>More than a fashion house, ZARIA represents a modern Emirati way of elegance: confident yet graceful, contemporary yet connected to heritage, understated yet distinctive.</p><p>Created in the UAE and inspired by its spirit, ZARIA is for women who embrace their identity, appreciate timeless design, and express themselves with quiet confidence and effortless sophistication.</p>",
+        "signature": "The House of ZARIA · United Arab Emirates",
+        "link_label": "Explore the collection",
         "link_url": "/collections/all-fabrics"
       }
     },
     "values": {
       "type": "zaria-values",
-      "settings": { "scheme": "soft", "eyebrow": "Why Zaria", "heading": "The house standard", "marker": "icon", "columns": "4" },
+      "settings": { "scheme": "soft", "eyebrow": "The ZARIA Standard", "heading": "What sets us apart", "marker": "icon", "columns": "4" },
       "blocks": {
-        "v1": { "type": "value", "settings": { "icon": "scissors", "title": "Bespoke tailoring", "text": "Each piece is cut and fitted to your measurements." } },
-        "v2": { "type": "value", "settings": { "icon": "needle", "title": "Hand finished", "text": "Finished by hand in our atelier, detail by detail." } },
-        "v3": { "type": "value", "settings": { "icon": "globe", "title": "Worldwide delivery", "text": "Considered packaging, shipped wherever you are." } },
-        "v4": { "type": "value", "settings": { "icon": "calendar", "title": "Private appointments", "text": "Design consultations in person or by video." } }
+        "v1": { "type": "value", "settings": { "icon": "scissors", "title": "Premium fabrics", "text": "Silks, cottons and chiffons, thoughtfully sourced for their beauty and quality." } },
+        "v2": { "type": "value", "settings": { "icon": "needle", "title": "Refined details", "text": "Graceful silhouettes and elegant finishing, made with care." } },
+        "v3": { "type": "value", "settings": { "icon": "globe", "title": "Emirati elegance", "text": "Modern design rooted in the grace of Arabian heritage." } },
+        "v4": { "type": "value", "settings": { "icon": "calendar", "title": "For every occasion", "text": "From everyday and business to family gatherings and celebrations." } }
       },
       "block_order": ["v1", "v2", "v3", "v4"]
     },
     "quote": {
       "type": "zaria-quote",
-      "settings": { "scheme": "ink", "eyebrow": "The philosophy", "quote": "True luxury is a garment that fits only you, made to be worn for years, not seasons.", "attribution": "Zaria Atelier, Dubai" }
+      "settings": { "scheme": "ink", "eyebrow": "The ZARIA Spirit", "quote": "Modesty. Grace. Elegance.", "attribution": "Created in the United Arab Emirates" }
     },
     "cta": {
       "type": "design-your-look",
