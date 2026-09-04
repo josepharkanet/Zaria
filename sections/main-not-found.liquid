@@ -4,9 +4,10 @@
   When a native URL redirect is added in Admin (Online Store > Navigation > URL redirects),
   Shopify serves it before this 404 template and this guard simply stops being reached.
 {%- endcomment -%}
-{%- assign zaria_alias_path = request.path | downcase -%}
+<!-- zaria-404 alias-guard v2 path="{{ request.path }}" -->
+{%- assign zaria_alias_path = request.path | downcase | split: '?' | first -%}
 {%- assign zaria_redirect_to = '' -%}
-{%- if zaria_alias_path == '/pages/about' -%}{%- assign zaria_redirect_to = '/pages/our-story' -%}{%- endif -%}
+{%- if zaria_alias_path == '/pages/about' or zaria_alias_path == '/pages/about/' -%}{%- assign zaria_redirect_to = '/pages/our-story' -%}{%- endif -%}
 
 {%- if zaria_redirect_to != blank -%}
   <meta http-equiv="refresh" content="0; url={{ zaria_redirect_to }}">
