@@ -100,7 +100,7 @@
     #shopify-section-{{ section.id }} .header.zaria-header-split { column-gap: 14px; padding-inline: 26px; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__primary-nav { display: contents; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half {
-      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 0.85rem; margin: 0; padding: 0; list-style: none;
+      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 0.95rem; margin: 0; padding: 0; list-style: none;
     }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: end; padding-inline-end: 1.05rem; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 1.05rem; }
@@ -108,7 +108,15 @@
     #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav { grid-area: secondary-nav; justify-self: end; }
     /* Zaria: slightly tighter nav type on the single-line desktop header so all six links + logo + icons fit down to 1000px */
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half a,
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half summary { font-size: 11px; letter-spacing: 0.07em; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half summary { font-size: 11.5px; letter-spacing: 0.1em; }
+  }
+  /* Zaria: on normal/wide desktops there is room to give the nav bigger, more spaced type */
+  @media screen and (min-width: 1200px) {
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half { gap: 0 1.35rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { padding-inline-end: 1.4rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { padding-inline-start: 1.4rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half a,
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half summary { font-size: 13px; letter-spacing: 0.16em; }
   }
   /* Zaria: smaller, refined header icons */
   #shopify-section-{{ section.id }} .header__nav-icon { width: 1.15rem; height: auto; }
