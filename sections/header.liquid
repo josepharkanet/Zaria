@@ -29,7 +29,7 @@
           --header-grid: "logo primary-nav secondary-nav" / minmax(max-content, 1fr) auto minmax(max-content, 1fr);
 
         {%- when 'logo_center_navigation_below' -%}
-          --header-grid: "zhedge nav-left logo nav-right secondary-nav" / 130px minmax(0, 1fr) auto minmax(0, 1fr) 130px;
+          --header-grid: "zhedge nav-left logo nav-right secondary-nav" / 110px minmax(0, 1fr) auto minmax(0, 1fr) 110px;
       {%- endcase -%}
     }
   }
@@ -96,14 +96,19 @@
   /* Zaria: single-line header — menu split around a centered logo, icons floated right */
   @media screen and (min-width: 1000px) {
     #shopify-section-{{ section.id }} .header.zaria-header-split { position: relative; }
+    /* Zaria: reclaim the wide default column-gap + gutter so the two nav groups get room and never overlap the icons */
+    #shopify-section-{{ section.id }} .header.zaria-header-split { column-gap: 14px; padding-inline: 26px; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__primary-nav { display: contents; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half {
-      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 1.3rem; margin: 0; padding: 0; list-style: none;
+      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 0.85rem; margin: 0; padding: 0; list-style: none;
     }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: end; padding-inline-end: 1.7rem; }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 1.7rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: end; padding-inline-end: 1.05rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 1.05rem; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__logo { grid-area: logo; justify-self: center; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav { grid-area: secondary-nav; justify-self: end; }
+    /* Zaria: slightly tighter nav type on the single-line desktop header so all six links + logo + icons fit down to 1000px */
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half a,
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half summary { font-size: 11px; letter-spacing: 0.07em; }
   }
   /* Zaria: smaller, refined header icons */
   #shopify-section-{{ section.id }} .header__nav-icon { width: 1.15rem; height: auto; }
