@@ -1,125 +1,81 @@
-{%- comment -%}Zaria - Our Story (editorial brand narrative, image-led) - Arkanet Technologies{%- endcomment -%}
+{%- comment -%}Zaria - Our Story (editorial brand narrative, theme-sized) - Arkanet Technologies{%- endcomment -%}
 {%- assign sc = section.settings -%}
 {%- assign flora = 'zaria-flora.png' | asset_url -%}
 <style>
-  #shopify-section-{{ section.id }} .zst{background:{% if sc.scheme == 'white' %}#ffffff{% else %}#f6f1ea{% endif %};color:#1a1a1a;
-    font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;position:relative;overflow:hidden;padding-bottom:{{ sc.padding_bottom }}px}
-  #shopify-section-{{ section.id }} .zst *{box-sizing:border-box}
+  #shopify-section-{{ section.id }} .zst2{background:{% if sc.scheme == 'cream' %}#f6f1ea{% else %}#ffffff{% endif %};color:#1a1a1a;
+    font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:clamp(52px,7vw,90px) clamp(20px,5vw,48px) {{ sc.padding_bottom }}px}
+  #shopify-section-{{ section.id }} .zst2 *{box-sizing:border-box}
 
-  /* Hero */
-  #shopify-section-{{ section.id }} .zst-hero{position:relative;min-height:min(74vh,660px);display:flex;align-items:center;justify-content:center;
-    text-align:center;background:#141414;color:#fff;overflow:hidden}
-  #shopify-section-{{ section.id }} .zst-hero__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6}
-  #shopify-section-{{ section.id }} .zst-hero__flora{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:min(70vw,720px);aspect-ratio:1580/1239;background:url('{{ flora }}') center/contain no-repeat;opacity:.10;pointer-events:none}
-  #shopify-section-{{ section.id }} .zst-hero::after{content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg,rgba(8,8,8,.42) 0%,rgba(8,8,8,.5) 55%,rgba(8,8,8,.62) 100%)}
-  #shopify-section-{{ section.id }} .zst-hero__in{position:relative;z-index:2;max-width:780px;padding:64px 24px}
-  #shopify-section-{{ section.id }} .zst-hero__over{font-size:12px;letter-spacing:.34em;text-transform:uppercase;margin:0 0 20px;color:rgba(255,255,255,.86)}
-  #shopify-section-{{ section.id }} .zst-hero__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:300;
-    font-size:clamp(42px,7.4vw,90px);line-height:1.02;letter-spacing:.03em;text-transform:uppercase;margin:0}
-  #shopify-section-{{ section.id }} .zst-hero__rule{width:46px;height:1px;background:rgba(255,255,255,.85);margin:24px auto}
-  #shopify-section-{{ section.id }} .zst-hero__tag{font-weight:300;font-size:clamp(15px,1.9vw,20px);line-height:1.6;letter-spacing:.01em;
-    color:rgba(255,255,255,.92);max-width:46ch;margin:0 auto}
+  #shopify-section-{{ section.id }} .zst2__head{max-width:780px;margin:0 auto;text-align:center}
+  #shopify-section-{{ section.id }} .zst2__eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#7a1f34;margin:0 0 16px}
+  #shopify-section-{{ section.id }} .zst2__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
+    font-size:clamp(26px,3.2vw,36px);line-height:1.15;letter-spacing:.05em;color:#1a1a1a;margin:0}
+  #shopify-section-{{ section.id }} .zst2__rule{width:40px;height:1px;background:#7a1f34;margin:20px auto 0}
 
-  /* Lead */
-  #shopify-section-{{ section.id }} .zst-lead{max-width:820px;margin:0 auto;padding:clamp(60px,8.5vw,116px) 24px clamp(8px,2vw,20px);text-align:center;position:relative;z-index:1}
-  #shopify-section-{{ section.id }} .zst-lead__eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#7a1f34;margin:0 0 20px}
-  #shopify-section-{{ section.id }} .zst-lead__rule{width:38px;height:1px;background:#7a1f34;margin:0 auto 26px}
-  #shopify-section-{{ section.id }} .zst-lead p{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:300;
-    font-size:clamp(22px,3vw,32px);line-height:1.46;letter-spacing:.006em;color:#221b18;margin:0 auto}
+  #shopify-section-{{ section.id }} .zst2__band{max-width:1120px;margin:clamp(38px,5.5vw,68px) auto 0;position:relative;
+    aspect-ratio:16/7;overflow:hidden;background:#f1ede7}
+  #shopify-section-{{ section.id }} .zst2__band img{width:100%;height:100%;object-fit:cover;display:block}
+  #shopify-section-{{ section.id }} .zst2__ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:#f4f1ec;background-image:url('{{ flora }}');background-size:min(46%,260px);background-repeat:no-repeat;background-position:center}
+  #shopify-section-{{ section.id }} .zst2__ph::before{content:"";position:absolute;inset:14px;border:1px solid rgba(122,31,52,.28)}
+  #shopify-section-{{ section.id }} .zst2__ph span{position:relative;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#7a1f34;
+    background:#f4f1ec;padding:6px 14px}
 
-  /* Chapters */
-  #shopify-section-{{ section.id }} .zst-ch-wrap{max-width:1220px;margin:0 auto;padding:clamp(40px,6vw,72px) clamp(20px,5vw,48px) clamp(24px,4vw,44px);
-    display:flex;flex-direction:column;gap:clamp(52px,7.5vw,104px);position:relative;z-index:1}
-  #shopify-section-{{ section.id }} .zst-ch{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center}
-  #shopify-section-{{ section.id }} .zst-ch--right .zst-ch__media{order:2}
-  #shopify-section-{{ section.id }} .zst-ch__media{position:relative;aspect-ratio:4/5;overflow:hidden;background:#ece6dd}
-  #shopify-section-{{ section.id }} .zst-ch__media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s ease}
-  #shopify-section-{{ section.id }} .zst-ch:hover .zst-ch__media img{transform:scale(1.04)}
-  /* placeholder frame (shown until a photo is added) */
-  #shopify-section-{{ section.id }} .zst-ch__ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    background:{% if sc.scheme == 'white' %}#f4efe8{% else %}#efe8dd{% endif %};
-    background-image:url('{{ flora }}');background-size:min(70%,320px);background-repeat:no-repeat;background-position:center 42%}
-  #shopify-section-{{ section.id }} .zst-ch__ph::before{content:"";position:absolute;inset:14px;border:1px solid rgba(122,31,52,.35)}
-  #shopify-section-{{ section.id }} .zst-ch__ph span{position:relative;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#7a1f34;
-    background:{% if sc.scheme == 'white' %}#f4efe8{% else %}#efe8dd{% endif %};padding:6px 14px;margin-top:38%}
-  #shopify-section-{{ section.id }} .zst-ch__txt{padding:clamp(4px,2vw,24px) 0}
-  #shopify-section-{{ section.id }} .zst-ch__num{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:300;
-    font-size:13px;letter-spacing:.1em;color:#c3a15a;margin:0 0 14px}
-  #shopify-section-{{ section.id }} .zst-ch__over{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#7a1f34;margin:0 0 14px}
-  #shopify-section-{{ section.id }} .zst-ch__h{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
-    font-size:clamp(24px,3.3vw,36px);line-height:1.18;letter-spacing:.01em;color:#1a1a1a;margin:0 0 18px}
-  #shopify-section-{{ section.id }} .zst-ch__b{color:#5f554b;font-size:clamp(14.5px,1.35vw,16px);line-height:1.82}
-  #shopify-section-{{ section.id }} .zst-ch__b p{margin:0 0 12px}
+  #shopify-section-{{ section.id }} .zst2__lead{max-width:640px;margin:clamp(38px,5.5vw,64px) auto 0;text-align:center}
+  #shopify-section-{{ section.id }} .zst2__lead p{font-weight:400;font-size:clamp(17px,1.9vw,20px);line-height:1.6;color:#2a2320;margin:0}
 
-  /* Close */
-  #shopify-section-{{ section.id }} .zst-close{text-align:center;max-width:820px;margin:0 auto;padding:clamp(20px,3vw,32px) 24px 0;position:relative;z-index:1}
-  #shopify-section-{{ section.id }} .zst-close__sign{margin:0;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#a99c8c}
-  #shopify-section-{{ section.id }} .zst-close__link{display:inline-block;margin-top:24px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+  #shopify-section-{{ section.id }} .zst2__body{max-width:680px;margin:clamp(24px,3.5vw,38px) auto 0}
+  #shopify-section-{{ section.id }} .zst2__body p{font-size:clamp(15px,1.3vw,16px);line-height:1.85;color:#544e47;margin:0 0 18px}
+  #shopify-section-{{ section.id }} .zst2__body p:last-child{margin-bottom:0}
+
+  #shopify-section-{{ section.id }} .zst2__sign{max-width:680px;margin:clamp(30px,4vw,46px) auto 0;text-align:center;
+    font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#a99c8c}
+  #shopify-section-{{ section.id }} .zst2__link{display:inline-block;margin-top:22px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
     color:#7a1f34;text-decoration:none;border-bottom:1px solid #7a1f34;padding-bottom:5px;transition:opacity .2s ease}
-  #shopify-section-{{ section.id }} .zst-close__link:hover{opacity:.55}
+  #shopify-section-{{ section.id }} .zst2__link:hover{opacity:.55}
 
-  @media(max-width:820px){
-    #shopify-section-{{ section.id }} .zst-ch{grid-template-columns:1fr;gap:22px}
-    #shopify-section-{{ section.id }} .zst-ch--right .zst-ch__media{order:0}
-    #shopify-section-{{ section.id }} .zst-ch__media{aspect-ratio:3/2}
-    #shopify-section-{{ section.id }} .zst-ch__ph span{margin-top:0}
+  @media(max-width:600px){
+    #shopify-section-{{ section.id }} .zst2__band{aspect-ratio:3/2}
   }
 </style>
-<section class="zst">
+<section class="zst2">
 
-  <div class="zst-hero">
-    {%- if sc.hero_image != blank -%}
-      <img class="zst-hero__img" src="{{ sc.hero_image | image_url: width: 2200 }}" alt="{{ sc.heading | escape }}"
-           width="{{ sc.hero_image.width }}" height="{{ sc.hero_image.height }}" loading="eager" fetchpriority="high">
-    {%- else -%}
-      <span class="zst-hero__flora" aria-hidden="true"></span>
-    {%- endif -%}
-    <div class="zst-hero__in">
-      {%- if sc.hero_overline != blank -%}<p class="zst-hero__over">{{ sc.hero_overline }}</p>{%- endif -%}
-      {%- if sc.heading != blank -%}<h1 class="zst-hero__title">{{ sc.heading }}</h1>{%- endif -%}
-      <div class="zst-hero__rule"></div>
-      {%- if sc.hero_tagline != blank -%}<p class="zst-hero__tag">{{ sc.hero_tagline }}</p>{%- endif -%}
-    </div>
+  <div class="zst2__head">
+    {%- if sc.eyebrow != blank -%}<p class="zst2__eyebrow">{{ sc.eyebrow }}</p>{%- endif -%}
+    {%- if sc.heading != blank -%}<h1 class="zst2__title">{{ sc.heading }}</h1>{%- endif -%}
+    <div class="zst2__rule"></div>
   </div>
 
-  {%- if sc.lead != blank -%}
-    <div class="zst-lead">
-      {%- if sc.lead_eyebrow != blank -%}<p class="zst-lead__eyebrow">{{ sc.lead_eyebrow }}</p>{%- endif -%}
-      <div class="zst-lead__rule"></div>
-      {{ sc.lead }}
+  <div class="zst2__band">
+    {%- if sc.hero_image != blank -%}
+      <img src="{{ sc.hero_image | image_url: width: 2000 }}" alt="{{ sc.heading | escape }}"
+           width="{{ sc.hero_image.width }}" height="{{ sc.hero_image.height }}" loading="lazy">
+    {%- else -%}
+      <div class="zst2__ph" aria-hidden="true"><span>{{ sc.hero_label | default: 'The House of Zaria' }}</span></div>
+    {%- endif -%}
+  </div>
+
+  {%- if sc.lead != blank -%}<div class="zst2__lead">{{ sc.lead }}</div>{%- endif -%}
+
+  {%- if sc.body_top != blank -%}<div class="zst2__body">{{ sc.body_top }}</div>{%- endif -%}
+
+  {%- if sc.image_mid != blank or sc.image_mid_label != blank -%}
+    <div class="zst2__band">
+      {%- if sc.image_mid != blank -%}
+        <img src="{{ sc.image_mid | image_url: width: 2000 }}" alt="{{ sc.image_mid_label | escape }}"
+             width="{{ sc.image_mid.width }}" height="{{ sc.image_mid.height }}" loading="lazy">
+      {%- else -%}
+        <div class="zst2__ph" aria-hidden="true"><span>{{ sc.image_mid_label | default: 'The Atelier' }}</span></div>
+      {%- endif -%}
     </div>
   {%- endif -%}
 
-  {%- if section.blocks.size > 0 -%}
-    <div class="zst-ch-wrap">
-      {%- for block in section.blocks -%}
-        {%- assign side = block.settings.image_side | default: 'left' -%}
-        <article class="zst-ch zst-ch--{{ side }}" {{ block.shopify_attributes }}>
-          <div class="zst-ch__media">
-            {%- if block.settings.image != blank -%}
-              <img src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.heading | escape }}"
-                   width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy">
-            {%- else -%}
-              <div class="zst-ch__ph" aria-hidden="true"><span>{{ block.settings.overline | default: 'Zaria' }}</span></div>
-            {%- endif -%}
-          </div>
-          <div class="zst-ch__txt">
-            <p class="zst-ch__num">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</p>
-            {%- if block.settings.overline != blank -%}<p class="zst-ch__over">{{ block.settings.overline }}</p>{%- endif -%}
-            {%- if block.settings.heading != blank -%}<h2 class="zst-ch__h">{{ block.settings.heading }}</h2>{%- endif -%}
-            {%- if block.settings.text != blank -%}<div class="zst-ch__b">{{ block.settings.text }}</div>{%- endif -%}
-          </div>
-        </article>
-      {%- endfor -%}
-    </div>
-  {%- endif -%}
+  {%- if sc.body_bottom != blank -%}<div class="zst2__body">{{ sc.body_bottom }}</div>{%- endif -%}
 
   {%- if sc.signature != blank or sc.link_label != blank -%}
-    <div class="zst-close">
-      {%- if sc.signature != blank -%}<p class="zst-close__sign">{{ sc.signature }}</p>{%- endif -%}
-      {%- if sc.link_label != blank -%}<a class="zst-close__link" href="{{ sc.link_url | default: '#' }}">{{ sc.link_label }}</a>{%- endif -%}
+    <div class="zst2__sign">
+      {%- if sc.signature != blank -%}{{ sc.signature }}{%- endif -%}
+      {%- if sc.link_label != blank -%}<br><a class="zst2__link" href="{{ sc.link_url | default: '#' }}">{{ sc.link_label }}</a>{%- endif -%}
     </div>
   {%- endif -%}
 
@@ -128,35 +84,26 @@
 {
   "name": "Zaria Story",
   "settings": [
-    { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "cream", "label": "Warm cream" }, { "value": "white", "label": "White" } ], "default": "cream" },
-    { "type": "header", "content": "Hero" },
-    { "type": "image_picker", "id": "hero_image", "label": "Hero image", "info": "Full-width banner. Leave empty for a dark motif background." },
-    { "type": "text", "id": "hero_overline", "label": "Hero overline", "default": "The House of Zaria" },
+    { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "cream", "label": "Warm cream" } ], "default": "white" },
+    { "type": "text", "id": "eyebrow", "label": "Overline", "default": "The House of Zaria" },
     { "type": "text", "id": "heading", "label": "Title", "default": "Our Story" },
-    { "type": "textarea", "id": "hero_tagline", "label": "Hero tagline", "default": "Modern Emirati elegance, where the grace of Arabian heritage meets the refinement of contemporary design." },
+    { "type": "header", "content": "Hero image" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
+    { "type": "text", "id": "hero_label", "label": "Hero placeholder label", "default": "The House of Zaria" },
     { "type": "header", "content": "Introduction" },
-    { "type": "text", "id": "lead_eyebrow", "label": "Intro overline", "default": "Modern Emirati Elegance" },
-    { "type": "richtext", "id": "lead", "label": "Lead statement", "default": "<p>Every woman carries a story of strength, grace and individuality. At ZARIA, we create fashion that reflects her story, with confidence, sophistication and effortless elegance.</p>" },
+    { "type": "richtext", "id": "lead", "label": "Lead statement", "default": "<p>Every woman carries a story of strength, grace, and individuality. At ZARIA, we create fashion that reflects her story, with confidence, sophistication, and effortless elegance.</p>" },
+    { "type": "richtext", "id": "body_top", "label": "Text (before image)", "default": "<p>Born in the United Arab Emirates, ZARIA embodies Modern Emirati Elegance, where the grace of Arabian heritage meets the refinement of contemporary design.</p>" },
+    { "type": "header", "content": "Middle image" },
+    { "type": "image_picker", "id": "image_mid", "label": "Image" },
+    { "type": "text", "id": "image_mid_label", "label": "Placeholder label", "default": "The Atelier" },
+    { "type": "header", "content": "Continued" },
+    { "type": "richtext", "id": "body_bottom", "label": "Text (after image)", "default": "<p>For ZARIA, luxury is found in simplicity, quality, and exceptional craftsmanship.</p>" },
     { "type": "header", "content": "Closing" },
     { "type": "text", "id": "signature", "label": "Signature line", "default": "The House of ZARIA · United Arab Emirates" },
     { "type": "text", "id": "link_label", "label": "Link label" },
     { "type": "url", "id": "link_url", "label": "Link" },
-    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 12 }
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 16 }
   ],
-  "blocks": [
-    {
-      "type": "chapter",
-      "name": "Chapter",
-      "settings": [
-        { "type": "image_picker", "id": "image", "label": "Image", "info": "Portrait works best (4:5)." },
-        { "type": "text", "id": "overline", "label": "Overline", "default": "Chapter" },
-        { "type": "text", "id": "heading", "label": "Heading", "default": "A chapter of the story" },
-        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Share a moment from the ZARIA story.</p>" },
-        { "type": "select", "id": "image_side", "label": "Image side", "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ], "default": "left" }
-      ]
-    }
-  ],
-  "max_blocks": 6,
-  "presets": [ { "name": "Zaria Story", "blocks": [ { "type": "chapter" }, { "type": "chapter", "settings": { "image_side": "right" } }, { "type": "chapter" } ] } ]
+  "presets": [ { "name": "Zaria Story" } ]
 }
 {% endschema %}
