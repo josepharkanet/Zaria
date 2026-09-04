@@ -49,19 +49,6 @@
         "padding_bottom": 96
       }
     },
-    "quote": {
-      "type": "zaria-quote",
-      "settings": {
-        "scheme": "ink",
-        "overlay": 40,
-        "eyebrow": "The ZARIA Spirit",
-        "quote": "Modesty. Grace. Elegance.",
-        "attribution": "Created in the United Arab Emirates",
-        "max_width": 820,
-        "padding_top": 120,
-        "padding_bottom": 120
-      }
-    },
     "cta": {
       "type": "design-your-look",
       "settings": {
@@ -78,7 +65,6 @@
   },
   "order": [
     "story",
-    "quote",
     "cta"
   ]
 }
