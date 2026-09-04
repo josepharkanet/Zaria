@@ -137,10 +137,10 @@
         <div class="zab-story__aside">
           <div class="zab-box"><h2 class="zab-heading">{{ sc.story_heading | default: 'The Story' }}</h2></div>
           {%- if sc.story_intro != blank -%}<div class="zab-story__intro">{{ sc.story_intro }}</div>{%- endif -%}
+          {%- if sc.story_btn_label != blank -%}<a class="zab-btn zab-story__btn" href="{{ sc.story_btn_url | default: '/pages/contact' }}">{{ sc.story_btn_label }}</a>{%- endif -%}
         </div>
         <div class="zab-story__text">
           {%- if sc.story_body != blank -%}<div class="zab-story__cols">{{ sc.story_body }}</div>{%- endif -%}
-          {%- if sc.story_btn_label != blank -%}<a class="zab-btn zab-story__btn" href="{{ sc.story_btn_url | default: '/pages/contact' }}">{{ sc.story_btn_label }}</a>{%- endif -%}
         </div>
       </div>
     </section>
