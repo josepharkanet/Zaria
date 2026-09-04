@@ -30,6 +30,9 @@
         "story_btn_label": "Design your look",
         "story_btn_url": "/collections/all-fabrics",
         "people_heading": "The Atelier",
+        "people_img_1": "shopify://shop_images/Portrait_row-1.png",
+        "people_img_2": "shopify://shop_images/Portrait_row-2.png",
+        "people_img_3": "shopify://shop_images/Portrait_row-3.png",
         "people_text": "<p>Every piece is shaped by the hands of our atelier, from the first sketch to the final stitch, with care, patience and an eye for detail.</p>",
         "people_btn_label": "",
         "people_btn_url": "",
@@ -37,6 +40,7 @@
         "featured_text": "<p>A considered edit of fabrics and finished pieces, chosen for their beauty, their fall, and the quiet luxury of the details.</p>",
         "featured_btn_label": "View the collection",
         "featured_btn_url": "/collections/all-fabrics",
+        "feat_img_1": "shopify://shop_images/kling_20260905_IMAGE_TALL__prof_917_0.png",
         "padding_top": 96,
         "padding_bottom": 96
       }
