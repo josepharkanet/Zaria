@@ -52,6 +52,7 @@
     "cta": {
       "type": "design-your-look",
       "settings": {
+        "background_video": "shopify://files/videos/Use_more_cloths_to_make_202609042348.mp4",
         "focal": "center",
         "height": 56,
         "overline": "The Atelier",
