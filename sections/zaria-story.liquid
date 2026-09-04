@@ -27,7 +27,7 @@
   #shopify-section-{{ section.id }} .zab{background:#ffffff;color:#141414;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif}
   #shopify-section-{{ section.id }} .zab *{box-sizing:border-box}
   #shopify-section-{{ section.id }} .zab__wrap{max-width:1220px;margin:0 auto;padding-inline:clamp(20px,5vw,48px)}
-  #shopify-section-{{ section.id }} .zab-heading{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;letter-spacing:.01em}
+  #shopify-section-{{ section.id }} .zab-heading{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;letter-spacing:.1em;text-transform:uppercase}
   #shopify-section-{{ section.id }} .zab-dot{color:#7a1f34}
   #shopify-section-{{ section.id }} .zab-eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#7a1f34;margin:0 0 16px}
   #shopify-section-{{ section.id }} .zab-btn{display:inline-block;background:#141414;color:#fff;padding:14px 32px;font-size:11px;letter-spacing:.22em;
@@ -47,14 +47,14 @@
   #shopify-section-{{ section.id }} .zab-hero__in{position:relative;z-index:2;padding:clamp(28px,6vw,76px);max-width:860px}
   #shopify-section-{{ section.id }} .zab-hero__over{color:#fff;opacity:.9}
   #shopify-section-{{ section.id }} .zab-hero__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
-    font-size:clamp(26px,3.6vw,42px);line-height:1.12;color:#fff;margin:0}
+    font-size:clamp(22px,2.9vw,32px);line-height:1.16;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin:0}
   #shopify-section-{{ section.id }} .zab-hero__title .u{border-bottom:3px solid #fff;padding-bottom:4px}
 
   /* story */
   #shopify-section-{{ section.id }} .zab-story{padding:clamp(56px,8vw,112px) 0}
   #shopify-section-{{ section.id }} .zab-story__grid{display:grid;grid-template-columns:minmax(210px,300px) 1fr;gap:clamp(28px,5vw,64px);align-items:start}
   #shopify-section-{{ section.id }} .zab-box{border:1px solid #141414;padding:clamp(26px,3vw,42px)}
-  #shopify-section-{{ section.id }} .zab-box .zab-heading{font-size:clamp(26px,3vw,40px);line-height:1.05;margin:0}
+  #shopify-section-{{ section.id }} .zab-box .zab-heading{font-size:clamp(22px,2.9vw,32px);line-height:1.16;margin:0}
   #shopify-section-{{ section.id }} .zab-story__intro{font-size:clamp(16px,1.7vw,20px);line-height:1.5;color:#241d1a;margin:0 0 24px;max-width:44ch}
   #shopify-section-{{ section.id }} .zab-story__cols{column-count:2;column-gap:38px;color:#5a534b;font-size:15px;line-height:1.85}
   #shopify-section-{{ section.id }} .zab-story__cols p{margin:0 0 14px;break-inside:avoid}
@@ -66,7 +66,7 @@
   #shopify-section-{{ section.id }} .zab-portrait{position:relative;aspect-ratio:3/4;overflow:hidden;background:#ededed}
   #shopify-section-{{ section.id }} .zab-portrait img{width:100%;height:100%;object-fit:cover}
   #shopify-section-{{ section.id }} .zab-people__box{border:1px solid #141414;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
-  #shopify-section-{{ section.id }} .zab-people__box .zab-heading{font-size:clamp(24px,2.6vw,34px);line-height:1.08;margin:0}
+  #shopify-section-{{ section.id }} .zab-people__box .zab-heading{font-size:clamp(22px,2.9vw,32px);line-height:1.16;margin:0}
   #shopify-section-{{ section.id }} .zab-people__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:22px;margin-top:clamp(24px,3vw,38px)}
   #shopify-section-{{ section.id }} .zab-people__foot p{margin:0;max-width:60ch;color:#5a534b;font-size:15px;line-height:1.8}
 
@@ -95,12 +95,33 @@
 
     <div class="zab-hero">
       <div class="zab-hero__media">
-        {%- if sc.hero_video != blank -%}
-          {{ sc.hero_video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true }}
+        {%- assign vurls = '' -%}
+        {%- for n in (1..3) -%}
+          {%- assign vkey = 'hero_video_' | append: n -%}
+          {%- assign vobj = sc[vkey] -%}
+          {%- if vobj != blank and vobj.sources.size > 0 -%}
+            {%- assign vsrc = vobj.sources | where: 'format', 'mp4' | first -%}
+            {%- unless vsrc -%}{%- assign vsrc = vobj.sources | first -%}{%- endunless -%}
+            {%- if vsrc.url != blank -%}{%- assign vurls = vurls | append: vsrc.url | append: '||' -%}{%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if vurls != blank -%}
+          <video id="zabv-{{ section.id }}" class="zab-hero__vid" muted autoplay playsinline preload="auto"{% if sc.hero_image != blank %} poster="{{ sc.hero_image | image_url: width: 1600 }}"{% endif %}></video>
+          <script>
+            (function(){
+              var urls = ({{ vurls | split: '||' | json }}).filter(Boolean);
+              var v = document.getElementById('zabv-{{ section.id }}');
+              if(!v || !urls.length) return;
+              var i = 0;
+              function play(n){ v.src = urls[n]; var p = v.play(); if(p && p.catch) p.catch(function(){}); }
+              v.addEventListener('ended', function(){ i = (i + 1) % urls.length; play(i); });
+              play(0);
+            })();
+          </script>
         {%- elsif sc.hero_image != blank -%}
           <img src="{{ sc.hero_image | image_url: width: 2200 }}" alt="{{ sc.hero_heading | escape }}" loading="eager">
         {%- else -%}
-          <div class="zab-ph" style="background:#161616 url('{{ flora }}') center/min(38%,300px) no-repeat"><span style="background:#161616;color:#fff;border:0">Video or image &middot; hero</span></div>
+          <div class="zab-ph" style="background:#161616 url('{{ flora }}') center/min(38%,300px) no-repeat"><span style="background:#161616;color:#fff;border:0">Hero video</span></div>
         {%- endif -%}
       </div>
       <div class="zab-hero__in">
@@ -194,8 +215,11 @@
     { "type": "url", "id": "link_url", "label": "Link" },
     { "type": "header", "content": "About page - Hero" },
     { "type": "paragraph", "content": "These settings only affect the page that uses the 'story' template (the About / Our Story page)." },
-    { "type": "video", "id": "hero_video", "label": "Hero video" },
-    { "type": "image_picker", "id": "hero_image", "label": "Hero image (used if no video)" },
+    { "type": "paragraph", "content": "Add up to 3 hero videos. They play one after another on a loop. Leave empty to use the hero image." },
+    { "type": "video", "id": "hero_video_1", "label": "Hero video 1" },
+    { "type": "video", "id": "hero_video_2", "label": "Hero video 2" },
+    { "type": "video", "id": "hero_video_3", "label": "Hero video 3" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image / video poster (used if no video)" },
     { "type": "text", "id": "hero_overline", "label": "Hero overline", "default": "The House of Zaria" },
     { "type": "text", "id": "hero_heading", "label": "Hero heading", "default": "Elegance, made in the Emirates" },
     { "type": "text", "id": "hero_heading_accent", "label": "Hero heading (underlined words)" },
