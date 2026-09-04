@@ -1,3 +1,21 @@
+{%- comment -%}
+  Zaria: theme-level alias redirect. The story lives at /pages/our-story; this sends the
+  legacy /pages/about path there so that URL is never a dead end. Scoped to that exact path.
+  When a native URL redirect is added in Admin (Online Store > Navigation > URL redirects),
+  Shopify serves it before this 404 template and this guard simply stops being reached.
+{%- endcomment -%}
+{%- assign zaria_alias_path = request.path | downcase -%}
+{%- assign zaria_redirect_to = '' -%}
+{%- if zaria_alias_path == '/pages/about' -%}{%- assign zaria_redirect_to = '/pages/our-story' -%}{%- endif -%}
+
+{%- if zaria_redirect_to != blank -%}
+  <meta http-equiv="refresh" content="0; url={{ zaria_redirect_to }}">
+  <script>window.location.replace({{ zaria_redirect_to | json }});</script>
+  <div class="section-spacing" style="min-height:38vh;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Jost',sans-serif;letter-spacing:.04em">
+    <p>Taking you to <a href="{{ zaria_redirect_to }}">Our Story</a>&hellip;</p>
+  </div>
+{%- else -%}
+
 {%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
 
 <div class="section-spacing elx-not-found color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }}">
@@ -14,6 +32,8 @@
     </div>
   </div>
 </div>
+
+{%- endif -%}
 
 {% schema %}
 {
