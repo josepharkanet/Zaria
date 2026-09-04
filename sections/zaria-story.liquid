@@ -1,12 +1,14 @@
-{%- comment -%}Zaria - Our Story (editorial brand narrative) - Arkanet Technologies{%- endcomment -%}
+{%- comment -%}Zaria - Our Story. Homepage uses the classic layout; the About/story-page template renders an editorial layout. - Arkanet Technologies{%- endcomment -%}
 {%- assign sc = section.settings -%}
+{%- assign flora = 'zaria-flora.png' | asset_url -%}
 <style>
+  /* ---------- Classic layout (homepage) - unchanged ---------- */
   #shopify-section-{{ section.id }} .zst{background:{% if sc.scheme == 'white' %}#ffffff{% else %}#f6f1ea{% endif %};color:#1a1a1a;
     font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:clamp(66px,9vw,120px) clamp(20px,5vw,48px);position:relative;overflow:hidden}
   #shopify-section-{{ section.id }} .zst *{box-sizing:border-box}
   #shopify-section-{{ section.id }} .zst__mono{position:absolute;top:50%;left:50%;transform:translate(-50%,-48%);
     width:min(60vw,600px);aspect-ratio:1580/1239;
-    background:url('{{ 'zaria-flora.png' | asset_url }}') center/contain no-repeat;opacity:.07;pointer-events:none;user-select:none;z-index:0}
+    background:url('{{ flora }}') center/contain no-repeat;opacity:.07;pointer-events:none;user-select:none;z-index:0}
   #shopify-section-{{ section.id }} .zst__inner{position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center}
   #shopify-section-{{ section.id }} .zst__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     letter-spacing:.04em;text-transform:uppercase;color:#1a1a1a;margin:0 0 20px}
@@ -19,34 +21,211 @@
   #shopify-section-{{ section.id }} .zst__link{display:inline-block;margin-top:30px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
     color:#7a1f34;text-decoration:none;border-bottom:1px solid #7a1f34;padding-bottom:5px;transition:opacity .2s ease}
   #shopify-section-{{ section.id }} .zst__link:hover{opacity:.55}
-  /* Story page only (page.story template): comfortable spacing for the longer narrative. Homepage is untouched. */
-  #shopify-section-{{ section.id }} .zst--story .zst__body{max-width:62ch}
-  #shopify-section-{{ section.id }} .zst--story .zst__body p{margin:0 0 16px}
   @media(max-width:600px){#shopify-section-{{ section.id }} .zst__mono{width:90vw}}
+
+  /* ---------- Editorial layout (About / story page only) ---------- */
+  #shopify-section-{{ section.id }} .zab{background:#ffffff;color:#141414;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif}
+  #shopify-section-{{ section.id }} .zab *{box-sizing:border-box}
+  #shopify-section-{{ section.id }} .zab__wrap{max-width:1220px;margin:0 auto;padding-inline:clamp(20px,5vw,48px)}
+  #shopify-section-{{ section.id }} .zab-heading{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;letter-spacing:.01em}
+  #shopify-section-{{ section.id }} .zab-dot{color:#7a1f34}
+  #shopify-section-{{ section.id }} .zab-eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#7a1f34;margin:0 0 16px}
+  #shopify-section-{{ section.id }} .zab-btn{display:inline-block;background:#141414;color:#fff;padding:14px 32px;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;text-decoration:none;transition:opacity .2s ease}
+  #shopify-section-{{ section.id }} .zab-btn:hover{opacity:.82}
+  /* media placeholder */
+  #shopify-section-{{ section.id }} .zab-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
+    background:#f2efe9 url('{{ flora }}') center/min(46%,220px) no-repeat}
+  #shopify-section-{{ section.id }} .zab-ph::before{content:"";position:absolute;inset:12px;border:1px solid rgba(122,31,52,.3)}
+  #shopify-section-{{ section.id }} .zab-ph span{position:relative;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#7a1f34;background:#f2efe9;padding:6px 12px}
+
+  /* hero */
+  #shopify-section-{{ section.id }} .zab-hero{position:relative;min-height:min(80vh,720px);display:flex;align-items:flex-end;overflow:hidden;background:#e9e6e1}
+  #shopify-section-{{ section.id }} .zab-hero__media,#shopify-section-{{ section.id }} .zab-hero__media video,#shopify-section-{{ section.id }} .zab-hero__media img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  #shopify-section-{{ section.id }} .zab-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.12) 0%,rgba(10,10,10,.15) 40%,rgba(10,10,10,.62) 100%)}
+  #shopify-section-{{ section.id }} .zab-hero__in{position:relative;z-index:2;padding:clamp(28px,6vw,76px);max-width:860px}
+  #shopify-section-{{ section.id }} .zab-hero__over{color:#fff;opacity:.9}
+  #shopify-section-{{ section.id }} .zab-hero__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
+    font-size:clamp(40px,6.6vw,84px);line-height:1.03;color:#fff;margin:0}
+  #shopify-section-{{ section.id }} .zab-hero__title .u{border-bottom:3px solid #fff;padding-bottom:4px}
+
+  /* story */
+  #shopify-section-{{ section.id }} .zab-story{padding:clamp(56px,8vw,112px) 0}
+  #shopify-section-{{ section.id }} .zab-story__grid{display:grid;grid-template-columns:minmax(210px,300px) 1fr;gap:clamp(28px,5vw,64px);align-items:start}
+  #shopify-section-{{ section.id }} .zab-box{border:1px solid #141414;padding:clamp(26px,3vw,42px)}
+  #shopify-section-{{ section.id }} .zab-box .zab-heading{font-size:clamp(26px,3vw,40px);line-height:1.05;margin:0}
+  #shopify-section-{{ section.id }} .zab-story__intro{font-size:clamp(16px,1.7vw,20px);line-height:1.5;color:#241d1a;margin:0 0 24px;max-width:44ch}
+  #shopify-section-{{ section.id }} .zab-story__cols{column-count:2;column-gap:38px;color:#5a534b;font-size:15px;line-height:1.85}
+  #shopify-section-{{ section.id }} .zab-story__cols p{margin:0 0 14px;break-inside:avoid}
+  #shopify-section-{{ section.id }} .zab-story__btn{margin-top:26px}
+
+  /* people */
+  #shopify-section-{{ section.id }} .zab-people{padding:clamp(20px,3vw,40px) 0 clamp(56px,8vw,104px)}
+  #shopify-section-{{ section.id }} .zab-people__row{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,26px);align-items:stretch}
+  #shopify-section-{{ section.id }} .zab-portrait{position:relative;aspect-ratio:3/4;overflow:hidden;background:#ededed}
+  #shopify-section-{{ section.id }} .zab-portrait img{width:100%;height:100%;object-fit:cover;filter:grayscale(100%)}
+  #shopify-section-{{ section.id }} .zab-people__box{border:1px solid #141414;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+  #shopify-section-{{ section.id }} .zab-people__box .zab-heading{font-size:clamp(24px,2.6vw,34px);line-height:1.08;margin:0}
+  #shopify-section-{{ section.id }} .zab-people__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:22px;margin-top:clamp(24px,3vw,38px)}
+  #shopify-section-{{ section.id }} .zab-people__foot p{margin:0;max-width:60ch;color:#5a534b;font-size:15px;line-height:1.8}
+
+  /* featured */
+  #shopify-section-{{ section.id }} .zab-featured{background:#efece7;padding:clamp(56px,8vw,104px) 0}
+  #shopify-section-{{ section.id }} .zab-featured__grid-wrap{display:grid;grid-template-columns:minmax(230px,340px) 1fr;gap:clamp(28px,5vw,60px);align-items:start}
+  #shopify-section-{{ section.id }} .zab-featured__intro p{color:#5a534b;font-size:15px;line-height:1.85;margin:20px 0 0}
+  #shopify-section-{{ section.id }} .zab-featured__btn{margin-top:26px}
+  #shopify-section-{{ section.id }} .zab-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  #shopify-section-{{ section.id }} .zab-tile{position:relative;aspect-ratio:1/1;overflow:hidden;background:#e2ded8}
+  #shopify-section-{{ section.id }} .zab-tile img{width:100%;height:100%;object-fit:cover}
+  #shopify-section-{{ section.id }} .zab-tile--tall{grid-row:span 2;aspect-ratio:auto}
+
+  @media(max-width:860px){
+    #shopify-section-{{ section.id }} .zab-story__grid,#shopify-section-{{ section.id }} .zab-featured__grid-wrap{grid-template-columns:1fr}
+    #shopify-section-{{ section.id }} .zab-story__cols{column-count:1}
+    #shopify-section-{{ section.id }} .zab-people__row{grid-template-columns:repeat(2,1fr)}
+    #shopify-section-{{ section.id }} .zab-people__box{aspect-ratio:3/4}
+    #shopify-section-{{ section.id }} .zab-tile--tall{grid-row:auto;aspect-ratio:1/1}
+  }
 </style>
-<section class="zst{% if template.suffix == 'story' %} zst--story{% endif %}">
-  <div class="zst__inner">
-    {%- if sc.heading != blank -%}<h2 class="zst__title">{{ sc.heading }}</h2>{%- endif -%}
-    <div class="zst__rule"></div>
-    {%- comment -%} lead statement removed per request {%- endcomment -%}
-    {%- if sc.body != blank -%}<div class="zst__body">{{ sc.body }}</div>{%- endif -%}
-    {%- if sc.signature != blank -%}<p class="zst__sign">{{ sc.signature }}</p>{%- endif -%}
-    {%- if sc.link_label != blank -%}<a class="zst__link" href="{{ sc.link_url | default: '#' }}">{{ sc.link_label }}</a>{%- endif -%}
+
+{%- if template.suffix == 'story' -%}
+  {%- comment -%} ===== Editorial About layout ===== {%- endcomment -%}
+  <div class="zab">
+
+    <div class="zab-hero">
+      <div class="zab-hero__media">
+        {%- if sc.hero_video != blank -%}
+          {{ sc.hero_video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true }}
+        {%- elsif sc.hero_image != blank -%}
+          <img src="{{ sc.hero_image | image_url: width: 2200 }}" alt="{{ sc.hero_heading | escape }}" loading="eager">
+        {%- else -%}
+          <div class="zab-ph" style="background:#161616 url('{{ flora }}') center/min(38%,300px) no-repeat"><span style="background:#161616;color:#fff;border:0">Video or image &middot; hero</span></div>
+        {%- endif -%}
+      </div>
+      <div class="zab-hero__in">
+        {%- if sc.hero_overline != blank -%}<p class="zab-eyebrow zab-hero__over">{{ sc.hero_overline }}</p>{%- endif -%}
+        <h1 class="zab-hero__title">{{ sc.hero_heading }}{% if sc.hero_heading_accent != blank %} <span class="u">{{ sc.hero_heading_accent }}</span>{% endif %}<span class="zab-dot">.</span></h1>
+      </div>
+    </div>
+
+    <section class="zab-story">
+      <div class="zab__wrap zab-story__grid">
+        <div class="zab-box"><h2 class="zab-heading">{{ sc.story_heading | default: 'The Story' }}<span class="zab-dot">.</span></h2></div>
+        <div class="zab-story__text">
+          {%- if sc.story_intro != blank -%}<div class="zab-story__intro">{{ sc.story_intro }}</div>{%- endif -%}
+          {%- if sc.story_body != blank -%}<div class="zab-story__cols">{{ sc.story_body }}</div>{%- endif -%}
+          {%- if sc.story_btn_label != blank -%}<a class="zab-btn zab-story__btn" href="{{ sc.story_btn_url | default: '/pages/contact' }}">{{ sc.story_btn_label }}</a>{%- endif -%}
+        </div>
+      </div>
+    </section>
+
+    <section class="zab-people">
+      <div class="zab__wrap">
+        <div class="zab-people__row">
+          {%- for i in (1..3) -%}
+            {%- assign key = 'people_img_' | append: i -%}
+            {%- assign pimg = sc[key] -%}
+            <div class="zab-portrait">
+              {%- if pimg != blank -%}
+                <img src="{{ pimg | image_url: width: 700 }}" alt="{{ sc.people_heading | escape }}" loading="lazy">
+              {%- else -%}
+                <div class="zab-ph"><span>Portrait {{ i }}</span></div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+          <div class="zab-people__box"><h2 class="zab-heading">{{ sc.people_heading | default: 'The People' }}<span class="zab-dot">.</span></h2></div>
+        </div>
+        <div class="zab-people__foot">
+          {%- if sc.people_text != blank -%}<p>{{ sc.people_text }}</p>{%- endif -%}
+          {%- if sc.people_btn_label != blank -%}<a class="zab-btn" href="{{ sc.people_btn_url | default: '/pages/contact' }}">{{ sc.people_btn_label }}</a>{%- endif -%}
+        </div>
+      </div>
+    </section>
+
+    <section class="zab-featured">
+      <div class="zab__wrap zab-featured__grid-wrap">
+        <div class="zab-featured__intro">
+          <div class="zab-box"><h2 class="zab-heading">{{ sc.featured_heading | default: 'Featured Work' }}<span class="zab-dot">.</span></h2></div>
+          {%- if sc.featured_text != blank -%}<p>{{ sc.featured_text }}</p>{%- endif -%}
+          {%- if sc.featured_btn_label != blank -%}<a class="zab-btn zab-featured__btn" href="{{ sc.featured_btn_url | default: '/collections/all-fabrics' }}">{{ sc.featured_btn_label }}</a>{%- endif -%}
+        </div>
+        <div class="zab-tiles">
+          {%- for i in (1..6) -%}
+            {%- assign key = 'feat_img_' | append: i -%}
+            {%- assign timg = sc[key] -%}
+            <div class="zab-tile{% if i == 1 %} zab-tile--tall{% endif %}">
+              {%- if timg != blank -%}
+                <img src="{{ timg | image_url: width: 900 }}" alt="{{ sc.featured_heading | escape }}" loading="lazy">
+              {%- else -%}
+                <div class="zab-ph"><span>Image {{ i }}</span></div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+
   </div>
-</section>
+
+{%- else -%}
+  {%- comment -%} ===== Classic layout (homepage) ===== {%- endcomment -%}
+  <section class="zst">
+    <div class="zst__inner">
+      {%- if sc.heading != blank -%}<h2 class="zst__title">{{ sc.heading }}</h2>{%- endif -%}
+      <div class="zst__rule"></div>
+      {%- if sc.body != blank -%}<div class="zst__body">{{ sc.body }}</div>{%- endif -%}
+      {%- if sc.signature != blank -%}<p class="zst__sign">{{ sc.signature }}</p>{%- endif -%}
+      {%- if sc.link_label != blank -%}<a class="zst__link" href="{{ sc.link_url | default: '#' }}">{{ sc.link_label }}</a>{%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
 {% schema %}
 {
   "name": "Zaria Story",
   "settings": [
+    { "type": "header", "content": "Homepage layout" },
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "cream", "label": "Warm cream" }, { "value": "white", "label": "White" } ], "default": "cream" },
     { "type": "text", "id": "heading", "label": "Overline", "default": "Our Story" },
-    { "type": "textarea", "id": "lead", "label": "Lead statement", "default": "Every woman carries a story of strength, grace, and individuality. At ZARIA, we create fashion that reflects her story, with confidence and effortless elegance." },
-    { "type": "richtext", "id": "body", "label": "Text", "default": "<p>Born in the United Arab Emirates, ZARIA embodies Modern Emirati Elegance, where the grace of Arabian heritage meets the refinement of contemporary design. Our collections reinterpret modest fashion for today's woman, thoughtfully created with premium fabrics, graceful silhouettes and elegant details.</p><p>For ZARIA, luxury is found in simplicity, quality and exceptional craftsmanship, in the beauty of a perfect silhouette and the quiet confidence of a woman who expresses herself with effortless sophistication.</p>" },
+    { "type": "richtext", "id": "body", "label": "Text", "default": "<p>Born in the United Arab Emirates, ZARIA embodies Modern Emirati Elegance, where the grace of Arabian heritage meets the refinement of contemporary design.</p>" },
     { "type": "text", "id": "signature", "label": "Signature line", "default": "The House of ZARIA · United Arab Emirates" },
-    { "type": "text", "id": "link_label", "label": "Link label", "default": "Read more" },
+    { "type": "text", "id": "link_label", "label": "Link label" },
     { "type": "url", "id": "link_url", "label": "Link" },
-    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 96 },
-    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 96 }
+    { "type": "header", "content": "About page - Hero" },
+    { "type": "paragraph", "content": "These settings only affect the page that uses the 'story' template (the About / Our Story page)." },
+    { "type": "video", "id": "hero_video", "label": "Hero video" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image (used if no video)" },
+    { "type": "text", "id": "hero_overline", "label": "Hero overline", "default": "The House of Zaria" },
+    { "type": "text", "id": "hero_heading", "label": "Hero heading", "default": "Elegance, made in the Emirates" },
+    { "type": "text", "id": "hero_heading_accent", "label": "Hero heading (underlined words)" },
+    { "type": "header", "content": "About page - Story" },
+    { "type": "text", "id": "story_heading", "label": "Boxed heading", "default": "The Story" },
+    { "type": "richtext", "id": "story_intro", "label": "Intro statement", "default": "<p>Every woman carries a story of strength, grace and individuality.</p>" },
+    { "type": "richtext", "id": "story_body", "label": "Body (shown in two columns)", "default": "<p>At ZARIA we create fashion that reflects her story.</p>" },
+    { "type": "text", "id": "story_btn_label", "label": "Button label", "default": "Design your look" },
+    { "type": "url", "id": "story_btn_url", "label": "Button link" },
+    { "type": "header", "content": "About page - People" },
+    { "type": "text", "id": "people_heading", "label": "Boxed heading", "default": "The Atelier" },
+    { "type": "image_picker", "id": "people_img_1", "label": "Portrait 1" },
+    { "type": "image_picker", "id": "people_img_2", "label": "Portrait 2" },
+    { "type": "image_picker", "id": "people_img_3", "label": "Portrait 3" },
+    { "type": "richtext", "id": "people_text", "label": "Caption" },
+    { "type": "text", "id": "people_btn_label", "label": "Button label", "default": "Book a consultation" },
+    { "type": "url", "id": "people_btn_url", "label": "Button link" },
+    { "type": "header", "content": "About page - Featured work" },
+    { "type": "text", "id": "featured_heading", "label": "Boxed heading", "default": "Featured Work" },
+    { "type": "richtext", "id": "featured_text", "label": "Description" },
+    { "type": "text", "id": "featured_btn_label", "label": "Button label", "default": "View the collection" },
+    { "type": "url", "id": "featured_btn_url", "label": "Button link" },
+    { "type": "image_picker", "id": "feat_img_1", "label": "Work image 1 (tall)" },
+    { "type": "image_picker", "id": "feat_img_2", "label": "Work image 2" },
+    { "type": "image_picker", "id": "feat_img_3", "label": "Work image 3" },
+    { "type": "image_picker", "id": "feat_img_4", "label": "Work image 4" },
+    { "type": "image_picker", "id": "feat_img_5", "label": "Work image 5" },
+    { "type": "image_picker", "id": "feat_img_6", "label": "Work image 6" },
+    { "type": "range", "id": "padding_top", "label": "Padding top (homepage)", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (homepage)", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 96 }
   ],
   "presets": [ { "name": "Zaria Story" } ]
 }
