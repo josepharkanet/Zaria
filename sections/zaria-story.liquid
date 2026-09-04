@@ -67,8 +67,10 @@
   #shopify-section-{{ section.id }} .zab-people__row{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,26px);align-items:stretch}
   #shopify-section-{{ section.id }} .zab-portrait{position:relative;aspect-ratio:3/4;overflow:hidden;background:#ededed}
   #shopify-section-{{ section.id }} .zab-portrait img{width:100%;height:100%;object-fit:cover}
-  #shopify-section-{{ section.id }} .zab-people__box{border:1px solid #141414;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+  #shopify-section-{{ section.id }} .zab-people__box{border:1px solid #141414;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:clamp(24px,2.4vw,34px);text-align:left}
   #shopify-section-{{ section.id }} .zab-people__box .zab-heading{font-size:clamp(16px,1.5vw,18px);line-height:1.16;margin:0}
+  #shopify-section-{{ section.id }} .zab-people__box-text{color:#5a534b;font-size:14px;line-height:1.72;margin-top:16px}
+  #shopify-section-{{ section.id }} .zab-people__box-text p{margin:0}
   #shopify-section-{{ section.id }} .zab-people__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:22px;margin-top:clamp(24px,3vw,38px)}
   #shopify-section-{{ section.id }} .zab-people__foot p{margin:0;max-width:60ch;color:#5a534b;font-size:15px;line-height:1.8}
 
@@ -159,12 +161,16 @@
               {%- endif -%}
             </div>
           {%- endfor -%}
-          <div class="zab-people__box"><h2 class="zab-heading">{{ sc.people_heading | default: 'The People' }}</h2></div>
+          <div class="zab-people__box">
+            <h2 class="zab-heading">{{ sc.people_heading | default: 'The People' }}</h2>
+            {%- if sc.people_text != blank -%}<div class="zab-people__box-text">{{ sc.people_text }}</div>{%- endif -%}
+          </div>
         </div>
+        {%- if sc.people_btn_label != blank -%}
         <div class="zab-people__foot">
-          {%- if sc.people_text != blank -%}<p>{{ sc.people_text }}</p>{%- endif -%}
-          {%- if sc.people_btn_label != blank -%}<a class="zab-btn" href="{{ sc.people_btn_url | default: '/pages/contact' }}">{{ sc.people_btn_label }}</a>{%- endif -%}
+          <a class="zab-btn" href="{{ sc.people_btn_url | default: '/pages/contact' }}">{{ sc.people_btn_label }}</a>
         </div>
+        {%- endif -%}
       </div>
     </section>
 
