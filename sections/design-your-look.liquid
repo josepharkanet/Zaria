@@ -4,6 +4,8 @@
   #shopify-section-{{ section.id }} .zdl{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
     min-height:{{ section.settings.height | default: 62 }}vh;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;background:#1c1518}
   #shopify-section-{{ section.id }} .zdl__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ section.settings.focal | default: 'center' }}}
+  /* Zaria: zoom the background video slightly so any tool watermark near the edges is cropped out of frame */
+  #shopify-section-{{ section.id }} .zdl__bg--video{transform:scale(1.12);transform-origin:center center}
   #shopify-section-{{ section.id }} .zdl__veil{position:absolute;inset:0;background:linear-gradient(rgba(18,12,14,.5),rgba(18,12,14,.64))}
   #shopify-section-{{ section.id }} .zdl__inner{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:70px clamp(24px,5vw,48px);text-align:center;color:#fff}
   #shopify-section-{{ section.id }} .zdl__overline{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#ecdde1;margin:0 0 20px}
@@ -15,7 +17,12 @@
   #shopify-section-{{ section.id }} .zdl__btn:hover{background:transparent;color:#fff}
 </style>
 <section class="zdl">
-  {%- if section.settings.image != blank -%}
+  {%- assign zdl_video = section.settings.background_video -%}
+  {%- if zdl_video != blank and zdl_video.sources.size > 0 -%}
+    {%- assign zdl_vsrc = zdl_video.sources | where: 'format', 'mp4' | first -%}
+    {%- unless zdl_vsrc -%}{%- assign zdl_vsrc = zdl_video.sources | first -%}{%- endunless -%}
+    <video class="zdl__bg zdl__bg--video" src="{{ zdl_vsrc.url }}" autoplay muted loop playsinline preload="auto"{% if section.settings.image != blank %} poster="{{ section.settings.image | image_url: width: 1600 }}"{% endif %}></video>
+  {%- elsif section.settings.image != blank -%}
     <img class="zdl__bg" src="{{ section.settings.image | image_url: width: 2200 }}" alt="" width="2200" height="1237" loading="lazy">
   {%- else -%}
     <img class="zdl__bg" src="{{ 'zaria-dyl-bg.jpg' | asset_url }}" alt="" width="2000" height="1333" loading="lazy">
@@ -34,7 +41,8 @@
 {
   "name": "Design Your Look",
   "settings": [
-    { "type": "image_picker", "id": "image", "label": "Background image (optional)" },
+    { "type": "video", "id": "background_video", "label": "Background video (overrides image)" },
+    { "type": "image_picker", "id": "image", "label": "Background image / video poster (optional)" },
     { "type": "text", "id": "focal", "label": "Image focal point", "default": "center" },
     { "type": "range", "id": "height", "label": "Height", "min": 44, "max": 90, "step": 2, "unit": "vh", "default": 62 },
     { "type": "text", "id": "overline", "label": "Overline", "default": "The Atelier" },
