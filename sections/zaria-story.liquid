@@ -49,14 +49,14 @@
   #shopify-section-{{ section.id }} .zab-hero__in{position:relative;z-index:2;padding:clamp(28px,6vw,76px);max-width:860px}
   #shopify-section-{{ section.id }} .zab-hero__over{color:#fff;opacity:.9}
   #shopify-section-{{ section.id }} .zab-hero__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
-    font-size:clamp(22px,2.9vw,32px);line-height:1.16;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin:0}
+    font-size:clamp(16px,1.5vw,18px);line-height:1.16;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin:0}
   #shopify-section-{{ section.id }} .zab-hero__title .u{border-bottom:3px solid #fff;padding-bottom:4px}
 
   /* story */
   #shopify-section-{{ section.id }} .zab-story{padding:clamp(56px,8vw,112px) 0}
   #shopify-section-{{ section.id }} .zab-story__grid{display:grid;grid-template-columns:minmax(210px,300px) 1fr;gap:clamp(28px,5vw,64px);align-items:start}
   #shopify-section-{{ section.id }} .zab-box{border:1px solid #141414;padding:clamp(26px,3vw,42px)}
-  #shopify-section-{{ section.id }} .zab-box .zab-heading{font-size:clamp(22px,2.9vw,32px);line-height:1.16;margin:0}
+  #shopify-section-{{ section.id }} .zab-box .zab-heading{font-size:clamp(16px,1.5vw,18px);line-height:1.16;margin:0}
   #shopify-section-{{ section.id }} .zab-story__intro{font-size:clamp(16px,1.7vw,20px);line-height:1.5;color:#241d1a;margin:0 0 24px;max-width:44ch}
   #shopify-section-{{ section.id }} .zab-story__cols{column-count:2;column-gap:38px;color:#5a534b;font-size:15px;line-height:1.85}
   #shopify-section-{{ section.id }} .zab-story__cols p{margin:0 0 14px;break-inside:avoid}
@@ -68,7 +68,7 @@
   #shopify-section-{{ section.id }} .zab-portrait{position:relative;aspect-ratio:3/4;overflow:hidden;background:#ededed}
   #shopify-section-{{ section.id }} .zab-portrait img{width:100%;height:100%;object-fit:cover}
   #shopify-section-{{ section.id }} .zab-people__box{border:1px solid #141414;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
-  #shopify-section-{{ section.id }} .zab-people__box .zab-heading{font-size:clamp(22px,2.9vw,32px);line-height:1.16;margin:0}
+  #shopify-section-{{ section.id }} .zab-people__box .zab-heading{font-size:clamp(16px,1.5vw,18px);line-height:1.16;margin:0}
   #shopify-section-{{ section.id }} .zab-people__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:22px;margin-top:clamp(24px,3vw,38px)}
   #shopify-section-{{ section.id }} .zab-people__foot p{margin:0;max-width:60ch;color:#5a534b;font-size:15px;line-height:1.8}
 
@@ -128,13 +128,13 @@
       </div>
       <div class="zab-hero__in">
         {%- if sc.hero_overline != blank -%}<p class="zab-eyebrow zab-hero__over">{{ sc.hero_overline }}</p>{%- endif -%}
-        <h1 class="zab-hero__title">{{ sc.hero_heading }}{% if sc.hero_heading_accent != blank %} <span class="u">{{ sc.hero_heading_accent }}</span>{% endif %}<span class="zab-dot">.</span></h1>
+        <h1 class="zab-hero__title">{{ sc.hero_heading }}{% if sc.hero_heading_accent != blank %} <span class="u">{{ sc.hero_heading_accent }}</span>{% endif %}</h1>
       </div>
     </div>
 
     <section class="zab-story">
       <div class="zab__wrap zab-story__grid">
-        <div class="zab-box"><h2 class="zab-heading">{{ sc.story_heading | default: 'The Story' }}<span class="zab-dot">.</span></h2></div>
+        <div class="zab-box"><h2 class="zab-heading">{{ sc.story_heading | default: 'The Story' }}</h2></div>
         <div class="zab-story__text">
           {%- if sc.story_intro != blank -%}<div class="zab-story__intro">{{ sc.story_intro }}</div>{%- endif -%}
           {%- if sc.story_body != blank -%}<div class="zab-story__cols">{{ sc.story_body }}</div>{%- endif -%}
@@ -157,7 +157,7 @@
               {%- endif -%}
             </div>
           {%- endfor -%}
-          <div class="zab-people__box"><h2 class="zab-heading">{{ sc.people_heading | default: 'The People' }}<span class="zab-dot">.</span></h2></div>
+          <div class="zab-people__box"><h2 class="zab-heading">{{ sc.people_heading | default: 'The People' }}</h2></div>
         </div>
         <div class="zab-people__foot">
           {%- if sc.people_text != blank -%}<p>{{ sc.people_text }}</p>{%- endif -%}
@@ -169,7 +169,7 @@
     <section class="zab-featured">
       <div class="zab__wrap zab-featured__grid-wrap">
         <div class="zab-featured__intro">
-          <div class="zab-box"><h2 class="zab-heading">{{ sc.featured_heading | default: 'Featured Work' }}<span class="zab-dot">.</span></h2></div>
+          <div class="zab-box"><h2 class="zab-heading">{{ sc.featured_heading | default: 'Featured Work' }}</h2></div>
           {%- if sc.featured_text != blank -%}<p>{{ sc.featured_text }}</p>{%- endif -%}
           {%- if sc.featured_btn_label != blank -%}<a class="zab-btn zab-featured__btn" href="{{ sc.featured_btn_url | default: '/collections/all-fabrics' }}">{{ sc.featured_btn_label }}</a>{%- endif -%}
         </div>
