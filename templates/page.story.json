@@ -1,8 +1,26 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "story": {
       "type": "zaria-story",
       "settings": {
+        "scheme": "cream",
+        "heading": "Our Story",
+        "body": "<p>Born in the United Arab Emirates, ZARIA embodies Modern Emirati Elegance, where the grace of Arabian heritage meets the refinement of contemporary design.</p>",
+        "signature": "The House of ZARIA · United Arab Emirates",
+        "link_label": "",
+        "link_url": "",
+        "hero_video_1": "shopify://files/videos/Abayas_Classic_Occasion_Bridal_Kaftans_202609050027.mp4",
+        "hero_video_2": "shopify://files/videos/Editorial_photograph_inside_a_luxury_202609050027.mp4",
+        "hero_video_3": "shopify://files/videos/compain_this_3_video_202609050027.mp4",
         "hero_overline": "The House of Zaria",
         "hero_heading": "Elegance, made in the Emirates",
         "hero_heading_accent": "",
@@ -18,12 +36,23 @@
         "featured_heading": "The Collection",
         "featured_text": "<p>A considered edit of fabrics and finished pieces, chosen for their beauty, their fall, and the quiet luxury of the details.</p>",
         "featured_btn_label": "View the collection",
-        "featured_btn_url": "/collections/all-fabrics"
+        "featured_btn_url": "/collections/all-fabrics",
+        "padding_top": 96,
+        "padding_bottom": 96
       }
     },
     "quote": {
       "type": "zaria-quote",
-      "settings": { "scheme": "ink", "eyebrow": "The ZARIA Spirit", "quote": "Modesty. Grace. Elegance.", "attribution": "Created in the United Arab Emirates" }
+      "settings": {
+        "scheme": "ink",
+        "overlay": 40,
+        "eyebrow": "The ZARIA Spirit",
+        "quote": "Modesty. Grace. Elegance.",
+        "attribution": "Created in the United Arab Emirates",
+        "max_width": 820,
+        "padding_top": 120,
+        "padding_bottom": 120
+      }
     },
     "cta": {
       "type": "design-your-look",
@@ -34,9 +63,14 @@
         "heading": "Design your look",
         "body": "Commission a piece made only for you. Share your vision, your measurements and your occasion, and our designers will bring it to life.",
         "button_label": "Start your design",
-        "button_url": "/collections/all-fabrics"
+        "button_url": "/collections/all-fabrics",
+        "open_in_new_tab": false
       }
     }
   },
-  "order": ["story", "quote", "cta"]
+  "order": [
+    "story",
+    "quote",
+    "cta"
+  ]
 }
