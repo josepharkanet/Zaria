@@ -151,7 +151,7 @@
           {%- if sc.featured_btn_label != blank -%}<a class="zab-btn zab-featured__btn" href="{{ sc.featured_btn_url | default: '/collections/all-fabrics' }}">{{ sc.featured_btn_label }}</a>{%- endif -%}
         </div>
         <div class="zab-tiles">
-          {%- for i in (1..6) -%}
+          {%- for i in (1..5) -%}
             {%- assign key = 'feat_img_' | append: i -%}
             {%- assign timg = sc[key] -%}
             <div class="zab-tile{% if i == 1 %} zab-tile--tall{% endif %}">
@@ -223,7 +223,6 @@
     { "type": "image_picker", "id": "feat_img_3", "label": "Work image 3" },
     { "type": "image_picker", "id": "feat_img_4", "label": "Work image 4" },
     { "type": "image_picker", "id": "feat_img_5", "label": "Work image 5" },
-    { "type": "image_picker", "id": "feat_img_6", "label": "Work image 6" },
     { "type": "range", "id": "padding_top", "label": "Padding top (homepage)", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 96 },
     { "type": "range", "id": "padding_bottom", "label": "Padding bottom (homepage)", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 96 }
   ],
