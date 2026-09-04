@@ -1,7 +1,7 @@
 {% comment %}Zaria - editorial feature (image + text) - Arkanet Technologies{% endcomment %}
 {%- assign sc = section.settings -%}
 <style>
-  #shopify-section-{{ section.id }} .zft{background:{{ sc.bg_color | default: '#f3efe6' }};
+  #shopify-section-{{ section.id }} .zft{background:{{ sc.bg_color | default: '#f5f5f5' }};
     color:#1a1a1a;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:0}
   #shopify-section-{{ section.id }} .zft *{box-sizing:border-box}
   #shopify-section-{{ section.id }} .zft__inner{max-width:100%;margin:0;display:grid;
@@ -9,7 +9,7 @@
   #shopify-section-{{ section.id }} .zft--right .zft__media{order:2}
   #shopify-section-{{ section.id }} .zft__media{position:relative;overflow:hidden}
   #shopify-section-{{ section.id }} .zft__media img,
-  #shopify-section-{{ section.id }} .zft__video{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;background:#efeae3}
+  #shopify-section-{{ section.id }} .zft__video{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;background:#ededed}
   #shopify-section-{{ section.id }} .zft__text{align-self:center;padding:clamp(40px,5vw,72px) clamp(24px,5.5vw,72px)}
   #shopify-section-{{ section.id }} .zft__eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#6a6a6a;margin:0 0 18px}
   #shopify-section-{{ section.id }} .zft__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
@@ -56,7 +56,7 @@
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
     { "type": "image_picker", "id": "image", "label": "Image (used as video poster / fallback)" },
     { "type": "text", "id": "video_asset", "label": "Video file in assets", "default": "zaria-feature.mp4", "info": "e.g. zaria-feature.mp4 — leave blank to show the image instead" },
-    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#f3efe6" },
+    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#f5f5f5" },
     {
       "type": "select", "id": "image_side", "label": "Image side",
       "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ],
