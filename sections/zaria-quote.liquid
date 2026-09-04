@@ -4,6 +4,8 @@
 {%- assign fg = '#111' -%}{%- assign bg = '#ffffff' -%}
 {%- if sc.scheme == 'soft' -%}{%- assign bg = '#fafafa' -%}{%- endif -%}
 {%- if sc.scheme == 'ink' or has_img -%}{%- assign fg = '#ffffff' -%}{%- assign bg = '#111111' -%}{%- endif -%}
+{%- comment -%} Zaria: hide this quote block on the About / story page {%- endcomment -%}
+{%- unless template.suffix == 'story' -%}
 <style>
   #shopify-section-{{ section.id }} .zq{position:relative;overflow:hidden;background:{{ bg }};color:{{ fg }};
     font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;padding:{{ sc.padding_top }}px clamp(24px,5vw,64px) {{ sc.padding_bottom }}px}
@@ -31,6 +33,7 @@
     {%- endif -%}
   </div>
 </section>
+{%- endunless -%}
 
 {% schema %}
 {
