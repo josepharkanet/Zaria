@@ -4,17 +4,14 @@
       "type": "zaria-story",
       "settings": {
         "scheme": "white",
-        "eyebrow": "The House of Zaria",
         "heading": "Our Story",
-        "hero_label": "The House of Zaria",
-        "lead": "<p>Every woman carries a story of strength, grace, and individuality. At ZARIA, we create fashion that reflects her story, with confidence, sophistication, and effortless elegance.</p>",
-        "body_top": "<p>Born in the United Arab Emirates, ZARIA embodies Modern Emirati Elegance, where the grace of Arabian heritage meets the refinement of contemporary design. Inspired by the UAE's unique balance of tradition and modernity, our collections reinterpret modest fashion for today's woman.</p><p>Every ZARIA piece is thoughtfully created with premium fabrics, graceful silhouettes, refined tailoring, and elegant details. Our designs celebrate modesty without compromising individuality, allowing women to move effortlessly from everyday moments and business occasions to family gatherings and special celebrations.</p>",
-        "image_mid_label": "The Atelier",
-        "body_bottom": "<p>For ZARIA, luxury is found in simplicity, quality, and exceptional craftsmanship. It is in the beauty of a perfect silhouette, the touch of a beautiful fabric, and the subtle details that make a piece feel truly special.</p><p>More than a fashion house, ZARIA represents a modern Emirati way of elegance: confident yet graceful, contemporary yet connected to heritage, understated yet distinctive.</p><p>Created in the UAE and inspired by its spirit, ZARIA is for women who embrace their identity, appreciate timeless design, and express themselves with quiet confidence and effortless sophistication.</p>",
+        "lead": "",
+        "body": "<p>Every woman carries a story of strength, grace, and individuality. At ZARIA, we create fashion that reflects her story, with confidence, sophistication, and effortless elegance.</p><p>Born in the United Arab Emirates, ZARIA embodies Modern Emirati Elegance, where the grace of Arabian heritage meets the refinement of contemporary design. Inspired by the UAE's unique balance of tradition and modernity, our collections reinterpret modest fashion for today's woman.</p><p>Every ZARIA piece is thoughtfully created with premium fabrics, graceful silhouettes, refined tailoring, and elegant details. Our designs celebrate modesty without compromising individuality, allowing women to move effortlessly from everyday moments and business occasions to family gatherings and special celebrations.</p><p>For ZARIA, luxury is found in simplicity, quality, and exceptional craftsmanship. It is in the beauty of a perfect silhouette, the touch of a beautiful fabric, and the subtle details that make a piece feel truly special.</p><p>More than a fashion house, ZARIA represents a modern Emirati way of elegance: confident yet graceful, contemporary yet connected to heritage, understated yet distinctive.</p><p>Created in the UAE and inspired by its spirit, ZARIA is for women who embrace their identity, appreciate timeless design, and express themselves with quiet confidence and effortless sophistication.</p>",
         "signature": "The House of ZARIA · United Arab Emirates",
         "link_label": "",
         "link_url": "",
-        "padding_bottom": 16
+        "padding_top": 88,
+        "padding_bottom": 72
       }
     },
     "values": {
