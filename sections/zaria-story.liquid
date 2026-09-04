@@ -54,10 +54,10 @@
 
   /* story */
   #shopify-section-{{ section.id }} .zab-story{padding:clamp(56px,8vw,112px) 0}
-  #shopify-section-{{ section.id }} .zab-story__grid{display:grid;grid-template-columns:minmax(210px,300px) 1fr;gap:clamp(28px,5vw,64px);align-items:start}
+  #shopify-section-{{ section.id }} .zab-story__grid{display:grid;grid-template-columns:minmax(280px,380px) 1fr;gap:clamp(28px,5vw,64px);align-items:start}
   #shopify-section-{{ section.id }} .zab-box{border:1px solid #141414;padding:clamp(26px,3vw,42px)}
   #shopify-section-{{ section.id }} .zab-box .zab-heading{font-size:clamp(16px,1.5vw,18px);line-height:1.16;margin:0}
-  #shopify-section-{{ section.id }} .zab-story__intro{font-size:clamp(16px,1.7vw,20px);line-height:1.5;color:#241d1a;margin:0 0 24px;max-width:44ch}
+  #shopify-section-{{ section.id }} .zab-story__intro{font-size:clamp(15px,1.5vw,18px);line-height:1.55;color:#241d1a;margin:22px 0 0}
   #shopify-section-{{ section.id }} .zab-story__cols{column-count:2;column-gap:38px;color:#5a534b;font-size:15px;line-height:1.85}
   #shopify-section-{{ section.id }} .zab-story__cols p{margin:0 0 14px;break-inside:avoid}
   #shopify-section-{{ section.id }} .zab-story__btn{margin-top:26px}
@@ -134,9 +134,11 @@
 
     <section class="zab-story">
       <div class="zab__wrap zab-story__grid">
-        <div class="zab-box"><h2 class="zab-heading">{{ sc.story_heading | default: 'The Story' }}</h2></div>
-        <div class="zab-story__text">
+        <div class="zab-story__aside">
+          <div class="zab-box"><h2 class="zab-heading">{{ sc.story_heading | default: 'The Story' }}</h2></div>
           {%- if sc.story_intro != blank -%}<div class="zab-story__intro">{{ sc.story_intro }}</div>{%- endif -%}
+        </div>
+        <div class="zab-story__text">
           {%- if sc.story_body != blank -%}<div class="zab-story__cols">{{ sc.story_body }}</div>{%- endif -%}
           {%- if sc.story_btn_label != blank -%}<a class="zab-btn zab-story__btn" href="{{ sc.story_btn_url | default: '/pages/contact' }}">{{ sc.story_btn_label }}</a>{%- endif -%}
         </div>
