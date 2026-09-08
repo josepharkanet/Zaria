@@ -5,7 +5,8 @@
 {%- comment -%} Zaria: hero video slider. Prefer up to 3 editor-uploaded videos; fall back to the packaged asset clips {%- endcomment -%}
 {%- assign vid_urls = '' -%}
 {%- for n in (1..3) -%}
-  {%- assign vobj = sc['hero_video_' | append: n] -%}
+  {%- assign vkey = 'hero_video_' | append: n -%}
+  {%- assign vobj = sc[vkey] -%}
   {%- if vobj != blank and vobj.sources.size > 0 -%}
     {%- assign vsrc = vobj.sources | where: 'format', 'mp4' | first -%}
     {%- unless vsrc -%}{%- assign vsrc = vobj.sources | first -%}{%- endunless -%}
