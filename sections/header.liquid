@@ -141,6 +141,9 @@
   #shopify-section-{{ section.id }} .zaria-mega .zaria-mega__head { color: #1a1a1a !important; }
   #shopify-section-{{ section.id }} .zaria-mega .zaria-mega__col a:hover { color: #7a1f34 !important; }
   #shopify-section-{{ section.id }} .zaria-mega .zaria-mega__promo-cap { color: #1a1a1a !important; }
+  #shopify-section-{{ section.id }} .zaria-nav-caret{margin-left:5px;display:inline-block;vertical-align:-1px;opacity:.55;transition:transform .2s ease}
+  #shopify-section-{{ section.id }} details[open] > summary .zaria-nav-caret,
+  #shopify-section-{{ section.id }} mega-menu-disclosure[open] .zaria-nav-caret{transform:rotate(180deg);opacity:1}
 </style>
 
 <height-observer variable="header">
@@ -331,7 +334,7 @@
                   {%- capture disclosure_content -%}
                     <details class="header__menu-disclosure">
                       <summary data-follow-link="{{ link.url }}" {% if section.settings.menu_text_font == 'heading' %}class="h6"{% endif %} data-title="{{ link.title | escape }}">
-                        {{- link.title | replace: '-', ' ' -}}
+                        {{- link.title | replace: '-', ' ' -}}<svg class="zaria-nav-caret" aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
                       </summary>
 
                       {%- if zaria_mega_links != blank -%}
