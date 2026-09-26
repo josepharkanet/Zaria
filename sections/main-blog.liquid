@@ -83,7 +83,7 @@
                       {%- capture featured_blog_post_sizes -%}(max-width: 1149px) 95vw, 1260px{%- endcapture -%}
 
                       {%- render 'zaria-blog-image',
-                        image: article.image,
+                        article: article,
                         sizes: featured_blog_post_sizes,
                         widths: '200,300,400,500,600,800,1000,1200,1400,1600,1800,2000,2200',
                         class: 'zoom-image group-hover:zoom',
