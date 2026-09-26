@@ -1,6 +1,6 @@
 {%- comment -%}
   Zaria - renders an article's image, or a mapped store product image, or a branded placeholder.
-  Resolution order: article.image -> per-handle mapped product -> first-tag collection image -> couture placeholder.
+  Resolution order: article.image -> per-handle mapped product -> tag-based collection image -> couture placeholder.
   (Blog articles have no uploaded featured images yet and the custom app has no content scope to set them,
    so relevant store imagery is mapped here in-theme. Uploading a real featured image auto-overrides this.)
   Params:
@@ -16,21 +16,21 @@
 
   if _img == blank
     case article.handle
-      when 'how-to-choose-fabric-for-abaya'
+      when 'how-to-choose-the-perfect-fabric-for-your-abaya'
         assign _pick = 'classic-embroidered-abaya'
-      when 'modest-eveningwear-guide-uae'
+      when 'a-guide-to-modest-eveningwear-for-uae-occasions'
         assign _pick = 'bridal-embellished-abaya'
-      when 'understanding-fabric-types'
+      when 'understanding-fabric-silk-chiffon-velvet-and-more'
         assign _pick = 'eggplant-satin-venus-dyied-thread'
-      when 'how-much-fabric-do-you-need'
+      when 'how-much-fabric-do-you-need-a-simple-guide'
         assign _pick = 'swiss-cotton-multicolor-wave-print-premium-turkish-fabric'
-      when 'made-to-measure-journey'
+      when 'the-made-to-measure-journey-from-vision-to-gown'
         assign _pick = 'satin-occasion-kaftan'
-      when 'fabric-care-tips'
+      when 'caring-for-your-couture-fabric-care-tips'
         assign _pick = 'turquoise-luc-a-fabric-taffeta'
-      when 'styling-kaftans-day-to-evening'
+      when 'styling-kaftans-from-daytime-to-evening'
         assign _pick = 'signature-kaftan'
-      when 'layering-fragrance-and-fashion'
+      when 'the-art-of-layering-fragrance-and-fashion'
         assign _pick = 'zaria-signature-eau-de-parfum'
       else
         assign _pick = blank
@@ -42,17 +42,18 @@
   endif
 
   if _img == blank
-    assign _tag = article.tags.first | downcase
-    case _tag
-      when 'fragrance'
-        assign _col = 'fragrance'
-      when 'kaftan'
-        assign _col = 'kaftans'
-      when 'abaya'
-        assign _col = 'abayas'
-      else
-        assign _col = 'luxe-silks'
-    endcase
+    assign _col = 'luxe-silks'
+    for _t in article.tags
+      assign _tl = _t | downcase
+      case _tl
+        when 'fragrance'
+          assign _col = 'fragrance'
+        when 'kaftan'
+          assign _col = 'kaftans'
+        when 'abaya'
+          assign _col = 'abayas'
+      endcase
+    endfor
     for _p in collections[_col].products limit: 8
       if _p.featured_image != blank
         assign _img = _p.featured_image
