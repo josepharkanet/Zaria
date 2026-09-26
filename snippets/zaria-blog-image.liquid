@@ -1,8 +1,10 @@
 {%- comment -%}
   Zaria - renders an article's image, or a mapped store product image, or a branded placeholder.
-  Resolution order: article.image -> per-handle mapped product -> tag-based collection image -> couture placeholder.
+  Resolution order: article.image -> per-handle mapped product (found via its collection) -> tag-based
+  collection image -> couture placeholder.
   (Blog articles have no uploaded featured images yet and the custom app has no content scope to set them,
-   so relevant store imagery is mapped here in-theme. Uploading a real featured image auto-overrides this.)
+   so relevant store imagery is mapped here in-theme. Uploading a real featured image auto-overrides this.
+   Products are resolved through collections[..].products, not all_products, which returns blank on this store.)
   Params:
     article  - the article object (required for mapping)
     sizes    - responsive sizes attribute
@@ -13,32 +15,39 @@
 {%- endcomment -%}
 {%- liquid
   assign _img = article.image
+  assign _pcol = blank
+  assign _pick = blank
 
-  if _img == blank
-    case article.handle
-      when 'how-to-choose-the-perfect-fabric-for-your-abaya'
-        assign _pick = 'classic-embroidered-abaya'
-      when 'a-guide-to-modest-eveningwear-for-uae-occasions'
-        assign _pick = 'bridal-embellished-abaya'
-      when 'understanding-fabric-silk-chiffon-velvet-and-more'
-        assign _pick = 'eggplant-satin-venus-dyied-thread'
-      when 'how-much-fabric-do-you-need-a-simple-guide'
-        assign _pick = 'swiss-cotton-multicolor-wave-print-premium-turkish-fabric'
-      when 'the-made-to-measure-journey-from-vision-to-gown'
-        assign _pick = 'satin-occasion-kaftan'
-      when 'caring-for-your-couture-fabric-care-tips'
-        assign _pick = 'turquoise-luc-a-fabric-taffeta'
-      when 'styling-kaftans-from-daytime-to-evening'
-        assign _pick = 'signature-kaftan'
-      when 'the-art-of-layering-fragrance-and-fashion'
-        assign _pick = 'zaria-signature-eau-de-parfum'
-      else
-        assign _pick = blank
-    endcase
+  case article.handle
+    when 'how-to-choose-the-perfect-fabric-for-your-abaya'
+      assign _pcol = 'abayas'
+      assign _pick = 'classic-embroidered-abaya'
+    when 'a-guide-to-modest-eveningwear-for-uae-occasions'
+      assign _pcol = 'abayas'
+      assign _pick = 'bridal-embellished-abaya'
+    when 'understanding-fabric-silk-chiffon-velvet-and-more'
+      assign _pcol = 'luxe-silks'
+      assign _pick = 'eggplant-satin-venus-dyied-thread'
+    when 'how-much-fabric-do-you-need-a-simple-guide'
+      assign _pcol = 'all-fabrics'
+      assign _pick = 'swiss-cotton-multicolor-wave-print-premium-turkish-fabric'
+    when 'the-made-to-measure-journey-from-vision-to-gown'
+      assign _pcol = 'kaftans'
+      assign _pick = 'satin-occasion-kaftan'
+    when 'caring-for-your-couture-fabric-care-tips'
+      assign _pcol = 'luxe-silks'
+      assign _pick = 'turquoise-luc-a-fabric-taffeta'
+    when 'styling-kaftans-from-daytime-to-evening'
+      assign _pcol = 'kaftans'
+      assign _pick = 'signature-kaftan'
+    when 'the-art-of-layering-fragrance-and-fashion'
+      assign _pcol = 'fragrance'
+      assign _pick = 'zaria-signature-eau-de-parfum'
+  endcase
 
-    if _pick != blank
-      assign _img = all_products[_pick].featured_image
-    endif
+  if _img == blank and _pick != blank
+    assign _prod = collections[_pcol].products | where: 'handle', _pick | first
+    assign _img = _prod.featured_image
   endif
 
   if _img == blank
