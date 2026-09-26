@@ -73,6 +73,7 @@
     sizes="{{ sizes | default: '100vw' }}"
     class="{{ class }}"
     alt="{{ article.title | escape }}"
+    width="1000" height="1250"
     {% if loading %}loading="{{ loading }}"{% endif %}>
 {%- elsif _fb != blank -%}
   {{-
