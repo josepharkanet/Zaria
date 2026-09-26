@@ -26,7 +26,7 @@
 
     <a href="{{ article.url }}" class="overflow-hidden blog-post-card__media">
       {%- render 'zaria-blog-image',
-        image: article.image,
+        article: article,
         loading: loading_strategy,
         sizes: sizes,
         widths: '300,400,500,600,800,1000,1200,1400,1600,1800,2000',

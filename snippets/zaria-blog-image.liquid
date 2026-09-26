@@ -1,7 +1,10 @@
 {%- comment -%}
-  Zaria - renders an article's featured image, or a branded couture placeholder when none is set.
+  Zaria - renders an article's image, or a mapped store product image, or a branded placeholder.
+  Resolution order: article.image -> per-handle mapped product -> first-tag collection image -> couture placeholder.
+  (Blog articles have no uploaded featured images yet and the custom app has no content scope to set them,
+   so relevant store imagery is mapped here in-theme. Uploading a real featured image auto-overrides this.)
   Params:
-    image    - the image object (e.g. article.image)
+    article  - the article object (required for mapping)
     sizes    - responsive sizes attribute
     widths   - comma list of widths (optional)
     class    - classes applied to the <img> or the placeholder wrapper
@@ -9,12 +12,61 @@
     loading  - 'lazy' or nil
 {%- endcomment -%}
 {%- liquid
+  assign _img = article.image
+
+  if _img == blank
+    case article.handle
+      when 'how-to-choose-fabric-for-abaya'
+        assign _pick = 'classic-embroidered-abaya'
+      when 'modest-eveningwear-guide-uae'
+        assign _pick = 'bridal-embellished-abaya'
+      when 'understanding-fabric-types'
+        assign _pick = 'eggplant-satin-venus-dyied-thread'
+      when 'how-much-fabric-do-you-need'
+        assign _pick = 'swiss-cotton-multicolor-wave-print-premium-turkish-fabric'
+      when 'made-to-measure-journey'
+        assign _pick = 'satin-occasion-kaftan'
+      when 'fabric-care-tips'
+        assign _pick = 'turquoise-luc-a-fabric-taffeta'
+      when 'styling-kaftans-day-to-evening'
+        assign _pick = 'signature-kaftan'
+      when 'layering-fragrance-and-fashion'
+        assign _pick = 'zaria-signature-eau-de-parfum'
+      else
+        assign _pick = blank
+    endcase
+
+    if _pick != blank
+      assign _img = all_products[_pick].featured_image
+    endif
+  endif
+
+  if _img == blank
+    assign _tag = article.tags.first | downcase
+    case _tag
+      when 'fragrance'
+        assign _col = 'fragrance'
+      when 'kaftan'
+        assign _col = 'kaftans'
+      when 'abaya'
+        assign _col = 'abayas'
+      else
+        assign _col = 'luxe-silks'
+    endcase
+    for _p in collections[_col].products limit: 8
+      if _p.featured_image != blank
+        assign _img = _p.featured_image
+        break
+      endif
+    endfor
+  endif
+
   assign _widths = widths | default: '300,400,500,600,800,1000,1200,1400,1600,1800,2000'
 -%}
-{%- if image != blank -%}
+{%- if _img != blank -%}
   {{-
-    image
-    | image_url: width: image.width
+    _img
+    | image_url: width: _img.width
     | image_tag: loading: loading, sizes: sizes, widths: _widths, class: class
   -}}
 {%- else -%}
