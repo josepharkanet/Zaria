@@ -129,7 +129,7 @@
   <header class="zaria-ahero">
     {%- if section.settings.show_image -%}
       <div class="zaria-ahero__media">
-        {%- render 'zaria-blog-image',
+        {%- render 'zaria-post-image',
           article: article,
           sizes: '100vw',
           widths: '400,600,800,1000,1200,1400,1600,1800,2000,2200,2600,3000',
@@ -276,7 +276,7 @@
             {%- if a.id != article.id and more_shown < 5 -%}
               <a href="{{ a.url }}" class="zaria-aside__post">
                 <span class="zaria-aside__thumb">
-                  {%- render 'zaria-blog-image', article: a, sizes: '62px', widths: '62,120,180,240', class: 'zaria-aside__thumb-img', loading: 'lazy' -%}
+                  {%- render 'zaria-post-image', article: a, sizes: '62px', widths: '62,120,180,240', class: 'zaria-aside__thumb-img', loading: 'lazy' -%}
                 </span>
                 <span class="zaria-aside__post-info">
                   <span class="zaria-aside__post-title">{{ a.title }}</span>
