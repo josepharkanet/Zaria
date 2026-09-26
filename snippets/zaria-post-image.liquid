@@ -1,0 +1,83 @@
+{%- comment -%}
+  Zaria - renders an article's image, or a mapped store product image, or a branded placeholder.
+  (Fresh filename: the previous zaria-blog-image snippet got stuck in the theme's GitHub sync.)
+  Resolution order: article.image (uploaded) -> per-handle mapped product (found by scanning its
+  collection) -> tag-based collection image -> couture placeholder.
+  Params: article, sizes, widths, class, ph_class, loading
+{%- endcomment -%}
+{%- liquid
+  assign _img = article.image
+  assign _pcol = blank
+  assign _pick = blank
+
+  case article.handle
+    when 'how-to-choose-the-perfect-fabric-for-your-abaya'
+      assign _pcol = 'abayas'
+      assign _pick = 'classic-embroidered-abaya'
+    when 'a-guide-to-modest-eveningwear-for-uae-occasions'
+      assign _pcol = 'abayas'
+      assign _pick = 'bridal-embellished-abaya'
+    when 'understanding-fabric-silk-chiffon-velvet-and-more'
+      assign _pcol = 'luxe-silks'
+      assign _pick = 'eggplant-satin-venus-dyied-thread'
+    when 'how-much-fabric-do-you-need-a-simple-guide'
+      assign _pcol = 'all-fabrics'
+      assign _pick = 'swiss-cotton-multicolor-wave-print-premium-turkish-fabric'
+    when 'the-made-to-measure-journey-from-vision-to-gown'
+      assign _pcol = 'kaftans'
+      assign _pick = 'satin-occasion-kaftan'
+    when 'caring-for-your-couture-fabric-care-tips'
+      assign _pcol = 'luxe-silks'
+      assign _pick = 'turquoise-luc-a-fabric-taffeta'
+    when 'styling-kaftans-from-daytime-to-evening'
+      assign _pcol = 'kaftans'
+      assign _pick = 'signature-kaftan'
+    when 'the-art-of-layering-fragrance-and-fashion'
+      assign _pcol = 'fragrance'
+      assign _pick = 'zaria-signature-eau-de-parfum'
+  endcase
+
+  if _img == blank and _pick != blank
+    for _p in collections[_pcol].products limit: 50
+      if _p.handle == _pick
+        assign _img = _p.featured_image
+        break
+      endif
+    endfor
+  endif
+
+  if _img == blank
+    assign _col = 'luxe-silks'
+    for _t in article.tags
+      assign _tl = _t | downcase
+      case _tl
+        when 'fragrance'
+          assign _col = 'fragrance'
+        when 'kaftan'
+          assign _col = 'kaftans'
+        when 'abaya'
+          assign _col = 'abayas'
+      endcase
+    endfor
+    for _p in collections[_col].products limit: 8
+      if _p.featured_image != blank
+        assign _img = _p.featured_image
+        break
+      endif
+    endfor
+  endif
+
+  assign _widths = widths | default: '300,400,500,600,800,1000,1200,1400,1600,1800,2000'
+-%}
+{%- if _img != blank -%}
+  {{-
+    _img
+    | image_url: width: _img.width
+    | image_tag: loading: loading, sizes: sizes, widths: _widths, class: class
+  -}}
+{%- else -%}
+  <div class="zaria-ph {{ ph_class }} {{ class }}" role="img" aria-label="Zaria Journal">
+    <span class="zaria-ph__mark">Zaria</span>
+    <span class="zaria-ph__eyebrow">The Journal</span>
+  </div>
+{%- endif -%}
