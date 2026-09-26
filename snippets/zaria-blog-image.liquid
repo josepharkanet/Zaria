@@ -1,0 +1,25 @@
+{%- comment -%}
+  Zaria - renders an article's featured image, or a branded couture placeholder when none is set.
+  Params:
+    image    - the image object (e.g. article.image)
+    sizes    - responsive sizes attribute
+    widths   - comma list of widths (optional)
+    class    - classes applied to the <img> or the placeholder wrapper
+    ph_class - extra classes applied only to the placeholder wrapper (e.g. zaria-ph--dark)
+    loading  - 'lazy' or nil
+{%- endcomment -%}
+{%- liquid
+  assign _widths = widths | default: '300,400,500,600,800,1000,1200,1400,1600,1800,2000'
+-%}
+{%- if image != blank -%}
+  {{-
+    image
+    | image_url: width: image.width
+    | image_tag: loading: loading, sizes: sizes, widths: _widths, class: class
+  -}}
+{%- else -%}
+  <div class="zaria-ph {{ ph_class }} {{ class }}" role="img" aria-label="Zaria Journal">
+    <span class="zaria-ph__mark">Zaria</span>
+    <span class="zaria-ph__eyebrow">The Journal</span>
+  </div>
+{%- endif -%}

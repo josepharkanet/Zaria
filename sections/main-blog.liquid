@@ -1,3 +1,14 @@
+<style>
+  /* Zaria Journal archive — uniform editorial media + branded placeholders */
+  #shopify-section-{{ section.id }} .blog-post-card__media { display: block; aspect-ratio: 4 / 5; background: #efe9e1; }
+  #shopify-section-{{ section.id }} .blog-post-card__media .blog-post-card__image,
+  #shopify-section-{{ section.id }} .blog-post-card__media .zaria-ph { width: 100%; height: 100%; object-fit: cover; }
+  #shopify-section-{{ section.id }} .featured-blog-post .zaria-ph--hero { position: absolute; inset: 0; height: 100%; }
+  #shopify-section-{{ section.id }} .featured-blog-post .prose { position: relative; z-index: 1; }
+  #shopify-section-{{ section.id }} .blog-post-card__title { transition: color .2s ease; }
+  #shopify-section-{{ section.id }} .blog-post-card:hover .blog-post-card__title { color: #7a1f34; }
+</style>
+
 {%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
 
 <div class="section-spacing section-spacing--tight color-scheme color-scheme--{{ section.settings.color_scheme }} color-scheme--bg-{{ color_scheme_hash }}">
@@ -71,13 +82,13 @@
                     <a href="{{ article.url }}" class="content-over-media content-over-media--xs">
                       {%- capture featured_blog_post_sizes -%}(max-width: 1149px) 95vw, 1260px{%- endcapture -%}
 
-                      {%- if article.image != blank -%}
-                        {{-
-                          article.image
-                          | image_url: width: article.image.width
-                          | image_tag: sizes: featured_blog_post_sizes, widths: '200,300,400,500,600,800,1000,1200,1400,1600,1800,2000,2200', class: 'zoom-image group-hover:zoom'
-                        -}}
-                      {%- endif -%}
+                      {%- render 'zaria-blog-image',
+                        image: article.image,
+                        sizes: featured_blog_post_sizes,
+                        widths: '200,300,400,500,600,800,1000,1200,1400,1600,1800,2000,2200',
+                        class: 'zoom-image group-hover:zoom',
+                        ph_class: 'zaria-ph--dark zaria-ph--hero'
+                      -%}
 
                       <div class="prose place-self-end-start">
                         <h2 class="h2">

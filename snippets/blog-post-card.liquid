@@ -16,27 +16,23 @@
 
 <div class="blog-post-card group snap-center">
   {%- if article -%}
-    {%- if article.image != blank -%}
-      {%- liquid
-        assign loading_strategy = null
+    {%- liquid
+      assign loading_strategy = null
 
-        if section.index > 3 or position > 3
-          assign loading_strategy = 'lazy'
-        endif
+      if section.index > 3 or position > 3
+        assign loading_strategy = 'lazy'
+      endif
+    -%}
+
+    <a href="{{ article.url }}" class="overflow-hidden blog-post-card__media">
+      {%- render 'zaria-blog-image',
+        image: article.image,
+        loading: loading_strategy,
+        sizes: sizes,
+        widths: '300,400,500,600,800,1000,1200,1400,1600,1800,2000',
+        class: 'blog-post-card__image w-full zoom-image group-hover:zoom'
       -%}
-
-      <a href="{{ article.url }}" class="overflow-hidden">
-        {{-
-          article.image
-          | image_url: width: article.image.width
-          | image_tag:
-            loading: loading_strategy,
-            sizes: sizes,
-            widths: '300,400,500,600,800,1000,1200,1400,1600,1800,2000',
-            class: 'blog-post-card__image w-full zoom-image group-hover:zoom'
-        -}}
-      </a>
-    {%- endif -%}
+    </a>
   {%- else -%}
     <div class="overflow-hidden">
       {{- 'image' | placeholder_svg_tag: 'blog-post-card__image placeholder placeholder--invert w-full zoom-image group-hover:zoom' -}}
