@@ -143,19 +143,10 @@
     {%- endif -%}
 
     <div class="zaria-ahero__inner container">
-      {%- if section.settings.show_date or section.settings.show_category and article.tags.size > 0 -%}
+      {%- comment -%} Zaria: category only in the hero eyebrow — no date {%- endcomment -%}
+      {%- if section.settings.show_category and article.tags.size > 0 -%}
         <div class="zaria-ahero__eyebrow">
-          {%- if section.settings.show_category and article.tags.size > 0 -%}
-            <a href="{{ blog.url }}/tagged/{{ article.tags.first | handle }}">{{ article.tags.first }}</a>
-          {%- endif -%}
-
-          {%- if section.settings.show_date and section.settings.show_category and article.tags.size > 0 -%}
-            <span class="separator-dot"></span>
-          {%- endif -%}
-
-          {%- if section.settings.show_date -%}
-            <time>{{- article.published_at | date: format: 'abbreviated_date' -}}</time>
-          {%- endif -%}
+          <a href="{{ blog.url }}/tagged/{{ article.tags.first | handle }}">{{ article.tags.first }}</a>
         </div>
       {%- endif -%}
 
@@ -172,54 +163,12 @@
             {{- article.content -}}
           </div>
 
-          {%- if section.settings.show_author or section.settings.show_share_buttons -%}
-            {%- liquid
-              assign has_extended_profile = false
-
-              if section.settings.show_author
-                assign author_bio = section.settings.author_bio | default: article.user.bio
-                assign author_image = section.settings.author_image | default: article.user.image
-                assign author_homepage = section.settings.author_homepage | default: article.user.homepage
-
-                if author_bio != blank or author_image != blank or author_homepage != blank
-                  assign has_extended_profile = true
-                endif
-              endif
-            -%}
-
+          {%- comment -%} Zaria: no author block — share only {%- endcomment -%}
+          {%- if section.settings.show_share_buttons -%}
             <div class="article__footer">
-              {%- if has_extended_profile -%}
-                <div class="article__author">
-                  {%- if author_image != blank -%}
-                    {{- author_image | image_url: width: author_image.width | image_tag: loading: 'lazy', sizes: '60px', widths: '60,120,180', class: 'article__author-image' -}}
-                  {%- endif -%}
-
-                  <div class="v-stack gap-3 justify-items-start">
-                    <p class="h6">{{ 'blog.post.written_by' | t: author: article.author }}</p>
-
-                    {%- if author_bio != blank -%}
-                      <div class="prose">
-                        {{- author_bio -}}
-                      </div>
-                    {%- endif -%}
-
-                    {%- if author_homepage != blank -%}
-                      <a href="{{ author_homepage }}" class="link" target="_blank">{{ 'blog.post.visit_author_website' | t }}</a>
-                    {%- endif -%}
-                  </div>
-                </div>
-              {%- endif -%}
-
               <div class="article__footer-bottom">
-                {%- if section.settings.show_author and has_extended_profile == false -%}
-                  <p class="h6 text-subdued">{{ 'blog.post.written_by' | t: author: article.author }}</p>
-                {%- elsif section.settings.show_share_buttons -%}
-                  <p class="h6 text-subdued">{{ 'blog.post.share' | t }}</p>
-                {%- endif -%}
-
-                {%- if section.settings.show_share_buttons -%}
-                  {%- render 'share-buttons', layout: 'block', url: article.url, title: article.title, description: article.content -%}
-                {%- endif -%}
+                <p class="h6 text-subdued">{{ 'blog.post.share' | t }}</p>
+                {%- render 'share-buttons', layout: 'block', url: article.url, title: article.title, description: article.content -%}
               </div>
             </div>
           {%- endif -%}
@@ -331,7 +280,6 @@
                 </span>
                 <span class="zaria-aside__post-info">
                   <span class="zaria-aside__post-title">{{ a.title }}</span>
-                  <span class="zaria-aside__post-date">{{ a.published_at | date: format: 'abbreviated_date' }}</span>
                 </span>
               </a>
               {%- assign more_shown = more_shown | plus: 1 -%}
