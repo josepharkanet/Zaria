@@ -12,8 +12,8 @@
   </script>
 {%- endif -%}
 
-{%- comment -%} On product pages the PDP section emits its own richer breadcrumb (Home / Gender / Brand / Product), so skip this generic one to avoid two BreadcrumbLists. {%- endcomment -%}
-{%- unless request.page_type == 'product' -%}
+{%- comment -%} Emit BreadcrumbList for all page types including products (the live PDP section does not render its own). {%- endcomment -%}
+{%- unless false -%}
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
