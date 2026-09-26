@@ -1,6 +1,14 @@
 {%- comment -%}Zaria — mobile drawer sub-links for the hardcoded mega categories (menu has no children). Usage: {% render 'zaria-nav-sub', title: link.title %}{%- endcomment -%}
 {%- assign t = title | strip | downcase -%}
 {%- case t -%}
+  {%- when 'shop' -%}
+    <a href="{{ routes.all_products_collection_url }}">Shop All</a>
+    <a href="{{ routes.root_url }}collections/new">New In</a>
+    <a href="{{ routes.root_url }}collections/all-fabrics">Fabrics</a>
+    <a href="{{ routes.root_url }}collections/fragrance">Fragrance</a>
+    <a href="{{ routes.root_url }}collections/accessories">Accessories</a>
+    <a href="{{ routes.root_url }}collections/gift-sets">Gifts</a>
+    <a href="{{ routes.root_url }}collections/sale">Sale</a>
   {%- when 'fabrics' -%}
     <a href="{{ routes.root_url }}collections/luxe-silks">Luxe Silks</a>
     <a href="{{ routes.root_url }}collections/fine-cottons">Fine Cottons</a>

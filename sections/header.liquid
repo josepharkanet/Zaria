@@ -245,6 +245,29 @@
               {%- comment -%} Zaria: hardcoded category mega-menus (no menu nesting needed) {%- endcomment -%}
               {%- capture zaria_mega_links -%}
                 {%- case link_title_downcase -%}
+                  {%- when 'shop' -%}
+                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.all_products_collection_url }}" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'tag' %}Shop All</a>
+                        <a href="{{ routes.root_url }}collections/new" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'silk' %}New In</a>
+                        <a href="{{ routes.root_url }}collections/all-fabrics" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'cotton' %}Fabrics</a>
+                        <a href="{{ routes.root_url }}collections/gift-sets" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'gift' %}Gifts</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/fragrance" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'perfume' %}Fragrance</a>
+                        <a href="{{ routes.root_url }}collections/perfumes">Perfumes</a>
+                        <a href="{{ routes.root_url }}collections/home-fragrance">Home Fragrance</a>
+                        <a href="{{ routes.root_url }}collections/gift-sets">Gift Sets</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'veil' %}Accessories</a>
+                        <a href="{{ routes.root_url }}collections/accessories">Sheilas &amp; Shawls</a>
+                        <a href="{{ routes.root_url }}collections/abayas">Ready-to-Wear</a>
+                      </div>
+                      <div class="zaria-mega__col">
+                        <a href="{{ routes.root_url }}collections/sale" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'shawl' %}Sale</a>
+                      </div>
+                    </div></div>
                   {%- when 'fabrics' -%}
                     <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
                       <div class="zaria-mega__col">
