@@ -1,45 +1,61 @@
 {%- comment -%}
   Zaria - renders an article's image, or a mapped store product image, or a branded placeholder.
-  Resolution order: article.image (uploaded) -> per-handle mapped Shopify CDN image -> tag-based
-  collection image -> couture placeholder.
+  Resolution order: article.image (uploaded) -> per-handle mapped product (found by scanning its
+  collection) -> tag-based collection image -> couture placeholder.
   Blog articles have no uploaded featured images yet and the custom app has no content scope to set
-  them, so relevant store imagery is mapped here in-theme (CDN URLs are used directly because
-  all_products / collection `where` lookups return blank on this store). Uploading a real featured
+  them, so relevant store imagery is mapped here in-theme. Products are resolved by scanning
+  collections[..].products (all_products returns blank on this store). Uploading a real featured
   image to an article auto-overrides the map.
   Params:
     article  - the article object (required for mapping)
     sizes    - responsive sizes attribute
-    widths   - comma list of widths (optional, for the uploaded-image path)
+    widths   - comma list of widths (optional)
     class    - classes applied to the <img> or the placeholder wrapper
     ph_class - extra classes applied only to the placeholder wrapper (e.g. zaria-ph--dark)
     loading  - 'lazy' or nil
 {%- endcomment -%}
 {%- liquid
-  assign _cdn = 'https://cdn.shopify.com/s/files/1/1041/5174/4795/files/'
-  assign _url = blank
+  assign _img = article.image
+  assign _pcol = blank
+  assign _pick = blank
+
   case article.handle
     when 'how-to-choose-the-perfect-fabric-for-your-abaya'
-      assign _url = _cdn | append: 'c26080ca58efd94687efce6e31b5ccfc.jpg?v=1787769332'
+      assign _pcol = 'abayas'
+      assign _pick = 'classic-embroidered-abaya'
     when 'a-guide-to-modest-eveningwear-for-uae-occasions'
-      assign _url = _cdn | append: 'c26080ca58efd94687efce6e31b5ccfc_35c4d93a-bc12-4c59-922a-d130d08463e9.jpg?v=1787769342'
+      assign _pcol = 'abayas'
+      assign _pick = 'bridal-embellished-abaya'
     when 'understanding-fabric-silk-chiffon-velvet-and-more'
-      assign _url = _cdn | append: '402-174.jpg?v=1788430503'
+      assign _pcol = 'luxe-silks'
+      assign _pick = 'eggplant-satin-venus-dyied-thread'
     when 'how-much-fabric-do-you-need-a-simple-guide'
-      assign _url = _cdn | append: 'f1d5e0f283128464c5df20781fb37f2c.jpg?v=1787763793'
+      assign _pcol = 'all-fabrics'
+      assign _pick = 'swiss-cotton-multicolor-wave-print-premium-turkish-fabric'
     when 'the-made-to-measure-journey-from-vision-to-gown'
-      assign _url = _cdn | append: 'c26080ca58efd94687efce6e31b5ccfc_e122ceec-445f-420a-bf08-bae0cb3e519a.jpg?v=1787769335'
+      assign _pcol = 'kaftans'
+      assign _pick = 'satin-occasion-kaftan'
     when 'caring-for-your-couture-fabric-care-tips'
-      assign _url = _cdn | append: '492-015.jpg?v=1788430510'
+      assign _pcol = 'luxe-silks'
+      assign _pick = 'turquoise-luc-a-fabric-taffeta'
     when 'styling-kaftans-from-daytime-to-evening'
-      assign _url = _cdn | append: '0500633d705cd37b690c53aabb871e3f.jpg?v=1787771892'
+      assign _pcol = 'kaftans'
+      assign _pick = 'signature-kaftan'
     when 'the-art-of-layering-fragrance-and-fashion'
-      assign _url = _cdn | append: 'f85ef1cb980ea5bdde9864d40344c2c9.jpg?v=1787783550'
+      assign _pcol = 'fragrance'
+      assign _pick = 'zaria-signature-eau-de-parfum'
   endcase
 
-  assign _widths = widths | default: '300,400,500,600,800,1000,1200,1400,1600,1800,2000'
+  if _img == blank and _pick != blank
+    for _p in collections[_pcol].products limit: 50
+      if _p.handle == _pick
+        assign _img = _p.featured_image
+        break
+      endif
+    endfor
+  endif
 
-  assign _fb = blank
-  if article.image == blank and _url == blank
+  if _img == blank
     assign _col = 'luxe-silks'
     for _t in article.tags
       assign _tl = _t | downcase
@@ -54,31 +70,18 @@
     endfor
     for _p in collections[_col].products limit: 8
       if _p.featured_image != blank
-        assign _fb = _p.featured_image
+        assign _img = _p.featured_image
         break
       endif
     endfor
   endif
+
+  assign _widths = widths | default: '300,400,500,600,800,1000,1200,1400,1600,1800,2000'
 -%}
-{%- if article.image != blank -%}
+{%- if _img != blank -%}
   {{-
-    article.image
-    | image_url: width: article.image.width
-    | image_tag: loading: loading, sizes: sizes, widths: _widths, class: class
-  -}}
-{%- elsif _url != blank -%}
-  <img
-    src="{{ _url }}&width=1000"
-    srcset="{{ _url }}&width=400 400w, {{ _url }}&width=600 600w, {{ _url }}&width=800 800w, {{ _url }}&width=1000 1000w, {{ _url }}&width=1400 1400w, {{ _url }}&width=1800 1800w"
-    sizes="{{ sizes | default: '100vw' }}"
-    class="{{ class }}"
-    alt="{{ article.title | escape }}"
-    width="1000" height="1250"
-    {% if loading %}loading="{{ loading }}"{% endif %}>
-{%- elsif _fb != blank -%}
-  {{-
-    _fb
-    | image_url: width: _fb.width
+    _img
+    | image_url: width: _img.width
     | image_tag: loading: loading, sizes: sizes, widths: _widths, class: class
   -}}
 {%- else -%}
