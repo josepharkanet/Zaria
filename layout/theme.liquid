@@ -234,6 +234,25 @@
       .shopify-policy__title,
       .shopify-policy__title h1,
       .shopify-policy__title h2 { text-align: left; }
+      /* Zaria: branded fallback for articles with no featured image (used by blog card, archive hero, article hero) */
+      .zaria-ph {
+        position: relative; display: grid; place-content: center; justify-items: center;
+        width: 100%; height: 100%; min-height: 100%; overflow: hidden;
+        background: linear-gradient(135deg, #f4f0ea 0%, #e7ded3 55%, #ddd2c5 100%);
+      }
+      .zaria-ph__mark {
+        font-family: var(--heading-font-family, 'Jost'), 'Jost', serif;
+        text-transform: uppercase; letter-spacing: .34em; font-weight: 400;
+        font-size: clamp(20px, 3.4vw, 40px); line-height: 1; color: #7a1f34; opacity: .48;
+      }
+      .zaria-ph__eyebrow {
+        font-family: var(--text-font-family, 'Jost'), 'Jost', sans-serif;
+        text-transform: uppercase; letter-spacing: .42em; font-size: 9px;
+        color: #1a1a1a; opacity: .42; margin-top: 10px; padding-left: .42em;
+      }
+      .zaria-ph--dark { background: linear-gradient(135deg, #161616 0%, #3a2126 58%, #6f1c30 100%); }
+      .zaria-ph--dark .zaria-ph__mark { color: #f6efe7; opacity: .82; }
+      .zaria-ph--dark .zaria-ph__eyebrow { color: #f6efe7; opacity: .6; }
     </style>
     <script>
       (function () {
