@@ -100,10 +100,10 @@
     #shopify-section-{{ section.id }} .header.zaria-header-split { column-gap: 10px; padding-inline: 16px; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__primary-nav { display: contents; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half {
-      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 0.5rem; margin: 0; padding: 0; list-style: none;
+      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 1rem; margin: 0; padding: 0; list-style: none;
     }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: end; padding-inline-end: 0.55rem; }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 0.55rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: end; padding-inline-end: 0.9rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 0.9rem; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__logo { grid-area: logo; justify-self: center; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav { grid-area: secondary-nav; justify-self: end; }
     /* Zaria: nav type — six links leave room for a larger, more legible size down to 1000px */
@@ -113,17 +113,17 @@
   /* Zaria: mid desktops — a little more air once there is room */
   @media screen and (min-width: 1200px) {
     #shopify-section-{{ section.id }} .header.zaria-header-split { padding-inline: 20px; }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half { gap: 0 0.8rem; }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { padding-inline-end: 0.85rem; }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { padding-inline-start: 0.85rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half { gap: 0 1.5rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { padding-inline-end: 1.3rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { padding-inline-start: 1.3rem; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half a,
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half summary { font-size: 14px; letter-spacing: 0.12em; }
   }
   /* Zaria: wide desktops — full couture spacing */
   @media screen and (min-width: 1400px) {
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half { gap: 0 1.15rem; }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { padding-inline-end: 1.2rem; }
-    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { padding-inline-start: 1.2rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half { gap: 0 2rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { padding-inline-end: 1.8rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { padding-inline-start: 1.8rem; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half a,
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half summary { font-size: 15px; letter-spacing: 0.16em; }
   }
