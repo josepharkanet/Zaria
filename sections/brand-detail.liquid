@@ -7,6 +7,7 @@
 {% assign brand_banner = brand.banner.value %}
 {% assign brand_col = brand.collection.value %}
 
+{% if brand != blank %}
 {%- comment -%} BANNER {%- endcomment -%}
 {% if brand_banner != blank %}
   <div style="position:relative;width:100%;height:480px;overflow:hidden;">
@@ -75,6 +76,24 @@
           <a href="/collections/{{ brand_col.handle }}" style="display:inline-block;padding:14px 40px;border:1px solid #1a1a1a;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#1a1a1a;text-decoration:none;font-family:sans-serif;">{{ 'custom.brands.view_all_count' | t: count: brand_col.products_count }}</a>
         </div>
       {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{%- comment -%} Zaria: non-brand page on the default page template — show the page body instead of an empty brand layout {%- endcomment -%}
+{% else %}
+  <div class="section-spacing section-spacing--tight">
+    <div class="container container--lg">
+      <div class="section-stack">
+        {% if page.title != blank %}
+          <div class="section-header justify-self-center text-center">
+            <h1 class="h2">{{ page.title }}</h1>
+          </div>
+        {% endif %}
+        {% if page.content != blank %}
+          <div class="prose">{{ page.content }}</div>
+        {% endif %}
+      </div>
     </div>
   </div>
 {% endif %}
