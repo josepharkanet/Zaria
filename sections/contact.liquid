@@ -9,33 +9,33 @@
 {%- assign show_form = section.settings.show_form -%}
 
 {% style %}
-  .elx-stores { background: #faf9f7; border-top: 1px solid rgba(0, 0, 0, .08); padding: clamp(44px, 7vw, 72px) 20px; }
-  .elx-stores * { box-sizing: border-box; }
-  .elx-stores .elx-st-inner { max-width: 1080px; margin: 0 auto; }
-  .elx-stores .elx-st-head { text-align: center; margin: 0 0 clamp(28px, 4vw, 44px); }
-  .elx-stores .elx-st-title { font-family: var(--heading-font-family, "Bodoni Moda", serif); font-weight: 400; font-size: clamp(21px, 4vw, 32px); text-transform: uppercase; letter-spacing: clamp(2px, 0.5vw, 4px); margin: 0; color: #1a1a1a; }
-  .elx-stores .elx-st-rule { width: 48px; height: 1px; background: #1a1a1a; margin: 16px auto 0; }
+  .zar-stores { background: #faf9f7; border-top: 1px solid rgba(0, 0, 0, .08); padding: clamp(44px, 7vw, 72px) 20px; }
+  .zar-stores * { box-sizing: border-box; }
+  .zar-stores .zar-st-inner { max-width: 1080px; margin: 0 auto; }
+  .zar-stores .zar-st-head { text-align: center; margin: 0 0 clamp(28px, 4vw, 44px); }
+  .zar-stores .zar-st-title { font-family: var(--heading-font-family, "Bodoni Moda", serif); font-weight: 400; font-size: clamp(21px, 4vw, 32px); text-transform: uppercase; letter-spacing: clamp(2px, 0.5vw, 4px); margin: 0; color: #1a1a1a; }
+  .zar-stores .zar-st-rule { width: 48px; height: 1px; background: #1a1a1a; margin: 16px auto 0; }
 
-  .elx-stores .elx-st-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(22px, 3vw, 34px); }
-  .elx-stores .elx-st-card { background: #fff; border: 1px solid rgba(0, 0, 0, .08); }
-  .elx-stores .elx-st-map { position: relative; width: 100%; height: 240px; overflow: hidden; }
-  .elx-stores .elx-st-map iframe { width: 100%; height: 100%; border: 0; display: block; filter: grayscale(1); transition: filter .3s ease; }
-  .elx-stores .elx-st-card:hover .elx-st-map iframe { filter: grayscale(0); }
-  .elx-stores .elx-st-body { padding: 22px 24px 26px; }
-  .elx-stores .elx-st-country { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #1a1a1a; margin: 0 0 10px; }
-  .elx-stores .elx-st-addr { font-size: 14px; line-height: 1.7; color: #4a4a4a; margin: 0 0 16px; white-space: pre-line; }
-  .elx-stores .elx-st-dir { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; border-bottom: 1px solid #1a1a1a; padding-bottom: 3px; }
-  .elx-stores .elx-st-dir:hover { color: #1a1a1a; }
-  .elx-stores .elx-st-dir svg { width: 13px; height: 13px; }
+  .zar-stores .zar-st-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(22px, 3vw, 34px); }
+  .zar-stores .zar-st-card { background: #fff; border: 1px solid rgba(0, 0, 0, .08); }
+  .zar-stores .zar-st-map { position: relative; width: 100%; height: 240px; overflow: hidden; }
+  .zar-stores .zar-st-map iframe { width: 100%; height: 100%; border: 0; display: block; filter: grayscale(1); transition: filter .3s ease; }
+  .zar-stores .zar-st-card:hover .zar-st-map iframe { filter: grayscale(0); }
+  .zar-stores .zar-st-body { padding: 22px 24px 26px; }
+  .zar-stores .zar-st-country { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #1a1a1a; margin: 0 0 10px; }
+  .zar-stores .zar-st-addr { font-size: 14px; line-height: 1.7; color: #4a4a4a; margin: 0 0 16px; white-space: pre-line; }
+  .zar-stores .zar-st-dir { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; border-bottom: 1px solid #1a1a1a; padding-bottom: 3px; }
+  .zar-stores .zar-st-dir:hover { color: #1a1a1a; }
+  .zar-stores .zar-st-dir svg { width: 13px; height: 13px; }
 
-  .elx-stores .elx-st-form { max-width: 640px; margin: 0 auto clamp(40px, 6vw, 60px); }
+  .zar-stores .zar-st-form { max-width: 640px; margin: 0 auto clamp(40px, 6vw, 60px); }
 {% endstyle %}
 
-<div class="elx-stores">
-  <div class="elx-st-inner">
+<div class="zar-stores">
+  <div class="zar-st-inner">
 
     {%- if show_form -%}
-      <div class="elx-st-form">
+      <div class="zar-st-form">
         <div class="section-stack text-center">
           {%- render 'section-header',
             subheading: section.settings.subheading,
@@ -73,21 +73,21 @@
       </div>
     {%- endif -%}
 
-    <div class="elx-st-head">
-      <h2 class="elx-st-title">{{ 'custom.contact.stores_heading' | t }}</h2>
-      <div class="elx-st-rule"></div>
+    <div class="zar-st-head">
+      <h2 class="zar-st-title">{{ 'custom.contact.stores_heading' | t }}</h2>
+      <div class="zar-st-rule"></div>
     </div>
 
-    <div class="elx-st-grid">
+    <div class="zar-st-grid">
       {%- if section.settings.uae_address != blank -%}
-        <div class="elx-st-card">
-          <div class="elx-st-map">
+        <div class="zar-st-card">
+          <div class="zar-st-map">
             <iframe src="{{ section.settings.uae_map }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="{{ section.settings.uae_country | escape }}"></iframe>
           </div>
-          <div class="elx-st-body">
-            <p class="elx-st-country">{{ section.settings.uae_country }}</p>
-            <p class="elx-st-addr">{{ section.settings.uae_address }}</p>
-            <a class="elx-st-dir" href="https://www.google.com/maps/search/?api=1&query={{ section.settings.uae_address | url_encode }}" target="_blank" rel="noopener">
+          <div class="zar-st-body">
+            <p class="zar-st-country">{{ section.settings.uae_country }}</p>
+            <p class="zar-st-addr">{{ section.settings.uae_address }}</p>
+            <a class="zar-st-dir" href="https://www.google.com/maps/search/?api=1&query={{ section.settings.uae_address | url_encode }}" target="_blank" rel="noopener">
               {{ 'custom.contact.directions' | t }}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
@@ -96,14 +96,14 @@
       {%- endif -%}
 
       {%- if section.settings.ksa_address != blank -%}
-        <div class="elx-st-card">
-          <div class="elx-st-map">
+        <div class="zar-st-card">
+          <div class="zar-st-map">
             <iframe src="{{ section.settings.ksa_map }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="{{ section.settings.ksa_country | escape }}"></iframe>
           </div>
-          <div class="elx-st-body">
-            <p class="elx-st-country">{{ section.settings.ksa_country }}</p>
-            <p class="elx-st-addr">{{ section.settings.ksa_address }}</p>
-            <a class="elx-st-dir" href="https://www.google.com/maps/search/?api=1&query={{ section.settings.ksa_address | url_encode }}" target="_blank" rel="noopener">
+          <div class="zar-st-body">
+            <p class="zar-st-country">{{ section.settings.ksa_country }}</p>
+            <p class="zar-st-addr">{{ section.settings.ksa_address }}</p>
+            <a class="zar-st-dir" href="https://www.google.com/maps/search/?api=1&query={{ section.settings.ksa_address | url_encode }}" target="_blank" rel="noopener">
               {{ 'custom.contact.directions' | t }}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>

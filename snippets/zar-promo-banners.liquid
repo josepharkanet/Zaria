@@ -12,15 +12,15 @@
 {%- assign elx_banners = shop.metafields.zaria_promotions.banners.value -%}
 {%- if elx_banners != blank -%}
   {%- style -%}
-    .elx-pbanner { position: relative; width: 100%; min-height: 350px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; background: #1a1a1a; }
-    .elx-pbanner__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-    .elx-pbanner__overlay { position: absolute; inset: 0; background: rgba(0,0,0,.35); }
-    .elx-pbanner__inner { position: relative; z-index: 2; max-width: 1100px; padding: 32px 24px; color: #fff; }
-    .elx-pbanner__title { font-family: var(--heading-font-family, "Bodoni Moda", serif); font-weight: 400; text-transform: uppercase; white-space: nowrap; letter-spacing: clamp(1px, .35vw, 4px); font-size: clamp(15px, 2.8vw, 31px); line-height: 1.15; margin: 0 0 13px; }
-    .elx-pbanner__desc { font-size: clamp(13px, 1.3vw, 16px); line-height: 1.6; letter-spacing: .02em; margin: 0 auto 20px; max-width: 560px; color: rgba(255,255,255,.9); }
-    .elx-pbanner__btn { display: inline-block; background: #1a1a1a; color: #fff; padding: 13px 30px; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; text-decoration: none; transition: opacity .2s ease; }
-    .elx-pbanner__btn:hover { opacity: .88; }
-    @media (max-width: 749px) { .elx-pbanner { min-height: 240px; } .elx-pbanner__inner { padding: 24px 18px; } }
+    .zar-pbanner { position: relative; width: 100%; min-height: 350px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; background: #1a1a1a; }
+    .zar-pbanner__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .zar-pbanner__overlay { position: absolute; inset: 0; background: rgba(0,0,0,.35); }
+    .zar-pbanner__inner { position: relative; z-index: 2; max-width: 1100px; padding: 32px 24px; color: #fff; }
+    .zar-pbanner__title { font-family: var(--heading-font-family, "Bodoni Moda", serif); font-weight: 400; text-transform: uppercase; white-space: nowrap; letter-spacing: clamp(1px, .35vw, 4px); font-size: clamp(15px, 2.8vw, 31px); line-height: 1.15; margin: 0 0 13px; }
+    .zar-pbanner__desc { font-size: clamp(13px, 1.3vw, 16px); line-height: 1.6; letter-spacing: .02em; margin: 0 auto 20px; max-width: 560px; color: rgba(255,255,255,.9); }
+    .zar-pbanner__btn { display: inline-block; background: #1a1a1a; color: #fff; padding: 13px 30px; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; text-decoration: none; transition: opacity .2s ease; }
+    .zar-pbanner__btn:hover { opacity: .88; }
+    @media (max-width: 749px) { .zar-pbanner { min-height: 240px; } .zar-pbanner__inner { padding: 24px 18px; } }
   {%- endstyle -%}
 
   {%- for b in elx_banners -%}
@@ -35,16 +35,16 @@
       {%- assign elx_pos = b.position -%}
     {%- endif -%}
 
-    <div id="{{ uid }}" data-elx-pbanner hidden>
-      <div class="elx-pbanner">
+    <div id="{{ uid }}" data-zar-pbanner hidden>
+      <div class="zar-pbanner">
         {%- if b.image != blank -%}
-          <img class="elx-pbanner__bg" src="{{ b.image }}" alt="{{ b.title | escape }}" width="1600" height="420" loading="lazy">
+          <img class="zar-pbanner__bg" src="{{ b.image }}" alt="{{ b.title | escape }}" width="1600" height="420" loading="lazy">
         {%- endif -%}
-        <div class="elx-pbanner__overlay"></div>
-        <div class="elx-pbanner__inner">
-          {%- if b.title != blank -%}<h2 class="elx-pbanner__title">{{ b.title }}</h2>{%- endif -%}
-          {%- if b.description != blank -%}<p class="elx-pbanner__desc">{{ b.description }}</p>{%- endif -%}
-          {%- if b.button_label != blank -%}<a class="elx-pbanner__btn" href="{{ b.button_link | default: '#' }}">{{ b.button_label }}</a>{%- endif -%}
+        <div class="zar-pbanner__overlay"></div>
+        <div class="zar-pbanner__inner">
+          {%- if b.title != blank -%}<h2 class="zar-pbanner__title">{{ b.title }}</h2>{%- endif -%}
+          {%- if b.description != blank -%}<p class="zar-pbanner__desc">{{ b.description }}</p>{%- endif -%}
+          {%- if b.button_label != blank -%}<a class="zar-pbanner__btn" href="{{ b.button_link | default: '#' }}">{{ b.button_label }}</a>{%- endif -%}
         </div>
       </div>
     </div>
@@ -55,7 +55,7 @@
         if (!host) return;
         var POS = parseInt({{ elx_pos | json }}, 10); if (isNaN(POS)) POS = 0;
         var CUSTOM = {{ b.custom_selector | default: '' | json }};
-        function isBanner(el) { return el.nodeType === 1 && el.hasAttribute && el.hasAttribute('data-elx-pbanner'); }
+        function isBanner(el) { return el.nodeType === 1 && el.hasAttribute && el.hasAttribute('data-zar-pbanner'); }
         function isEmpty(el) {
           return el.textContent.replace(/\s+/g, '') === '' &&
                  !el.querySelector('img,svg,video,picture,iframe,input,button,a,form');

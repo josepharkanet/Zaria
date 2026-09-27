@@ -16,7 +16,7 @@
   {% if update_on_change %}update-on-change{% endif %}
   section-id="{{ section.id }}"
 >
-  <form method="GET" action="{{ request.path }}" class="facets elx-facets">
+  <form method="GET" action="{{ request.path }}" class="facets zar-facets">
     {%- comment -%}Reset to first page whenever criteria change{%- endcomment -%}
     <input type="hidden" name="page" value="">
 
@@ -31,11 +31,11 @@
     {%- endif -%}
 
     {%- if quick_links_menu.links.size > 0 -%}
-      <div class="elx-facet">
-        <div class="elx-facet__title">{{ quick_links_menu.title }}</div>
-        <div class="elx-facet__values">
+      <div class="zar-facet">
+        <div class="zar-facet__title">{{ quick_links_menu.title }}</div>
+        <div class="zar-facet__values">
           {%- for link in quick_links_menu.links -%}
-            <a href="{{ link.url }}" class="elx-quicklink {% unless link.active %}is-faded{% endunless %}">{{ link.title }}</a>
+            <a href="{{ link.url }}" class="zar-quicklink {% unless link.active %}is-faded{% endunless %}">{{ link.title }}</a>
           {%- endfor -%}
         </div>
       </div>
@@ -67,27 +67,27 @@
         {%- case filter.type -%}
 
           {%- when 'boolean' -%}
-            <div class="elx-facet" data-facet="{{ dl }}">
-              <div class="elx-facet__title">{{ filter_label }}</div>
-              <div class="elx-facet__values">
+            <div class="zar-facet" data-facet="{{ dl }}">
+              <div class="zar-facet__title">{{ filter_label }}</div>
+              <div class="zar-facet__values">
                 {%- for filter_value in filter.values -%}
-                  <label class="elx-check">
+                  <label class="zar-check">
                     <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>
-                    <span class="elx-check__box"></span>
-                    <span class="elx-check__label">{{ filter_value.label }}</span>
+                    <span class="zar-check__box"></span>
+                    <span class="zar-check__label">{{ filter_value.label }}</span>
                   </label>
                 {%- endfor -%}
               </div>
             </div>
 
           {%- when 'list' -%}
-            <div class="elx-facet" data-facet="{{ dl }}">
-              <div class="elx-facet__title">{{ filter_label }}</div>
+            <div class="zar-facet" data-facet="{{ dl }}">
+              <div class="zar-facet__title">{{ filter_label }}</div>
 
               {%- if dl contains 'size' -%}
                 {%- comment -%}Size: collapse duplicate variants (50ml / 50 / 50.0 -> 50ml){%- endcomment -%}
                 {%- assign seen_sizes = '|' -%}
-                <div class="elx-pills">
+                <div class="zar-pills">
                   {%- for filter_value in filter.values -%}
                     {%- liquid
                       assign lbl = filter_value.label | downcase | strip
@@ -114,7 +114,7 @@
                     -%}
                     {%- unless seen_sizes contains dkey -%}
                       {%- assign seen_sizes = seen_sizes | append: disp | append: '|' -%}
-                      <label class="elx-pill {% if filter_value.active %}is-active{% endif %}">
+                      <label class="zar-pill {% if filter_value.active %}is-active{% endif %}">
                         <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>
                         <span>{{ disp }}</span>
                       </label>
@@ -123,9 +123,9 @@
                 </div>
 
               {%- elsif dl contains 'gender' -%}
-                <div class="elx-pills">
+                <div class="zar-pills">
                   {%- for filter_value in filter.values -%}
-                    <label class="elx-pill {% if filter_value.active %}is-active{% endif %}">
+                    <label class="zar-pill {% if filter_value.active %}is-active{% endif %}">
                       <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>
                       <span>{{ filter_value.label }}</span>
                     </label>
@@ -134,7 +134,7 @@
 
               {%- elsif dl contains 'brand' or dl contains 'vendor' -%}
                 {%- comment -%}Brand: show the metaobject's real name + a hover logo popover (lookup gated to this filter only).{%- endcomment -%}
-                <div class="elx-facet__values">
+                <div class="zar-facet__values">
                   {%- for filter_value in filter.values -%}
                     {%- liquid
                       assign b_name = filter_value.label | replace: '-', ' ' | capitalize
@@ -147,15 +147,15 @@
                         endif
                       endfor
                     -%}
-                    <label class="elx-check elx-brand">
+                    <label class="zar-check zar-brand">
                       <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>
-                      <span class="elx-check__box"></span>
-                      <span class="elx-check__label">
+                      <span class="zar-check__box"></span>
+                      <span class="zar-check__label">
                         {{- b_name -}}
-                        {%- if section.settings.show_filter_values_count %} <span class="elx-check__count">{{ filter_value.count }}</span>{% endif -%}
+                        {%- if section.settings.show_filter_values_count %} <span class="zar-check__count">{{ filter_value.count }}</span>{% endif -%}
                       </span>
                       {%- if b_logo != blank -%}
-                        <span class="elx-brand__pop" aria-hidden="true">
+                        <span class="zar-brand__pop" aria-hidden="true">
                           <img src="{{ b_logo | image_url: width: 240 }}" alt="{{ b_name | escape }}" loading="lazy">
                         </span>
                       {%- endif -%}
@@ -185,7 +185,7 @@
                   {%- endunless -%}
                 {%- endfor -%}
                 {%- assign group_list = group_names | split: delim -%}
-                <div class="elx-facet__values {% if group_list.size > 8 %}elx-facet__values--scroll{% endif %}">
+                <div class="zar-facet__values {% if group_list.size > 8 %}zar-facet__values--scroll{% endif %}">
                   {%- for g in group_list -%}
                     {%- assign g_lc = g | downcase -%}
                     {%- assign g_count = 0 -%}
@@ -196,25 +196,25 @@
                         {%- if fg == g_lc -%}
                           {%- assign g_count = g_count | plus: filter_value.count -%}
                           {%- if filter_value.active -%}{%- assign g_active = true -%}{%- endif -%}
-                          <input type="checkbox" class="elx-scent-member" name="{{ filter_value.param_name }}" value="{{ filter_value.value | escape }}" {% if filter_value.active %}checked{% endif %}>
+                          <input type="checkbox" class="zar-scent-member" name="{{ filter_value.param_name }}" value="{{ filter_value.value | escape }}" {% if filter_value.active %}checked{% endif %}>
                         {%- endif -%}
                       {%- endfor -%}
                     {%- endcapture -%}
-                    <label class="elx-check elx-scent-group">
-                      <input type="checkbox" class="elx-scent-toggle" {% if g_active %}checked{% endif %}>
-                      <span class="elx-check__box"></span>
-                      <span class="elx-check__label">
+                    <label class="zar-check zar-scent-group">
+                      <input type="checkbox" class="zar-scent-toggle" {% if g_active %}checked{% endif %}>
+                      <span class="zar-check__box"></span>
+                      <span class="zar-check__label">
                         {{- g -}}
-                        {%- if section.settings.show_filter_values_count %} <span class="elx-check__count">{{ g_count }}</span>{% endif -%}
+                        {%- if section.settings.show_filter_values_count %} <span class="zar-check__count">{{ g_count }}</span>{% endif -%}
                       </span>
-                      <span class="elx-scent-members" style="display:none">{{ members }}</span>
+                      <span class="zar-scent-members" style="display:none">{{ members }}</span>
                     </label>
                   {%- endfor -%}
                 </div>
 
               {%- elsif dl contains 'colour' or dl contains 'color' -%}
                 {%- comment -%}Zaria: colour filter rendered as visual swatches{%- endcomment -%}
-                <div class="elx-facet__values elx-swatches">
+                <div class="zar-facet__values zar-swatches">
                   {%- for filter_value in filter.values -%}
                     {%- assign cn = filter_value.label | downcase | strip -%}
                     {%- assign chex = '' -%}
@@ -262,23 +262,23 @@
                       {%- when 'charcoal' -%}{%- assign chex = '#36393d' -%}
                       {%- when 'mauve' -%}{%- assign chex = '#b48a9c' -%}
                     {%- endcase -%}
-                    <label class="elx-swatch {% if filter_value.active %}is-active{% endif %}{% if cn contains 'multicol' %} elx-swatch--multi{% endif %}" title="{{ filter_value.label | escape }}">
+                    <label class="zar-swatch {% if filter_value.active %}is-active{% endif %}{% if cn contains 'multicol' %} zar-swatch--multi{% endif %}" title="{{ filter_value.label | escape }}">
                       <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>
-                      <span class="elx-swatch__chip"{% if chex != '' %} style="background:{{ chex }}"{% endif %}></span>
-                      <span class="elx-swatch__label">{{ filter_value.label }}</span>
+                      <span class="zar-swatch__chip"{% if chex != '' %} style="background:{{ chex }}"{% endif %}></span>
+                      <span class="zar-swatch__label">{{ filter_value.label }}</span>
                     </label>
                   {%- endfor -%}
                 </div>
 
               {%- else -%}
-                <div class="elx-facet__values {% if filter.values.size > 8 %}elx-facet__values--scroll{% endif %}">
+                <div class="zar-facet__values {% if filter.values.size > 8 %}zar-facet__values--scroll{% endif %}">
                   {%- for filter_value in filter.values -%}
-                    <label class="elx-check">
+                    <label class="zar-check">
                       <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>
-                      <span class="elx-check__box"></span>
-                      <span class="elx-check__label">
+                      <span class="zar-check__box"></span>
+                      <span class="zar-check__label">
                         {{- filter_value.label -}}
-                        {%- if section.settings.show_filter_values_count %} <span class="elx-check__count">{{ filter_value.count }}</span>{% endif -%}
+                        {%- if section.settings.show_filter_values_count %} <span class="zar-check__count">{{ filter_value.count }}</span>{% endif -%}
                       </span>
                     </label>
                   {%- endfor -%}
@@ -292,9 +292,9 @@
       {%- comment -%}Price range — rendered at the very bottom of the filter{%- endcomment -%}
       {%- for filter in results.filters -%}
         {%- if filter.type == 'price_range' -%}
-          <div class="elx-facet elx-facet--price">
-            <div class="elx-facet__title">{{ filter.label }}</div>
-            <div class="elx-facet__price">
+          <div class="zar-facet zar-facet--price">
+            <div class="zar-facet__title">{{ filter.label }}</div>
+            <div class="zar-facet__price">
               {%- render 'price-range', filter: filter -%}
             </div>
           </div>
@@ -318,10 +318,10 @@
     window.__elxScentGroupInit = true;
     document.addEventListener('change', function (e) {
       var t = e.target;
-      if (!t || !t.classList || !t.classList.contains('elx-scent-toggle')) return;
-      var wrap = t.closest('.elx-scent-group');
+      if (!t || !t.classList || !t.classList.contains('zar-scent-toggle')) return;
+      var wrap = t.closest('.zar-scent-group');
       if (!wrap) return;
-      var members = wrap.querySelectorAll('.elx-scent-member');
+      var members = wrap.querySelectorAll('.zar-scent-member');
       for (var i = 0; i < members.length; i++) members[i].checked = t.checked;
     }, true);
   })();
@@ -334,7 +334,7 @@
     window.__elxBrandPopInit = true;
     function ensurePop(row) {
       if (row.__elxPop) return row.__elxPop;
-      var pop = row.querySelector('.elx-brand__pop');
+      var pop = row.querySelector('.zar-brand__pop');
       if (pop) {
         document.body.appendChild(pop);          // escape the sidebar's stacking context
         pop.style.position = 'fixed';
@@ -357,32 +357,32 @@
       pop.style.visibility = 'hidden';
     }
     document.addEventListener('mouseover', function (e) {
-      var row = e.target.closest && e.target.closest('.elx-brand'); if (row) show(row);
+      var row = e.target.closest && e.target.closest('.zar-brand'); if (row) show(row);
     });
     document.addEventListener('mouseout', function (e) {
-      var row = e.target.closest && e.target.closest('.elx-brand');
+      var row = e.target.closest && e.target.closest('.zar-brand');
       if (row && !(e.relatedTarget && row.contains(e.relatedTarget))) hide(row);
     });
     document.addEventListener('focusin', function (e) {
-      var row = e.target.closest && e.target.closest('.elx-brand'); if (row) show(row);
+      var row = e.target.closest && e.target.closest('.zar-brand'); if (row) show(row);
     });
     document.addEventListener('focusout', function (e) {
-      var row = e.target.closest && e.target.closest('.elx-brand'); if (row) hide(row);
+      var row = e.target.closest && e.target.closest('.zar-brand'); if (row) hide(row);
     });
     document.addEventListener('scroll', function () {
-      document.querySelectorAll('.elx-brand__pop').forEach(function (p) { p.style.opacity = '0'; p.style.visibility = 'hidden'; });
+      document.querySelectorAll('.zar-brand__pop').forEach(function (p) { p.style.opacity = '0'; p.style.visibility = 'hidden'; });
     }, true);
   })();
 </script>
 
 {% style %}
-  .elx-facets {
-    --elx-gold: #1a1a1a;
-    --elx-ink: #1a1a1a;
-    --elx-muted: #8c8c8c;
-    --elx-line: rgba(33, 33, 33, 0.16);
+  .zar-facets {
+    --zar-gold: #1a1a1a;
+    --zar-ink: #1a1a1a;
+    --zar-muted: #8c8c8c;
+    --zar-line: rgba(33, 33, 33, 0.16);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    color: var(--elx-ink);
+    color: var(--zar-ink);
     display: flex;
     flex-direction: column;
     background: #f4f3f1;
@@ -390,35 +390,35 @@
     border-radius: 4px;
   }
   /* Order: Category, then Scent (Family), then the rest; price last */
-  .elx-facet[data-facet*="category"] { order: -2; }
-  .elx-facet[data-facet="family"],
-  .elx-facet[data-facet*="scent"]    { order: -1; }
-  .elx-facet--price                  { order: 90; }
+  .zar-facet[data-facet*="category"] { order: -2; }
+  .zar-facet[data-facet="family"],
+  .zar-facet[data-facet*="scent"]    { order: -1; }
+  .zar-facet--price                  { order: 90; }
 
-  .elx-facets__head {
+  .zar-facets__head {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     padding-bottom: 12px;
-    border-bottom: 1px solid var(--elx-line);
+    border-bottom: 1px solid var(--zar-line);
   }
-  .elx-facets__clear {
+  .zar-facets__clear {
     font-size: 11px;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: var(--elx-gold);
+    color: var(--zar-gold);
     text-decoration: none;
     cursor: pointer;
   }
-  .elx-facets__clear:hover { text-decoration: underline; }
+  .zar-facets__clear:hover { text-decoration: underline; }
 
-  .elx-facet {
+  .zar-facet {
     padding: 20px 0;
-    border-bottom: 1px solid var(--elx-line);
+    border-bottom: 1px solid var(--zar-line);
   }
-  .elx-facet:first-of-type { padding-top: 2px; }
-  .elx-facet:last-of-type { border-bottom: 0; }
-  .elx-facet__title {
+  .zar-facet:first-of-type { padding-top: 2px; }
+  .zar-facet:last-of-type { border-bottom: 0; }
+  .zar-facet__title {
     font-size: 11px;
     font-weight: 600;
     letter-spacing: .22em;
@@ -427,31 +427,31 @@
     margin-bottom: 14px;
   }
 
-  .elx-facet__values { display: flex; flex-direction: column; gap: 11px; }
-  .elx-facet__values--scroll {
+  .zar-facet__values { display: flex; flex-direction: column; gap: 11px; }
+  .zar-facet__values--scroll {
     max-height: 230px;
     overflow-y: auto;
     padding-right: 8px;
     scrollbar-width: thin;
-    scrollbar-color: var(--elx-gold) transparent;
+    scrollbar-color: var(--zar-gold) transparent;
   }
-  .elx-facet__values--scroll::-webkit-scrollbar { width: 5px; }
-  .elx-facet__values--scroll::-webkit-scrollbar-thumb {
-    background: var(--elx-gold); border-radius: 3px;
+  .zar-facet__values--scroll::-webkit-scrollbar { width: 5px; }
+  .zar-facet__values--scroll::-webkit-scrollbar-thumb {
+    background: var(--zar-gold); border-radius: 3px;
   }
 
   /* ---- Checkbox rows (brand, category, class, family, country) ---- */
-  .elx-check {
+  .zar-check {
     display: flex;
     align-items: center;
     gap: 11px;
     cursor: pointer;
     font-size: 14px;
     line-height: 1.3;
-    color: var(--elx-ink);
+    color: var(--zar-ink);
   }
-  .elx-check input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .elx-check__box {
+  .zar-check input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .zar-check__box {
     flex: 0 0 auto;
     width: 17px; height: 17px;
     border: 1.5px solid #cccccc;
@@ -459,7 +459,7 @@
     position: relative;
     transition: border-color .15s ease, background-color .15s ease;
   }
-  .elx-check__box::after {
+  .zar-check__box::after {
     content: "";
     position: absolute;
     left: 5px; top: 1px;
@@ -469,28 +469,28 @@
     transform: rotate(45deg) scale(0);
     transition: transform .15s ease;
   }
-  .elx-check input:checked ~ .elx-check__box {
-    background: var(--elx-gold);
-    border-color: var(--elx-gold);
+  .zar-check input:checked ~ .zar-check__box {
+    background: var(--zar-gold);
+    border-color: var(--zar-gold);
   }
-  .elx-check input:checked ~ .elx-check__box::after { transform: rotate(45deg) scale(1); }
-  .elx-check input:focus-visible ~ .elx-check__box {
-    outline: 2px solid var(--elx-gold); outline-offset: 2px;
+  .zar-check input:checked ~ .zar-check__box::after { transform: rotate(45deg) scale(1); }
+  .zar-check input:focus-visible ~ .zar-check__box {
+    outline: 2px solid var(--zar-gold); outline-offset: 2px;
   }
-  .elx-check:hover .elx-check__label { color: #000; }
-  .elx-check__label { flex: 1; }
-  .elx-check__count { color: var(--elx-muted); font-size: 12px; }
+  .zar-check:hover .zar-check__label { color: #000; }
+  .zar-check__label { flex: 1; }
+  .zar-check__count { color: var(--zar-muted); font-size: 12px; }
 
   /* ---- Brand rows: elegant hover logo popover ---- */
   /* shrink the brand row to its content so the logo pops right next to the name */
-  .elx-brand {
+  .zar-brand {
     position: relative;
     align-self: flex-start;
     width: -moz-fit-content;
     width: fit-content;
     max-width: 100%;
   }
-  .elx-brand__pop {
+  .zar-brand__pop {
     position: fixed;            /* escape the sidebar's scroll/clip; float on top */
     left: 0;
     top: 0;
@@ -502,7 +502,7 @@
     justify-content: center;
     padding: 12px 16px;
     background: #ffffff !important;
-    border: 1px solid var(--elx-gold);
+    border: 1px solid var(--zar-gold);
     border-radius: 10px;
     box-shadow: 0 10px 28px rgba(26, 18, 8, .16);
     opacity: 0;
@@ -511,7 +511,7 @@
     transition: opacity .28s ease, transform .28s ease;
     z-index: 2147483000;        /* above all page elements */
   }
-  .elx-brand__pop::before {
+  .zar-brand__pop::before {
     content: "";
     position: absolute;
     left: -6px;
@@ -520,10 +520,10 @@
     width: 11px;
     height: 11px;
     background: #fff;
-    border-left: 1px solid var(--elx-gold);
-    border-bottom: 1px solid var(--elx-gold);
+    border-left: 1px solid var(--zar-gold);
+    border-bottom: 1px solid var(--zar-gold);
   }
-  .elx-brand__pop img {
+  .zar-brand__pop img {
     max-width: 100%;
     max-height: 100%;
     width: auto;
@@ -534,8 +534,8 @@
      so it can never be clipped or stacked behind the product grid) */
 
   /* ---- Pills (gender, size) ---- */
-  .elx-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-  .elx-pill {
+  .zar-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .zar-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -549,23 +549,23 @@
     transition: all .15s ease;
     white-space: nowrap;
   }
-  .elx-pill input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .elx-pill:hover { border-color: var(--elx-gold); }
-  .elx-pill.is-active,
-  .elx-pill:has(input:checked) {
-    background: var(--elx-gold);
-    border-color: var(--elx-gold);
+  .zar-pill input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .zar-pill:hover { border-color: var(--zar-gold); }
+  .zar-pill.is-active,
+  .zar-pill:has(input:checked) {
+    background: var(--zar-gold);
+    border-color: var(--zar-gold);
     color: #fff;
   }
 
   /* ---- Quick links ---- */
-  .elx-quicklink { font-size: 14px; text-decoration: none; color: var(--elx-ink); }
-  .elx-quicklink.is-faded { color: var(--elx-muted); }
-  .elx-quicklink:hover { color: var(--elx-gold); }
+  .zar-quicklink { font-size: 14px; text-decoration: none; color: var(--zar-ink); }
+  .zar-quicklink.is-faded { color: var(--zar-muted); }
+  .zar-quicklink:hover { color: var(--zar-gold); }
 
   /* ---- Price range — realistic fader / volume control ---- */
-  .elx-facet__price .price-range { display: block; }
-  .elx-facet__price .range-group {
+  .zar-facet__price .price-range { display: block; }
+  .zar-facet__price .range-group {
     display: none;            /* simple price filter — drag fader removed */
     position: relative;
     height: 34px;
@@ -573,7 +573,7 @@
     background: none;
   }
   /* recessed groove channel */
-  .elx-facet__price .range-group::before {
+  .zar-facet__price .range-group::before {
     content: "";
     position: absolute;
     left: 0; right: 0; top: 50%;
@@ -583,7 +583,7 @@
     box-shadow: inset 0 1px 2px rgba(26, 26, 26,.28), 0 1px 0 rgba(255,255,255,.7);
   }
   /* brass "level" fill between the two handles */
-  .elx-facet__price .range-group::after {
+  .zar-facet__price .range-group::after {
     content: "";
     position: absolute;
     top: 50%; transform: translateY(-50%);
@@ -593,7 +593,7 @@
     background: linear-gradient(180deg, #c98a6c, #9c5733);
     box-shadow: inset 0 1px 1px rgba(255,255,255,.5);
   }
-  .elx-facet__price .range {
+  .zar-facet__price .range {
     position: absolute;
     left: 0; right: 0; top: 0;
     width: 100%; height: 34px;
@@ -604,38 +604,38 @@
     appearance: none;
   }
   /* tactile fader knob: metallic cap with a center grip line */
-  .elx-facet__price .range::-webkit-slider-thumb {
+  .zar-facet__price .range::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     pointer-events: auto;
     width: 20px; height: 28px;
     border-radius: 5px;
-    border: 1px solid var(--elx-gold);
+    border: 1px solid var(--zar-gold);
     background-image:
       linear-gradient(180deg, rgba(26, 26, 26,0) 43%, rgba(26, 26, 26,.55) 43%, rgba(26, 26, 26,.55) 57%, rgba(26, 26, 26,0) 57%),
       linear-gradient(180deg, #ffffff 0%, #f5f5f5 45%, #ededed 100%);
     box-shadow: 0 2px 5px rgba(26, 26, 26,.45), inset 0 1px 0 rgba(255,255,255,.9);
     cursor: grab;
   }
-  .elx-facet__price .range::-webkit-slider-thumb:active { cursor: grabbing; }
-  .elx-facet__price .range::-moz-range-thumb {
+  .zar-facet__price .range::-webkit-slider-thumb:active { cursor: grabbing; }
+  .zar-facet__price .range::-moz-range-thumb {
     pointer-events: auto;
     width: 20px; height: 28px;
     border-radius: 5px;
-    border: 1px solid var(--elx-gold);
+    border: 1px solid var(--zar-gold);
     background-image:
       linear-gradient(180deg, rgba(26, 26, 26,0) 43%, rgba(26, 26, 26,.55) 43%, rgba(26, 26, 26,.55) 57%, rgba(26, 26, 26,0) 57%),
       linear-gradient(180deg, #ffffff 0%, #f5f5f5 45%, #ededed 100%);
     box-shadow: 0 2px 5px rgba(26, 26, 26,.45), inset 0 1px 0 rgba(255,255,255,.9);
     cursor: grab;
   }
-  .elx-facet__price .range::-moz-range-track { background: transparent; }
-  .elx-facet__price .input-group {
+  .zar-facet__price .range::-moz-range-track { background: transparent; }
+  .zar-facet__price .input-group {
     display: flex;
     align-items: center;
     gap: 10px;
   }
-  .elx-facet__price .input-prefix {
+  .zar-facet__price .input-prefix {
     flex: 1;
     display: flex;
     align-items: center;
@@ -645,10 +645,10 @@
     padding: 7px 10px;
     background: #fff;
   }
-  .elx-facet__price .input-prefix:focus-within { border-color: var(--elx-gold); }
-  .elx-facet__price .input-prefix .prefix { color: var(--elx-muted); }
-  .elx-facet__price .field {
+  .zar-facet__price .input-prefix:focus-within { border-color: var(--zar-gold); }
+  .zar-facet__price .input-prefix .prefix { color: var(--zar-muted); }
+  .zar-facet__price .field {
     border: 0; outline: 0; width: 100%; background: none;
-    font-size: 14px; color: var(--elx-ink);
+    font-size: 14px; color: var(--zar-ink);
   }
 {% endstyle %}

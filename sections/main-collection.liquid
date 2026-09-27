@@ -228,8 +228,8 @@
 
               {%- comment -%}Desktop: Filter toggle, placed right after the grid selector{%- endcomment -%}
               {%- if show_filters and section.settings.filter_layout == 'sidebar' -%}
-                <div class="collection-toolbar__button-container elx-filter-toggle-container md-max:hidden">
-                  <button type="button" class="collection-toolbar__button elx-filter-toggle heading text-xxs w-full" aria-expanded="false">
+                <div class="collection-toolbar__button-container zar-filter-toggle-container md-max:hidden">
+                  <button type="button" class="collection-toolbar__button zar-filter-toggle heading text-xxs w-full" aria-expanded="false">
                     <span class="text-with-icon justify-center">
                       {{- 'collection.faceting.filter_button' | t | default: 'Filter' -}}
                       {% if active_values_count > 0 %}({{ active_values_count }}){% endif %}
@@ -427,7 +427,7 @@
       s = s || sec();
       if (!s) return;
       var col = s.querySelector('.collection');
-      var btn = s.querySelector('.elx-filter-toggle');
+      var btn = s.querySelector('.zar-filter-toggle');
       if (col) col.classList.toggle('is-filters-collapsed', !window.__elxFiltersOpen);
       if (btn) {
         btn.classList.toggle('is-open', !!window.__elxFiltersOpen);
@@ -437,7 +437,7 @@
 
     /* delegated click — survives DOM replacement from the facet AJAX update */
     document.addEventListener('click', function (e) {
-      var btn = e.target.closest ? e.target.closest('.elx-filter-toggle') : null;
+      var btn = e.target.closest ? e.target.closest('.zar-filter-toggle') : null;
       if (!btn) return;
       var s = sec();
       if (!s || !s.contains(btn)) return;
@@ -461,9 +461,9 @@
 <script>
   (function () {
     document.addEventListener('mouseover', function (e) {
-      var brand = e.target.closest ? e.target.closest('.elx-brand') : null;
+      var brand = e.target.closest ? e.target.closest('.zar-brand') : null;
       if (!brand) return;
-      var pop = brand.querySelector('.elx-brand__pop');
+      var pop = brand.querySelector('.zar-brand__pop');
       if (!pop) return;
       var r = brand.getBoundingClientRect();
       pop.style.left = (r.right + 12) + 'px';

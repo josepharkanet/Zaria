@@ -47,8 +47,8 @@
   handle="{{ product.handle | escape }}"
 >
   {%- comment -%} Custom wishlist heart (self-contained) — pinned to the card's very bottom-left corner {%- endcomment -%}
-  <button type="button" class="elx-heart" data-handle="{{ product.handle }}" aria-label="Save to wishlist" aria-pressed="false">
-    <svg class="elx-heart__icon" viewBox="0 0 24 24" aria-hidden="true">
+  <button type="button" class="zar-heart" data-handle="{{ product.handle }}" aria-label="Save to wishlist" aria-pressed="false">
+    <svg class="zar-heart__icon" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
     </svg>
   </button>
@@ -62,15 +62,15 @@
   {%- endif -%}
   {%- capture elx_is_offer -%}{%- render 'is-gift-offer', product: product -%}{%- endcapture -%}
   {%- if elx_disc > 0 or elx_is_offer contains 'true' -%}
-    <div class="elx-badges" aria-hidden="true">
+    <div class="zar-badges" aria-hidden="true">
       {%- if elx_is_offer contains 'true' -%}
-        <span class="elx-badge elx-badge--gift">
-          <svg class="elx-badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9"/><path d="M12 8v13"/><path d="M12 8S10.5 3.5 8 4c-1.8.4-1.8 3 0 3.4 1.6.4 4 .6 4 .6zM12 8s1.5-4.5 4-4c1.8.4 1.8 3 0 3.4-1.6.4-4 .6-4 .6z"/></svg>
+        <span class="zar-badge zar-badge--gift">
+          <svg class="zar-badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9"/><path d="M12 8v13"/><path d="M12 8S10.5 3.5 8 4c-1.8.4-1.8 3 0 3.4 1.6.4 4 .6 4 .6zM12 8s1.5-4.5 4-4c1.8.4 1.8 3 0 3.4-1.6.4-4 .6-4 .6z"/></svg>
           {{ shop.metafields.zaria_promotions.gift_offer_badge_text.value | default: 'Free Gift' }}
         </span>
       {%- endif -%}
       {%- if elx_disc > 0 -%}
-        <span class="elx-badge elx-badge--sale">{{ 'custom.product_card.percent_off' | t: percent: elx_disc }}</span>
+        <span class="zar-badge zar-badge--sale">{{ 'custom.product_card.percent_off' | t: percent: elx_disc }}</span>
       {%- endif -%}
     </div>
   {%- endif -%}
@@ -226,7 +226,7 @@
             {% endif %}
             data-instant
           >
-            {%- render 'elx-product-title', product: product -%}
+            {%- render 'zar-product-title', product: product -%}
           </a>
         {%- endif -%}
 
