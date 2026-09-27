@@ -2310,11 +2310,11 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
    Sits in the bottom-left corner of the image, in a small cell that uses the
    card's left + bottom edges with an elegant gray division on its top + right. */
 /* Hide ANY leftover wishlist-app element anywhere (app uninstalled), but never our
-   own elements (.elx-*) or the nav heart. */
-:is([class*="ishlist"], [class*="wym"], [class*="swym"], [class*="Wishlist"]):not([class*="elx-"]):not(.header__wishlist-link):not(.header__wishlist-count) {
+   own elements (.zar-*) or the nav heart. */
+:is([class*="ishlist"], [class*="wym"], [class*="swym"], [class*="Wishlist"]):not([class*="zar-"]):not(.header__wishlist-link):not(.header__wishlist-count) {
   display: none !important;
 }
-.product-card > .elx-heart {
+.product-card > .zar-heart {
   position: absolute;
   left: 0;
   bottom: 0;
@@ -2335,11 +2335,11 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   cursor: pointer;
   transition: color .2s ease, border-color .2s ease;
 }
-.product-card > .elx-heart:hover {
+.product-card > .zar-heart:hover {
   color: #a9a9a9;                                     /* darker gray on hover — no brass until saved */
   border-color: rgba(0, 0, 0, 0.12);
 }
-.product-card > .elx-heart .elx-heart__icon {
+.product-card > .zar-heart .zar-heart__icon {
   width: 15px;
   height: 15px;
 }
@@ -2354,7 +2354,7 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
    BEHIND the product photo: the bottle overlaps in front, the badge shows through
    the photo's transparent areas around it. */
 .product-card__figure { z-index: 1; }
-.product-card > .elx-badges {
+.product-card > .zar-badges {
   position: absolute;
   top: 0;
   right: 0;
@@ -2366,32 +2366,32 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   pointer-events: none;
 }
 /* The var() fallbacks below are this theme's own look, and they are what renders
-   unless the Elixir Promotions app has a design saved. See elx-design-vars.liquid:
+   unless the Elixir Promotions app has a design saved. See zar-design-vars.liquid:
    the app's Storefront design page writes them, and nothing else reads them. */
-.elx-badge {
+.zar-badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   padding: 7px 11px;
-  font-size: var(--elx-badge-fs, 0.58rem);
-  letter-spacing: var(--elx-badge-ls, 0.08em);
-  font-weight: var(--elx-badge-fw, 600);
+  font-size: var(--zar-badge-fs, 0.58rem);
+  letter-spacing: var(--zar-badge-ls, 0.08em);
+  font-weight: var(--zar-badge-fw, 600);
   line-height: 1;
-  text-transform: var(--elx-badge-tt, uppercase);
+  text-transform: var(--zar-badge-tt, uppercase);
   white-space: nowrap;
-  border-bottom-left-radius: var(--elx-badge-radius-bl, 11px);   /* rounded inner corner — the tab edge */
+  border-bottom-left-radius: var(--zar-badge-radius-bl, 11px);   /* rounded inner corner — the tab edge */
 }
-.product-card > .elx-badges .elx-badge:first-child {
-  border-top-right-radius: var(--elx-badge-radius-tr, 12px);     /* matches the card corner */
+.product-card > .zar-badges .zar-badge:first-child {
+  border-top-right-radius: var(--zar-badge-radius-tr, 12px);     /* matches the card corner */
 }
-.elx-badge--sale { background: var(--elx-badge-sale-bg, #1a1a1a); color: var(--elx-badge-fg, #ffffff); }
-.elx-badge--gift { background: var(--elx-badge-gift-bg, #1a1a1a); color: var(--elx-badge-fg, #ffffff); }
-.elx-badge__icon { width: 12px; height: 12px; color: var(--elx-badge-sale-bg, #1a1a1a); }
+.zar-badge--sale { background: var(--zar-badge-sale-bg, #1a1a1a); color: var(--zar-badge-fg, #ffffff); }
+.zar-badge--gift { background: var(--zar-badge-gift-bg, #1a1a1a); color: var(--zar-badge-fg, #ffffff); }
+.zar-badge__icon { width: 12px; height: 12px; color: var(--zar-badge-sale-bg, #1a1a1a); }
 @media (max-width: 600px) {
   /* On phones the cards are half-width, so scale the badge down from the app's
      chosen size to keep it as subtle as it looks on the desktop/laptop view. */
-  .elx-badge { font-size: calc(var(--elx-badge-fs, 0.58rem) * 0.8); padding: 4px 7px; gap: 4px; letter-spacing: 0.05em; }
-  .elx-badge__icon { width: 10px; height: 10px; }
+  .zar-badge { font-size: calc(var(--zar-badge-fs, 0.58rem) * 0.8); padding: 4px 7px; gap: 4px; letter-spacing: 0.05em; }
+  .zar-badge__icon { width: 10px; height: 10px; }
 }
 
 /* Gift line — small "Free gift" tag (replaces the discount pill) */
@@ -2457,13 +2457,13 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
 
 /* Default heart colour applies in EVERY context (grid, carousels like New Arrivals
    / Be classy, list view) — not just direct children of .product-card. */
-.elx-heart {
+.zar-heart {
   color: #cccccc !important;                          /* force gray — nothing may tint it brass */
 }
-.elx-heart:not(.is-saved):hover {
+.zar-heart:not(.is-saved):hover {
   color: #a9a9a9 !important;
 }
-.elx-heart__icon {
+.zar-heart__icon {
   width: 19px;
   height: 19px;
   fill: none !important;
@@ -2471,14 +2471,14 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   stroke-width: 1.7;
   transition: fill .2s ease, stroke .2s ease, transform .2s cubic-bezier(.16, 1, .3, 1);
 }
-.elx-heart.is-saved {
+.zar-heart.is-saved {
   color: #1a1a1a !important;                          /* saved = filled brass — clear active state on any background */
 }
-.elx-heart.is-saved .elx-heart__icon {
+.zar-heart.is-saved .zar-heart__icon {
   fill: #1a1a1a !important;
   stroke: #1a1a1a !important;
 }
-.elx-heart--pulse .elx-heart__icon {
+.zar-heart--pulse .zar-heart__icon {
   transform: scale(1.28);
 }
 /* Cart actions: Checkout + Continue shopping.
@@ -2525,7 +2525,7 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
 }
 
 /* 404 page button: black & white */
-.elx-not-found .button {
+.zar-not-found .button {
   --button-background: 20 20 20 !important;
   --button-text-color: 255 255 255 !important;
   --button-outline-color: 20 20 20 !important;
@@ -4378,10 +4378,10 @@ product-rerender {
   }
   .announcement-bar__carousel > .is-selected {
     white-space: nowrap;
-    animation: elx-announcement-marquee 30s linear infinite;
+    animation: zar-announcement-marquee 30s linear infinite;
     will-change: transform;
   }
-  @keyframes elx-announcement-marquee {
+  @keyframes zar-announcement-marquee {
     from { transform: translateX(100%); }
     to { transform: translateX(-100%); }
   }
@@ -9450,7 +9450,7 @@ html.theme-dark .color-scheme--scheme-marquee-custom {
    Scaling the media (the image link) zooms both the primary and the
    hover-swap image together; badges and the quick-add button stay put. */
 .product-card__media,
-.elx-light-surface {
+.zar-light-surface {
   overflow: hidden;
   transition: transform .55s cubic-bezier(.16, 1, .3, 1);
 }
@@ -9562,7 +9562,7 @@ html.theme-dark .color-scheme--scheme-marquee-custom {
   text-transform: uppercase;
   white-space: nowrap;
 }
-.elx-ribbon-icon {
+.zar-ribbon-icon {
   display: inline-block;
   vertical-align: middle;
   width: 13px;
@@ -9579,8 +9579,8 @@ html.theme-dark .color-scheme--scheme-marquee-custom {
 :root {
   --font-heading-family: var(--heading-font-family);
   --font-body-family: var(--text-font-family);
-  --elx-serif: var(--heading-font-family);
-  --elx-sans: var(--text-font-family);
+  --zar-serif: var(--heading-font-family);
+  --zar-sans: var(--text-font-family);
   --serif: var(--heading-font-family);
 }
 
@@ -9679,7 +9679,7 @@ facets-drawer .button:hover {
 .facets-sidebar {
   isolation: isolate;
   /* Fill the full column height so the gray panel can reach the section below.
-     Stickiness lives on .elx-facets instead, so the filters still stay pinned. */
+     Stickiness lives on .zar-facets instead, so the filters still stay pinned. */
   position: relative;
   align-self: stretch;
   top: auto !important;   /* neutralize the base sticky `top` now that we're relative */
@@ -9695,7 +9695,7 @@ facets-drawer .button:hover {
   z-index: 0;
 }
 .facets-sidebar > * { position: relative; z-index: 1; }
-.facets-sidebar .elx-facets {
+.facets-sidebar .zar-facets {
   border-radius: 0 !important;
   background: transparent !important;
   /* shift content left into the bled strip (margins cancel, so width/dividers stay inside the panel) */
@@ -9711,8 +9711,8 @@ facets-drawer .button:hover {
   overscroll-behavior: contain;
   scrollbar-width: thin;
 }
-.facets-sidebar .elx-facets::-webkit-scrollbar { width: 6px; }
-.facets-sidebar .elx-facets::-webkit-scrollbar-thumb {
+.facets-sidebar .zar-facets::-webkit-scrollbar { width: 6px; }
+.facets-sidebar .zar-facets::-webkit-scrollbar-thumb {
   background: rgba(33, 33, 33, 0.25);
   border-radius: 3px;
 }
@@ -9724,8 +9724,8 @@ facets-drawer .button:hover {
 /* ── Inline filter toggle: collapse the sidebar until the Filter button is clicked ── */
 .collection.is-filters-collapsed { --collection-grid-template: minmax(0, 1fr) !important; }
 .collection.is-filters-collapsed .facets-sidebar { display: none !important; }
-.elx-filter-toggle svg { transition: transform .25s ease; }
-.elx-filter-toggle.is-open svg { transform: rotate(180deg); }
+.zar-filter-toggle svg { transition: transform .25s ease; }
+.zar-filter-toggle.is-open svg { transform: rotate(180deg); }
 
 /* ── Grid view (medium) columns follow the filter state: 4 default, 3 when filter open ── */
 @media (min-width: 1000px) {
@@ -9888,9 +9888,9 @@ body {
 }
 /* slow Ken-Burns drift on the image */
 [id$="__image_with_text_overlay_4fKA4Q"] .content-over-media img {
-  animation: elx-hero-kb 22s ease-in-out infinite alternate;
+  animation: zar-hero-kb 22s ease-in-out infinite alternate;
 }
-@keyframes elx-hero-kb {
+@keyframes zar-hero-kb {
   from { transform: scale(1); }
   to   { transform: scale(1.07); }
 }
@@ -9988,8 +9988,8 @@ h1,h2,h3,h4,h5,h6,.h0,.h1,.h2,.h3,.h4,.h5,.h6{font-family:"Jost",-apple-system,B
 .product-card .price,.product-card .price-list{font-family:"Jost",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important;font-size:12px;letter-spacing:.06em;color:#6a6a6a;justify-content:center;}
 .product-card .price--on-sale .price__sale,.product-card .price__sale{color:#1a1a1a;}
 /* strip the Elixir commerce clutter on cards for a clean couture grid */
-.product-card .elx-heart,
-.product-card .elx-badges,
+.product-card .zar-heart,
+.product-card .zar-badges,
 .product-card .product-card__quick-add-button,
 .product-card__brand,
 .product-card__brand--logo,
@@ -10044,19 +10044,19 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .product-card .product-card__image--secondary{opacity:0!important;transition:opacity .18s ease;}
 
 /* ===== Zaria: colour filter as visual swatches (grid, wraps vertically, no h-scroll) ===== */
-.elx-swatches{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:16px 6px;padding-top:6px;max-height:none!important;overflow:visible!important;}
-.elx-swatch{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;width:auto;min-width:0;text-align:center;}
-.elx-swatch__label{word-break:break-word;hyphens:auto;}
-.elx-swatch input{position:absolute;opacity:0;width:0;height:0;pointer-events:none;}
-.elx-swatch__chip{width:26px;height:26px;border-radius:50%;background:#ddd;border:1px solid rgba(0,0,0,.22);box-shadow:inset 0 0 0 2px #fff;transition:transform .15s ease,box-shadow .15s ease;}
-.elx-swatch--multi .elx-swatch__chip{background:conic-gradient(from 0deg,#c0392b,#e7c65e,#4e7a4e,#3f6fb0,#6b3f8f,#c0392b)!important;}
-.elx-swatch__label{font-size:10.5px;letter-spacing:.03em;color:#6a6a6a;line-height:1.2;}
-.elx-swatch:hover .elx-swatch__chip{transform:scale(1.09);}
-.elx-swatch.is-active .elx-swatch__chip{box-shadow:inset 0 0 0 2px #fff,0 0 0 2px #1a1a1a;}
-.elx-swatch.is-active .elx-swatch__label{color:#1a1a1a;font-weight:500;}
+.zar-swatches{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:16px 6px;padding-top:6px;max-height:none!important;overflow:visible!important;}
+.zar-swatch{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;width:auto;min-width:0;text-align:center;}
+.zar-swatch__label{word-break:break-word;hyphens:auto;}
+.zar-swatch input{position:absolute;opacity:0;width:0;height:0;pointer-events:none;}
+.zar-swatch__chip{width:26px;height:26px;border-radius:50%;background:#ddd;border:1px solid rgba(0,0,0,.22);box-shadow:inset 0 0 0 2px #fff;transition:transform .15s ease,box-shadow .15s ease;}
+.zar-swatch--multi .zar-swatch__chip{background:conic-gradient(from 0deg,#c0392b,#e7c65e,#4e7a4e,#3f6fb0,#6b3f8f,#c0392b)!important;}
+.zar-swatch__label{font-size:10.5px;letter-spacing:.03em;color:#6a6a6a;line-height:1.2;}
+.zar-swatch:hover .zar-swatch__chip{transform:scale(1.09);}
+.zar-swatch.is-active .zar-swatch__chip{box-shadow:inset 0 0 0 2px #fff,0 0 0 2px #1a1a1a;}
+.zar-swatch.is-active .zar-swatch__label{color:#1a1a1a;font-weight:500;}
 
 /* ===== Zaria: neutralize leftover Elixir gold accent in facets -> couture black ===== */
-:root{--elx-gold:#1a1a1a !important;}
+:root{--zar-gold:#1a1a1a !important;}
 
 /* ===== Zaria: product image edge-to-edge on the card (kill the theme's card padding) ===== */
 .product-card{padding:0!important;}

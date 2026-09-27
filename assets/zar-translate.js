@@ -140,7 +140,7 @@
       status.textContent = 'Saving… (first save can take ~20s while the index builds)';
       fetch(WORKER + '/save', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json', 'x-elx-key': KEY},
+        headers: {'Content-Type': 'application/json', 'x-zar-key': KEY},
         body: JSON.stringify({english: english, arabic: arabic, locale: 'ar'}),
       }).then(function (r) { return r.json(); }).then(function (j) {
         if (j.ok) {
