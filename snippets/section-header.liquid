@@ -17,7 +17,8 @@
         {%- endif -%}
 
         {%- if heading != blank -%}
-          <h2 class="{{ heading_style | default: 'h2' }}">{{- heading -}}</h2>
+          {%- assign _htag = heading_tag | default: 'h2' -%}
+          <{{ _htag }} class="{{ heading_style | default: 'h2' }}">{{- heading -}}</{{ _htag }}>
         {%- endif -%}
 
         {{- content -}}
