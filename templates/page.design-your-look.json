@@ -1,12 +1,50 @@
 {
   "sections": {
-    "main": {
-      "type": "main-page",
+    "hero": {
+      "type": "design-your-look",
       "settings": {
-        "show_title": true,
-        "page_width": "lg"
+        "height": 66,
+        "focal": "center",
+        "overline": "Custom Design",
+        "heading": "Design Your Look",
+        "body": "Commission a piece made only for you. Share your vision, your measurements and your occasion, and our designers will bring it to life.",
+        "button_label": "Start your design",
+        "button_url": "http://sc25oof3tkoifl6da9udzu3p.2.24.130.10.sslip.io",
+        "open_in_new_tab": true
+      }
+    },
+    "journey": {
+      "type": "zaria-values",
+      "settings": {
+        "scheme": "white",
+        "eyebrow": "The Zaria Journey",
+        "heading": "How your piece is made",
+        "marker": "number",
+        "columns": "4",
+        "align": "center",
+        "dividers": false
+      },
+      "blocks": {
+        "s1": { "type": "value", "settings": { "icon": "none", "title": "The Vision", "text": "Share your inspiration, occasion and measurements. We listen closely to understand the piece you have in mind." } },
+        "s2": { "type": "value", "settings": { "icon": "none", "title": "The Design", "text": "We refine the silhouette, fabric and finishing with you, until every detail feels right." } },
+        "s3": { "type": "value", "settings": { "icon": "none", "title": "The Atelier", "text": "Your piece is cut and finished by hand in our Dubai atelier, with care at every stitch." } },
+        "s4": { "type": "value", "settings": { "icon": "none", "title": "The Fitting", "text": "A final fitting ensures every line falls exactly as it should, made to your measure." } }
+      },
+      "block_order": ["s1", "s2", "s3", "s4"]
+    },
+    "cta": {
+      "type": "design-your-look",
+      "settings": {
+        "height": 48,
+        "focal": "center",
+        "overline": "Ready when you are",
+        "heading": "Begin your bespoke journey",
+        "body": "Open the Zaria Design Studio to share your vision, choose your fabric and submit your measurements.",
+        "button_label": "Start your design",
+        "button_url": "http://sc25oof3tkoifl6da9udzu3p.2.24.130.10.sslip.io",
+        "open_in_new_tab": true
       }
     }
   },
-  "order": ["main"]
+  "order": ["hero", "journey", "cta"]
 }
