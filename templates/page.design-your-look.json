@@ -3,6 +3,7 @@
     "hero": {
       "type": "design-your-look",
       "settings": {
+        "scheme": "light",
         "height": 66,
         "focal": "center",
         "overline": "Custom Design",
