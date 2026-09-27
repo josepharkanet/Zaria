@@ -40,7 +40,7 @@
         "show_country_flag": false,
         "show_locale_selector": true,
         "transparent_header_text_color": "#ffffff",
-        "transparent_logo": "shopify://shop_images/elixir_logo_white_-Photoroom.png"
+        "transparent_logo": ""
       }
     },
     "announcement-bar": {

@@ -303,8 +303,8 @@
             {%- endif -%}
 
             {%- comment -%}
-              On the "offers" collection, also surface the gift-offer products (e.g. Maison
-              Crivelli) — they aren't price-discounted so they wouldn't otherwise appear here.
+              On the "offers" collection, also surface the gift-offer products
+              (gift-with-purchase items) that aren't price-discounted so they wouldn't otherwise appear here.
             {%- endcomment -%}
             {%- assign offers_inject = false -%}
             {%- assign offers_gift_col = shop.metafields.elixir_promotions.gift_offer_collection.value -%}
