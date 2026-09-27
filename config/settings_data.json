@@ -47,7 +47,7 @@
     "social_snapchat": "",
     "favicon": "shopify://shop_images/ChatGPT_Image_May_23_2026_07_15_36_PM.png",
     "ai_assistant_enabled": false,
-    "ai_assistant_endpoint": "https://elixir-assistant.arkanet.workers.dev",
+    "ai_assistant_endpoint": "",
     "gift_offer_collection": "",
     "gift_offer_threshold": 1,
     "gift_offer_badge_text": "Get a free gift",

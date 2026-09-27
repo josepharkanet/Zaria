@@ -861,7 +861,7 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "Floating AI concierge (Gemini). Deploy the elixir-assistant Cloudflare Worker, paste its URL below, and enable. Manage its knowledge in an admin Page whose handle you set here."
+        "content": "Floating AI concierge (Gemini). Deploy the AI assistant Cloudflare Worker, paste its URL below, and enable. Manage its knowledge in an admin Page whose handle you set here."
       },
       {
         "type": "checkbox",
@@ -873,7 +873,7 @@
         "type": "url",
         "id": "ai_assistant_endpoint",
         "label": "Assistant endpoint URL",
-        "info": "The deployed Cloudflare Worker URL, e.g. https://elixir-assistant.xxx.workers.dev"
+        "info": "The deployed Cloudflare Worker URL, e.g. https://your-assistant.xxx.workers.dev"
       },
       {
         "type": "text",

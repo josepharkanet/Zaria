@@ -529,7 +529,7 @@
   "custom": {
     "about_page": {
       "story_heading": "OUR STORY",
-      "story_text": "Founded in Dubai, Zaria is a modern house of luxury perfumery, blending timeless artistry with contemporary elegance. It is the newest venture from the leadership behind Extravaganza one of the Middle East's most established names in prestige beauty born of that same expertise, but devoted to something more intimate: the world's finest niche fragrance houses, and the collectors who seek them.",
+      "story_text": "Founded in Dubai, Zaria is a modern house of fine fabrics and modest couture, blending timeless artistry with contemporary elegance. We bring together the world's finest cloth, from luxe silks and fine cottons to chiffons and hand-embellished fabrics by the metre, alongside made-to-measure design for the women who wear them.",
       "md_role": "CHAIRMAN",
       "md_intro": "With a passion for artistry and a commitment to excellence, our Managing Director has curated a collection that celebrates the finest in luxury perfumery. Each fragrance tells a story, and every bottle is a testament to our dedication to quality and distinction.",
       "philosophy_heading": "OUR PHILOSOPHY",
@@ -545,7 +545,7 @@
       "hero_quote": "\"Fragrance is the unseen, unforgettable, ultimate accessory — it heralds your arrival and prolongs your departure.\"",
       "collections_label": "OUR COLLECTIONS",
       "collections_heading": "A CURATED WORLD OF SCENT",
-      "collections_text": "Discover our carefully selected range of niche and luxury fragrances Amouage, Roja, Nishane, Vilhelm Parfumerie, Maison Crivelli, Ormonde Jayne, and more each chosen to inspire and captivate.",
+      "collections_text": "Discover our carefully selected range of fine fabrics, from luxe silks and fine cottons to chiffons, velvets and hand-embellished cloth, each chosen to inspire and to be made your own.",
       "explore_button": "EXPLORE NOW"
     },
     "footer": {
@@ -577,7 +577,7 @@
       "partner": "Partner With Us",
       "careers": "Careers",
       "designed_by": "Designed by",
-      "copyright": "{{ year }} Zaria All rights reserved."
+      "copyright": "© {{ year }} Zaria. All rights reserved."
     },
     "pdp": {
       "free_gift_with": "Free Gift with this product",
@@ -601,7 +601,7 @@
       "more_from": "More from {{ name }}"
     },
     "brands": {
-      "grid_heading": "Discover the Art of Fine Perfumery",
+      "grid_heading": "Discover the Art of Fine Fabrics",
       "add": "Add",
       "cart": "Cart",
       "sold_out": "Sold Out",
