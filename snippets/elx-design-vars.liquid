@@ -1,7 +1,7 @@
 {%- doc -%}
   Turns the Zaria Promotions app's badge design into CSS variables.
 
-  The app writes `shop.metafields.elixir_promotions.design` (json) whenever the
+  The app writes `shop.metafields.zaria_promotions.design` (json) whenever the
   merchant saves the Storefront design page. This is what makes those settings
   actually reach the storefront: the app's own badge renderer has never been
   deployed, so without this the design page saves values nothing reads.
@@ -17,7 +17,7 @@
     {%- render 'elx-design-vars' -%}
 {%- enddoc -%}
 {%- liquid
-  assign design = shop.metafields.elixir_promotions.design.value
+  assign design = shop.metafields.zaria_promotions.design.value
   assign d = design.badge
   assign pc = design.productCard
 

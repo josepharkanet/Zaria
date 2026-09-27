@@ -1,6 +1,6 @@
 {%- doc -%}
   Live gift-offer progress nudge for the cart page and cart drawer.
-  Supports three modes (shop metafield elixir_promotions.gift_offer_mode, written by the
+  Supports three modes (shop metafield zaria_promotions.gift_offer_mode, written by the
   Zaria Promotions app):
     - quantity (default): buy N qualifying items -> gift
     - amount:             spend X on qualifying items -> gift
@@ -9,9 +9,9 @@
 {%- capture offer_on -%}{%- render 'gift-offer-active' -%}{%- endcapture -%}
 {%- if offer_on contains 'true' and cart.item_count > 0 -%}
   {%- liquid
-    assign gift_mode = shop.metafields.elixir_promotions.gift_offer_mode.value | default: 'quantity'
-    assign gift_threshold = shop.metafields.elixir_promotions.gift_offer_threshold.value | default: 1
-    assign gift_min_amount = shop.metafields.elixir_promotions.gift_offer_min_amount.value | default: 0
+    assign gift_mode = shop.metafields.zaria_promotions.gift_offer_mode.value | default: 'quantity'
+    assign gift_threshold = shop.metafields.zaria_promotions.gift_offer_threshold.value | default: 1
+    assign gift_min_amount = shop.metafields.zaria_promotions.gift_offer_min_amount.value | default: 0
     assign gift_qty = 0
     assign gift_amt = 0
     for line_item in cart.items
@@ -55,7 +55,7 @@
     if gift_pct > 100
       assign gift_pct = 100
     endif
-    assign gift_col = shop.metafields.elixir_promotions.gift_offer_collection.value
+    assign gift_col = shop.metafields.zaria_promotions.gift_offer_collection.value
     assign gift_label = gift_col.title
   -%}
   {%- if gift_qty > 0 -%}
@@ -71,7 +71,7 @@
               <span>The lowest-priced item is free at checkout.</span>
             {%- else -%}
               <strong>Your free gift is unlocked!</strong>
-              {%- assign cg_gift = shop.metafields.elixir_promotions.gift_offer_gift.value -%}
+              {%- assign cg_gift = shop.metafields.zaria_promotions.gift_offer_gift.value -%}
               {%- if cg_gift != blank -%}
                 <span>{{ cg_gift.title }} — applied at checkout.</span>
               {%- else -%}

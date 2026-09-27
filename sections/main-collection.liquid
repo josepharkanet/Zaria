@@ -307,7 +307,7 @@
               (gift-with-purchase items) that aren't price-discounted so they wouldn't otherwise appear here.
             {%- endcomment -%}
             {%- assign offers_inject = false -%}
-            {%- assign offers_gift_col = shop.metafields.elixir_promotions.gift_offer_collection.value -%}
+            {%- assign offers_gift_col = shop.metafields.zaria_promotions.gift_offer_collection.value -%}
             {%- if collection.handle == 'gift-set' or collection.handle == 'offers' or collection.handle == 'offer' -%}
               {%- capture offers_active -%}{%- render 'gift-offer-active' -%}{%- endcapture -%}
               {%- comment -%}
@@ -317,7 +317,7 @@
                 listing them after the offer stopped, because this reads the
                 gift_offer_collection metafield rather than a live promotion.
               {%- endcomment -%}
-              {%- assign offers_mode = shop.metafields.elixir_promotions.gift_offer_mode.value | default: 'quantity' -%}
+              {%- assign offers_mode = shop.metafields.zaria_promotions.gift_offer_mode.value | default: 'quantity' -%}
               {%- assign offers_is_gift = true -%}
               {%- if offers_mode == 'discount' or offers_mode == 'markdown' -%}
                 {%- assign offers_is_gift = false -%}

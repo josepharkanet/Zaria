@@ -3,7 +3,7 @@
   Talks to the Cloudflare Worker (settings.ai_assistant_endpoint) which holds the
   Gemini key. Bilingual EN/عربي with RTL. Grounds on:
     - Knowledge base: the admin PAGE whose handle is settings.ai_assistant_kb_page.
-    - Offers: the Zaria Promotions shop metafields (elixir_promotions.gift_offer_*).
+    - Offers: the Zaria Promotions shop metafields (zaria_promotions.gift_offer_*).
     - Live catalog: the Worker searches the storefront directly.
   Renders replies + action buttons; executes add-to-cart via the AJAX cart and
   opens checkout on request.
@@ -21,12 +21,12 @@
 
   {%- comment -%} Offers summary from the Zaria Promotions metafields {%- endcomment -%}
   {%- capture ai_offers -%}
-    {%- if shop.metafields.elixir_promotions.gift_offer_active.value == true -%}
-      {%- assign _m = shop.metafields.elixir_promotions.gift_offer_mode.value | default: 'quantity' -%}
-      {%- assign _col = shop.metafields.elixir_promotions.gift_offer_collection.value -%}
-      {%- assign _gift = shop.metafields.elixir_promotions.gift_offer_gift.value -%}
-      {%- assign _thr = shop.metafields.elixir_promotions.gift_offer_threshold.value | default: 1 -%}
-      {%- assign _min = shop.metafields.elixir_promotions.gift_offer_min_amount.value | default: 0 -%}
+    {%- if shop.metafields.zaria_promotions.gift_offer_active.value == true -%}
+      {%- assign _m = shop.metafields.zaria_promotions.gift_offer_mode.value | default: 'quantity' -%}
+      {%- assign _col = shop.metafields.zaria_promotions.gift_offer_collection.value -%}
+      {%- assign _gift = shop.metafields.zaria_promotions.gift_offer_gift.value -%}
+      {%- assign _thr = shop.metafields.zaria_promotions.gift_offer_threshold.value | default: 1 -%}
+      {%- assign _min = shop.metafields.zaria_promotions.gift_offer_min_amount.value | default: 0 -%}
       {%- if _m == 'bogo' -%}
         Buy {{ _thr }}, get 1 free{% if _col != blank %} on {{ _col.title }}{% endif %}. The lowest-priced item is free at checkout.
       {%- elsif _m == 'amount' -%}
@@ -39,7 +39,7 @@
   {%- endcapture -%}
 
   {%- comment -%} Real store links the AI can hand out as buttons {%- endcomment -%}
-  {%- assign ai_offers_col = shop.metafields.elixir_promotions.gift_offer_collection.value -%}
+  {%- assign ai_offers_col = shop.metafields.zaria_promotions.gift_offer_collection.value -%}
   {%- capture ai_links_json -%}
     {
       "All fabrics": {{ routes.all_products_collection_url | json }},

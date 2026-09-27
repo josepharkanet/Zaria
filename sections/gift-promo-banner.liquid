@@ -23,8 +23,8 @@
   assign gb_heading = s.heading
   assign gb_badge   = s.badge_text
   if request.design_mode == false
-    assign mf_heading = shop.metafields.elixir_promotions.gift_offer_heading.value
-    assign mf_badge   = shop.metafields.elixir_promotions.gift_offer_badge_text.value
+    assign mf_heading = shop.metafields.zaria_promotions.gift_offer_heading.value
+    assign mf_badge   = shop.metafields.zaria_promotions.gift_offer_badge_text.value
     if mf_heading != blank
       assign gb_heading = mf_heading
     endif
@@ -173,7 +173,7 @@
     { "type": "richtext", "id": "subheading", "label": "Subheading", "default": "<p>A complimentary gift with any two fragrances — automatically added at checkout.</p>" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the offer" },
     { "type": "url", "id": "button_link", "label": "Button link" },
-    { "type": "checkbox", "id": "respect_offer_status", "label": "Auto-hide when the gift offer is off", "info": "Hides this banner on the live store whenever the gift offer is paused (theme toggle or the elixir_promotions.gift_offer_active shop metafield).", "default": true },
+    { "type": "checkbox", "id": "respect_offer_status", "label": "Auto-hide when the gift offer is off", "info": "Hides this banner on the live store whenever the gift offer is paused (theme toggle or the zaria_promotions.gift_offer_active shop metafield).", "default": true },
     { "type": "header", "content": "Style" },
     { "type": "select", "id": "text_align", "label": "Layout", "options": [ { "value": "left", "label": "Row (left)" }, { "value": "center", "label": "Centered" } ], "default": "left" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#1a1a1a" },

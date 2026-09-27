@@ -6,12 +6,12 @@
     {%- if is_offer contains 'true' -%} ... {%- endif -%}
 
   Config comes exclusively from the Zaria Promotions app's shop metafields:
-    elixir_promotions.gift_offer_active     — master switch
-    elixir_promotions.gift_offer_mode       — quantity | amount | bogo (gift families),
+    zaria_promotions.gift_offer_active     — master switch
+    zaria_promotions.gift_offer_mode       — quantity | amount | bogo (gift families),
                                    discount (% / amount off, applied at the cart)
                                    or markdown (product price already reduced)
-    elixir_promotions.gift_offer_scope_all  — store-wide offers (spend model without a collection)
-    elixir_promotions.gift_offer_collection — the qualifying collection
+    zaria_promotions.gift_offer_scope_all  — store-wide offers (spend model without a collection)
+    zaria_promotions.gift_offer_collection — the qualifying collection
 
   Only the GIFT families ever qualify a product here. A `discount`/`markdown`
   offer drives the promo banner but must never badge a product as a free gift.
@@ -20,7 +20,7 @@
 {%- enddoc -%}
 {%- capture offer_on -%}{%- render 'gift-offer-active' -%}{%- endcapture -%}
 {%- liquid
-  assign offer_mode = shop.metafields.elixir_promotions.gift_offer_mode.value
+  assign offer_mode = shop.metafields.zaria_promotions.gift_offer_mode.value
   assign is_gift_mode = true
   if offer_mode == 'discount' or offer_mode == 'markdown'
     assign is_gift_mode = false
@@ -28,12 +28,12 @@
   assign match = false
 
   if offer_on contains 'true' and product != blank and is_gift_mode
-    if shop.metafields.elixir_promotions.gift_offer_scope_all.value == true
+    if shop.metafields.zaria_promotions.gift_offer_scope_all.value == true
       assign match = true
     endif
 
     unless match
-      assign eff_collection = shop.metafields.elixir_promotions.gift_offer_collection.value
+      assign eff_collection = shop.metafields.zaria_promotions.gift_offer_collection.value
       if eff_collection != blank
         for c in product.collections
           if c.id == eff_collection.id
