@@ -4,26 +4,26 @@
   Assign this section's template ("wishlist") to a page with handle "wishlist".
 {%- endcomment -%}
 
-<div class="elx-wishlist-page">
-  <div class="elx-wishlist-page__grid product-list" id="elx-wishlist-grid" aria-live="polite"></div>
+<div class="zar-wishlist-page">
+  <div class="zar-wishlist-page__grid product-list" id="zar-wishlist-grid" aria-live="polite"></div>
 
-  <div class="elx-wishlist-page__empty" id="elx-wishlist-empty" hidden>
+  <div class="zar-wishlist-page__empty" id="zar-wishlist-empty" hidden>
     <p>{{ section.settings.empty_text | default: 'Your saved list is empty.' }}</p>
-    <a class="elx-wishlist-page__cta" href="{{ section.settings.empty_link | default: '/collections/all' }}">
+    <a class="zar-wishlist-page__cta" href="{{ section.settings.empty_link | default: '/collections/all' }}">
       {{ section.settings.empty_button | default: 'Browse fragrances' }}
     </a>
   </div>
 </div>
 
 <style>
-  .elx-wishlist-page { max-width: 1300px; margin: 0 auto; padding: clamp(1.5rem, 4vw, 3rem) 1.25rem 4rem; }
-  .elx-wishlist-page__grid {
+  .zar-wishlist-page { max-width: 1300px; margin: 0 auto; padding: clamp(1.5rem, 4vw, 3rem) 1.25rem 4rem; }
+  .zar-wishlist-page__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     gap: clamp(1rem, 2.5vw, 1.5rem);
   }
-  .elx-wishlist-page__empty { text-align: center; color: #6b6b6b; padding: 3rem 0; }
-  .elx-wishlist-page__cta {
+  .zar-wishlist-page__empty { text-align: center; color: #6b6b6b; padding: 3rem 0; }
+  .zar-wishlist-page__cta {
     display: inline-block; margin-top: 1rem; padding: .8rem 2rem;
     background: #141414; color: #fff; text-decoration: none;
     letter-spacing: .12em; text-transform: uppercase; font-size: .72rem; border-radius: 2px;
@@ -32,8 +32,8 @@
 
 <script>
   (function () {
-    var grid = document.getElementById('elx-wishlist-grid');
-    var empty = document.getElementById('elx-wishlist-empty');
+    var grid = document.getElementById('zar-wishlist-grid');
+    var empty = document.getElementById('zar-wishlist-empty');
     if (!grid) return;
 
     function showEmpty(show) { if (empty) empty.hidden = !show; }
@@ -46,7 +46,7 @@
 
       var seen = {};
       list.forEach(function (handle) {
-        fetch('/products/' + handle + '?section_id=elx-wishlist-item')
+        fetch('/products/' + handle + '?section_id=zar-wishlist-item')
           .then(function (r) { return r.ok ? r.text() : ''; })
           .then(function (html) {
             if (!html) return;
@@ -54,7 +54,7 @@
             tmp.innerHTML = html;
             var card = tmp.querySelector('product-card, .product-card');
             if (!card) return;
-            var heart = card.querySelector('.elx-heart');
+            var heart = card.querySelector('.zar-heart');
 
             // The stored handle can be stale (the product's handle was changed in
             // the SEO rename). fetch() follows the redirect, so the rendered card

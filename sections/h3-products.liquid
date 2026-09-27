@@ -46,7 +46,7 @@
             {%- if product.images[1] -%}<img class="i2" src="{{ product.images[1] | image_url: width: 600 }}" alt="" loading="lazy" aria-hidden="true">{%- endif -%}
           </span>
           {%- if brand != blank -%}<span class="h2np__brand">{{ brand }}</span>{%- endif -%}
-          <h3 class="h2np__name">{%- render 'elx-product-title', product: product -%}</h3>
+          <h3 class="h2np__name">{%- render 'zar-product-title', product: product -%}</h3>
           <span class="h2np__price">
             {%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}
             {{ product.price | money }}

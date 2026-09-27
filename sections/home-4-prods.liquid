@@ -1,11 +1,11 @@
 <style>
-  #elx-prods-{{ section.id }} {
+  #zar-prods-{{ section.id }} {
     background: #FBFAF7;
     font-family: var(--text-font-family);
     color: #1A1A1A;
   }
-  #elx-prods-{{ section.id }} * { box-sizing: border-box; }
-  #elx-prods-{{ section.id }} img { display: block; max-width: 100%; }
+  #zar-prods-{{ section.id }} * { box-sizing: border-box; }
+  #zar-prods-{{ section.id }} img { display: block; max-width: 100%; }
 
   .ep-wrap-{{ section.id }} {
     max-width: 1280px; margin: 0 auto; padding: 0 40px;
@@ -59,7 +59,7 @@
     .ep-link-{{ section.id }} { margin-left: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
-    #elx-prods-{{ section.id }} * { transition: none !important; }
+    #zar-prods-{{ section.id }} * { transition: none !important; }
   }
 </style>
 
@@ -67,7 +67,7 @@
   assign rows = section.settings.collections | split: ','
 -%}
 
-<div id="elx-prods-{{ section.id }}">
+<div id="zar-prods-{{ section.id }}">
   <div class="ep-wrap-{{ section.id }}">
 
     {%- for row in rows -%}
@@ -88,7 +88,7 @@
                          alt="{{ product.title | escape }}" loading="lazy">
                   {%- endif -%}
                 </div>
-                <p class="ep-name-{{ section.id }}">{%- render 'elx-product-title', product: product -%}</p>
+                <p class="ep-name-{{ section.id }}">{%- render 'zar-product-title', product: product -%}</p>
                 <p class="ep-price-{{ section.id }}">{{ product.price | money }}</p>
               </a>
             {%- endfor -%}

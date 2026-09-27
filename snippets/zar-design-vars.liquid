@@ -14,7 +14,7 @@
   Render once, in <head>. Rendering per card would duplicate the CSS.
 
   Usage:
-    {%- render 'elx-design-vars' -%}
+    {%- render 'zar-design-vars' -%}
 {%- enddoc -%}
 {%- liquid
   assign design = shop.metafields.zaria_promotions.design.value
@@ -70,16 +70,16 @@
 -%}
 {%- capture elx_design_css -%}
   :root {
-    --elx-badge-sale-bg: {{ sale_bg }};
-    --elx-badge-gift-bg: {{ gift_bg }};
-    --elx-badge-fg: {{ fg }};
-    --elx-badge-fs: {{ fs }};
-    --elx-badge-fw: {{ fw }};
-    --elx-badge-ls: {{ ls }};
-    --elx-badge-tt: {{ tt }};
-    --elx-badge-radius-bl: {{ radius_bl }};
-    --elx-badge-radius-tr: {{ radius_tr }};
-    --elx-badge-inset: {{ inset }}px;
+    --zar-badge-sale-bg: {{ sale_bg }};
+    --zar-badge-gift-bg: {{ gift_bg }};
+    --zar-badge-fg: {{ fg }};
+    --zar-badge-fs: {{ fs }};
+    --zar-badge-fw: {{ fw }};
+    --zar-badge-ls: {{ ls }};
+    --zar-badge-tt: {{ tt }};
+    --zar-badge-radius-bl: {{ radius_bl }};
+    --zar-badge-radius-tr: {{ radius_tr }};
+    --zar-badge-inset: {{ inset }}px;
   }
   {%- comment -%}
     The shapes the app's style picker promises. These rules come after theme.css
@@ -92,54 +92,54 @@
     section's own .bls__badge rules (0,1,0), whatever the source order.
   {%- endcomment -%}
   {%- if d.style == 'pill' -%}
-    .elx-badge, .product-card > .elx-badges .elx-badge:first-child,
+    .zar-badge, .product-card > .zar-badges .zar-badge:first-child,
     .brand-logo-card .bls__badge { border-radius: 999px; }
-    .product-card > .elx-badges { gap: 4px; }
+    .product-card > .zar-badges { gap: 4px; }
   {%- endif -%}
   {%- if d.style == 'outline' -%}
-    .elx-badge, .brand-logo-card .bls__badge { background: transparent; border: 1px solid currentColor; }
-    .elx-badge--sale, .brand-logo-card .bls__badge--sale { background: transparent; color: var(--elx-badge-sale-bg); }
-    .elx-badge--gift, .brand-logo-card .bls__badge--gift { background: transparent; color: var(--elx-badge-gift-bg); }
-    .product-card > .elx-badges { gap: 4px; }
+    .zar-badge, .brand-logo-card .bls__badge { background: transparent; border: 1px solid currentColor; }
+    .zar-badge--sale, .brand-logo-card .bls__badge--sale { background: transparent; color: var(--zar-badge-sale-bg); }
+    .zar-badge--gift, .brand-logo-card .bls__badge--gift { background: transparent; color: var(--zar-badge-gift-bg); }
+    .product-card > .zar-badges { gap: 4px; }
   {%- endif -%}
   {%- if d.style == 'minimal' -%}
-    .elx-badge, .brand-logo-card .bls__badge { background: transparent; padding-left: 0; padding-right: 0; }
-    .elx-badge--sale, .brand-logo-card .bls__badge--sale { background: transparent; color: var(--elx-badge-sale-bg); }
-    .elx-badge--gift, .brand-logo-card .bls__badge--gift { background: transparent; color: var(--elx-badge-gift-bg); }
-    .product-card > .elx-badges { gap: 2px; padding: 6px 10px; }
+    .zar-badge, .brand-logo-card .bls__badge { background: transparent; padding-left: 0; padding-right: 0; }
+    .zar-badge--sale, .brand-logo-card .bls__badge--sale { background: transparent; color: var(--zar-badge-sale-bg); }
+    .zar-badge--gift, .brand-logo-card .bls__badge--gift { background: transparent; color: var(--zar-badge-gift-bg); }
+    .product-card > .zar-badges { gap: 2px; padding: 6px 10px; }
   {%- endif -%}
   {%- if d.style == 'stacked' -%}
-    .elx-badge, .brand-logo-card .bls__badge { background: transparent; border-bottom: 1px solid currentColor; padding-left: 0; padding-right: 0; }
-    .elx-badge--sale, .brand-logo-card .bls__badge--sale { background: transparent; color: var(--elx-badge-sale-bg); }
-    .elx-badge--gift, .brand-logo-card .bls__badge--gift { background: transparent; color: var(--elx-badge-gift-bg); }
-    .product-card > .elx-badges { gap: 4px; padding: 6px 10px; }
+    .zar-badge, .brand-logo-card .bls__badge { background: transparent; border-bottom: 1px solid currentColor; padding-left: 0; padding-right: 0; }
+    .zar-badge--sale, .brand-logo-card .bls__badge--sale { background: transparent; color: var(--zar-badge-sale-bg); }
+    .zar-badge--gift, .brand-logo-card .bls__badge--gift { background: transparent; color: var(--zar-badge-gift-bg); }
+    .product-card > .zar-badges { gap: 4px; padding: 6px 10px; }
   {%- endif -%}
 
   {%- if d.position != blank and d.position != 'top-right' -%}
     {%- comment -%} Only re-anchor when the merchant moved it off the theme's default. {%- endcomment -%}
-    .product-card > .elx-badges {
+    .product-card > .zar-badges {
       {%- case d.position -%}
-        {%- when 'top-left' -%}    top: var(--elx-badge-inset); right: auto; bottom: auto; left: var(--elx-badge-inset); align-items: flex-start;
-        {%- when 'top-center' -%}  top: var(--elx-badge-inset); right: auto; bottom: auto; left: 50%; transform: translateX(-50%); align-items: center;
-        {%- when 'mid-left' -%}    top: 50%; right: auto; bottom: auto; left: var(--elx-badge-inset); transform: translateY(-50%); align-items: flex-start;
-        {%- when 'mid-right' -%}   top: 50%; right: var(--elx-badge-inset); bottom: auto; left: auto; transform: translateY(-50%); align-items: flex-end;
-        {%- when 'bot-left' -%}    top: auto; right: auto; bottom: var(--elx-badge-inset); left: var(--elx-badge-inset); align-items: flex-start;
-        {%- when 'bot-center' -%}  top: auto; right: auto; bottom: var(--elx-badge-inset); left: 50%; transform: translateX(-50%); align-items: center;
-        {%- when 'bot-right' -%}   top: auto; right: var(--elx-badge-inset); bottom: var(--elx-badge-inset); left: auto; align-items: flex-end;
+        {%- when 'top-left' -%}    top: var(--zar-badge-inset); right: auto; bottom: auto; left: var(--zar-badge-inset); align-items: flex-start;
+        {%- when 'top-center' -%}  top: var(--zar-badge-inset); right: auto; bottom: auto; left: 50%; transform: translateX(-50%); align-items: center;
+        {%- when 'mid-left' -%}    top: 50%; right: auto; bottom: auto; left: var(--zar-badge-inset); transform: translateY(-50%); align-items: flex-start;
+        {%- when 'mid-right' -%}   top: 50%; right: var(--zar-badge-inset); bottom: auto; left: auto; transform: translateY(-50%); align-items: flex-end;
+        {%- when 'bot-left' -%}    top: auto; right: auto; bottom: var(--zar-badge-inset); left: var(--zar-badge-inset); align-items: flex-start;
+        {%- when 'bot-center' -%}  top: auto; right: auto; bottom: var(--zar-badge-inset); left: 50%; transform: translateX(-50%); align-items: center;
+        {%- when 'bot-right' -%}   top: auto; right: var(--zar-badge-inset); bottom: var(--zar-badge-inset); left: auto; align-items: flex-end;
       {%- endcase -%}
     }
     {%- if d.position == 'top-center' or d.position == 'bot-center' -%}
       {%- comment -%} A centred badge hugs no corner, so the tab's cut corner is wrong there. {%- endcomment -%}
-      .elx-badge, .product-card > .elx-badges .elx-badge:first-child { border-radius: 4px; }
+      .zar-badge, .product-card > .zar-badges .zar-badge:first-child { border-radius: 4px; }
     {%- endif -%}
   {%- endif -%}
   {%- if on_left and d.style == 'tab' -%}
     {%- comment -%} Mirror the tab: cut the bottom-RIGHT corner, round the top-left. {%- endcomment -%}
-    .elx-badge { border-bottom-left-radius: 0; border-bottom-right-radius: var(--elx-badge-radius-bl, 11px); }
-    .product-card > .elx-badges .elx-badge:first-child { border-top-right-radius: 0; border-top-left-radius: var(--elx-badge-radius-tr, 12px); }
+    .zar-badge { border-bottom-left-radius: 0; border-bottom-right-radius: var(--zar-badge-radius-bl, 11px); }
+    .product-card > .zar-badges .zar-badge:first-child { border-top-right-radius: 0; border-top-left-radius: var(--zar-badge-radius-tr, 12px); }
   {%- endif -%}
   {%- if d.enabled == false -%}
-    .elx-badges { display: none; }
+    .zar-badges { display: none; }
   {%- endif -%}
 
   {%- comment -%}
@@ -150,15 +150,15 @@
   {%- endcomment -%}
   {%- if pc != blank -%}
     :root {
-      {%- if pc.bgColor != blank %} --elx-pdp-bg: {{ pc.bgColor }};{% endif -%}
-      {%- if pc.textColor != blank %} --elx-pdp-fg: {{ pc.textColor }};{% endif -%}
-      {%- if pc.accentColor != blank %} --elx-pdp-accent: {{ pc.accentColor }};{% endif -%}
-      {%- if pc.borderColor != blank %} --elx-pdp-border: {{ pc.borderColor }};{% endif -%}
-      {%- if pc.cornerRadius > 0 %} --elx-pdp-radius: {{ pc.cornerRadius }}px;{% endif -%}
-      {%- if pc.padding > 0 %} --elx-pdp-padding: {{ pc.padding }}px;{% endif -%}
-      {%- if pc.marginTop > 0 %} --elx-pdp-mt: {{ pc.marginTop }}px;{% endif -%}
-      {%- if pc.marginBottom > 0 %} --elx-pdp-mb: {{ pc.marginBottom }}px;{% endif -%}
-      {%- if pc.headingSize > 0 %} --elx-pdp-heading-size: {{ pc.headingSize }}px;{% endif -%}
+      {%- if pc.bgColor != blank %} --zar-pdp-bg: {{ pc.bgColor }};{% endif -%}
+      {%- if pc.textColor != blank %} --zar-pdp-fg: {{ pc.textColor }};{% endif -%}
+      {%- if pc.accentColor != blank %} --zar-pdp-accent: {{ pc.accentColor }};{% endif -%}
+      {%- if pc.borderColor != blank %} --zar-pdp-border: {{ pc.borderColor }};{% endif -%}
+      {%- if pc.cornerRadius > 0 %} --zar-pdp-radius: {{ pc.cornerRadius }}px;{% endif -%}
+      {%- if pc.padding > 0 %} --zar-pdp-padding: {{ pc.padding }}px;{% endif -%}
+      {%- if pc.marginTop > 0 %} --zar-pdp-mt: {{ pc.marginTop }}px;{% endif -%}
+      {%- if pc.marginBottom > 0 %} --zar-pdp-mb: {{ pc.marginBottom }}px;{% endif -%}
+      {%- if pc.headingSize > 0 %} --zar-pdp-heading-size: {{ pc.headingSize }}px;{% endif -%}
     }
     {%- if pc.enabled == false -%}
       .lpdp__gift { display: none; }

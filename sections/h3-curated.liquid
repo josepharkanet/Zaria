@@ -37,7 +37,7 @@
           <span class="h2cu__info">
             <span class="h2cu__rank">N°{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
             {%- if brand != blank -%}<span class="h2cu__brand">{{ brand }}</span>{%- endif -%}
-            <span class="h2cu__name">{%- render 'elx-product-title', product: product -%}</span>
+            <span class="h2cu__name">{%- render 'zar-product-title', product: product -%}</span>
             <span class="h2cu__price">{{ product.price | money }}</span>
             <span class="h2cu__link">{{ 'custom.home.discover' | t }}</span>
           </span>
