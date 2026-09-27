@@ -42,7 +42,7 @@
     </div>
     <div class="zft__text">
       {%- if sc.eyebrow != blank -%}<p class="zft__eyebrow">{{ sc.eyebrow }}</p>{%- endif -%}
-      {%- if sc.heading != blank -%}<h2 class="zft__title">{{ sc.heading }}</h2>{%- endif -%}
+      {%- if sc.heading != blank -%}{%- if template.suffix == 'careers' -%}<h1 class="zft__title">{{ sc.heading }}</h1>{%- else -%}<h2 class="zft__title">{{ sc.heading }}</h2>{%- endif -%}{%- endif -%}
       {%- if sc.body != blank -%}<div class="zft__body">{{ sc.body }}</div>{%- endif -%}
       {%- if sc.link_label != blank -%}<a class="zft__link" href="{{ sc.link_url | default: '#' }}">{{ sc.link_label }}</a>{%- endif -%}
     </div>
