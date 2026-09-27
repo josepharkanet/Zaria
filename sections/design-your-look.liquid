@@ -15,8 +15,17 @@
   #shopify-section-{{ section.id }} .zdl__btn{display:inline-block;background:#fff;color:#161616;text-decoration:none;padding:16px 46px;
     font-size:12px;letter-spacing:.22em;text-transform:uppercase;border:1px solid #fff;transition:background .2s ease,color .2s ease}
   #shopify-section-{{ section.id }} .zdl__btn:hover{background:transparent;color:#fff}
+  /* Light variant: airy, contained, no dark image block */
+  #shopify-section-{{ section.id }} .zdl.zdl--light{min-height:0;background:#faf8f5;display:block}
+  #shopify-section-{{ section.id }} .zdl--light .zdl__inner{color:#141414;padding:clamp(54px,7vw,86px) clamp(24px,5vw,48px)}
+  #shopify-section-{{ section.id }} .zdl--light .zdl__overline{color:#8a8178}
+  #shopify-section-{{ section.id }} .zdl--light .zdl__heading{color:#141414}
+  #shopify-section-{{ section.id }} .zdl--light .zdl__body{color:#5a534b}
+  #shopify-section-{{ section.id }} .zdl--light .zdl__btn{background:#161616;color:#fff;border-color:#161616}
+  #shopify-section-{{ section.id }} .zdl--light .zdl__btn:hover{background:#7a1f34;border-color:#7a1f34;color:#fff}
 </style>
-<section class="zdl">
+<section class="zdl{% if section.settings.scheme == 'light' %} zdl--light{% endif %}">
+  {%- unless section.settings.scheme == 'light' -%}
   {%- assign zdl_video = section.settings.background_video -%}
   {%- if zdl_video != blank and zdl_video.sources.size > 0 -%}
     {%- assign zdl_vsrc = zdl_video.sources | where: 'format', 'mp4' | first -%}
@@ -28,6 +37,7 @@
     <img class="zdl__bg" src="{{ 'zaria-dyl-bg.jpg' | asset_url }}" alt="" width="2000" height="1333" loading="lazy">
   {%- endif -%}
   <div class="zdl__veil"></div>
+  {%- endunless -%}
   <div class="zdl__inner">
     {%- if section.settings.overline != blank -%}<p class="zdl__overline">{{ section.settings.overline }}</p>{%- endif -%}
     {%- if section.settings.heading != blank -%}{%- if section.settings.use_h1 -%}<h1 class="zdl__heading">{{ section.settings.heading }}</h1>{%- else -%}<h2 class="zdl__heading">{{ section.settings.heading }}</h2>{%- endif -%}{%- endif -%}
@@ -41,6 +51,7 @@
 {
   "name": "Design Your Look",
   "settings": [
+    { "type": "select", "id": "scheme", "label": "Style", "options": [ { "value": "dark", "label": "Dark image banner" }, { "value": "light", "label": "Light" } ], "default": "dark" },
     { "type": "video", "id": "background_video", "label": "Background video (overrides image)" },
     { "type": "image_picker", "id": "image", "label": "Background image / video poster (optional)" },
     { "type": "text", "id": "focal", "label": "Image focal point", "default": "center" },
