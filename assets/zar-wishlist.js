@@ -1,7 +1,7 @@
 /* Elixir self-contained wishlist (localStorage). No app dependency.
-   - Hearts on product cards (.elx-heart[data-handle]) toggle saved state.
-   - Persists across the site; updates any [data-elx-wishlist-count] badges.
-   - The Saved page (sections/elx-wishlist-page.liquid) reads window.ElxWishlist. */
+   - Hearts on product cards (.zar-heart[data-handle]) toggle saved state.
+   - Persists across the site; updates any [data-zar-wishlist-count] badges.
+   - The Saved page (sections/zar-wishlist-page.liquid) reads window.ElxWishlist. */
 (function () {
   var KEY = 'elx_wishlist';
 
@@ -25,7 +25,7 @@
 
   function updateCount() {
     var n = read().length;
-    var els = document.querySelectorAll('[data-elx-wishlist-count]');
+    var els = document.querySelectorAll('[data-zar-wishlist-count]');
     for (var i = 0; i < els.length; i++) {
       els[i].textContent = n;
       els[i].style.display = n > 0 ? '' : 'none';
@@ -33,7 +33,7 @@
   }
 
   function syncHearts(root) {
-    var btns = (root || document).querySelectorAll('.elx-heart[data-handle]');
+    var btns = (root || document).querySelectorAll('.zar-heart[data-handle]');
     for (var i = 0; i < btns.length; i++) {
       var saved = has(btns[i].getAttribute('data-handle'));
       btns[i].classList.toggle('is-saved', saved);
@@ -47,19 +47,19 @@
   // the Featured-collections carousels (Newly Added / Best Sellers) and in plain
   // grids (Men / Women / Unisex).
   function onHeartClick(e) {
-    var btn = e.target.closest && e.target.closest('.elx-heart[data-handle]');
+    var btn = e.target.closest && e.target.closest('.zar-heart[data-handle]');
     if (!btn) return;
     e.preventDefault();
     e.stopPropagation();
     var nowSaved = toggle(btn.getAttribute('data-handle'));
     btn.classList.toggle('is-saved', nowSaved);
     btn.setAttribute('aria-pressed', nowSaved ? 'true' : 'false');
-    btn.classList.add('elx-heart--pulse');
-    setTimeout(function () { btn.classList.remove('elx-heart--pulse'); }, 300);
+    btn.classList.add('zar-heart--pulse');
+    setTimeout(function () { btn.classList.remove('zar-heart--pulse'); }, 300);
   }
   document.addEventListener('click', onHeartClick, true);   // capture
   document.addEventListener('touchend', function (e) {       // mobile safety net
-    var btn = e.target.closest && e.target.closest('.elx-heart[data-handle]');
+    var btn = e.target.closest && e.target.closest('.zar-heart[data-handle]');
     if (btn) { onHeartClick(e); }
   }, true);
 
@@ -82,8 +82,8 @@
         for (var j = 0; j < added.length; j++) {
           var n = added[j];
           if (n.nodeType === 1 &&
-              ((n.matches && n.matches('.elx-heart[data-handle]')) ||
-               (n.querySelector && n.querySelector('.elx-heart[data-handle]')))) {
+              ((n.matches && n.matches('.zar-heart[data-handle]')) ||
+               (n.querySelector && n.querySelector('.zar-heart[data-handle]')))) {
             scheduleSync();
             return;
           }
