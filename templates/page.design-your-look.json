@@ -32,20 +32,7 @@
         "s4": { "type": "value", "settings": { "icon": "none", "title": "The Fitting", "text": "A final fitting ensures every line falls exactly as it should, made to your measure." } }
       },
       "block_order": ["s1", "s2", "s3", "s4"]
-    },
-    "cta": {
-      "type": "design-your-look",
-      "settings": {
-        "height": 48,
-        "focal": "center",
-        "overline": "Ready when you are",
-        "heading": "Begin your bespoke journey",
-        "body": "Open the Zaria Design Studio to share your vision, choose your fabric and submit your measurements.",
-        "button_label": "Start your design",
-        "button_url": "http://sc25oof3tkoifl6da9udzu3p.2.24.130.10.sslip.io",
-        "open_in_new_tab": true
-      }
     }
   },
-  "order": ["hero", "journey", "cta"]
+  "order": ["hero", "journey"]
 }
