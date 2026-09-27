@@ -10,13 +10,13 @@
   so nothing is hard-coded. Runs only when the offer is active and a gift product is set.
 {%- enddoc -%}
 {%- capture offer_on -%}{%- render 'gift-offer-active' -%}{%- endcapture -%}
-{%- assign giftp = shop.metafields.elixir_promotions.gift_offer_gift.value -%}
-{%- assign ag_collection = shop.metafields.elixir_promotions.gift_offer_collection.value -%}
-{%- assign ag_threshold = shop.metafields.elixir_promotions.gift_offer_threshold.value | default: 1 -%}
-{%- assign ag_mode = shop.metafields.elixir_promotions.gift_offer_mode.value | default: 'quantity' -%}
-{%- assign ag_min_amount = shop.metafields.elixir_promotions.gift_offer_min_amount.value | default: 0 -%}
+{%- assign giftp = shop.metafields.zaria_promotions.gift_offer_gift.value -%}
+{%- assign ag_collection = shop.metafields.zaria_promotions.gift_offer_collection.value -%}
+{%- assign ag_threshold = shop.metafields.zaria_promotions.gift_offer_threshold.value | default: 1 -%}
+{%- assign ag_mode = shop.metafields.zaria_promotions.gift_offer_mode.value | default: 'quantity' -%}
+{%- assign ag_min_amount = shop.metafields.zaria_promotions.gift_offer_min_amount.value | default: 0 -%}
 {%- assign ag_scope_all = false -%}
-{%- if shop.metafields.elixir_promotions.gift_offer_scope_all.value == true -%}{%- assign ag_scope_all = true -%}{%- endif -%}
+{%- if shop.metafields.zaria_promotions.gift_offer_scope_all.value == true -%}{%- assign ag_scope_all = true -%}{%- endif -%}
 {%- comment -%} BOGO has no separate gift product to auto-add — Shopify discounts the cheapest qualifying item {%- endcomment -%}
 {%- if offer_on contains 'true' and giftp != blank and ag_mode != 'bogo' -%}
   {%- assign giftv = giftp.selected_or_first_available_variant -%}

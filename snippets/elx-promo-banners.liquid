@@ -1,6 +1,6 @@
 {% comment %}
   App-managed promotion banners — rendered globally (home page) from
-  shop.metafields.elixir_promotions.banners so no theme-editor section is
+  shop.metafields.zaria_promotions.banners so no theme-editor section is
   needed. Each banner auto-places itself by stepping through the home page's
   VISIBLE sections: `position` is the section index it sits above
   (0 = top of the page / above the hero, 1 = after the 1st section, 2 = after
@@ -9,7 +9,7 @@
   drop point. Managed entirely in the app → Home page banners.
 {% endcomment %}
 
-{%- assign elx_banners = shop.metafields.elixir_promotions.banners.value -%}
+{%- assign elx_banners = shop.metafields.zaria_promotions.banners.value -%}
 {%- if elx_banners != blank -%}
   {%- style -%}
     .elx-pbanner { position: relative; width: 100%; min-height: 350px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; background: #1a1a1a; }
