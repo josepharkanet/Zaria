@@ -10109,3 +10109,23 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 /* ===== Zaria: lifestyle model image on card hover (colour-matched, no lift/shadow) ===== */
 .product-card__image--model{position:absolute!important;inset:0;width:100%!important;height:100%!important;object-fit:cover!important;opacity:0;transition:opacity .45s ease;z-index:2;pointer-events:none;border-radius:0!important;}
 .product-card:hover .product-card__image--model{opacity:1;}
+
+/* ===== Zaria: fast product-card hover + multi-image cycle (JS-driven) ===== */
+/* stacked hover images; hidden by default, shown instantly by JS (.is-shown) — no slow fade, no "holding" needed */
+.product-card__image--hover{position:absolute!important;inset:0;width:100%!important;height:100%!important;object-fit:cover!important;opacity:0!important;transition:opacity .12s linear!important;z-index:3;pointer-events:none;border-radius:0!important;}
+.product-card:hover .product-card__image--hover{opacity:0!important;}
+.product-card .product-card__image--hover.is-shown,
+.product-card:hover .product-card__image--hover.is-shown{opacity:1!important;}
+/* no-JS fallback: still reveal the 2nd image (back) on hover if the cycle script doesn't run */
+.product-card:hover .product-card__image--secondary.product-card__image--hover{opacity:1!important;}
+/* keep the primary steady underneath and kill the slow zoom so the first swap is instant */
+.product-card__media > img,.product-card__image{transition:opacity .12s linear!important;}
+.product-card:hover .product-card__media > img{transform:none!important;}
+.product-card:hover .product-card__image--primary{opacity:1!important;}
+
+/* ===== Zaria: collapsible collection filters (collapsed by default) ===== */
+.zar-facet__title{cursor:pointer;display:flex!important;align-items:center;justify-content:space-between;gap:10px;user-select:none;}
+.zar-facet__title::after{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:transform .2s ease;flex:none;margin-left:auto;opacity:.55;}
+.zar-facet.is-open > .zar-facet__title::after{transform:rotate(-135deg);}
+.zar-facet > :not(.zar-facet__title){max-height:0;overflow:hidden;opacity:0;transition:max-height .3s ease,opacity .2s ease;}
+.zar-facet.is-open > :not(.zar-facet__title){max-height:2200px;opacity:1;}
