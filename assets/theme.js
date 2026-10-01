@@ -6255,30 +6255,30 @@ export {
   waitForEvent
 };
 
-/* ===== Zaria: fast product-card hover image cycle + collapsible collection filters ===== */
+/* ===== Zaria: product-card hover image cycle (in order) + filter sidebar toggle ===== */
 (function () {
   try {
-    var CYCLE_MS = 850;
-    var active = null, timer = null, idx = 0;
-    function imgsOf(card) { return card ? card.querySelectorAll(".product-card__image--hover") : []; }
-    function show(imgs, n) { for (var i = 0; i < imgs.length; i++) imgs[i].classList.toggle("is-shown", i === n); }
-    function clearCard(card) { var im = imgsOf(card); for (var i = 0; i < im.length; i++) im[i].classList.remove("is-shown"); }
-    function stop() { if (timer) { clearInterval(timer); timer = null; } if (active) { clearCard(active); active = null; } }
-    // Hover: instantly swap to image #2 (the back), then cycle through the rest while hovering.
+    var CYCLE_MS = 900;
+    var active = null, timer = null, step = 0;
+    function hoversOf(card) { return card ? card.querySelectorAll(".product-card__image--hover") : []; }
+    // view v: 1..n shows hover image (v-1) [= product image #(v+1)]; v=0 shows none (the front/primary).
+    function render(card, v) { var h = hoversOf(card); for (var i = 0; i < h.length; i++) h[i].classList.toggle("is-shown", i === (v - 1)); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } if (active) { render(active, 0); active = null; } }
+    // Hover: instantly show image #2, then advance one image at a time, in order (…, last, front, #2, #3, …).
     document.addEventListener("pointerover", function (e) {
       if (!e.target || !e.target.closest) return;
       var card = e.target.closest(".product-card");
       if (!card || card === active) return;
-      var imgs = imgsOf(card);
-      if (!imgs.length) return;
-      if (active) clearCard(active);
-      active = card; idx = 0; show(imgs, 0);
+      var h = hoversOf(card);
+      if (!h.length) return;
+      if (active) render(active, 0);
+      active = card; step = 1; render(card, 1);
       if (timer) clearInterval(timer);
       timer = setInterval(function () {
-        var im = imgsOf(active);
-        if (!im.length) { stop(); return; }
-        idx = (idx + 1) % im.length;
-        show(im, idx);
+        var hs = hoversOf(active);
+        if (!hs.length) { stop(); return; }
+        step = (step + 1) % (hs.length + 1); // 1,2,…,n,0(front),1,… -> every image, in order
+        render(active, step);
       }, CYCLE_MS);
     });
     document.addEventListener("pointerout", function (e) {
@@ -6289,13 +6289,6 @@ export {
       if (to && active.contains(to)) return; // moved within the same card
       stop();
     });
-    // Collection filters: collapsed by default, click a group title to expand/collapse.
-    document.addEventListener("click", function (e) {
-      if (!e.target || !e.target.closest) return;
-      var t = e.target.closest(".zar-facet__title");
-      if (!t) return;
-      var f = t.closest(".zar-facet");
-      if (f) f.classList.toggle("is-open");
-    });
+    // (The FILTER-button sidebar toggle is handled by main-collection.liquid's own script.)
   } catch (err) { /* no-op */ }
 })();
