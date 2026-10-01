@@ -6254,41 +6254,5 @@ export {
   videoLoaded,
   waitForEvent
 };
-
-/* ===== Zaria: product-card hover image cycle (in order) + filter sidebar toggle ===== */
-(function () {
-  try {
-    var CYCLE_MS = 900;
-    var active = null, timer = null, step = 0;
-    function hoversOf(card) { return card ? card.querySelectorAll(".product-card__image--hover") : []; }
-    // view v: 1..n shows hover image (v-1) [= product image #(v+1)]; v=0 shows none (the front/primary).
-    function render(card, v) { var h = hoversOf(card); for (var i = 0; i < h.length; i++) h[i].classList.toggle("is-shown", i === (v - 1)); }
-    function stop() { if (timer) { clearInterval(timer); timer = null; } if (active) { render(active, 0); active = null; } }
-    // Hover: instantly show image #2, then advance one image at a time, in order (…, last, front, #2, #3, …).
-    document.addEventListener("pointerover", function (e) {
-      if (!e.target || !e.target.closest) return;
-      var card = e.target.closest(".product-card");
-      if (!card || card === active) return;
-      var h = hoversOf(card);
-      if (!h.length) return;
-      if (active) render(active, 0);
-      active = card; step = 1; render(card, 1);
-      if (timer) clearInterval(timer);
-      timer = setInterval(function () {
-        var hs = hoversOf(active);
-        if (!hs.length) { stop(); return; }
-        step = (step + 1) % (hs.length + 1); // 1,2,…,n,0(front),1,… -> every image, in order
-        render(active, step);
-      }, CYCLE_MS);
-    });
-    document.addEventListener("pointerout", function (e) {
-      if (!active || !e.target || !e.target.closest) return;
-      var card = e.target.closest(".product-card");
-      if (card !== active) return;
-      var to = e.relatedTarget;
-      if (to && active.contains(to)) return; // moved within the same card
-      stop();
-    });
-    // (The FILTER-button sidebar toggle is handled by main-collection.liquid's own script.)
-  } catch (err) { /* no-op */ }
-})();
+/* Zaria: product-card hover (show 2nd image) is pure CSS; the full-screen gallery + zoom
+   lives in snippets/zaria-quickzoom.liquid; the filter toggle in main-collection.liquid. */

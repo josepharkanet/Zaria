@@ -128,28 +128,13 @@
             class: main_image_classes
         -}}
 
-        {%- comment -%} Zaria: render the additional media as stacked hover images. JS cycles through them on hover (first = #2 = the back), capped for performance. {%- endcomment -%}
+        {%- comment -%} Zaria: single hover image = the 2nd product photo (the back). {%- endcomment -%}
         {%- liquid
           if show_secondary_image and product.media.size > 1
-            assign hover_count = 0
-            assign custom_hover = product.metafields.custom.card_hover_image.value
-            if custom_hover != blank
-              echo custom_hover | image_url: width: custom_hover.width | image_tag: class: 'product-card__image product-card__image--secondary product-card__image--hover', loading: 'lazy', fetchpriority: 'low', sizes: sizes, widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800', draggable: 'false', aria-hidden: 'true'
-              assign hover_count = 1
+            assign next_media = product.metafields.custom.card_hover_image.value | default: product.media[1] | default: product.media[0]
+            if next_media != blank
+              echo next_media | image_url: width: next_media.width | image_tag: class: 'product-card__image product-card__image--secondary', loading: 'lazy', fetchpriority: 'low', sizes: sizes, widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800', draggable: 'false', aria-hidden: 'true'
             endif
-            for m in product.media
-              unless m == featured_media
-                if hover_count >= 5
-                  break
-                endif
-                assign hover_cls = 'product-card__image product-card__image--hover'
-                if hover_count == 0
-                  assign hover_cls = 'product-card__image product-card__image--secondary product-card__image--hover'
-                endif
-                echo m | image_url: width: m.width | image_tag: class: hover_cls, loading: 'lazy', fetchpriority: 'low', sizes: sizes, widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800', draggable: 'false', aria-hidden: 'true'
-                assign hover_count = hover_count | plus: 1
-              endunless
-            endfor
           endif
         -%}
       </a>
@@ -158,7 +143,8 @@
       {%- assign card_is_frag = false -%}
       {%- if product.tags contains 'Perfume' or product.tags contains 'Home Fragrance' or product.tags contains 'Gift Set' or product.tags contains 'Fragrance Accessory' -%}{%- assign card_is_frag = true -%}{%- endif -%}
       {%- if featured_media != blank and card_is_frag == false -%}
-        <button type="button" class="zaria-zoom" aria-label="Quick zoom" data-zoom-src="{{ featured_media | image_url: width: 1600 }}">
+        {%- capture zoom_gallery -%}{%- for m in product.media -%}{{ m.preview_image | image_url: width: 1600 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+        <button type="button" class="zaria-zoom" aria-label="Quick zoom" data-zoom-src="{{ featured_media | image_url: width: 1600 }}" data-zoom-gallery="{{ zoom_gallery | escape }}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
         </button>
       {%- endif -%}
