@@ -6254,3 +6254,48 @@ export {
   videoLoaded,
   waitForEvent
 };
+
+/* ===== Zaria: fast product-card hover image cycle + collapsible collection filters ===== */
+(function () {
+  try {
+    var CYCLE_MS = 850;
+    var active = null, timer = null, idx = 0;
+    function imgsOf(card) { return card ? card.querySelectorAll(".product-card__image--hover") : []; }
+    function show(imgs, n) { for (var i = 0; i < imgs.length; i++) imgs[i].classList.toggle("is-shown", i === n); }
+    function clearCard(card) { var im = imgsOf(card); for (var i = 0; i < im.length; i++) im[i].classList.remove("is-shown"); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } if (active) { clearCard(active); active = null; } }
+    // Hover: instantly swap to image #2 (the back), then cycle through the rest while hovering.
+    document.addEventListener("pointerover", function (e) {
+      if (!e.target || !e.target.closest) return;
+      var card = e.target.closest(".product-card");
+      if (!card || card === active) return;
+      var imgs = imgsOf(card);
+      if (!imgs.length) return;
+      if (active) clearCard(active);
+      active = card; idx = 0; show(imgs, 0);
+      if (timer) clearInterval(timer);
+      timer = setInterval(function () {
+        var im = imgsOf(active);
+        if (!im.length) { stop(); return; }
+        idx = (idx + 1) % im.length;
+        show(im, idx);
+      }, CYCLE_MS);
+    });
+    document.addEventListener("pointerout", function (e) {
+      if (!active || !e.target || !e.target.closest) return;
+      var card = e.target.closest(".product-card");
+      if (card !== active) return;
+      var to = e.relatedTarget;
+      if (to && active.contains(to)) return; // moved within the same card
+      stop();
+    });
+    // Collection filters: collapsed by default, click a group title to expand/collapse.
+    document.addEventListener("click", function (e) {
+      if (!e.target || !e.target.closest) return;
+      var t = e.target.closest(".zar-facet__title");
+      if (!t) return;
+      var f = t.closest(".zar-facet");
+      if (f) f.classList.toggle("is-open");
+    });
+  } catch (err) { /* no-op */ }
+})();

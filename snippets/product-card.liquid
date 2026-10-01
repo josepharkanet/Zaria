@@ -128,13 +128,28 @@
             class: main_image_classes
         -}}
 
+        {%- comment -%} Zaria: render the additional media as stacked hover images. JS cycles through them on hover (first = #2 = the back), capped for performance. {%- endcomment -%}
         {%- liquid
           if show_secondary_image and product.media.size > 1
-            assign next_media = product.metafields.custom.card_hover_image.value | default: product.media[1] | default: product.media[0]
-
-            if next_media != blank
-              echo next_media | image_url: width: next_media.width | image_tag: class: 'product-card__image product-card__image--secondary', loading: 'lazy', fetchpriority: 'low', sizes: sizes, widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800', draggable: 'false', aria-hidden: 'true'
+            assign hover_count = 0
+            assign custom_hover = product.metafields.custom.card_hover_image.value
+            if custom_hover != blank
+              echo custom_hover | image_url: width: custom_hover.width | image_tag: class: 'product-card__image product-card__image--secondary product-card__image--hover', loading: 'lazy', fetchpriority: 'low', sizes: sizes, widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800', draggable: 'false', aria-hidden: 'true'
+              assign hover_count = 1
             endif
+            for m in product.media
+              unless m == featured_media
+                if hover_count >= 5
+                  break
+                endif
+                assign hover_cls = 'product-card__image product-card__image--hover'
+                if hover_count == 0
+                  assign hover_cls = 'product-card__image product-card__image--secondary product-card__image--hover'
+                endif
+                echo m | image_url: width: m.width | image_tag: class: hover_cls, loading: 'lazy', fetchpriority: 'low', sizes: sizes, widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800', draggable: 'false', aria-hidden: 'true'
+                assign hover_count = hover_count | plus: 1
+              endunless
+            endfor
           endif
         -%}
       </a>
