@@ -261,7 +261,7 @@
           </height-observer>
         {%- endif -%}
 
-        <div class="collection">
+        <div class="collection{% if section.settings.filter_layout == 'sidebar' and show_filters %} is-filters-collapsed{% endif %}">
           {%- paginate collection.products by section.settings.products_per_page -%}
             {%- if show_filters -%}
               <facets-drawer
@@ -445,8 +445,8 @@
       sync(s);
     });
 
-    /* sidebar is OPEN by default; the Filter button collapses it */
-    if (typeof window.__elxFiltersOpen === 'undefined') window.__elxFiltersOpen = true;
+    /* sidebar is COLLAPSED by default; the Filter button expands it */
+    if (typeof window.__elxFiltersOpen === 'undefined') window.__elxFiltersOpen = false;
 
     /* re-apply state whenever the collection is re-rendered (filter applied) */
     var s = sec();
