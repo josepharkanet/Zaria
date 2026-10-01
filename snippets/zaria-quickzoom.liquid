@@ -1,25 +1,37 @@
 {%- comment -%}
-  Zaria quick-zoom: a lightweight lightbox for the product catalogue.
-  Any element with [data-zoom-src] opens a full-screen zoomable view of that image.
-  Rendered once (from theme.liquid); the trigger buttons live on the product cards.
+  Zaria quick-zoom: a full-screen lightbox gallery for the product catalogue.
+  A trigger with [data-zoom-gallery] (pipe-separated image URLs) opens a one-image-at-a-time
+  viewer with left/right arrows (and keyboard arrows) to browse, plus click-to-zoom with pan.
+  Falls back to [data-zoom-src] for a single image. Rendered once (from theme.liquid).
 {%- endcomment -%}
-<div class="zqz" id="zaria-quickzoom" aria-hidden="true" role="dialog" aria-label="Fabric preview">
+<div class="zqz" id="zaria-quickzoom" aria-hidden="true" role="dialog" aria-label="Product images">
   <button class="zqz__close" type="button" aria-label="Close">&times;</button>
+  <button class="zqz__nav zqz__nav--prev" type="button" aria-label="Previous image">&#8249;</button>
   <div class="zqz__stage"><img class="zqz__img" alt="" src=""></div>
-  <span class="zqz__hint">Click image to zoom</span>
+  <button class="zqz__nav zqz__nav--next" type="button" aria-label="Next image">&#8250;</button>
+  <span class="zqz__count" aria-hidden="true"></span>
+  <span class="zqz__hint">Click image to zoom &middot; Arrows to browse</span>
 </div>
 <style>
-  .zqz{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;background:rgba(17,17,17,.93);}
+  .zqz{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;background:rgba(17,17,17,.94);}
   .zqz.is-open{display:flex;}
-  .zqz__stage{max-width:92vw;max-height:86vh;overflow:hidden;cursor:zoom-in;}
-  .zqz__img{display:block;max-width:92vw;max-height:86vh;object-fit:contain;transition:transform .25s ease;transform-origin:center center;}
+  .zqz__stage{max-width:84vw;max-height:86vh;overflow:hidden;cursor:zoom-in;}
+  .zqz__img{display:block;max-width:84vw;max-height:86vh;object-fit:contain;transition:transform .25s ease;transform-origin:center center;}
   .zqz.is-zoomed .zqz__stage{cursor:zoom-out;}
   .zqz.is-zoomed .zqz__img{transform:scale(2.3);}
   .zqz__close{position:fixed;top:20px;right:26px;background:none;border:0;color:#fff;font-size:36px;line-height:1;cursor:pointer;opacity:.85;}
   .zqz__close:hover{opacity:1;}
-  .zqz__hint{position:fixed;bottom:22px;left:0;right:0;text-align:center;color:rgba(255,255,255,.7);font-size:11px;letter-spacing:.18em;text-transform:uppercase;}
+  .zqz__nav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:0;color:#fff;width:52px;height:52px;border-radius:50%;font-size:30px;line-height:1;cursor:pointer;display:grid;place-items:center;opacity:.85;transition:background .15s ease,opacity .15s ease;}
+  .zqz__nav:hover{background:rgba(255,255,255,.22);opacity:1;}
+  .zqz__nav--prev{left:22px;}
+  .zqz__nav--next{right:22px;}
+  .zqz__nav[hidden]{display:none;}
+  .zqz.is-zoomed .zqz__nav{opacity:0;pointer-events:none;}
+  .zqz__count{position:fixed;top:24px;left:0;right:0;text-align:center;color:rgba(255,255,255,.8);font-size:12px;letter-spacing:.18em;}
+  .zqz__hint{position:fixed;bottom:22px;left:0;right:0;text-align:center;color:rgba(255,255,255,.65);font-size:11px;letter-spacing:.16em;text-transform:uppercase;}
   .zqz.is-zoomed .zqz__hint{opacity:0;}
-  /* card zoom trigger (subtle, always visible so it doesn't rely on a card hover effect) */
+  @media(max-width:699px){.zqz__nav{width:42px;height:42px;font-size:24px;}.zqz__nav--prev{left:8px;}.zqz__nav--next{right:8px;}.zqz__stage,.zqz__img{max-width:94vw;}}
+  /* card zoom trigger (subtle, always visible) */
   .zaria-zoom{position:absolute;bottom:8px;right:8px;z-index:3;width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.82);color:#1a1a1a;display:grid;place-items:center;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.18);transition:background .15s ease,opacity .15s ease;opacity:.9;}
   .zaria-zoom:hover{background:#fff;opacity:1;}
   .zaria-zoom svg{width:15px;height:15px;}
@@ -29,20 +41,50 @@
   (function(){
     var lb=document.getElementById('zaria-quickzoom'); if(!lb) return;
     var img=lb.querySelector('.zqz__img'), stage=lb.querySelector('.zqz__stage');
-    function open(src){ img.src=src; lb.classList.add('is-open'); lb.classList.remove('is-zoomed'); lb.setAttribute('aria-hidden','false'); document.documentElement.style.overflow='hidden'; }
-    function close(){ lb.classList.remove('is-open','is-zoomed'); lb.setAttribute('aria-hidden','true'); document.documentElement.style.overflow=''; img.style.transformOrigin='center center'; }
+    var prev=lb.querySelector('.zqz__nav--prev'), next=lb.querySelector('.zqz__nav--next'), count=lb.querySelector('.zqz__count');
+    var gallery=[], idx=0;
+    function unzoom(){ lb.classList.remove('is-zoomed'); img.style.transformOrigin='center center'; }
+    function render(){
+      if(!gallery.length) return;
+      img.src=gallery[idx];
+      var multi=gallery.length>1;
+      count.textContent=multi?((idx+1)+' / '+gallery.length):'';
+      prev.hidden=!multi; next.hidden=!multi;
+      unzoom();
+    }
+    function openGallery(list, start){
+      gallery=(list||[]).filter(Boolean); idx=start||0;
+      if(!gallery.length) return;
+      lb.classList.add('is-open'); lb.setAttribute('aria-hidden','false');
+      document.documentElement.style.overflow='hidden';
+      render();
+    }
+    function close(){ lb.classList.remove('is-open','is-zoomed'); lb.setAttribute('aria-hidden','true'); document.documentElement.style.overflow=''; unzoom(); }
+    function go(d){ if(gallery.length<2) return; idx=(idx+d+gallery.length)%gallery.length; render(); }
+
     document.addEventListener('click', function(e){
-      var t=e.target.closest('[data-zoom-src]');
-      if(t){ e.preventDefault(); e.stopPropagation(); open(t.getAttribute('data-zoom-src')); }
+      var t=e.target.closest ? e.target.closest('[data-zoom-gallery],[data-zoom-src]') : null;
+      if(!t) return;
+      e.preventDefault(); e.stopPropagation();
+      var g=t.getAttribute('data-zoom-gallery');
+      var list=g ? g.split('|') : [t.getAttribute('data-zoom-src')];
+      openGallery(list, 0);
     });
+    prev.addEventListener('click', function(e){ e.stopPropagation(); go(-1); });
+    next.addEventListener('click', function(e){ e.stopPropagation(); go(1); });
     lb.querySelector('.zqz__close').addEventListener('click', close);
     lb.addEventListener('click', function(e){ if(e.target===lb) close(); });
-    stage.addEventListener('click', function(){ lb.classList.toggle('is-zoomed'); });
+    stage.addEventListener('click', function(e){ e.stopPropagation(); lb.classList.toggle('is-zoomed'); });
     stage.addEventListener('mousemove', function(e){
       if(!lb.classList.contains('is-zoomed')) return;
       var r=stage.getBoundingClientRect();
       img.style.transformOrigin=((e.clientX-r.left)/r.width*100)+'% '+((e.clientY-r.top)/r.height*100)+'%';
     });
-    document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+    document.addEventListener('keydown', function(e){
+      if(!lb.classList.contains('is-open')) return;
+      if(e.key==='Escape') close();
+      else if(e.key==='ArrowLeft') go(-1);
+      else if(e.key==='ArrowRight') go(1);
+    });
   })();
 </script>

@@ -10110,17 +10110,11 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .product-card__image--model{position:absolute!important;inset:0;width:100%!important;height:100%!important;object-fit:cover!important;opacity:0;transition:opacity .45s ease;z-index:2;pointer-events:none;border-radius:0!important;}
 .product-card:hover .product-card__image--model{opacity:1;}
 
-/* ===== Zaria: product-card hover — cycle ALL images in order (JS-driven) ===== */
-/* Only the JS-selected hover image is ever visible (.is-shown), so the sequence is exact. */
-.product-card .product-card__image--hover{position:absolute!important;inset:0;width:100%!important;height:100%!important;object-fit:cover!important;opacity:0!important;transition:opacity .12s linear!important;z-index:4;pointer-events:none;border-radius:0!important;}
-.product-card:hover .product-card__image--hover{opacity:0!important;}
-.product-card .product-card__image--hover.is-shown,
-.product-card:hover .product-card__image--hover.is-shown{opacity:1!important;}
-/* keep the primary steady underneath and kill the slow zoom so swaps are instant */
-.product-card__media > img,.product-card__image{transition:opacity .12s linear!important;}
-.product-card:hover .product-card__media > img{transform:none!important;}
+/* ===== Zaria: product-card hover — show the 2nd image (back), fast ===== */
+.product-card .product-card__image--secondary{opacity:0!important;transition:opacity .15s ease!important;}
+.product-card:hover .product-card__image--secondary{opacity:1!important;}
 .product-card:hover .product-card__image--primary{opacity:1!important;}
+.product-card:hover .product-card__media > img{transform:none!important;}
 
 /* ===== Zaria: filter sidebar collapsed by default (FILTER button toggles it) ===== */
-/* .collection.is-filters-collapsed already hides .facets-sidebar + makes the grid full-width (see rules above). */
 .zar-filter-toggle{cursor:pointer;}
