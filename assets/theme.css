@@ -10118,3 +10118,10 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 
 /* ===== Zaria: filter sidebar collapsed by default (FILTER button toggles it) ===== */
 .zar-filter-toggle{cursor:pointer;}
+
+/* ===== Zaria: "Coming Soon" state for empty categories ===== */
+.zaria-coming-soon{min-height:48vh;display:grid;place-items:center;text-align:center;padding:64px 20px;}
+.zaria-coming-soon .prose{max-width:none;}
+.zaria-cs__eyebrow{font-family:"Jost",sans-serif;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#8a8178;margin:0 0 14px;}
+.zaria-cs__title{font-family:"Jost",sans-serif;font-weight:300;font-size:clamp(28px,5vw,46px);letter-spacing:.1em;text-transform:uppercase;color:#161616;margin:0 0 16px;line-height:1.1;}
+.zaria-cs__text{color:#6a645c;font-size:15px;line-height:1.85;max-width:42ch;margin:0 auto 30px;}
