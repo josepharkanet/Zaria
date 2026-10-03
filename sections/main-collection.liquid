@@ -127,10 +127,12 @@
   <div class="container">
     <div class="v-stack gap-6 sm:gap-12">
       {%- if collection.all_products_count == 0 -%}
-        <div class="empty-state">
+        {%- comment -%} Zaria: elegant "Coming Soon" state for categories that have no products yet {%- endcomment -%}
+        <div class="empty-state zaria-coming-soon">
           <div class="prose">
-            <h1 class="h4">{{ collection.title }}</h1>
-            <p>{{ 'collection.general.empty_collection' | t }}</p>
+            <p class="zaria-cs__eyebrow">{{ collection.title }}</p>
+            <h1 class="zaria-cs__title">Coming Soon</h1>
+            <p class="zaria-cs__text">This collection is being prepared with care. Please check back shortly.</p>
 
             {%- assign button_content = 'collection.general.continue_shopping' | t -%}
             {%- render 'button', href: routes.all_products_collection_url, size: 'xl', content: button_content -%}
