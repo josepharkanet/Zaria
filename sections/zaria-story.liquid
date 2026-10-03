@@ -92,6 +92,14 @@
     #shopify-section-{{ section.id }} .zab-tiles{grid-template-columns:repeat(2,1fr)}
     #shopify-section-{{ section.id }} .zab-tile--tall{grid-row:auto;aspect-ratio:1/1}
   }
+
+  /* ---------- Zaria: slim invitation band (replaces the homepage story) ---------- */
+  #shopify-section-{{ section.id }} .zst-invite{background:#f5f5f5;text-align:center;padding:clamp(54px,7vw,92px) clamp(20px,5vw,48px);font-family:var(--text-font-family,'Jost'),'Jost',sans-serif}
+  #shopify-section-{{ section.id }} .zst-invite__inner{max-width:760px;margin:0 auto}
+  #shopify-section-{{ section.id }} .zst-invite__eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#8a8178;margin:0 0 18px}
+  #shopify-section-{{ section.id }} .zst-invite__lead{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:300;font-size:clamp(22px,3vw,34px);line-height:1.3;letter-spacing:.01em;color:#1a1a1a;margin:0 0 30px}
+  #shopify-section-{{ section.id }} .zst-invite__cta{display:inline-block;background:#161616;color:#fff;text-decoration:none;padding:15px 44px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;border:1px solid #161616;transition:background .2s ease,border-color .2s ease}
+  #shopify-section-{{ section.id }} .zst-invite__cta:hover{background:#7a1f34;border-color:#7a1f34}
 </style>
 
 {%- if template.suffix == 'story' -%}
@@ -201,14 +209,12 @@
   </div>
 
 {%- else -%}
-  {%- comment -%} ===== Classic layout (homepage) ===== {%- endcomment -%}
-  <section class="zst">
-    <div class="zst__inner">
-      {%- if sc.heading != blank -%}<h2 class="zst__title">{{ sc.heading }}</h2>{%- endif -%}
-      <div class="zst__rule"></div>
-      {%- if sc.body != blank -%}<div class="zst__body">{{ sc.body }}</div>{%- endif -%}
-      {%- if sc.signature != blank -%}<p class="zst__sign">{{ sc.signature }}</p>{%- endif -%}
-      {%- if sc.link_label != blank -%}<a class="zst__link" href="{{ sc.link_url | default: '#' }}">{{ sc.link_label }}</a>{%- endif -%}
+  {%- comment -%} ===== Zaria: landing-page story replaced with a slim invitation band ===== {%- endcomment -%}
+  <section class="zst-invite">
+    <div class="zst-invite__inner">
+      <p class="zst-invite__eyebrow">The House of Zaria</p>
+      <p class="zst-invite__lead">Fine fabrics and modest couture, designed and made in Dubai.</p>
+      <a class="zst-invite__cta" href="/collections/all">Explore the Collection</a>
     </div>
   </section>
 {%- endif -%}
