@@ -1,13 +1,14 @@
 {%- comment -%}Zaria footer — rendered as a snippet (section registration fails on this theme via Shopify GitHub sync). No section.settings here; values are hardcoded assigns below. Arkanet{%- endcomment -%}
 {%- assign zf_tagline = 'A design-led couture house of considered silhouettes and refined tailoring.' -%}
 {%- assign zf_loc = 'Dubai, United Arab Emirates' -%}
+{%- assign zf_email = 'hello@zaria.ae' -%}
 {%- assign zf_news_heading = 'The Zaria List' -%}
 {%- assign zf_news_text = 'First looks, private appointments and atelier notes.' -%}
 {%- assign zf_design_url = '/pages/design-your-look' -%}
 {%- assign zf_credit = 'Arkanet Technologies' -%}
 {%- assign zf_credit_url = 'https://arkanet.ae' -%}
 {%- comment -%} Social — set a URL to reveal the icon (blank hides it). Placeholders point nowhere until Zaria's real handles are added. {%- endcomment -%}
-{%- assign zf_instagram = '' -%}
+{%- assign zf_instagram = 'https://instagram.com/zaria.uae' -%}
 {%- assign zf_tiktok = '' -%}
 {%- assign zf_facebook = '' -%}
 {%- assign zf_pinterest = '' -%}
@@ -140,6 +141,7 @@
         {%- endif -%}
 
         {%- if zf_loc != blank -%}<p class="zaria-footer__loc">{{ zf_loc }}</p>{%- endif -%}
+        {%- if zf_email != blank -%}<p class="zaria-footer__loc"><a href="mailto:{{ zf_email }}" style="color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px">{{ zf_email }}</a></p>{%- endif -%}
       </div>
 
       <div class="zaria-footer__right">

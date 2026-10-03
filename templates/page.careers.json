@@ -9,7 +9,7 @@
         "heading": "Join the House of Zaria",
         "body": "<p>Zaria is a design-led couture house in Dubai, creating modest luxury with care and precision. We look for people who love craft, detail and quiet excellence, from pattern cutters and tailors to stylists, client advisors and digital talent.</p><p>If that sounds like you, we would love to hear from you, even if there is no role listed today.</p>",
         "link_label": "Email the studio",
-        "link_url": "mailto:Order@zaria.ae"
+        "link_url": "mailto:hello@zaria.ae"
       }
     },
     "values": {
@@ -24,7 +24,7 @@
     },
     "cta": {
       "type": "zaria-quote",
-      "settings": { "scheme": "ink", "eyebrow": "Open applications", "quote": "Send your portfolio or CV to Order@zaria.ae. We read every message.", "attribution": "The House of Zaria, Dubai" }
+      "settings": { "scheme": "ink", "eyebrow": "Open applications", "quote": "Send your portfolio or CV to hello@zaria.ae. We read every message.", "attribution": "The House of Zaria, Dubai" }
     }
   },
   "order": ["intro", "values", "cta"]
