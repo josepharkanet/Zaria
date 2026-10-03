@@ -110,36 +110,6 @@
         <img class="zaria-footer__logo" src="{{ 'zaria-logo-full.png' | asset_url }}" alt="{{ shop.name | escape }}" width="2150" height="2155" loading="lazy">
         {%- if zf_tagline != blank -%}<p class="zaria-footer__tagline">{{ zf_tagline }}</p>{%- endif -%}
 
-        {%- if zf_instagram != blank or zf_tiktok != blank or zf_facebook != blank or zf_pinterest != blank or zf_youtube != blank -%}
-          <div class="zaria-social">
-            {%- if zf_instagram != blank -%}
-              <a href="{{ zf_instagram }}" target="_blank" rel="noopener" aria-label="Instagram">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-              </a>
-            {%- endif -%}
-            {%- if zf_tiktok != blank -%}
-              <a href="{{ zf_tiktok }}" target="_blank" rel="noopener" aria-label="TikTok">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.1 1.6 3.7 3.7 4v2.6c-1.4.1-2.7-.3-3.9-1v5.9c0 3.5-2.9 6.2-6.3 5.5-2.4-.5-4.2-2.6-4.3-5.1-.1-3 2.3-5.5 5.3-5.5.3 0 .5 0 .8.1v2.7c-.3-.1-.5-.1-.8-.1-1.5 0-2.7 1.4-2.4 3 .2 1 1 1.8 2 2 1.5.2 2.8-.9 2.8-2.4V3z"/></svg>
-              </a>
-            {%- endif -%}
-            {%- if zf_facebook != blank -%}
-              <a href="{{ zf_facebook }}" target="_blank" rel="noopener" aria-label="Facebook">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-              </a>
-            {%- endif -%}
-            {%- if zf_pinterest != blank -%}
-              <a href="{{ zf_pinterest }}" target="_blank" rel="noopener" aria-label="Pinterest">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.04-2.83.18-.77 1.22-5.17 1.22-5.17s-.31-.62-.31-1.54c0-1.45.84-2.53 1.88-2.53.89 0 1.32.67 1.32 1.47 0 .9-.57 2.24-.87 3.48-.25 1.04.52 1.88 1.54 1.88 1.85 0 3.27-1.95 3.27-4.76 0-2.49-1.79-4.23-4.34-4.23-2.96 0-4.69 2.22-4.69 4.51 0 .89.34 1.85.77 2.37.08.1.09.19.07.29-.08.32-.25 1.04-.28 1.18-.04.19-.14.23-.32.14-1.25-.58-2.03-2.42-2.03-3.89 0-3.15 2.29-6.05 6.61-6.05 3.47 0 6.16 2.47 6.16 5.77 0 3.45-2.17 6.22-5.19 6.22-1.01 0-1.97-.53-2.3-1.15l-.62 2.33c-.23.87-.84 1.96-1.25 2.62.94.29 1.94.45 2.97.45 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              </a>
-            {%- endif -%}
-            {%- if zf_youtube != blank -%}
-              <a href="{{ zf_youtube }}" target="_blank" rel="noopener" aria-label="YouTube">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
-              </a>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
-
         {%- if zf_loc != blank -%}<p class="zaria-footer__loc">{{ zf_loc }}</p>{%- endif -%}
         {%- if zf_email != blank -%}<p class="zaria-footer__loc"><a href="mailto:{{ zf_email }}" style="color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px">{{ zf_email }}</a></p>{%- endif -%}
       </div>
@@ -183,6 +153,35 @@
           <div class="zaria-footer__news-intro">
             {%- if zf_news_heading != blank -%}<p class="zaria-footer__eyebrow">{{ zf_news_heading }}</p>{%- endif -%}
             {%- if zf_news_text != blank -%}<p class="zaria-news__text">{{ zf_news_text }}</p>{%- endif -%}
+            {%- if zf_instagram != blank or zf_tiktok != blank or zf_facebook != blank or zf_pinterest != blank or zf_youtube != blank -%}
+              <div class="zaria-social">
+                {%- if zf_instagram != blank -%}
+                  <a href="{{ zf_instagram }}" target="_blank" rel="noopener" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                  </a>
+                {%- endif -%}
+                {%- if zf_tiktok != blank -%}
+                  <a href="{{ zf_tiktok }}" target="_blank" rel="noopener" aria-label="TikTok">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.1 1.6 3.7 3.7 4v2.6c-1.4.1-2.7-.3-3.9-1v5.9c0 3.5-2.9 6.2-6.3 5.5-2.4-.5-4.2-2.6-4.3-5.1-.1-3 2.3-5.5 5.3-5.5.3 0 .5 0 .8.1v2.7c-.3-.1-.5-.1-.8-.1-1.5 0-2.7 1.4-2.4 3 .2 1 1 1.8 2 2 1.5.2 2.8-.9 2.8-2.4V3z"/></svg>
+                  </a>
+                {%- endif -%}
+                {%- if zf_facebook != blank -%}
+                  <a href="{{ zf_facebook }}" target="_blank" rel="noopener" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                  </a>
+                {%- endif -%}
+                {%- if zf_pinterest != blank -%}
+                  <a href="{{ zf_pinterest }}" target="_blank" rel="noopener" aria-label="Pinterest">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.04-2.83.18-.77 1.22-5.17 1.22-5.17s-.31-.62-.31-1.54c0-1.45.84-2.53 1.88-2.53.89 0 1.32.67 1.32 1.47 0 .9-.57 2.24-.87 3.48-.25 1.04.52 1.88 1.54 1.88 1.85 0 3.27-1.95 3.27-4.76 0-2.49-1.79-4.23-4.34-4.23-2.96 0-4.69 2.22-4.69 4.51 0 .89.34 1.85.77 2.37.08.1.09.19.07.29-.08.32-.25 1.04-.28 1.18-.04.19-.14.23-.32.14-1.25-.58-2.03-2.42-2.03-3.89 0-3.15 2.29-6.05 6.61-6.05 3.47 0 6.16 2.47 6.16 5.77 0 3.45-2.17 6.22-5.19 6.22-1.01 0-1.97-.53-2.3-1.15l-.62 2.33c-.23.87-.84 1.96-1.25 2.62.94.29 1.94.45 2.97.45 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                  </a>
+                {%- endif -%}
+                {%- if zf_youtube != blank -%}
+                  <a href="{{ zf_youtube }}" target="_blank" rel="noopener" aria-label="YouTube">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
           </div>
           {%- form 'customer', id: 'zaria-newsletter-form', class: 'zaria-news__formwrap' -%}
             <input type="hidden" name="contact[tags]" value="newsletter">
