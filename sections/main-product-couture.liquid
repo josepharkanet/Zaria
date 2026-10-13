@@ -50,6 +50,11 @@
     assign is_garment = true
   endif
 
+  assign is_accessory = false
+  if product.tags contains 'Accessories' or product.type == 'Sheila'
+    assign is_accessory = true
+  endif
+
   comment
     Zaria Design Studio (Coolify). Temporary sslip.io domain — swap this one line when a permanent domain is set.
   endcomment
@@ -346,8 +351,8 @@
         </div>
       {%- endform -%}
 
-      {%- unless is_fragrance or is_garment -%}{% render 'zaria-design-form', product: product, variant: fv %}{%- endunless -%}
-      {%- unless is_fragrance or is_garment -%}<div class="zpdp__sizechart">{% render 'zaria-size-chart' %}</div>{%- endunless -%}
+      {%- unless is_fragrance or is_garment or is_accessory -%}{% render 'zaria-design-form', product: product, variant: fv %}{%- endunless -%}
+      {%- unless is_fragrance or is_garment or is_accessory -%}<div class="zpdp__sizechart">{% render 'zaria-size-chart' %}</div>{%- endunless -%}
 
       <div class="zpdp__acc" style="margin-top:28px">
         <details open>
