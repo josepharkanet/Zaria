@@ -341,7 +341,7 @@
             {%- if product.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}
           </button>
           {%- if product.available and is_garment == false -%}
-            <a class="zpdp__buynow" href="/checkout?variant={{ fv.id }}&quantity=1">Buy it Now</a>
+            <a class="zpdp__buynow" data-zpdp-buynow data-variant="{{ fv.id }}" href="/checkout?variant={{ fv.id }}&quantity=1">Buy it Now</a>
           {%- endif -%}
         </div>
       {%- endform -%}
@@ -402,6 +402,8 @@
 (function(){
   var f=document.getElementById('zpdp-form');
   if(f){f.querySelectorAll('[data-qstep]').forEach(function(b){b.addEventListener('click',function(){var i=f.querySelector('.zpdp__qty');var v=parseInt(i.value||'1',10)+parseInt(b.getAttribute('data-qstep'),10);i.value=v<1?1:v;});});}
+  var bn=document.querySelector('[data-zpdp-buynow]');
+  if(bn){bn.addEventListener('click',function(){var q=1,vid=bn.getAttribute('data-variant');if(f){var qi=f.querySelector('.zpdp__qty');if(qi)q=Math.max(1,parseInt(qi.value||'1',10));var vs=f.querySelector('select.zpdp__variant');if(vs&&vs.value)vid=vs.value;}bn.setAttribute('href','/checkout?variant='+vid+'&quantity='+q);});}
 })();
 (function(){
   var root=document.getElementById('zpdp-gal-{{ section.id }}');
