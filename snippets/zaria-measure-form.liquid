@@ -43,7 +43,7 @@
   /* Readymade */
   .zmm__ready-grid{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .zmm__ready-grid .zmm__label{margin:0;white-space:nowrap}
-  .zmm__ready-grid select{width:auto;min-width:124px;padding:9px 30px 9px 12px;font-size:13.5px}
+  .zmm__ready-grid select{width:152px;min-width:0;padding:9px 30px 9px 12px;font-size:13.5px}
 
   /* Customized - visual layout */
   .zmm__visual{display:grid;grid-template-columns:210px 1fr;gap:clamp(18px,3vw,34px);align-items:start}
@@ -99,20 +99,30 @@
 
   {%- comment -%} ===== READYMADE ===== {%- endcomment -%}
   {%- assign zmm_len = product.metafields.custom.length.value -%}
+  {%- assign zmm_all_len = '53,54,55,56,57,58,59,60,61' | split: ',' -%}
   {%- assign zmm_slv = product.metafields.custom.sleeve_length.value -%}
   <div class="zmm__panel" data-zmm-panel="ready" hidden>
     <div class="zmm__ready-grid">
       <div class="zmm__label">Length <span class="req">*</span></div>
       <select name="properties[Length]" data-zmm-in="ready" disabled>
         {%- if zmm_len != blank -%}
-          <option value="{{ zmm_len }} inches" selected>{{ zmm_len }} inches</option>
+          {%- for L in zmm_all_len -%}
+            {%- if L == zmm_len -%}
+              <option value="{{ L }} inches" selected>{{ L }} inches</option>
+            {%- else -%}
+              <option value="" disabled>{{ L }} inches &mdash; not available</option>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- unless zmm_all_len contains zmm_len -%}
+            <option value="{{ zmm_len }} inches" selected>{{ zmm_len }} inches</option>
+          {%- endunless -%}
         {%- else -%}
           <option value="One Size" selected>One Size</option>
         {%- endif -%}
       </select>
     </div>
     <input type="hidden" name="properties[Size]" value="One Size" data-zmm-in="ready" disabled>
-    <p class="zmm__hint">This piece is ready-to-wear in <b>one standard size</b>, cut to the length shown above{% if zmm_slv != blank %} with a {{ zmm_slv }}&quot; sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements, or choose <b>Customized</b> for a made-to-measure fit.</p>
+    <p class="zmm__hint">This piece is made in <b>{% if zmm_len != blank %}{{ zmm_len }}&quot;{% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }}&quot; sleeve{% endif %} &mdash; other lengths are shown as not available. Open the <b>Size Chart</b> for full measurements, or choose <b>Customized</b> to have it cut to your own measurements.</p>
   </div>
 
   {%- comment -%} ===== CUSTOMIZED (visual) ===== {%- endcomment -%}
