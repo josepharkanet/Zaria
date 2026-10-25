@@ -121,7 +121,7 @@
             {%- if L == zmm_len -%}
               <option value="{{ L }} inches" selected>{{ L }} inches</option>
             {%- else -%}
-              <option value="" disabled>{{ L }} inches &mdash; not available</option>
+              <option value="" disabled>{{ L }} inches (not available)</option>
             {%- endif -%}
           {%- endfor -%}
           {%- unless zmm_all_len contains zmm_len -%}
