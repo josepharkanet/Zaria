@@ -26,10 +26,6 @@
   .zmm__mode:hover{border-color:#161616;color:#161616}
   .zmm__mode input{accent-color:var(--wine,#7a1f34);width:16px;height:16px;margin:0}
   .zmm__mode.is-active{border-color:var(--wine,#7a1f34);color:#161616;background:#fbf7f8}
-  .zmm__mode{flex-wrap:wrap}
-  .zmm__mode-note{color:#8a8178;font-size:11px;letter-spacing:.08em}
-  .zmm__mode.is-active .zmm__mode-note{color:var(--wine,#7a1f34)}
-  @media (max-width:600px){.zmm__mode{gap:6px;padding:13px 8px}.zmm__mode-note{flex:0 0 100%;text-align:center;margin-top:3px}}
   .zmm__panel{margin-top:18px}
   .zmm__panel[hidden]{display:none}
   .zmm select,.zmm textarea{width:100%;border:1px solid #d7d2ca;background:#fff;padding:13px 12px;font:inherit;
@@ -89,7 +85,7 @@
   <div class="zmm__modes">
     <label class="zmm__mode" data-zmm-modelabel>
       <input type="radio" name="properties[Size Type]" value="Readymade" data-zmm-mode="ready" required>
-      Readymade <span class="zmm__mode-note">(One Size)</span>
+      Readymade
     </label>
     <label class="zmm__mode" data-zmm-modelabel>
       <input type="radio" name="properties[Size Type]" value="Customized" data-zmm-mode="custom">
