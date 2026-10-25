@@ -54,7 +54,9 @@
         </svg>
       </div>
 
-      <div class="zsc__tablewrap">
+      <div class="zsc__tablecol">
+        <p class="zsc__scrollhint">Scroll sideways to see all sizes &rarr;</p>
+        <div class="zsc__tablewrap">
         <table class="zsc__table">
           <thead>
             <tr><th class="zsc__rh">Size</th><th>36</th><th>38</th><th>40</th><th>42</th><th>44</th><th>46</th><th>48</th><th>50</th><th>52</th><th>54</th></tr>
@@ -73,6 +75,7 @@
             <tr><th class="zsc__rh">Bottom Open</th><td>15</td><td>15</td><td>16</td><td>18&frac12;</td><td>19</td><td>20</td><td>20</td><td>21</td><td>21</td><td>22</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   </div>
@@ -86,7 +89,7 @@
     opacity:0;transition:opacity .25s ease}
   .zsc__overlay.is-open{opacity:1}
   .zsc__overlay[hidden]{display:none}
-  .zsc__modal{position:relative;background:#fff;width:100%;max-width:920px;max-height:90vh;overflow:auto;padding:clamp(22px,4vw,44px);
+  .zsc__modal{position:relative;background:#fff;width:100%;max-width:1040px;max-height:90vh;overflow-y:auto;overflow-x:hidden;padding:clamp(22px,4vw,44px);
     font-family:'Jost',sans-serif;color:#1a1a1a;box-shadow:0 30px 80px rgba(0,0,0,.3);transform:translateY(10px);transition:transform .25s ease}
   .zsc__overlay.is-open .zsc__modal{transform:none}
   .zsc__close{position:absolute;top:14px;right:14px;background:none;border:0;cursor:pointer;color:#8a8a8a;padding:6px}
@@ -97,7 +100,9 @@
   .zsc__body{display:grid;grid-template-columns:220px 1fr;gap:clamp(20px,3vw,40px);align-items:start}
   .zsc__diagram{position:sticky;top:0}
   .zsc__diagram svg{width:100%;height:auto}
-  .zsc__tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #ece8e2}
+  .zsc__tablecol{min-width:0}
+  .zsc__scrollhint{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#a89f95;margin:0 0 8px}
+  .zsc__tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #ece8e2;min-width:0;max-width:100%}
   .zsc__table{border-collapse:collapse;width:100%;min-width:560px;font-size:12.5px}
   .zsc__table th,.zsc__table td{padding:11px 12px;text-align:center;white-space:nowrap;border-bottom:1px solid #f0ece6}
   .zsc__table thead th{background:#161616;color:#fff;font-weight:400;letter-spacing:.06em;position:sticky;top:0}
@@ -108,6 +113,8 @@
   @media (max-width:640px){
     .zsc__body{grid-template-columns:1fr}
     .zsc__diagram{max-width:200px;margin:0 auto;position:static}
+    .zsc__table th,.zsc__table td{padding:9px 9px}
+    .zsc__rh{min-width:96px}
   }
 </style>
 
@@ -117,7 +124,9 @@
   var overlay=document.querySelector('[data-zsc-overlay]');
   if(!open||!overlay)return;
   var closeEls=overlay.querySelectorAll('[data-zsc-close]');
-  function show(){overlay.hidden=false;requestAnimationFrame(function(){overlay.classList.add('is-open')});document.body.style.overflow='hidden';}
+  function syncHint(){var tw=overlay.querySelector('.zsc__tablewrap'),h=overlay.querySelector('.zsc__scrollhint');if(tw&&h){h.style.display=(tw.scrollWidth>tw.clientWidth+4)?'':'none';}}
+  function show(){overlay.hidden=false;requestAnimationFrame(function(){overlay.classList.add('is-open');syncHint();});document.body.style.overflow='hidden';}
+  window.addEventListener('resize',function(){if(!overlay.hidden)syncHint();});
   function hide(){overlay.classList.remove('is-open');document.body.style.overflow='';setTimeout(function(){overlay.hidden=true;},250);}
   open.addEventListener('click',show);
   closeEls.forEach(function(c){c.addEventListener('click',hide);});
