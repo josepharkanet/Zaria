@@ -118,7 +118,7 @@
       </select>
     </div>
     <input type="hidden" name="properties[Size]" value="One Size" data-zmm-in="ready" disabled>
-    <p class="zmm__hint">This piece is made in <b>{% if zmm_len != blank %}{{ zmm_len }}&quot;{% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }}&quot; sleeve{% endif %} &mdash; other lengths are shown as not available. Open the <b>Size Chart</b> for full measurements, or choose <b>Customized</b> to have it cut to your own measurements.</p>
+    <p class="zmm__hint">This piece is available in <b>{% if zmm_len != blank %}{{ zmm_len }}&quot;{% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }}&quot; sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements, or choose <b>Customized</b> to have it cut to your own measurements.</p>
   </div>
 
   {%- comment -%} ===== CUSTOMIZED (visual) ===== {%- endcomment -%}
