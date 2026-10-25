@@ -26,12 +26,15 @@
   .zmm__mode:hover{border-color:#161616;color:#161616}
   .zmm__mode input{accent-color:var(--wine,#7a1f34);width:16px;height:16px;margin:0}
   .zmm__mode.is-active{border-color:var(--wine,#7a1f34);color:#161616;background:#fbf7f8}
+  .zmm__mode{flex-wrap:wrap}
+  .zmm__mode-note{color:#8a8178;font-size:11px;letter-spacing:.08em}
+  .zmm__mode.is-active .zmm__mode-note{color:var(--wine,#7a1f34)}
+  @media (max-width:600px){.zmm__mode{gap:6px;padding:13px 8px}.zmm__mode-note{flex:0 0 100%;text-align:center;margin-top:3px}}
   .zmm__panel{margin-top:18px}
   .zmm__panel[hidden]{display:none}
   .zmm select,.zmm textarea{width:100%;border:1px solid #d7d2ca;background:#fff;padding:13px 12px;font:inherit;
     font-size:14px;color:#161616;border-radius:0;box-sizing:border-box}
   .zmm select:focus,.zmm textarea:focus{outline:none;border-color:#161616}
-  .zmm__onesize{display:inline-flex;align-items:center;border:1px solid #d7d2ca;background:#faf7f2;padding:13px 16px;font-size:14px;letter-spacing:.06em;color:#161616;border-radius:0;box-sizing:border-box}
   .zmm textarea{min-height:76px;resize:vertical;line-height:1.6}
   .zmm__label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6a;margin:0 0 6px}
   .zmm__label .req{color:var(--wine,#7a1f34)}
@@ -84,7 +87,7 @@
   <div class="zmm__modes">
     <label class="zmm__mode" data-zmm-modelabel>
       <input type="radio" name="properties[Size Type]" value="Readymade" data-zmm-mode="ready" required>
-      Readymade
+      Readymade <span class="zmm__mode-note">(One Size)</span>
     </label>
     <label class="zmm__mode" data-zmm-modelabel>
       <input type="radio" name="properties[Size Type]" value="Customized" data-zmm-mode="custom">
@@ -94,13 +97,7 @@
 
   {%- comment -%} ===== READYMADE ===== {%- endcomment -%}
   <div class="zmm__panel" data-zmm-panel="ready" hidden>
-    <div class="zmm__ready-grid">
-      <div>
-        <div class="zmm__label">Size</div>
-        <div class="zmm__onesize">One Size</div>
-        <input type="hidden" name="properties[Size]" value="One Size" data-zmm-in="ready" disabled>
-      </div>
-    </div>
+    <input type="hidden" name="properties[Size]" value="One Size" data-zmm-in="ready" disabled>
     <p class="zmm__hint">This ready-to-wear piece is made in <b>one standard size</b> (one piece per item). Open the <b>Size Chart</b> above to view its measurements, or choose <b>Customized</b> for a made-to-measure fit.</p>
   </div>
 
