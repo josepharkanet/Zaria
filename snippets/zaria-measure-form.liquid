@@ -31,6 +31,7 @@
   .zmm select,.zmm textarea{width:100%;border:1px solid #d7d2ca;background:#fff;padding:13px 12px;font:inherit;
     font-size:14px;color:#161616;border-radius:0;box-sizing:border-box}
   .zmm select:focus,.zmm textarea:focus{outline:none;border-color:#161616}
+  .zmm__onesize{display:inline-flex;align-items:center;border:1px solid #d7d2ca;background:#faf7f2;padding:13px 16px;font-size:14px;letter-spacing:.06em;color:#161616;border-radius:0;box-sizing:border-box}
   .zmm textarea{min-height:76px;resize:vertical;line-height:1.6}
   .zmm__label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6a;margin:0 0 6px}
   .zmm__label .req{color:var(--wine,#7a1f34)}
@@ -95,19 +96,12 @@
   <div class="zmm__panel" data-zmm-panel="ready" hidden>
     <div class="zmm__ready-grid">
       <div>
-        <div class="zmm__label">Size <span class="req">*</span></div>
-        <select name="properties[Size]" data-zmm-req data-zmm-in="ready" disabled>
-          <option value="">-- Please select --</option>
-          <option value="36 / XS">36 / XS</option>
-          <option value="38 / S">38 / S</option>
-          <option value="40 / M">40 / M</option>
-          <option value="42 / L">42 / L</option>
-          <option value="44 / XL">44 / XL</option>
-          <option value="46 / XXL">46 / XXL</option>
-        </select>
+        <div class="zmm__label">Size</div>
+        <div class="zmm__onesize">One Size</div>
+        <input type="hidden" name="properties[Size]" value="One Size" data-zmm-in="ready" disabled>
       </div>
     </div>
-    <p class="zmm__hint">Not sure of your size? Open the <b>Size Chart</b> above to match your measurements to a standard size.</p>
+    <p class="zmm__hint">This ready-to-wear piece is made in <b>one standard size</b> (one piece per item). Open the <b>Size Chart</b> above to view its measurements, or choose <b>Customized</b> for a made-to-measure fit.</p>
   </div>
 
   {%- comment -%} ===== CUSTOMIZED (visual) ===== {%- endcomment -%}
