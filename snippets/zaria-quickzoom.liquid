@@ -68,7 +68,7 @@
       e.preventDefault(); e.stopPropagation();
       var g=t.getAttribute('data-zoom-gallery');
       var list=g ? g.split('|') : [t.getAttribute('data-zoom-src')];
-      openGallery(list, 0);
+      openGallery(list, parseInt(t.getAttribute("data-zoom-start"),10)||0);
     });
     prev.addEventListener('click', function(e){ e.stopPropagation(); go(-1); });
     next.addEventListener('click', function(e){ e.stopPropagation(); go(1); });
@@ -80,6 +80,13 @@
       var r=stage.getBoundingClientRect();
       img.style.transformOrigin=((e.clientX-r.left)/r.width*100)+'% '+((e.clientY-r.top)/r.height*100)+'%';
     });
+    stage.addEventListener('touchmove', function(e){
+      if(!lb.classList.contains('is-zoomed')) return;
+      var tt=e.touches&&e.touches[0]; if(!tt) return;
+      var r=stage.getBoundingClientRect();
+      img.style.transformOrigin=((tt.clientX-r.left)/r.width*100)+'% '+((tt.clientY-r.top)/r.height*100)+'%';
+      e.preventDefault();
+    },{passive:false});
     document.addEventListener('keydown', function(e){
       if(!lb.classList.contains('is-open')) return;
       if(e.key==='Escape') close();
