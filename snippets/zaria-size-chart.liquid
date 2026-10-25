@@ -125,7 +125,7 @@
   if(!open||!overlay)return;
   var closeEls=overlay.querySelectorAll('[data-zsc-close]');
   function syncHint(){var tw=overlay.querySelector('.zsc__tablewrap'),h=overlay.querySelector('.zsc__scrollhint');if(tw&&h){h.style.display=(tw.scrollWidth>tw.clientWidth+4)?'':'none';}}
-  function show(){overlay.hidden=false;requestAnimationFrame(function(){overlay.classList.add('is-open');syncHint();});document.body.style.overflow='hidden';}
+  function show(){overlay.hidden=false;requestAnimationFrame(function(){overlay.classList.add('is-open');syncHint();});setTimeout(syncHint,140);document.body.style.overflow='hidden';}
   window.addEventListener('resize',function(){if(!overlay.hidden)syncHint();});
   function hide(){overlay.classList.remove('is-open');document.body.style.overflow='';setTimeout(function(){overlay.hidden=true;},250);}
   open.addEventListener('click',show);
