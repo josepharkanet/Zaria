@@ -96,9 +96,21 @@
   </div>
 
   {%- comment -%} ===== READYMADE ===== {%- endcomment -%}
+  {%- assign zmm_len = product.metafields.custom.length.value -%}
+  {%- assign zmm_slv = product.metafields.custom.sleeve_length.value -%}
   <div class="zmm__panel" data-zmm-panel="ready" hidden>
+    <div class="zmm__ready-grid">
+      <div class="zmm__label">Length <span class="req">*</span></div>
+      <select name="properties[Length]" data-zmm-in="ready" disabled>
+        {%- if zmm_len != blank -%}
+          <option value="{{ zmm_len }} inches" selected>{{ zmm_len }} inches</option>
+        {%- else -%}
+          <option value="One Size" selected>One Size</option>
+        {%- endif -%}
+      </select>
+    </div>
     <input type="hidden" name="properties[Size]" value="One Size" data-zmm-in="ready" disabled>
-    <p class="zmm__hint">This ready-to-wear piece is made in <b>one standard size</b> (one piece per item). Open the <b>Size Chart</b> above to view its measurements, or choose <b>Customized</b> for a made-to-measure fit.</p>
+    <p class="zmm__hint">This piece is ready-to-wear in <b>one standard size</b>, cut to the length shown above{% if zmm_slv != blank %} with a {{ zmm_slv }}&quot; sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements, or choose <b>Customized</b> for a made-to-measure fit.</p>
   </div>
 
   {%- comment -%} ===== CUSTOMIZED (visual) ===== {%- endcomment -%}
