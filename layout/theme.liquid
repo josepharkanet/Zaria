@@ -13,6 +13,8 @@
       {%- else -%}
         {{- page_title -}}
         {%- if current_page != 1 %} &ndash; {{ 'general.page' | t: page: current_page }}{% endif -%}
+        {%- comment -%}Zaria: carry the house name into every title so search results read as ours{%- endcomment -%}
+        {%- unless page_title contains 'Zaria' %} | Zaria{% endunless -%}
       {%- endif -%}
     </title>
 
@@ -20,6 +22,23 @@
       <meta name="description" content="Zaria is a UAE house of fine fabrics and modest couture. Premium silk, cotton, chiffon and embellished cloth by the metre, plus made-to-measure design.">
     {%- elsif page_description -%}
       <meta name="description" content="{{ page_description | escape }}">
+    {%- else -%}
+      {%- comment -%}Zaria: fall back to the collection or page copy so no page ships without a description{%- endcomment -%}
+      {%- liquid
+        assign zmeta = ''
+        if request.page_type == 'collection' and collection.description != blank
+          assign zmeta = collection.description | strip_html | strip_newlines | truncate: 155
+        elsif request.page_type == 'collection'
+          assign zmeta = collection.title | append: ' from Zaria, a UAE house of fine fabrics and modest couture. Shop the collection or commission a made-to-measure piece.'
+        elsif request.page_type == 'page' and page.content != blank
+          assign zmeta = page.content | strip_html | strip_newlines | truncate: 155
+        elsif request.page_type == 'article' and article.excerpt_or_content != blank
+          assign zmeta = article.excerpt_or_content | strip_html | strip_newlines | truncate: 155
+        endif
+      -%}
+      {%- if zmeta != blank -%}
+        <meta name="description" content="{{ zmeta | escape }}">
+      {%- endif -%}
     {%- endif -%}
 
     <link rel="canonical" href="{{ canonical_url }}">
