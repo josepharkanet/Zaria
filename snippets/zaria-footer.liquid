@@ -2,6 +2,8 @@
 {%- assign zf_tagline = 'A design-led couture house of considered silhouettes and refined tailoring.' -%}
 {%- assign zf_loc = 'Dubai, United Arab Emirates' -%}
 {%- assign zf_email = 'hello@zaria.ae' -%}
+{%- comment -%}SRTIP trade licence number. Leave blank until Zaria confirm it; the footer line hides it while empty.{%- endcomment -%}
+{%- assign zf_licence = '' -%}
 {%- assign zf_news_heading = 'The Zaria List' -%}
 {%- assign zf_news_text = 'First looks, private appointments and atelier notes.' -%}
 {%- assign zf_design_url = '/pages/design-your-look' -%}
@@ -68,6 +70,7 @@
     margin-top:28px;padding-top:24px;border-top:1px solid #ececec}
   .zaria-footer__copyright{color:#9a9a9a;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin:0}
   .zaria-footer__credit{color:#bcbcbc;font-size:10.5px;letter-spacing:.05em;margin:0}
+  .zaria-footer__legal{margin:18px 0 0;text-align:center;color:#bcbcbc;font-size:10.5px;line-height:1.7;letter-spacing:.04em}
   .zaria-footer__credit a{color:#8a8a8a;text-decoration:none;transition:color .2s ease}
   .zaria-footer__credit a:hover{color:#7a1f34}
   .zaria-payments{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.5rem;margin:0;padding:0;list-style:none}
@@ -202,7 +205,7 @@
     </div>
 
     <div class="zaria-footer__aside">
-      <p class="zaria-footer__copyright">&copy; {{ 'now' | date: '%Y' }} - {{ shop.name }}</p>
+      <p class="zaria-footer__copyright">&copy; {{ 'now' | date: '%Y' }} Zaria | Zaria Fashion FZE. All rights reserved.</p>
 
       {%- if shop.enabled_payment_types.size >= 2 -%}
         <ul class="zaria-payments">
@@ -237,6 +240,11 @@
         </p>
       {%- endif -%}
     </div>
+
+    <p class="zaria-footer__legal">
+      ZARIA | Zaria Fashion FZE &middot; Licensed by Sharjah Research Technology and Innovation Park (SRTIP){% if zf_licence != blank %} &middot; Trade Licence No. {{ zf_licence }}{% endif %}<br>
+      Block B-B58-155, Sharjah Research Technology and Innovation Park, Sharjah, United Arab Emirates
+    </p>
 
   </div>
 </footer>
