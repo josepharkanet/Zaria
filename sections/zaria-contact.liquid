@@ -50,9 +50,20 @@
     <div class="zct__hero">
       {%- assign zct_hero_vid = sc.hero_video | default: 'zaria-contact-video.mp4' -%}
       {%- if zct_hero_vid != blank -%}
-        <video class="zct__hero-bg" autoplay muted loop playsinline preload="metadata" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1600 }}{% else %}{{ 'zaria-contact-poster.jpg' | asset_url }}{% endif %}">
-          <source src="{{ zct_hero_vid | asset_url }}" type="video/mp4">
-        </video>
+        {%- comment -%}Zaria: ~7MB clip, so phones keep the poster and desktop attaches it after load.{%- endcomment -%}
+        <video class="zct__hero-bg" data-zct-src="{{ zct_hero_vid | asset_url }}" muted loop playsinline preload="none" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1600 }}{% else %}{{ 'zaria-contact-poster.jpg' | asset_url }}{% endif %}"></video>
+        <script>
+        (function(){
+          var v=document.currentScript.previousElementSibling;
+          if(!v||!v.dataset.zctSrc)return;
+          if(!window.matchMedia('(min-width:750px)').matches)return;
+          if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+          var s=document.createElement('source');
+          s.src=v.dataset.zctSrc;s.type='video/mp4';
+          v.appendChild(s);
+          try{v.load();v.play();}catch(e){}
+        })();
+        </script>
       {%- else -%}
         <img class="zct__hero-bg" src="{% if sc.image != blank %}{{ sc.image | image_url: width: 2000 }}{% else %}{{ 'zaria-dyl-bg.jpg' | asset_url }}{% endif %}" alt="" width="2000" height="1333" loading="lazy">
       {%- endif -%}
