@@ -31,9 +31,31 @@
     <div class="zft__media">
       {%- assign zft_vid = sc.video_asset | default: 'zaria-hero-model.mp4' -%}
       {%- if zft_vid != blank -%}
-        <video class="zft__video" autoplay muted loop playsinline preload="metadata" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1200 }}{% else %}{{ 'zaria-feature.jpg' | asset_url }}{% endif %}">
-          <source src="{{ zft_vid | asset_url }}" type="video/mp4">
-        </video>
+        {%- comment -%}
+          Zaria: this clip is ~15MB and sits below the fold. The source is held in data-src so
+          phones never fetch it, and desktop only loads it once the section scrolls into view.
+        {%- endcomment -%}
+        <video class="zft__video" data-zft-src="{{ zft_vid | asset_url }}" muted loop playsinline preload="none" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1200 }}{% else %}{{ 'zaria-feature.jpg' | asset_url }}{% endif %}"></video>
+        <script>
+        (function(){
+          var v=document.currentScript.previousElementSibling;
+          if(!v||!v.dataset.zftSrc)return;
+          if(!window.matchMedia('(min-width:750px)').matches)return;
+          if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+          function load(){
+            if(v.dataset.ready)return;
+            var s=document.createElement('source');
+            s.src=v.dataset.zftSrc;s.type='video/mp4';
+            v.appendChild(s);v.dataset.ready='1';
+            try{v.load();v.play();}catch(e){}
+          }
+          if(!('IntersectionObserver' in window)){load();return;}
+          var io=new IntersectionObserver(function(es){
+            es.forEach(function(e){if(e.isIntersecting){load();io.disconnect();}});
+          },{rootMargin:'300px'});
+          io.observe(v);
+        })();
+        </script>
       {%- elsif sc.image != blank -%}
         <img src="{{ sc.image | image_url: width: 1200 }}" alt="{{ sc.image.alt | escape }}" width="{{ sc.image.width }}" height="{{ sc.image.height }}" loading="lazy">
       {%- else -%}
