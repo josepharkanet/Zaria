@@ -36,9 +36,15 @@
   #shopify-section-{{ section.id }} .zhero__veil{position:absolute;inset:0;background:#000;opacity:{{ sc.overlay | divided_by: 100.0 }}}
   #shopify-section-{{ section.id }} .zhero__scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.62) 0%,rgba(0,0,0,.22) 40%,rgba(0,0,0,0) 70%)}
   #shopify-section-{{ section.id }} .zhero__video{border:0;background:#1a1a1a}
-  #shopify-section-{{ section.id }} .zhero__videos{position:absolute;inset:0}
+  #shopify-section-{{ section.id }} .zhero__videos{position:absolute;inset:0;display:none}
   #shopify-section-{{ section.id }} .zhero__v{opacity:0;transition:opacity 1.4s ease}
   #shopify-section-{{ section.id }} .zhero__v.is-active{opacity:1}
+  {%- comment -%}Zaria: phones keep the still; the clips only appear once the script turns them on{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zhero__still{z-index:0}
+  @media (min-width:750px){
+    #shopify-section-{{ section.id }} .zhero--playing .zhero__videos{display:block}
+    #shopify-section-{{ section.id }} .zhero--playing .zhero__still{display:none}
+  }
   #shopify-section-{{ section.id }} .zhero__inner{position:relative;z-index:1;width:100%;max-width:1280px;margin:0 auto;
     display:flex;flex-direction:column;padding:48px 24px;gap:0}
   #shopify-section-{{ section.id }} .zhero--top .zhero__inner{justify-content:flex-start}
@@ -70,11 +76,19 @@
 </style>
 <section class="zhero {{ scheme }} zhero--{{ sc.align }} zhero--middle">
   {%- if has_hero_video -%}
+    {%- comment -%}
+      Zaria: the hero clips are ~31MB together, so phones get the poster still instead.
+      The sources stay in data-src and are only attached on wide screens (see the script).
+    {%- endcomment -%}
+    {%- if sc.image != blank -%}
+      {%- assign zhero_poster_url = sc.image | image_url: width: 1600 -%}
+    {%- else -%}
+      {%- assign zhero_poster_url = hero_poster | asset_url -%}
+    {%- endif -%}
+    <img class="zhero__bg zhero__still" src="{{ zhero_poster_url }}" alt="{{ sc.image.alt | escape }}" loading="eager" fetchpriority="high">
     <div class="zhero__videos" id="zhero-vids-{{ section.id }}">
       {%- for u in vid_list -%}
-        <video class="zhero__bg zhero__video zhero__v{% if forloop.first %} is-active{% endif %}" data-i="{{ forloop.index0 }}"{% if forloop.first %} autoplay{% endif %} muted loop playsinline preload="{% if forloop.first %}auto{% else %}none{% endif %}"{% if forloop.first %} poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1600 }}{% else %}{{ hero_poster | asset_url }}{% endif %}"{% endif %}>
-          <source src="{{ u }}" type="video/mp4">
-        </video>
+        <video class="zhero__bg zhero__video zhero__v{% if forloop.first %} is-active{% endif %}" data-i="{{ forloop.index0 }}" data-src="{{ u }}" muted loop playsinline preload="none"{% if forloop.first %} poster="{{ zhero_poster_url }}"{% endif %}></video>
       {%- endfor -%}
     </div>
     <div class="zhero__veil"></div>
@@ -102,12 +116,27 @@
   if(!root)return;
   var vids=[].slice.call(root.querySelectorAll('.zhero__v'));
   if(!vids.length)return;
+
+  /* Phones and reduced-motion visitors keep the poster still: no clip is ever fetched. */
+  if(!window.matchMedia('(min-width:750px)').matches)return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+
+  function attach(v){
+    if(v.dataset.ready)return;
+    var s=document.createElement('source');
+    s.src=v.dataset.src;s.type='video/mp4';
+    v.appendChild(s);v.dataset.ready='1';
+    try{v.load();}catch(e){}
+  }
+  attach(vids[0]);
+  var section=root.closest('.zhero');
+  if(section)section.classList.add('zhero--playing');
   try{vids[0].play();}catch(e){}
   if(vids.length<2)return;
   var cur=0, loaded={0:true};
   setInterval(function(){
     var next=(cur+1)%vids.length;
-    if(!loaded[next]){try{vids[next].load();}catch(e){}loaded[next]=true;}
+    if(!loaded[next]){attach(vids[next]);loaded[next]=true;}
     try{vids[next].currentTime=0;vids[next].play();}catch(e){}
     vids[next].classList.add('is-active');
     vids[cur].classList.remove('is-active');
