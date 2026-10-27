@@ -2,21 +2,35 @@
 {%- assign sc = section.settings -%}
 {%- assign scheme = 'zhero--dark' -%}
 {%- if sc.text_color == 'light' -%}{%- assign scheme = 'zhero--light' -%}{%- endif -%}
-{%- comment -%} Zaria: hero video slider. Prefer up to 3 editor-uploaded videos; fall back to the packaged asset clips {%- endcomment -%}
+{%- comment -%}
+  Zaria: hero video slider. Prefer editor-uploaded videos, fall back to the packaged asset clips.
+  Each slot is read explicitly: a bracket lookup on section.settings fails Shopify's section
+  validation, which silently froze this file on the theme for weeks.
+{%- endcomment -%}
 {%- assign vid_urls = '' -%}
-{%- for n in (1..3) -%}
-  {%- assign vkey = 'hero_video_' | append: n -%}
-  {%- assign vobj = sc[vkey] -%}
-  {%- if vobj != blank and vobj.sources.size > 0 -%}
-    {%- assign vsrc = vobj.sources | where: 'format', 'mp4' | first -%}
-    {%- unless vsrc -%}{%- assign vsrc = vobj.sources | first -%}{%- endunless -%}
-    {%- if vsrc.url != blank -%}{%- assign vid_urls = vid_urls | append: vsrc.url | append: '||' -%}{%- endif -%}
-  {%- endif -%}
-{%- endfor -%}
+
+{%- if sc.hero_video_1 != blank and sc.hero_video_1.sources.size > 0 -%}
+  {%- assign vsrc = sc.hero_video_1.sources | where: 'format', 'mp4' | first -%}
+  {%- unless vsrc -%}{%- assign vsrc = sc.hero_video_1.sources | first -%}{%- endunless -%}
+  {%- if vsrc.url != blank -%}{%- assign vid_urls = vid_urls | append: vsrc.url | append: '||' -%}{%- endif -%}
+{%- endif -%}
+
+{%- if sc.hero_video_2 != blank and sc.hero_video_2.sources.size > 0 -%}
+  {%- assign vsrc = sc.hero_video_2.sources | where: 'format', 'mp4' | first -%}
+  {%- unless vsrc -%}{%- assign vsrc = sc.hero_video_2.sources | first -%}{%- endunless -%}
+  {%- if vsrc.url != blank -%}{%- assign vid_urls = vid_urls | append: vsrc.url | append: '||' -%}{%- endif -%}
+{%- endif -%}
+
+{%- if sc.hero_video_3 != blank and sc.hero_video_3.sources.size > 0 -%}
+  {%- assign vsrc = sc.hero_video_3.sources | where: 'format', 'mp4' | first -%}
+  {%- unless vsrc -%}{%- assign vsrc = sc.hero_video_3.sources | first -%}{%- endunless -%}
+  {%- if vsrc.url != blank -%}{%- assign vid_urls = vid_urls | append: vsrc.url | append: '||' -%}{%- endif -%}
+{%- endif -%}
+
 {%- if vid_urls == blank -%}
   {%- assign av1 = 'zaria-hero-1.mp4' | asset_url -%}
   {%- assign av2 = 'zaria-hero-2.mp4' | asset_url -%}
-  {%- assign vid_urls = av1 | append: '||' | append: av2 | append: '||' -%}
+  {%- assign vid_urls = av1 | append: '||' | append: av2 -%}
 {%- endif -%}
 {%- assign vid_list = vid_urls | split: '||' -%}
 {%- assign has_hero_video = false -%}
