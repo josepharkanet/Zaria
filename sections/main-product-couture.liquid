@@ -55,11 +55,6 @@
     assign is_accessory = true
   endif
 
-  comment
-    Zaria Design Studio (Coolify). Served over HTTPS on studio.zaria.ae.
-  endcomment
-  assign studio_url = 'https://studio.zaria.ae'
-
   assign attr_count = 0
   if is_fragrance
     if fr_family != blank
@@ -184,9 +179,6 @@
   #shopify-section-{{ section.id }} .zpdp__buynow{display:flex;align-items:center;justify-content:center;flex:1 1 160px;height:54px;
     background:transparent;color:#161616;border:1px solid #161616;font-size:12px;letter-spacing:.22em;text-transform:uppercase;text-decoration:none}
   #shopify-section-{{ section.id }} .zpdp__buynow:hover{background:#161616;color:#fff}
-  #shopify-section-{{ section.id }} .zpdp__studio{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:14px;padding:14px;
-    border:1px solid var(--wine);color:var(--wine);font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;transition:background .2s,color .2s}
-  #shopify-section-{{ section.id }} .zpdp__studio:hover{background:var(--wine);color:#fff}
   #shopify-section-{{ section.id }} .zpdp__sizechart{margin-top:16px;padding-top:16px;border-top:1px solid #ece8e2}
 
   /* accordions */
