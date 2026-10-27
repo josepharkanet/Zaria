@@ -32,8 +32,12 @@
           assign zmeta = collection.title | append: ' from Zaria, a UAE house of fine fabrics and modest couture. Shop the collection or commission a made-to-measure piece.'
         elsif request.page_type == 'page' and page.content != blank
           assign zmeta = page.content | strip_html | strip_newlines | truncate: 155
+        elsif request.page_type == 'page'
+          assign zmeta = page.title | append: ' at Zaria, a UAE house of fine fabrics and modest couture in Dubai.'
         elsif request.page_type == 'article' and article.excerpt_or_content != blank
           assign zmeta = article.excerpt_or_content | strip_html | strip_newlines | truncate: 155
+        elsif request.page_type == 'blog'
+          assign zmeta = blog.title | append: ' from Zaria: atelier notes, fabric stories and dressing well in the UAE.'
         endif
       -%}
       {%- if zmeta != blank -%}
