@@ -13,8 +13,9 @@
       "type": "design-your-look",
       "settings": {
         "scheme": "light",
-        "height": 66,
+        "image": "shopify://shop_images/ALS_7578.jpg",
         "focal": "center",
+        "height": 66,
         "overline": "Custom Design",
         "heading": "Design Your Look",
         "use_h1": true,
@@ -26,15 +27,6 @@
     },
     "journey": {
       "type": "zaria-values",
-      "settings": {
-        "scheme": "white",
-        "eyebrow": "The Zaria Journey",
-        "heading": "How your piece is made",
-        "marker": "number",
-        "columns": "4",
-        "align": "center",
-        "dividers": false
-      },
       "blocks": {
         "s1": {
           "type": "value",
@@ -74,11 +66,31 @@
         "s2",
         "s3",
         "s4"
-      ]
+      ],
+      "settings": {
+        "scheme": "white",
+        "eyebrow": "The Zaria Journey",
+        "heading": "How your piece is made",
+        "marker": "number",
+        "columns": "4",
+        "align": "center",
+        "dividers": false,
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
     },
     "form": {
       "type": "zaria-studio-form",
-      "settings": {}
+      "settings": {
+        "heading": "Tell us about your piece",
+        "lede": "Share as much or as little as you like. A designer will take it from here.",
+        "rtw_length": "58",
+        "rtw_sleeve": "23",
+        "api_url": "",
+        "button_label": "Send my design request",
+        "success_heading": "Thank you, your request is with our designers",
+        "success_body": "One of our designers will be in touch shortly to refine the design and confirm your measurements."
+      }
     }
   },
   "order": [
