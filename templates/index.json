@@ -12,11 +12,51 @@
     "hero": {
       "type": "zaria-hero",
       "settings": {
+        "image_alt": "Zaria couture kaftan",
+        "interval": 4,
+        "fallback_bg": "#f3f0ec",
+        "overlay": 0,
         "text_color": "dark",
+        "overline": "Modern Emirati Elegance",
+        "heading": "The Art of Fine Fabric",
         "subheading": "",
         "button_1_label": "",
+        "button_1_url": "",
         "button_2_label": "",
-        "vertical": "middle"
+        "button_2_url": "",
+        "align": "center",
+        "vertical": "middle",
+        "height_desktop": 86,
+        "height_mobile": 78
+      }
+    },
+    "story": {
+      "type": "zaria-story",
+      "settings": {
+        "scheme": "cream",
+        "heading": "Our Story",
+        "body": "<p>Born in the United Arab Emirates, ZARIA embodies Modern Emirati Elegance, where the grace of Arabian heritage meets the refinement of contemporary design.</p>",
+        "signature": "The House of ZARIA · United Arab Emirates",
+        "link_label": "",
+        "link_url": "",
+        "hero_overline": "The House of Zaria",
+        "hero_heading": "Elegance, made in the Emirates",
+        "hero_heading_accent": "",
+        "story_heading": "The Story",
+        "story_intro": "<p>Every woman carries a story of strength, grace, and individuality. At ZARIA, we create fashion that reflects her story, with confidence, sophistication, and effortless elegance.</p>",
+        "story_body": "<p>Born in the United Arab Emirates, ZARIA embodies Modern Emirati Elegance, where the grace of Arabian heritage meets the refinement of contemporary design. Inspired by the UAE's unique balance of tradition and modernity, our collections reinterpret modest fashion for today's woman.</p><p>Every ZARIA piece is thoughtfully created with premium fabrics, graceful silhouettes, refined tailoring, and elegant details. Our designs celebrate modesty without compromising individuality, allowing women to move effortlessly from everyday moments and business occasions to family gatherings and special celebrations.</p><p>For ZARIA, luxury is found in simplicity, quality, and exceptional craftsmanship. It is in the beauty of a perfect silhouette, the touch of a beautiful fabric, and the subtle details that make a piece feel truly special.</p><p>More than a fashion house, ZARIA represents a modern Emirati way of elegance: confident yet graceful, contemporary yet connected to heritage, understated yet distinctive.</p><p>Created in the UAE and inspired by its spirit, ZARIA is for women who embrace their identity, appreciate timeless design, and express themselves with quiet confidence and effortless sophistication.</p>",
+        "story_btn_label": "Design your look",
+        "story_btn_url": "",
+        "people_heading": "The Atelier",
+        "people_text": "<p>Every piece is shaped by the hands of our atelier, from the first sketch to the final stitch, with care, patience and an eye for detail.</p>",
+        "people_btn_label": "Book a consultation",
+        "people_btn_url": "",
+        "featured_heading": "Featured Work",
+        "featured_text": "<p>A considered edit of fabrics and finished pieces, chosen for their beauty, their fall, and the quiet luxury of the details.</p>",
+        "featured_btn_label": "View the collection",
+        "featured_btn_url": "",
+        "padding_top": 96,
+        "padding_bottom": 96
       }
     },
     "collections": {
@@ -25,19 +65,22 @@
         "c1": {
           "type": "collection",
           "settings": {
-            "collection": "silk"
+            "collection": "silk",
+            "title": ""
           }
         },
         "c2": {
           "type": "collection",
           "settings": {
-            "collection": "cotton"
+            "collection": "cotton",
+            "title": ""
           }
         },
         "c3": {
           "type": "collection",
           "settings": {
-            "collection": "chiffon"
+            "collection": "chiffon",
+            "title": ""
           }
         },
         "c4": {
@@ -55,49 +98,59 @@
         "c4"
       ],
       "settings": {
-        "eyebrow": "The Fabrics",
-        "heading": "Explore by fabric",
-        "link_label": "Explore",
-        "columns": "4",
-        "ratio": "3/4"
-      }
-    },
-    "products": {
-      "type": "zaria-products",
-      "settings": {
-        "eyebrow": "",
-        "heading": "New Arrivals",
-        "collection": "all-fabrics",
-        "limit": 4,
-        "columns": "4"
+        "scheme": "white",
+        "overline": "The Fabric House",
+        "title": "Explore Collections",
+        "cols": "3",
+        "tile_ratio": "1/1",
+        "cat_handles": "luxe-silks,fine-cottons,chiffons-organza,linen-blends,velvets,tulle-3d-work,silk-blends,sequins-embroidery,hand-painted",
+        "cat_names": "Luxe Silks,Fine Cottons,Chiffons & Organza,Linen Blends,Velvets,Tulle & 3D Work,Silk Blends,Sequins & Embroidery,Hand-Painted",
+        "padding_top": 88,
+        "padding_bottom": 48
       }
     },
     "fragrance": {
       "type": "zaria-fragrance",
-      "settings": {}
-    },
-    "feature": {
-      "type": "zaria-feature",
-      "settings": {}
-    },
-    "story": {
-      "type": "zaria-story",
-      "settings": {}
+      "settings": {
+        "image": "shopify://shop_images/perfume.png",
+        "focal": "center",
+        "eyebrow": "The Maison",
+        "title": "The Art of Scent",
+        "subheading": "Oud, amber and rose, composed into a signature olfactory wardrobe, perfumes, bakhoor and home fragrance in the Zaria spirit.",
+        "button_label": "Discover Fragrance",
+        "button_url": "",
+        "height": 54
+      }
     },
     "lookbook": {
       "type": "zaria-lookbook",
       "blocks": {
         "l1": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "overline": "",
+            "caption": "",
+            "link": "",
+            "tall": false
+          }
         },
         "l2": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "overline": "",
+            "caption": "",
+            "link": "",
+            "tall": false
+          }
         },
         "l3": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "overline": "",
+            "caption": "",
+            "link": "",
+            "tall": false
+          }
         }
       },
       "block_order": [
@@ -105,7 +158,47 @@
         "l2",
         "l3"
       ],
-      "settings": {}
+      "settings": {
+        "scheme": "white",
+        "eyebrow": "Lookbook",
+        "heading": "The season in view",
+        "columns": "3",
+        "ratio": "3/4",
+        "padding_top": 96,
+        "padding_bottom": 56
+      }
+    },
+    "products": {
+      "type": "zaria-products",
+      "settings": {
+        "scheme": "white",
+        "eyebrow": "",
+        "heading": "New Arrivals",
+        "collection": "all-fabrics",
+        "limit": 4,
+        "columns": "4",
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "padding_top": 40,
+        "padding_bottom": 88
+      }
+    },
+    "feature": {
+      "type": "zaria-feature",
+      "settings": {
+        "scheme": "white",
+        "video_asset": "zaria-feature.mp4",
+        "bg_color": "#f5f5f5",
+        "image_side": "left",
+        "ratio": "4/5",
+        "eyebrow": "The House of Zaria",
+        "heading": "A study in modern couture",
+        "body": "<p>Zaria is a design-led couture house built on considered silhouettes and refined tailoring. Every piece is drawn, cut, and finished by hand, made to be worn and kept.</p>",
+        "link_label": "Discover the house",
+        "link_url": "",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     },
     "values": {
       "type": "zaria-values",
@@ -149,11 +242,32 @@
         "v3",
         "v4"
       ],
-      "settings": {}
+      "settings": {
+        "scheme": "white",
+        "eyebrow": "Why Zaria",
+        "heading": "The house standard",
+        "marker": "icon",
+        "columns": "4",
+        "align": "center",
+        "dividers": false,
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
     },
     "design_your_look": {
       "type": "design-your-look",
-      "settings": {}
+      "settings": {
+        "scheme": "dark",
+        "focal": "center",
+        "height": 62,
+        "overline": "The Atelier",
+        "heading": "Design your look",
+        "use_h1": false,
+        "body": "Commission a piece made only for you. Share your vision, your measurements and your occasion, and our designers will bring it to life.",
+        "button_label": "Start your design",
+        "button_url": "",
+        "open_in_new_tab": false
+      }
     }
   },
   "order": [
