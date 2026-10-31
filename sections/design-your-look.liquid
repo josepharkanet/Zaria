@@ -4,6 +4,8 @@
   #shopify-section-{{ section.id }} .zdl{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
     min-height:{{ section.settings.height | default: 62 }}vh;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;background:#1c1518}
   #shopify-section-{{ section.id }} .zdl__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ section.settings.focal | default: 'center' }}}
+  {%- comment -%}The picture wrapper is positioned so it never becomes a stray flex item in the centred band{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zdl__bgwrap{position:absolute;inset:0}
   /* Zaria: zoom the background video slightly so any tool watermark near the edges is cropped out of frame */
   #shopify-section-{{ section.id }} .zdl__bg--video{transform:scale(1.12);transform-origin:center center}
   #shopify-section-{{ section.id }} .zdl__veil{position:absolute;inset:0;background:linear-gradient(rgba(18,12,14,.5),rgba(18,12,14,.64))}
@@ -34,7 +36,15 @@
   {%- elsif section.settings.image != blank -%}
     <img class="zdl__bg" src="{{ section.settings.image | image_url: width: 2200 }}" alt="" width="2200" height="1237" loading="lazy">
   {%- else -%}
-    <img class="zdl__bg" src="{{ 'zaria-dyl-bg.jpg' | asset_url }}" alt="" width="2000" height="1333" loading="lazy">
+    {%- comment -%}
+      Zaria: zaria-dyl-bg.jpg stays untouched because sections/zaria-contact.liquid falls back to it
+      for the Contact hero. This band carries its own frame, with a phone crop held on the model:
+      the wide photograph is close to 2:1, and a tall phone band centre-cropped onto bare wall.
+    {%- endcomment -%}
+    <picture class="zdl__bgwrap">
+      <source media="(min-width: 750px)" srcset="{{ 'zaria-dyl-bw.jpg' | asset_url }}">
+      <img class="zdl__bg" src="{{ 'zaria-dyl-bw-m.jpg' | asset_url }}" alt="" width="900" height="1200" loading="lazy">
+    </picture>
   {%- endif -%}
   <div class="zdl__veil"></div>
   {%- endunless -%}
