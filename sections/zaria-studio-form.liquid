@@ -25,21 +25,27 @@
 
 <style>
   {%- comment -%}Everything is scoped to this section so no rule reaches the rest of the theme.{%- endcomment -%}
-  #shopify-section-{{ section.id }} .zds{max-width:940px;margin:0 auto;padding:clamp(34px,5vw,64px) clamp(18px,4vw,28px) clamp(48px,6vw,88px);
+  {%- comment -%}
+    House pattern, matching sections/zaria-values.liquid: a centred head block at 760, a small
+    uppercase letterspaced title, no overline. theme.css caps every section title at
+    clamp(14px,1.5vw,19px) and hides overlines outright, both with !important, so a big
+    heading here would be the only one on the site and would out-shout the page's own h1.
+  {%- endcomment -%}
+  #shopify-section-{{ section.id }} .zds{max-width:1100px;margin:0 auto;padding:clamp(44px,6vw,80px) clamp(18px,4vw,40px) clamp(56px,7vw,96px);
     font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;color:#111}
   #shopify-section-{{ section.id }} .zds *{box-sizing:border-box}
-  #shopify-section-{{ section.id }} .zds__eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#6a6a6a;margin:0 0 12px}
+  #shopify-section-{{ section.id }} .zds__head{max-width:760px;margin:0 auto 40px;text-align:center}
   #shopify-section-{{ section.id }} .zds__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
-    font-size:clamp(26px,4vw,40px);letter-spacing:.02em;line-height:1.14;margin:0 0 16px}
-  #shopify-section-{{ section.id }} .zds__lede{font-size:15px;line-height:1.85;color:#5a5a5a;max-width:62ch;margin:0 0 30px}
+    text-transform:uppercase;letter-spacing:.1em;font-size:clamp(14px,1.5vw,19px);line-height:1.3;margin:0 0 16px}
+  #shopify-section-{{ section.id }} .zds__lede{font-size:15px;line-height:1.85;color:#5a5a5a;max-width:58ch;margin:0 auto}
 
-  #shopify-section-{{ section.id }} .zds__banner{display:flex;gap:11px;align-items:flex-start;border:1px solid #efe3e6;background:#fbf7f8;
+  #shopify-section-{{ section.id }} .zds__banner{max-width:900px;margin-left:auto;margin-right:auto;display:flex;gap:11px;align-items:flex-start;border:1px solid #efe3e6;background:#fbf7f8;
     padding:14px 16px;margin:0 0 26px;font-size:13.5px;line-height:1.6;color:#4a4a4a}
   #shopify-section-{{ section.id }} .zds__banner svg{flex:none;color:#7a1f34;margin-top:2px}
   #shopify-section-{{ section.id }} .zds__banner b{font-weight:500;color:#111}
   #shopify-section-{{ section.id }} .zds__banner small{display:block;color:#8a8a8a;font-size:12px;margin-top:3px}
 
-  #shopify-section-{{ section.id }} .zds__card{border:1px solid #ededed;background:#fff;padding:clamp(22px,3.4vw,38px)}
+  #shopify-section-{{ section.id }} .zds__card{max-width:900px;margin:0 auto;border:1px solid #ededed;background:#fff;padding:clamp(22px,3.4vw,40px)}
   #shopify-section-{{ section.id }} .zds__h{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#111;font-weight:600;
     margin:34px 0 14px;padding-top:26px;border-top:1px solid #ededed}
   #shopify-section-{{ section.id }} .zds__h--first{margin-top:0;padding-top:0;border-top:none}
@@ -102,7 +108,7 @@
   #shopify-section-{{ section.id }} .zds__submit[disabled]{opacity:.5;cursor:default}
   #shopify-section-{{ section.id }} .zds__err{margin:16px 0 0;font-size:13.5px;line-height:1.6;color:#7a1f34}
   #shopify-section-{{ section.id }} .zds__err[hidden]{display:none}
-  #shopify-section-{{ section.id }} .zds__done{border:1px solid #ededed;background:#fff;padding:clamp(28px,5vw,56px);text-align:center}
+  #shopify-section-{{ section.id }} .zds__done{max-width:900px;margin:0 auto;border:1px solid #ededed;background:#fff;padding:clamp(28px,5vw,56px);text-align:center}
   #shopify-section-{{ section.id }} .zds__done[hidden]{display:none}
   #shopify-section-{{ section.id }} .zds__done h3{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     font-size:clamp(22px,3vw,30px);margin:0 0 14px;letter-spacing:.02em}
@@ -123,9 +129,12 @@
 {%- comment -%}Fixed anchor: the section id is template-generated, so a link cannot target it.{%- endcomment -%}
 <span id="design-studio-form" style="display:block;height:0;scroll-margin-top:90px"></span>
 <div class="zds" id="zds-{{ section.id }}" data-zds-api="{{ api }}">
-  {%- if sc.eyebrow != blank -%}<p class="zds__eyebrow">{{ sc.eyebrow }}</p>{%- endif -%}
-  {%- if sc.heading != blank -%}<h2 class="zds__title">{{ sc.heading }}</h2>{%- endif -%}
-  {%- if sc.lede != blank -%}<p class="zds__lede">{{ sc.lede }}</p>{%- endif -%}
+  {%- if sc.heading != blank or sc.lede != blank -%}
+    <div class="zds__head">
+      {%- if sc.heading != blank -%}<h2 class="zds__title">{{ sc.heading }}</h2>{%- endif -%}
+      {%- if sc.lede != blank -%}<p class="zds__lede">{{ sc.lede }}</p>{%- endif -%}
+    </div>
+  {%- endif -%}
 
   {%- comment -%}Filled in by script when the fabric product pages hand over ?fabric= and ?product=.{%- endcomment -%}
   <div class="zds__banner" data-zds-banner hidden>
@@ -402,9 +411,8 @@
 {
   "name": "Design Studio Form",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Overline", "default": "The Design Studio" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Tell us about your piece" },
-    { "type": "textarea", "id": "lede", "label": "Intro", "default": "One of our designers will reach out to refine the design, confirm your measurements and guide you to a finished garment made only for you." },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "Share as much or as little as you like. A designer will take it from here." },
     { "type": "header", "content": "Ready-to-wear" },
     { "type": "text", "id": "rtw_length", "label": "Standard length (inches)", "default": "58" },
     { "type": "text", "id": "rtw_sleeve", "label": "Standard sleeve (inches)", "default": "23" },
