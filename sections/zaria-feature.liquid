@@ -32,10 +32,12 @@
       {%- assign zft_vid = sc.video_asset | default: 'zaria-hero-model.mp4' -%}
       {%- if zft_vid != blank -%}
         {%- comment -%}
-          Zaria: this clip is ~15MB and sits below the fold. The source is held in data-src so
-          phones never fetch it, and desktop only loads it once the section scrolls into view.
+          Zaria: this clip sits below the fold. The source is held in data-src so phones never
+          fetch it, and desktop only loads it once the section scrolls into view. Phones therefore
+          only ever see the poster, so it is a frame of this very clip, not the shared
+          zaria-feature.jpg, which is also the site og:image and a lookbook tile.
         {%- endcomment -%}
-        <video class="zft__video" data-zft-src="{{ zft_vid | asset_url }}" muted loop playsinline preload="none" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1200 }}{% else %}{{ 'zaria-feature.jpg' | asset_url }}{% endif %}"></video>
+        <video class="zft__video" data-zft-src="{{ zft_vid | asset_url }}" muted loop playsinline preload="none" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1200 }}{% else %}{{ 'zaria-feature-poster.jpg' | asset_url }}{% endif %}"></video>
         <script>
         (function(){
           var v=document.currentScript.previousElementSibling;
