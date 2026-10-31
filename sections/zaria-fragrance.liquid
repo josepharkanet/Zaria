@@ -15,8 +15,9 @@
   #shopify-section-{{ section.id }} .zfr__sub{font-size:clamp(14px,1.5vw,17px);line-height:1.75;margin:22px 0 0;max-width:44ch;opacity:.92}
   #shopify-section-{{ section.id }} .zfr__actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
   #shopify-section-{{ section.id }} .zfr__btn{display:inline-block;text-decoration:none;padding:15px 40px;font-size:12px;letter-spacing:.22em;
-    text-transform:uppercase;border:1px solid #241a1e;background:#241a1e;color:#fff;transition:background .2s,color .2s}
-  #shopify-section-{{ section.id }} .zfr__btn:hover{background:transparent;color:#241a1e}
+    {%- comment -%}Neutral dark grey: the old #241a1e carried a plum cast that fought the monochrome frame{%- endcomment -%}
+    text-transform:uppercase;border:1px solid #3a3a3a;background:#3a3a3a;color:#fff;transition:background .2s,color .2s}
+  #shopify-section-{{ section.id }} .zfr__btn:hover{background:transparent;color:#3a3a3a}
   #shopify-section-{{ section.id }} .zfr__btn--ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.7)}
   #shopify-section-{{ section.id }} .zfr__btn--ghost:hover{background:#fff;color:#161616;border-color:#fff}
   @media (max-width:749px){#shopify-section-{{ section.id }} .zfr__inner{align-items:center;text-align:center}
