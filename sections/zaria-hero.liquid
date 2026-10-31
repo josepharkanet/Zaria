@@ -81,15 +81,6 @@
   #shopify-section-{{ section.id }} .zhero--dark .zhero__dot::after{background:#111}
   #shopify-section-{{ section.id }} .zhero__dot.is-active::after{transform:scaleX(1);
     transition:transform {{ sc.interval }}s linear}
-  #shopify-section-{{ section.id }} .zhero__arrow{position:absolute;top:50%;z-index:2;transform:translateY(-50%);
-    width:46px;height:46px;display:none;align-items:center;justify-content:center;cursor:pointer;
-    background:transparent;border:0;opacity:.5;transition:opacity .25s ease}
-  #shopify-section-{{ section.id }} .zhero--light .zhero__arrow{color:#fff}
-  #shopify-section-{{ section.id }} .zhero--dark .zhero__arrow{color:#111}
-  #shopify-section-{{ section.id }} .zhero__arrow:hover{opacity:1}
-  #shopify-section-{{ section.id }} .zhero__arrow--prev{left:18px}
-  #shopify-section-{{ section.id }} .zhero__arrow--next{right:18px}
-  #shopify-section-{{ section.id }} .zhero__arrow svg{width:22px;height:22px;display:block}
   #shopify-section-{{ section.id }} .zhero__inner{position:relative;z-index:1;width:100%;max-width:1280px;margin:0 auto;
     display:flex;flex-direction:column;padding:48px 24px;gap:0;pointer-events:none}
   #shopify-section-{{ section.id }} .zhero--top .zhero__inner{justify-content:flex-start}
@@ -106,7 +97,6 @@
     #shopify-section-{{ section.id }} .zhero__inner{padding:72px 48px}
     {%- comment -%}Zaria: wide frames crop at the sides, so each slide holds its own focal column{%- endcomment -%}
     #shopify-section-{{ section.id }} .zhero__img{object-position:var(--fx,50%) 50%}
-    #shopify-section-{{ section.id }} .zhero__arrow{display:flex}
     #shopify-section-{{ section.id }} .zhero__dots{bottom:34px}
   }
   @media (prefers-reduced-motion: reduce){
@@ -138,12 +128,6 @@
   </div>
   {%- if sc.overlay > 0 -%}<div class="zhero__veil"></div>{%- endif -%}
   <div class="zhero__scrim"></div>
-  <button class="zhero__arrow zhero__arrow--prev" type="button" data-prev aria-label="Previous slide">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M15 4 7 12l8 8"/></svg>
-  </button>
-  <button class="zhero__arrow zhero__arrow--next" type="button" data-next aria-label="Next slide">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M9 4l8 8-8 8"/></svg>
-  </button>
   <div class="zhero__dots" data-dots>
     {%- for s in slide_list -%}
       <button class="zhero__dot{% if forloop.first %} is-active{% endif %}" type="button" data-go="{{ forloop.index0 }}" aria-label="Go to slide {{ forloop.index }}"></button>
@@ -183,9 +167,6 @@
   }
   function start(){ if(still)return; clearInterval(timer); timer=setInterval(function(){go(cur+1);},gap); }
 
-  var prev=section.querySelector('[data-prev]'), next=section.querySelector('[data-next]');
-  if(prev)prev.addEventListener('click',function(){go(cur-1,true);});
-  if(next)next.addEventListener('click',function(){go(cur+1,true);});
   dots.forEach(function(d){d.addEventListener('click',function(){go(parseInt(d.dataset.go,10),true);});});
 
   /* swipe */
