@@ -29,21 +29,15 @@
 {%- else -%}
   {%- assign su = 'zaria-hero-s3.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s3-m.jpg' | asset_url -%}
 {%- endif -%}
-{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^47||' -%}
+{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^60||' -%}
 
 {%- if sc.slide_4 != blank -%}
   {%- assign su = sc.slide_4 | image_url: width: 2000 -%}{%- assign sm = sc.slide_4 | image_url: width: 900 -%}
 {%- else -%}
   {%- assign su = 'zaria-hero-s4.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s4-m.jpg' | asset_url -%}
 {%- endif -%}
-{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^60||' -%}
-
-{%- if sc.slide_5 != blank -%}
-  {%- assign su = sc.slide_5 | image_url: width: 2000 -%}{%- assign sm = sc.slide_5 | image_url: width: 900 -%}
-{%- else -%}
-  {%- assign su = 'zaria-hero-s5.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s5-m.jpg' | asset_url -%}
-{%- endif -%}
 {%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^57' -%}
+
 
 {%- assign slide_list = slides | split: '||' -%}
 {%- assign zalt = sc.image_alt -%}
@@ -194,12 +188,11 @@
   "name": "Zaria Hero",
   "settings": [
     { "type": "header", "content": "Slides" },
-    { "type": "paragraph", "content": "Five sliding hero frames. Leave a slot empty to keep the packaged photograph. Upload at 2000x1124 (16:9)." },
+    { "type": "paragraph", "content": "Four sliding hero frames. Leave a slot empty to keep the packaged photograph. Upload at 2000x1124 (16:9)." },
     { "type": "image_picker", "id": "slide_1", "label": "Slide 1" },
     { "type": "image_picker", "id": "slide_2", "label": "Slide 2" },
     { "type": "image_picker", "id": "slide_3", "label": "Slide 3" },
     { "type": "image_picker", "id": "slide_4", "label": "Slide 4" },
-    { "type": "image_picker", "id": "slide_5", "label": "Slide 5" },
     { "type": "text", "id": "image_alt", "label": "Image description", "default": "Zaria couture kaftan", "info": "Read aloud by screen readers." },
     { "type": "range", "id": "interval", "label": "Seconds per slide", "min": 3, "max": 12, "step": 1, "unit": "s", "default": 4 },
     { "type": "color", "id": "fallback_bg", "label": "Fallback background", "default": "#f3f0ec" },
