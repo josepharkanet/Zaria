@@ -8,7 +8,12 @@
   #shopify-section-{{ section.id }} .zdl__bgwrap{position:absolute;inset:0}
   /* Zaria: zoom the background video slightly so any tool watermark near the edges is cropped out of frame */
   #shopify-section-{{ section.id }} .zdl__bg--video{transform:scale(1.12);transform-origin:center center}
-  #shopify-section-{{ section.id }} .zdl__veil{position:absolute;inset:0;background:linear-gradient(rgba(18,12,14,.5),rgba(18,12,14,.64))}
+  {%- comment -%}
+    Zaria: the veil used to run .5 to .64, which suited the mid-tone arch photograph it was written
+    for. The black and white frame is already dark, so that much shade stacked into a flat black
+    panel and the photograph disappeared. Lighter now, still enough to carry white type.
+  {%- endcomment -%}
+  #shopify-section-{{ section.id }} .zdl__veil{position:absolute;inset:0;background:linear-gradient(rgba(18,12,14,.28),rgba(18,12,14,.46))}
   #shopify-section-{{ section.id }} .zdl__inner{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:70px clamp(24px,5vw,48px);text-align:center;color:#fff}
   #shopify-section-{{ section.id }} .zdl__overline{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#ecdde1;margin:0 0 20px}
   #shopify-section-{{ section.id }} .zdl__heading{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
