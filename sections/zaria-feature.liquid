@@ -32,18 +32,27 @@
       {%- assign zft_vid = sc.video_asset | default: 'zaria-hero-model.mp4' -%}
       {%- if zft_vid != blank -%}
         {%- comment -%}
-          Zaria: this clip sits below the fold. The source is held in data-src so phones never
-          fetch it, and desktop only loads it once the section scrolls into view. Phones therefore
-          only ever see the poster, so it is a frame of this very clip, not the shared
-          zaria-feature.jpg, which is also the site og:image and a lookbook tile.
+          Zaria: this clip sits below the fold, so the source is held in data-src and nothing is
+          fetched until the section scrolls into view. It plays on phones as well as desktop now
+          that the file is 7MB rather than the 15MB it replaced, but it still stands down on a
+          metered or slow connection, where 7MB is not a fair thing to spend without asking.
+          The poster is a frame of this very clip, not the shared zaria-feature.jpg, which is
+          also the site og:image and a lookbook tile, so whoever does not get the video still
+          sees the right picture.
         {%- endcomment -%}
         <video class="zft__video" data-zft-src="{{ zft_vid | asset_url }}" muted loop playsinline preload="none" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1200 }}{% else %}{{ 'zaria-feature-poster.jpg' | asset_url }}{% endif %}"></video>
         <script>
         (function(){
           var v=document.currentScript.previousElementSibling;
           if(!v||!v.dataset.zftSrc)return;
-          if(!window.matchMedia('(min-width:750px)').matches)return;
           if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+          /* Data Saver on, or a 2g/3g class connection: keep the poster. The API is absent on
+             Safari, where the check simply passes and the clip plays as it does on desktop. */
+          var net=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+          if(net){
+            if(net.saveData)return;
+            if(/^(slow-2g|2g|3g)$/.test(net.effectiveType||''))return;
+          }
           function load(){
             if(v.dataset.ready)return;
             var s=document.createElement('source');
