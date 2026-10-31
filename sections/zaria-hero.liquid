@@ -120,10 +120,15 @@
       {%- for s in slide_list -%}
         {%- assign p = s | split: '^^' -%}
         <div class="zhero__slide" style="--fx:{{ p[2] }}%" aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
+          {%- comment -%}
+            Zaria: the phone crop is the fallback, not the override. With the wide file in the
+            img tag a phone fetched both, 2.2MB instead of 0.8MB, so the big frame now hangs
+            off a min-width source that narrow screens never match.
+          {%- endcomment -%}
           <picture>
-            <source media="(max-width: 749px)" srcset="{{ p[1] }}">
-            <img class="zhero__img" src="{{ p[0] }}" alt="{{ zalt | escape }}"
-              width="2000" height="1124"
+            <source media="(min-width: 750px)" srcset="{{ p[0] }}">
+            <img class="zhero__img" src="{{ p[1] }}" alt="{{ zalt | escape }}"
+              width="900" height="1125"
               {% if forloop.first %}fetchpriority="high"{% else %}fetchpriority="low"{% endif %}
               loading="eager" decoding="async">
           </picture>
