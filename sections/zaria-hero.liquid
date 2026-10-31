@@ -1,66 +1,85 @@
-{% comment %}Zaria - couture hero (video slider) - Arkanet Technologies{% endcomment %}
+{% comment %}Zaria - couture hero (image slider) - Arkanet Technologies{% endcomment %}
 {%- assign sc = section.settings -%}
 {%- assign scheme = 'zhero--dark' -%}
 {%- if sc.text_color == 'light' -%}{%- assign scheme = 'zhero--light' -%}{%- endif -%}
 {%- comment -%}
-  Zaria: hero video slider. Prefer editor-uploaded videos, fall back to the packaged asset clips.
-  Each slot is read explicitly: a bracket lookup on section.settings fails Shopify's section
-  validation, which silently froze this file on the theme for weeks.
+  Zaria: hero image slider. Each of the five slots is read explicitly, never through a
+  bracket lookup on section.settings: that fails Shopify's section validation and silently
+  froze this file on the live theme for weeks. Each slide carries its own desktop file,
+  mobile crop and horizontal focal point, packed as "desktop^^mobile^^focal".
 {%- endcomment -%}
-{%- assign vid_urls = '' -%}
+{%- assign slides = '' -%}
 
-{%- if sc.hero_video_1 != blank and sc.hero_video_1.sources.size > 0 -%}
-  {%- assign vsrc = sc.hero_video_1.sources | where: 'format', 'mp4' | first -%}
-  {%- unless vsrc -%}{%- assign vsrc = sc.hero_video_1.sources | first -%}{%- endunless -%}
-  {%- if vsrc.url != blank -%}{%- assign vid_urls = vid_urls | append: vsrc.url | append: '||' -%}{%- endif -%}
+{%- if sc.slide_1 != blank -%}
+  {%- assign su = sc.slide_1 | image_url: width: 2000 -%}{%- assign sm = sc.slide_1 | image_url: width: 900 -%}
+{%- else -%}
+  {%- assign su = 'zaria-hero-s1.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s1-m.jpg' | asset_url -%}
 {%- endif -%}
+{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^52||' -%}
 
-{%- if sc.hero_video_2 != blank and sc.hero_video_2.sources.size > 0 -%}
-  {%- assign vsrc = sc.hero_video_2.sources | where: 'format', 'mp4' | first -%}
-  {%- unless vsrc -%}{%- assign vsrc = sc.hero_video_2.sources | first -%}{%- endunless -%}
-  {%- if vsrc.url != blank -%}{%- assign vid_urls = vid_urls | append: vsrc.url | append: '||' -%}{%- endif -%}
+{%- if sc.slide_2 != blank -%}
+  {%- assign su = sc.slide_2 | image_url: width: 2000 -%}{%- assign sm = sc.slide_2 | image_url: width: 900 -%}
+{%- else -%}
+  {%- assign su = 'zaria-hero-s2.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s2-m.jpg' | asset_url -%}
 {%- endif -%}
+{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^36||' -%}
 
-{%- if sc.hero_video_3 != blank and sc.hero_video_3.sources.size > 0 -%}
-  {%- assign vsrc = sc.hero_video_3.sources | where: 'format', 'mp4' | first -%}
-  {%- unless vsrc -%}{%- assign vsrc = sc.hero_video_3.sources | first -%}{%- endunless -%}
-  {%- if vsrc.url != blank -%}{%- assign vid_urls = vid_urls | append: vsrc.url | append: '||' -%}{%- endif -%}
+{%- if sc.slide_3 != blank -%}
+  {%- assign su = sc.slide_3 | image_url: width: 2000 -%}{%- assign sm = sc.slide_3 | image_url: width: 900 -%}
+{%- else -%}
+  {%- assign su = 'zaria-hero-s3.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s3-m.jpg' | asset_url -%}
 {%- endif -%}
+{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^47||' -%}
 
-{%- if vid_urls == blank -%}
-  {%- assign av1 = 'zaria-hero-1.mp4' | asset_url -%}
-  {%- assign av2 = 'zaria-hero-2.mp4' | asset_url -%}
-  {%- assign vid_urls = av1 | append: '||' | append: av2 -%}
+{%- if sc.slide_4 != blank -%}
+  {%- assign su = sc.slide_4 | image_url: width: 2000 -%}{%- assign sm = sc.slide_4 | image_url: width: 900 -%}
+{%- else -%}
+  {%- assign su = 'zaria-hero-s4.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s4-m.jpg' | asset_url -%}
 {%- endif -%}
-{%- assign vid_list = vid_urls | split: '||' -%}
-{%- assign has_hero_video = false -%}
-{%- if vid_list.size > 0 -%}{%- assign has_hero_video = true -%}{%- endif -%}
-{%- assign hero_poster = 'zaria-hero-1-poster.jpg' -%}
-{%- if has_hero_video -%}{%- assign scheme = 'zhero--light' -%}{%- endif -%}
-{%- assign btn1_url = sc.button_1_url -%}
-{%- if btn1_url == blank -%}{%- assign btn1_url = routes.root_url | append: 'collections/all-fabrics' -%}{%- endif -%}
-{%- assign btn2_url = sc.button_2_url -%}
-{%- if btn2_url == blank -%}{%- assign btn2_url = routes.root_url | append: 'collections/ready-to-wear' -%}{%- endif -%}
+{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^60||' -%}
+
+{%- if sc.slide_5 != blank -%}
+  {%- assign su = sc.slide_5 | image_url: width: 2000 -%}{%- assign sm = sc.slide_5 | image_url: width: 900 -%}
+{%- else -%}
+  {%- assign su = 'zaria-hero-s5.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s5-m.jpg' | asset_url -%}
+{%- endif -%}
+{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^57' -%}
+
+{%- assign slide_list = slides | split: '||' -%}
+{%- assign zalt = sc.image_alt -%}
 <style>
   #shopify-section-{{ section.id }} .zhero{position:relative;display:flex;overflow:hidden;
     min-height:{{ sc.height_mobile }}vh;background:{{ sc.fallback_bg }};
     font-family:var(--text-font-family,'Jost'),'Jost',-apple-system,sans-serif}
   #shopify-section-{{ section.id }} .zhero *{box-sizing:border-box}
-  #shopify-section-{{ section.id }} .zhero__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sc.focal }}}
-  #shopify-section-{{ section.id }} .zhero__veil{position:absolute;inset:0;background:#000;opacity:{{ sc.overlay | divided_by: 100.0 }}}
-  #shopify-section-{{ section.id }} .zhero__scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.62) 0%,rgba(0,0,0,.22) 40%,rgba(0,0,0,0) 70%)}
-  #shopify-section-{{ section.id }} .zhero__video{border:0;background:#1a1a1a}
-  #shopify-section-{{ section.id }} .zhero__videos{position:absolute;inset:0;display:none}
-  #shopify-section-{{ section.id }} .zhero__v{opacity:0;transition:opacity 1.4s ease}
-  #shopify-section-{{ section.id }} .zhero__v.is-active{opacity:1}
-  {%- comment -%}Zaria: phones keep the still; the clips only appear once the script turns them on{%- endcomment -%}
-  #shopify-section-{{ section.id }} .zhero__still{z-index:0}
-  @media (min-width:750px){
-    #shopify-section-{{ section.id }} .zhero--playing .zhero__videos{display:block}
-    #shopify-section-{{ section.id }} .zhero--playing .zhero__still{display:none}
-  }
+  #shopify-section-{{ section.id }} .zhero__slider{position:absolute;inset:0;overflow:hidden}
+  #shopify-section-{{ section.id }} .zhero__track{display:flex;width:100%;height:100%;
+    will-change:transform;transition:transform 1.15s cubic-bezier(.76,0,.24,1)}
+  #shopify-section-{{ section.id }} .zhero__slide{flex:0 0 100%;position:relative;height:100%;overflow:hidden}
+  #shopify-section-{{ section.id }} .zhero__slide picture{display:block;width:100%;height:100%}
+  #shopify-section-{{ section.id }} .zhero__img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
+  #shopify-section-{{ section.id }} .zhero__veil{position:absolute;inset:0;pointer-events:none;background:#000;opacity:{{ sc.overlay | divided_by: 100.0 }}}
+  {%- comment -%}Zaria: a whisper of shade at the foot so the indicators stay legible on pale frames{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zhero__scrim{position:absolute;inset:auto 0 0 0;height:28%;pointer-events:none;
+    background:linear-gradient(to top,rgba(0,0,0,.20) 0%,rgba(0,0,0,0) 100%)}
+  #shopify-section-{{ section.id }} .zhero__dots{position:absolute;left:0;right:0;bottom:26px;z-index:2;
+    display:flex;justify-content:center;gap:10px;padding:0 24px}
+  #shopify-section-{{ section.id }} .zhero__dot{appearance:none;border:0;padding:0;cursor:pointer;background:rgba(255,255,255,.42);
+    width:34px;height:2px;border-radius:0;position:relative;overflow:hidden;transition:background .3s ease}
+  #shopify-section-{{ section.id }} .zhero__dot:hover{background:rgba(255,255,255,.7)}
+  #shopify-section-{{ section.id }} .zhero__dot::after{content:'';position:absolute;inset:0;background:#fff;
+    transform:scaleX(0);transform-origin:left center}
+  #shopify-section-{{ section.id }} .zhero__dot.is-active::after{transform:scaleX(1);
+    transition:transform {{ sc.interval }}s linear}
+  #shopify-section-{{ section.id }} .zhero__arrow{position:absolute;top:50%;z-index:2;transform:translateY(-50%);
+    width:46px;height:46px;display:none;align-items:center;justify-content:center;cursor:pointer;
+    background:transparent;border:0;color:#fff;opacity:.55;transition:opacity .25s ease}
+  #shopify-section-{{ section.id }} .zhero__arrow:hover{opacity:1}
+  #shopify-section-{{ section.id }} .zhero__arrow--prev{left:10px}
+  #shopify-section-{{ section.id }} .zhero__arrow--next{right:10px}
+  #shopify-section-{{ section.id }} .zhero__arrow svg{width:22px;height:22px;display:block}
   #shopify-section-{{ section.id }} .zhero__inner{position:relative;z-index:1;width:100%;max-width:1280px;margin:0 auto;
-    display:flex;flex-direction:column;padding:48px 24px;gap:0}
+    display:flex;flex-direction:column;padding:48px 24px;gap:0;pointer-events:none}
   #shopify-section-{{ section.id }} .zhero--top .zhero__inner{justify-content:flex-start}
   #shopify-section-{{ section.id }} .zhero--middle .zhero__inner{justify-content:center}
   #shopify-section-{{ section.id }} .zhero--bottom .zhero__inner{justify-content:flex-end}
@@ -70,93 +89,105 @@
   #shopify-section-{{ section.id }} .zhero__content{display:flex;flex-direction:column;max-width:620px}
   #shopify-section-{{ section.id }} .zhero--light .zhero__content{color:#fff}
   #shopify-section-{{ section.id }} .zhero--dark .zhero__content{color:#111}
-  #shopify-section-{{ section.id }} .zhero__overline{font-size:12px;letter-spacing:.34em;text-transform:uppercase;margin:0 0 22px;opacity:.85}
-  #shopify-section-{{ section.id }} .zhero__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
-    font-size:clamp(34px,6vw,72px);line-height:1.06;letter-spacing:.01em;margin:0}
-  #shopify-section-{{ section.id }} .zhero__sub{font-size:clamp(14px,1.5vw,17px);line-height:1.7;margin:22px 0 0;max-width:46ch;opacity:.9}
-  #shopify-section-{{ section.id }} .zhero__actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
-  #shopify-section-{{ section.id }} .zhero__btn{display:inline-block;text-decoration:none;padding:15px 40px;font-size:12px;
-    letter-spacing:.22em;text-transform:uppercase;border:1px solid transparent;transition:opacity .2s ease,background .2s ease,color .2s ease}
-  #shopify-section-{{ section.id }} .zhero--light .zhero__btn--primary{background:#fff;color:#111;border-color:#fff}
-  #shopify-section-{{ section.id }} .zhero--dark .zhero__btn--primary{background:#111;color:#fff;border-color:#111}
-  #shopify-section-{{ section.id }} .zhero__btn--primary:hover{opacity:.85}
-  #shopify-section-{{ section.id }} .zhero--light .zhero__btn--ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.7)}
-  #shopify-section-{{ section.id }} .zhero--dark .zhero__btn--ghost{background:transparent;color:#111;border-color:rgba(17,17,17,.5)}
-  #shopify-section-{{ section.id }} .zhero__btn--ghost:hover{border-color:currentColor}
   @media (min-width:750px){
     #shopify-section-{{ section.id }} .zhero{min-height:{{ sc.height_desktop }}vh}
     #shopify-section-{{ section.id }} .zhero__inner{padding:72px 48px}
+    {%- comment -%}Zaria: wide frames crop at the sides, so each slide holds its own focal column{%- endcomment -%}
+    #shopify-section-{{ section.id }} .zhero__img{object-position:var(--fx,50%) 50%}
+    #shopify-section-{{ section.id }} .zhero__arrow{display:flex}
+    #shopify-section-{{ section.id }} .zhero__dots{bottom:34px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    #shopify-section-{{ section.id }} .zhero__track{transition:none}
+    #shopify-section-{{ section.id }} .zhero__dot.is-active::after{transition:none}
   }
 </style>
-<section class="zhero {{ scheme }} zhero--{{ sc.align }} zhero--middle">
-  {%- if has_hero_video -%}
-    {%- comment -%}
-      Zaria: the hero clips are ~31MB together, so phones get the poster still instead.
-      The sources stay in data-src and are only attached on wide screens (see the script).
-    {%- endcomment -%}
-    {%- if sc.image != blank -%}
-      {%- assign zhero_poster_url = sc.image | image_url: width: 1600 -%}
-    {%- else -%}
-      {%- assign zhero_poster_url = hero_poster | asset_url -%}
-    {%- endif -%}
-    <img class="zhero__bg zhero__still" src="{{ zhero_poster_url }}" alt="{{ sc.image.alt | escape }}" loading="eager" fetchpriority="high">
-    <div class="zhero__videos" id="zhero-vids-{{ section.id }}">
-      {%- for u in vid_list -%}
-        <video class="zhero__bg zhero__video zhero__v{% if forloop.first %} is-active{% endif %}" data-i="{{ forloop.index0 }}" data-src="{{ u }}" muted loop playsinline preload="none"{% if forloop.first %} poster="{{ zhero_poster_url }}"{% endif %}></video>
+<section class="zhero {{ scheme }} zhero--{{ sc.align }} zhero--{{ sc.vertical }}">
+  <div class="zhero__slider" id="zhero-{{ section.id }}" role="region" aria-roledescription="carousel" aria-label="Featured looks">
+    <div class="zhero__track" data-track>
+      {%- for s in slide_list -%}
+        {%- assign p = s | split: '^^' -%}
+        <div class="zhero__slide" style="--fx:{{ p[2] }}%" aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
+          <picture>
+            <source media="(max-width: 749px)" srcset="{{ p[1] }}">
+            <img class="zhero__img" src="{{ p[0] }}" alt="{{ zalt | escape }}"
+              width="2000" height="1124"
+              {% if forloop.first %}fetchpriority="high"{% else %}fetchpriority="low"{% endif %}
+              loading="eager" decoding="async">
+          </picture>
+        </div>
       {%- endfor -%}
     </div>
-    <div class="zhero__veil"></div>
-    <div class="zhero__scrim"></div>
-  {%- elsif sc.image != blank -%}
-    <picture>
-      {%- if sc.image_mobile != blank -%}
-        <source media="(max-width: 749px)" srcset="{{ sc.image_mobile | image_url: width: 1000 }}">
-      {%- endif -%}
-      <img class="zhero__bg" src="{{ sc.image | image_url: width: 2400 }}" alt="{{ sc.image.alt | escape }}"
-        width="{{ sc.image.width }}" height="{{ sc.image.height }}" loading="eager" fetchpriority="high">
-    </picture>
-    <div class="zhero__veil"></div>
-  {%- endif -%}
+  </div>
+  {%- if sc.overlay > 0 -%}<div class="zhero__veil"></div>{%- endif -%}
+  <div class="zhero__scrim"></div>
+  <button class="zhero__arrow zhero__arrow--prev" type="button" data-prev aria-label="Previous slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M15 4 7 12l8 8"/></svg>
+  </button>
+  <button class="zhero__arrow zhero__arrow--next" type="button" data-next aria-label="Next slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M9 4l8 8-8 8"/></svg>
+  </button>
+  <div class="zhero__dots" data-dots>
+    {%- for s in slide_list -%}
+      <button class="zhero__dot{% if forloop.first %} is-active{% endif %}" type="button" data-go="{{ forloop.index0 }}" aria-label="Go to slide {{ forloop.index }}"></button>
+    {%- endfor -%}
+  </div>
   <div class="zhero__inner">
     <div class="zhero__content">
-      {%- comment -%} Zaria: clean video hero, no text overlay {%- endcomment -%}
+      {%- comment -%} Zaria: clean image hero, no text overlay {%- endcomment -%}
     </div>
   </div>
 </section>
 
 <script>
 (function(){
-  var root=document.getElementById('zhero-vids-{{ section.id }}');
+  var root=document.getElementById('zhero-{{ section.id }}');
   if(!root)return;
-  var vids=[].slice.call(root.querySelectorAll('.zhero__v'));
-  if(!vids.length)return;
-
-  /* Phones and reduced-motion visitors keep the poster still: no clip is ever fetched. */
-  if(!window.matchMedia('(min-width:750px)').matches)return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-
-  function attach(v){
-    if(v.dataset.ready)return;
-    var s=document.createElement('source');
-    s.src=v.dataset.src;s.type='video/mp4';
-    v.appendChild(s);v.dataset.ready='1';
-    try{v.load();}catch(e){}
-  }
-  attach(vids[0]);
   var section=root.closest('.zhero');
-  if(section)section.classList.add('zhero--playing');
-  try{vids[0].play();}catch(e){}
-  if(vids.length<2)return;
-  var cur=0, loaded={0:true};
-  setInterval(function(){
-    var next=(cur+1)%vids.length;
-    if(!loaded[next]){attach(vids[next]);loaded[next]=true;}
-    try{vids[next].currentTime=0;vids[next].play();}catch(e){}
-    vids[next].classList.add('is-active');
-    vids[cur].classList.remove('is-active');
-    var prev=cur;cur=next;
-    setTimeout(function(){try{vids[prev].pause();}catch(e){}},1500);
-  },8000);
+  var track=root.querySelector('[data-track]');
+  var slides=[].slice.call(root.querySelectorAll('.zhero__slide'));
+  if(!track||slides.length<2)return;
+  var dots=[].slice.call(section.querySelectorAll('[data-dots] .zhero__dot'));
+  var gap={{ sc.interval }}*1000, cur=0, timer=null;
+  var still=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function paint(){
+    track.style.transform='translate3d(-'+(cur*100)+'%,0,0)';
+    slides.forEach(function(s,i){s.setAttribute('aria-hidden',i===cur?'false':'true');});
+    dots.forEach(function(d,i){d.classList.toggle('is-active',i===cur);});
+  }
+  function go(i,user){
+    cur=(i+slides.length)%slides.length;
+    /* restart the indicator fill cleanly on every move */
+    dots.forEach(function(d){d.classList.remove('is-active');});
+    void root.offsetWidth;
+    paint();
+    if(user)start();
+  }
+  function start(){ if(still)return; clearInterval(timer); timer=setInterval(function(){go(cur+1);},gap); }
+
+  var prev=section.querySelector('[data-prev]'), next=section.querySelector('[data-next]');
+  if(prev)prev.addEventListener('click',function(){go(cur-1,true);});
+  if(next)next.addEventListener('click',function(){go(cur+1,true);});
+  dots.forEach(function(d){d.addEventListener('click',function(){go(parseInt(d.dataset.go,10),true);});});
+
+  /* swipe */
+  var x0=null,y0=null;
+  root.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+  root.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy))go(dx<0?cur+1:cur-1,true);
+    x0=null;y0=null;
+  },{passive:true});
+
+  /* hold while the tab is hidden or the pointer rests on the hero */
+  section.addEventListener('mouseenter',function(){clearInterval(timer);});
+  section.addEventListener('mouseleave',start);
+  document.addEventListener('visibilitychange',function(){document.hidden?clearInterval(timer):start();});
+
+  paint();
+  start();
 })();
 </script>
 
@@ -164,16 +195,17 @@
 {
   "name": "Zaria Hero",
   "settings": [
-    { "type": "header", "content": "Media" },
-    { "type": "paragraph", "content": "Add up to 3 videos for a cross-fading hero slider. Leave all empty to use the background image." },
-    { "type": "video", "id": "hero_video_1", "label": "Hero video 1" },
-    { "type": "video", "id": "hero_video_2", "label": "Hero video 2" },
-    { "type": "video", "id": "hero_video_3", "label": "Hero video 3" },
-    { "type": "image_picker", "id": "image", "label": "Background image / video poster" },
-    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image (optional)" },
-    { "type": "text", "id": "focal", "label": "Image focal point", "default": "center", "info": "e.g. center, top, 50% 30%" },
+    { "type": "header", "content": "Slides" },
+    { "type": "paragraph", "content": "Five sliding hero frames. Leave a slot empty to keep the packaged photograph. Upload at 2000x1124 (16:9)." },
+    { "type": "image_picker", "id": "slide_1", "label": "Slide 1" },
+    { "type": "image_picker", "id": "slide_2", "label": "Slide 2" },
+    { "type": "image_picker", "id": "slide_3", "label": "Slide 3" },
+    { "type": "image_picker", "id": "slide_4", "label": "Slide 4" },
+    { "type": "image_picker", "id": "slide_5", "label": "Slide 5" },
+    { "type": "text", "id": "image_alt", "label": "Image description", "default": "Zaria couture kaftan", "info": "Read aloud by screen readers." },
+    { "type": "range", "id": "interval", "label": "Seconds per slide", "min": 3, "max": 12, "step": 1, "unit": "s", "default": 6 },
     { "type": "color", "id": "fallback_bg", "label": "Fallback background", "default": "#f3f0ec" },
-    { "type": "range", "id": "overlay", "label": "Image overlay", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 25 },
+    { "type": "range", "id": "overlay", "label": "Image overlay", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 0 },
     { "type": "header", "content": "Text" },
     {
       "type": "select", "id": "text_color", "label": "Text colour",
