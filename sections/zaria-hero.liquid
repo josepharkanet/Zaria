@@ -207,9 +207,8 @@
     x0=null;y0=null;
   },{passive:true});
 
-  /* hold while the tab is hidden or the pointer rests on the hero */
-  section.addEventListener('mouseenter',function(){clearInterval(timer);});
-  section.addEventListener('mouseleave',start);
+  /* Hold only while the tab is hidden. Pausing on hover froze the slider on desktop:
+     the hero fills the viewport, so the pointer is over it almost the whole time. */
   document.addEventListener('visibilitychange',function(){document.hidden?clearInterval(timer):start();});
 
   place(false); mark();
