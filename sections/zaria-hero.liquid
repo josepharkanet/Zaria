@@ -54,7 +54,7 @@
   #shopify-section-{{ section.id }} .zhero *{box-sizing:border-box}
   #shopify-section-{{ section.id }} .zhero__slider{position:absolute;inset:0;overflow:hidden}
   #shopify-section-{{ section.id }} .zhero__track{display:flex;width:100%;height:100%;
-    will-change:transform;transition:transform 1.15s cubic-bezier(.76,0,.24,1)}
+    will-change:transform;transition:transform .85s cubic-bezier(.72,0,.22,1)}
   #shopify-section-{{ section.id }} .zhero__slide{flex:0 0 100%;position:relative;height:100%;overflow:hidden}
   #shopify-section-{{ section.id }} .zhero__slide picture{display:block;width:100%;height:100%}
   #shopify-section-{{ section.id }} .zhero__img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
@@ -220,7 +220,7 @@
     { "type": "image_picker", "id": "slide_4", "label": "Slide 4" },
     { "type": "image_picker", "id": "slide_5", "label": "Slide 5" },
     { "type": "text", "id": "image_alt", "label": "Image description", "default": "Zaria couture kaftan", "info": "Read aloud by screen readers." },
-    { "type": "range", "id": "interval", "label": "Seconds per slide", "min": 3, "max": 12, "step": 1, "unit": "s", "default": 6 },
+    { "type": "range", "id": "interval", "label": "Seconds per slide", "min": 3, "max": 12, "step": 1, "unit": "s", "default": 4 },
     { "type": "color", "id": "fallback_bg", "label": "Fallback background", "default": "#f3f0ec" },
     { "type": "range", "id": "overlay", "label": "Image overlay", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 0 },
     { "type": "header", "content": "Text" },
