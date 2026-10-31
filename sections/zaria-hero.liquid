@@ -140,28 +140,62 @@
   if(!root)return;
   var section=root.closest('.zhero');
   var track=root.querySelector('[data-track]');
-  var slides=[].slice.call(root.querySelectorAll('.zhero__slide'));
-  if(!track||slides.length<2)return;
+  var real=[].slice.call(root.querySelectorAll('.zhero__slide'));
+  if(!track||real.length<2)return;
   var dots=[].slice.call(section.querySelectorAll('[data-dots] .zhero__dot'));
-  var gap={{ sc.interval }}*1000, cur=0, timer=null;
+  var n=real.length, gap={{ sc.interval }}*1000, pos=0, timer=null, busy=false;
   var still=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function paint(){
-    track.style.transform='translate3d(-'+(cur*100)+'%,0,0)';
-    slides.forEach(function(s,i){s.setAttribute('aria-hidden',i===cur?'false':'true');});
-    dots.forEach(function(d,i){d.classList.toggle('is-active',i===cur);});
+  /* A copy of the first frame sits after the last one. The run forward slides onto
+     the copy, then jumps home with the transition off, so the strip never rewinds
+     through every frame to reach the start again. */
+  var clone=real[0].cloneNode(true);
+  clone.setAttribute('aria-hidden','true');
+  track.appendChild(clone);
+  var all=real.concat([clone]);
+
+  function place(animate){
+    track.style.transition=animate?'':'none';
+    track.style.transform='translate3d(-'+(pos*100)+'%,0,0)';
+    if(!animate)void track.offsetWidth;
   }
-  function go(i,user){
-    cur=(i+slides.length)%slides.length;
+  function aria(i){ all.forEach(function(s,k){s.setAttribute('aria-hidden',k===i?'false':'true');}); }
+  function mark(){
+    aria(pos);
     /* restart the indicator fill cleanly on every move */
     dots.forEach(function(d){d.classList.remove('is-active');});
     void root.offsetWidth;
-    paint();
-    if(user)start();
+    var i=pos%n;
+    dots.forEach(function(d,k){d.classList.toggle('is-active',k===i);});
   }
-  function start(){ if(still)return; clearInterval(timer); timer=setInterval(function(){go(cur+1);},gap); }
+  function settle(fn){
+    var done=false;
+    function run(){ if(done)return; done=true; track.removeEventListener('transitionend',run); fn(); }
+    track.addEventListener('transitionend',run);
+    setTimeout(run,1400);
+  }
+  function forward(){
+    if(busy)return; busy=true;
+    pos++; place(true); mark();
+    settle(function(){
+      if(pos===n){ pos=0; place(false); aria(0); }
+      busy=false;
+    });
+  }
+  function back(){
+    if(busy)return; busy=true;
+    if(pos===0){ pos=n; place(false); }
+    pos--; place(true); mark();
+    settle(function(){ busy=false; });
+  }
+  function jump(i){
+    if(busy||i===pos)return; busy=true;
+    pos=i; place(true); mark();
+    settle(function(){ busy=false; });
+  }
+  function start(){ if(still)return; clearInterval(timer); timer=setInterval(forward,gap); }
 
-  dots.forEach(function(d){d.addEventListener('click',function(){go(parseInt(d.dataset.go,10),true);});});
+  dots.forEach(function(d){d.addEventListener('click',function(){jump(parseInt(d.dataset.go,10));start();});});
 
   /* swipe */
   var x0=null,y0=null;
@@ -169,7 +203,7 @@
   root.addEventListener('touchend',function(e){
     if(x0===null)return;
     var dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
-    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy))go(dx<0?cur+1:cur-1,true);
+    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)){ dx<0?forward():back(); start(); }
     x0=null;y0=null;
   },{passive:true});
 
@@ -178,7 +212,7 @@
   section.addEventListener('mouseleave',start);
   document.addEventListener('visibilitychange',function(){document.hidden?clearInterval(timer):start();});
 
-  paint();
+  place(false); mark();
   start();
 })();
 </script>
