@@ -11,8 +11,8 @@
         "use_h1": true,
         "body": "Commission a piece made only for you. Share your vision, your measurements and your occasion, and our designers will bring it to life.",
         "button_label": "Start your design",
-        "button_url": "https://studio.zaria.ae",
-        "open_in_new_tab": true
+        "button_url": "#design-studio-form",
+        "open_in_new_tab": false
       }
     },
     "journey": {
@@ -27,13 +27,54 @@
         "dividers": false
       },
       "blocks": {
-        "s1": { "type": "value", "settings": { "icon": "none", "title": "The Vision", "text": "Share your inspiration, occasion and measurements. We listen closely to understand the piece you have in mind." } },
-        "s2": { "type": "value", "settings": { "icon": "none", "title": "The Design", "text": "We refine the silhouette, fabric and finishing with you, until every detail feels right." } },
-        "s3": { "type": "value", "settings": { "icon": "none", "title": "The Atelier", "text": "Your piece is cut and finished by hand in our Dubai atelier, with care at every stitch." } },
-        "s4": { "type": "value", "settings": { "icon": "none", "title": "The Fitting", "text": "A final fitting ensures every line falls exactly as it should, made to your measure." } }
+        "s1": {
+          "type": "value",
+          "settings": {
+            "icon": "none",
+            "title": "The Vision",
+            "text": "Share your inspiration, occasion and measurements. We listen closely to understand the piece you have in mind."
+          }
+        },
+        "s2": {
+          "type": "value",
+          "settings": {
+            "icon": "none",
+            "title": "The Design",
+            "text": "We refine the silhouette, fabric and finishing with you, until every detail feels right."
+          }
+        },
+        "s3": {
+          "type": "value",
+          "settings": {
+            "icon": "none",
+            "title": "The Atelier",
+            "text": "Your piece is cut and finished by hand in our Dubai atelier, with care at every stitch."
+          }
+        },
+        "s4": {
+          "type": "value",
+          "settings": {
+            "icon": "none",
+            "title": "The Fitting",
+            "text": "A final fitting ensures every line falls exactly as it should, made to your measure."
+          }
+        }
       },
-      "block_order": ["s1", "s2", "s3", "s4"]
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ]
+    },
+    "form": {
+      "type": "zaria-studio-form",
+      "settings": {}
     }
   },
-  "order": ["hero", "journey"]
+  "order": [
+    "hero",
+    "journey",
+    "form"
+  ]
 }
