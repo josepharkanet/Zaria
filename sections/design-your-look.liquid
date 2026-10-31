@@ -13,7 +13,14 @@
     for. The black and white frame is already dark, so that much shade stacked into a flat black
     panel and the photograph disappeared. Lighter now, still enough to carry white type.
   {%- endcomment -%}
-  #shopify-section-{{ section.id }} .zdl__veil{position:absolute;inset:0;background:linear-gradient(rgba(18,12,14,.28),rgba(18,12,14,.46))}
+  {%- comment -%}
+    Two layers: a soft pool of shade under the copy, and a light wash over the whole frame. The
+    centred text crosses the model's face and her pale dress, where white type on white fabric
+    vanished, so the shade is concentrated where the words are and lets the edges stay open.
+  {%- endcomment -%}
+  #shopify-section-{{ section.id }} .zdl__veil{position:absolute;inset:0;
+    background:radial-gradient(ellipse 58% 64% at 50% 50%,rgba(12,9,10,.66) 0%,rgba(12,9,10,.40) 52%,rgba(12,9,10,0) 78%),
+      linear-gradient(rgba(18,12,14,.26),rgba(18,12,14,.42))}
   #shopify-section-{{ section.id }} .zdl__inner{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:70px clamp(24px,5vw,48px);text-align:center;color:#fff}
   #shopify-section-{{ section.id }} .zdl__overline{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#ecdde1;margin:0 0 20px}
   #shopify-section-{{ section.id }} .zdl__heading{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
