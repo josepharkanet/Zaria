@@ -49,9 +49,12 @@
   #shopify-section-{{ section.id }} .zcol__ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     background:linear-gradient(165deg,#f3f1ed 0%,#eae6e0 58%,#e4dfd8 100%)}
   #shopify-section-{{ section.id }} .zcol__ph::after{content:'';position:absolute;inset:14px;border:1px solid rgba(17,17,17,.10)}
-  #shopify-section-{{ section.id }} .zcol__phmark{font-family:var(--heading-font-family,'Jost'),Georgia,serif;
-    font-size:clamp(13px,1.4vw,17px);letter-spacing:.42em;text-transform:uppercase;color:rgba(17,17,17,.16);
-    transform:translateY(-14%);user-select:none}
+  /* Placed, not centred: flex-centring put it directly behind the label box, where it was
+     invisible and would have muddled the hover state. */
+  #shopify-section-{{ section.id }} .zcol__phmark{position:absolute;top:26%;left:0;right:0;text-align:center;
+    font-family:var(--heading-font-family,'Jost'),Georgia,serif;
+    font-size:clamp(13px,1.4vw,17px);letter-spacing:.42em;text-transform:uppercase;color:rgba(17,17,17,.20);
+    user-select:none;pointer-events:none}
   @media (max-width:900px){#shopify-section-{{ section.id }} .zcol__grid{grid-template-columns:repeat(2,1fr)}}
   /* Two across on phones, not one. Four full-width tiles made the section a long scroll,
      and a pair of portrait tiles reads as a grid of categories rather than a list. */
