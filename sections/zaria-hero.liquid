@@ -40,7 +40,10 @@
 
 
 {%- assign slide_list = slides | split: '||' -%}
-{%- assign zalt = sc.image_alt -%}
+{%- comment -%}Fresh id: templates/index.json still holds "Zaria couture kaftan" against
+   image_alt and that file ignores pushes, so the rename only reaches the storefront under a
+   setting the editor has never written. See the same trick in zaria-collections.{%- endcomment -%}
+{%- assign zalt = sc.alt_text -%}
 <style>
   #shopify-section-{{ section.id }} .zhero{position:relative;display:flex;overflow:hidden;
     min-height:{{ sc.height_mobile }}vh;background:{{ sc.fallback_bg }};
@@ -230,7 +233,7 @@
     { "type": "image_picker", "id": "slide_2", "label": "Slide 2" },
     { "type": "image_picker", "id": "slide_3", "label": "Slide 3" },
     { "type": "image_picker", "id": "slide_4", "label": "Slide 4" },
-    { "type": "text", "id": "image_alt", "label": "Image description", "default": "Zaria couture jalabiya", "info": "Read aloud by screen readers." },
+    { "type": "text", "id": "alt_text", "label": "Image description", "default": "Zaria couture jalabiya", "info": "Read aloud by screen readers." },
     { "type": "range", "id": "interval", "label": "Seconds per slide", "min": 3, "max": 12, "step": 1, "unit": "s", "default": 4 },
     { "type": "color", "id": "fallback_bg", "label": "Fallback background", "default": "#f3f0ec" },
     { "type": "range", "id": "overlay", "label": "Image overlay", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 0 },
