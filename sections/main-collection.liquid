@@ -39,15 +39,16 @@
 -%}
 
 {%- comment -%}Shop All used to bounce itself to ?zaria=1, so the first page a shopper saw was
-  shuffled and the newest pieces were scattered through it. It now shows the collection order
-  like every other page; Zaria Pick is still there to choose.{%- endcomment -%}
+  shuffled. It still bounces, because /collections/all is Shopify's automatic collection and has
+  no sort order of its own to set: left alone it falls back to alphabetical, which put four
+  Italian silks at the top. The bounce now asks for newest instead of random.{%- endcomment -%}
 {%- unless request.design_mode -%}
-  {%- if false -%}
+  {%- if collection.handle == 'all' -%}
     <script>
       (function () {
         var p = new URLSearchParams(window.location.search);
         if (!p.has('sort_by') && !p.has('zaria')) {
-          p.set('zaria', '1');
+          p.set('sort_by', 'created-descending');
           window.location.replace(window.location.pathname + '?' + p.toString());
         }
       })();
