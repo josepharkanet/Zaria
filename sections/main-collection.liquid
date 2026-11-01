@@ -38,9 +38,11 @@
   endif
 -%}
 
-{%- comment -%}Default the All Products page to "Zaria Pick" (?zaria=1) when no sort is chosen{%- endcomment -%}
+{%- comment -%}Shop All used to bounce itself to ?zaria=1, so the first page a shopper saw was
+  shuffled and the newest pieces were scattered through it. It now shows the collection order
+  like every other page; Zaria Pick is still there to choose.{%- endcomment -%}
 {%- unless request.design_mode -%}
-  {%- if collection.handle == 'all' -%}
+  {%- if false -%}
     <script>
       (function () {
         var p = new URLSearchParams(window.location.search);
@@ -182,7 +184,9 @@
                     <x-listbox class="popover__value-list">
                       {%- for sort_option in collection.sort_options -%}
                         {%- assign sv = sort_option.value -%}
-                        {%- unless sort_option.name == blank or sv == 'title-ascending' or sv == 'title-descending' or sv == 'created-ascending' or sv == 'created-descending' -%}
+                        {%- comment -%}created-descending stays in the list: it is the default order now, so a
+                          shopper who tries Zaria Pick or a price sort needs a way back to it.{%- endcomment -%}
+                        {%- unless sort_option.name == blank or sv == 'title-ascending' or sv == 'title-descending' or sv == 'created-ascending' -%}
                           <button
                             type="button"
                             class="popover__value-option group"
@@ -384,14 +388,17 @@
   </div>
 </div>
 
-{%- comment -%}Zaria Pick is the DEFAULT order: shuffle the loaded products randomly
-  unless the shopper has chosen a specific sort (?sort_by=...).{%- endcomment -%}
+{%- comment -%}Zaria Pick shuffles the loaded products, and it is now something the shopper
+  asks for (?zaria=1) rather than what they get by default. It used to run on every collection
+  view, which meant a new piece could land anywhere on the page and the order changed on every
+  reload. The default is the collection's own order, newest first.{%- endcomment -%}
 <script>
   (function () {
     try {
       var params = new URLSearchParams(window.location.search);
-      // Respect an explicitly chosen sort; otherwise Zaria Pick (random) is the default.
-      if (params.get('sort_by')) return;
+      // Only when Zaria Pick is the chosen sort. Anything else, including no choice at all,
+      // keeps the order the collection was rendered in.
+      if (params.get('zaria') !== '1' || params.get('sort_by')) return;
 
       var list = document.getElementById('product-list-{{ section.id }}');
       if (!list) return;
