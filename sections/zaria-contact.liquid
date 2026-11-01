@@ -6,16 +6,26 @@
   #shopify-section-{{ section.id }} .zct *{box-sizing:border-box}
 
   /* Hero band */
-  #shopify-section-{{ section.id }} .zct__hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
-    min-height:clamp(300px,40vw,420px);text-align:center}
+  /* The hero photo is bright, so the type is ink rather than white and the veil lightens
+     the plate instead of darkening it. The model sits right of centre, so on a wide screen
+     the words take the open left third; on a phone the crop is tighter and the text sits
+     over a soft wash at the top, where the wall behind her is plainest. */
+  #shopify-section-{{ section.id }} .zct__hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:flex-start;
+    min-height:clamp(300px,40vw,460px);text-align:left}
   #shopify-section-{{ section.id }} .zct__hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sc.focal | default: 'center' }}}
-  #shopify-section-{{ section.id }} .zct__hero-veil{position:absolute;inset:0;background:linear-gradient(rgba(18,12,14,.5),rgba(18,12,14,.64)),radial-gradient(ellipse at center,rgba(18,12,14,.4),transparent 64%)}
-  #shopify-section-{{ section.id }} .zct__hero-in{position:relative;z-index:1;max-width:640px;padding:56px clamp(24px,5vw,48px);color:#fff}
-  #shopify-section-{{ section.id }} .zct__hero-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#fff;margin:0 0 18px;text-shadow:0 1px 14px rgba(0,0,0,.6)}
-  #shopify-section-{{ section.id }} .zct__hero-title,#shopify-section-{{ section.id }} .zct__hero-intro{text-shadow:0 2px 20px rgba(0,0,0,.4)}
+  #shopify-section-{{ section.id }} .zct__hero-veil{position:absolute;inset:0;
+    background:linear-gradient(90deg,rgba(252,250,247,.94) 0%,rgba(252,250,247,.80) 34%,rgba(252,250,247,.30) 56%,rgba(252,250,247,0) 74%)}
+  #shopify-section-{{ section.id }} .zct__hero-in{position:relative;z-index:1;max-width:540px;padding:56px clamp(24px,5vw,56px);color:#111}
+  #shopify-section-{{ section.id }} .zct__hero-eyebrow{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:#6a6a6a;margin:0 0 16px}
   #shopify-section-{{ section.id }} .zct__hero-title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
-    font-size:clamp(30px,4.4vw,52px);line-height:1.1;letter-spacing:.01em;margin:0}
-  #shopify-section-{{ section.id }} .zct__hero-intro{color:rgba(255,255,255,.9);font-size:clamp(14px,1.5vw,16px);line-height:1.85;margin:20px auto 0;max-width:48ch}
+    font-size:clamp(30px,4.4vw,52px);line-height:1.1;letter-spacing:.01em;margin:0;color:#111}
+  #shopify-section-{{ section.id }} .zct__hero-intro{color:#4a4a4a;font-size:clamp(14px,1.5vw,16px);line-height:1.85;margin:18px 0 0;max-width:44ch}
+  @media (max-width:749px){
+    #shopify-section-{{ section.id }} .zct__hero{align-items:flex-start;justify-content:center;text-align:center;min-height:430px}
+    #shopify-section-{{ section.id }} .zct__hero-veil{background:linear-gradient(180deg,rgba(252,250,247,.95) 0%,rgba(252,250,247,.80) 34%,rgba(252,250,247,.15) 62%,rgba(252,250,247,0) 86%)}
+    #shopify-section-{{ section.id }} .zct__hero-in{padding:34px 22px 0;max-width:none}
+    #shopify-section-{{ section.id }} .zct__hero-intro{margin-left:auto;margin-right:auto}
+  }
 
   /* Body */
   #shopify-section-{{ section.id }} .zct__inner{max-width:1120px;margin:0 auto;
@@ -48,7 +58,7 @@
 <section class="zct">
   {%- if sc.show_hero != false -%}
     <div class="zct__hero">
-      {%- assign zct_hero_vid = sc.hero_video | default: 'zaria-contact-video.mp4' -%}
+      {%- assign zct_hero_vid = sc.hero_video -%}
       {%- if zct_hero_vid != blank -%}
         {%- comment -%}Zaria: ~7MB clip, so phones keep the poster and desktop attaches it after load.{%- endcomment -%}
         <video class="zct__hero-bg" data-zct-src="{{ zct_hero_vid | asset_url }}" muted loop playsinline preload="none" poster="{% if sc.image != blank %}{{ sc.image | image_url: width: 1600 }}{% else %}{{ 'zaria-contact-poster.jpg' | asset_url }}{% endif %}"></video>
@@ -65,7 +75,16 @@
         })();
         </script>
       {%- else -%}
-        <img class="zct__hero-bg" src="{% if sc.image != blank %}{{ sc.image | image_url: width: 2000 }}{% else %}{{ 'zaria-dyl-bg.jpg' | asset_url }}{% endif %}" alt="" width="2000" height="1333" loading="lazy">
+        {%- comment -%} Wide file on the min-width source, phone crop in the img src, or phones
+           fetch both. The phone crop keeps the model in frame where a 2:1 plate would not. {%- endcomment -%}
+        {%- if sc.image != blank -%}
+          <img class="zct__hero-bg" src="{{ sc.image | image_url: width: 2000 }}" alt="" width="2000" height="1009" loading="eager" fetchpriority="high">
+        {%- else -%}
+          <picture>
+            <source media="(min-width:750px)" srcset="{{ 'zaria-contact-hero.jpg' | asset_url }}">
+            <img class="zct__hero-bg" src="{{ 'zaria-contact-hero-m.jpg' | asset_url }}" alt="" width="1000" height="750" loading="eager" fetchpriority="high">
+          </picture>
+        {%- endif -%}
       {%- endif -%}
       <div class="zct__hero-veil"></div>
       <div class="zct__hero-in">
@@ -122,7 +141,7 @@
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
     { "type": "checkbox", "id": "show_hero", "label": "Show hero image band", "default": true },
     { "type": "image_picker", "id": "image", "label": "Hero image / video poster (optional)" },
-    { "type": "text", "id": "hero_video", "label": "Hero video file in assets", "default": "zaria-contact-video.mp4", "info": "e.g. zaria-contact-video.mp4 — leave blank to show the image instead" },
+    { "type": "text", "id": "hero_video", "label": "Hero video file in assets", "info": "Blank shows the hero photograph. Put a filename here, e.g. zaria-contact-video.mp4, to play a clip instead." },
     { "type": "text", "id": "focal", "label": "Hero focal point", "default": "center" },
     { "type": "text", "id": "eyebrow", "label": "Overline", "default": "Contact" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Get in touch" },
