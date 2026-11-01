@@ -31,16 +31,27 @@
   #shopify-section-{{ section.id }} .zcol__media img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s ease}
   #shopify-section-{{ section.id }} .zcol__card:hover .zcol__media img{transform:scale(1.06)}
   #shopify-section-{{ section.id }} .zcol__veil{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.16),rgba(0,0,0,.44));transition:background .3s ease}
+  /* Over the pale placeholder the photographic veil would just grey it down, and the label
+     needs ink rather than white to read. */
+  #shopify-section-{{ section.id }} .zcol__card--ph .zcol__veil{background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,.06))}
+  #shopify-section-{{ section.id }} .zcol__card--ph:hover .zcol__veil{background:linear-gradient(to bottom,rgba(0,0,0,.02),rgba(0,0,0,.10))}
+  #shopify-section-{{ section.id }} .zcol__card--ph .zcol__label{border-color:rgba(17,17,17,.45);color:#111;background:rgba(255,255,255,.55)}
+  #shopify-section-{{ section.id }} .zcol__card--ph:hover .zcol__label{background:#111;color:#fff;border-color:#111}
   #shopify-section-{{ section.id }} .zcol__card:hover .zcol__veil{background:linear-gradient(to bottom,rgba(0,0,0,.30),rgba(0,0,0,.54))}
   #shopify-section-{{ section.id }} .zcol__cap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center}
   #shopify-section-{{ section.id }} .zcol__label{display:inline-block;border:1px solid rgba(255,255,255,.85);
     padding:12px 22px;font-size:clamp(11px,1vw,13px);letter-spacing:.2em;text-transform:uppercase;line-height:1.3;
     color:#fff;background:rgba(20,20,20,.12);transition:background .3s ease,color .3s ease,border-color .3s ease}
   #shopify-section-{{ section.id }} .zcol__card:hover .zcol__label{background:rgba(255,255,255,.95);color:#141414;border-color:#fff}
-  #shopify-section-{{ section.id }} .zcol__ph{position:absolute;inset:0;
-    background:repeating-linear-gradient(45deg,#efece7,#efece7 12px,#e9e5df 12px,#e9e5df 24px)}
-  #shopify-section-{{ section.id }} .zcol__phnum{position:absolute;top:10px;left:10px;font-size:10px;letter-spacing:.14em;color:#9a9081;
-    text-transform:uppercase;background:#fff;padding:3px 8px;border:1px solid #e0dad0}
+  /* Shown until the client uploads a collection image. A quiet linen plate with the
+     wordmark, rather than a hazard-stripe swatch, so the row still looks like the house
+     while it waits. The label sits on top of it as it does on a photograph. */
+  #shopify-section-{{ section.id }} .zcol__ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(165deg,#f3f1ed 0%,#eae6e0 58%,#e4dfd8 100%)}
+  #shopify-section-{{ section.id }} .zcol__ph::after{content:'';position:absolute;inset:14px;border:1px solid rgba(17,17,17,.10)}
+  #shopify-section-{{ section.id }} .zcol__phmark{font-family:var(--heading-font-family,'Jost'),Georgia,serif;
+    font-size:clamp(13px,1.4vw,17px);letter-spacing:.42em;text-transform:uppercase;color:rgba(17,17,17,.16);
+    transform:translateY(-14%);user-select:none}
   @media (max-width:900px){#shopify-section-{{ section.id }} .zcol__grid{grid-template-columns:repeat(2,1fr)}}
   /* Two across on phones, not one. Four full-width tiles made the section a long scroll,
      and a pair of portrait tiles reads as a grid of categories rather than a list. */
@@ -61,22 +72,18 @@
       {%- assign col = collections[handle] -%}
       {%- assign href = col.url -%}
       {%- if href == blank -%}{%- assign href = routes.root_url | append: 'collections/' | append: handle -%}{%- endif -%}
-      {%- comment -%} Zaria: tile art = the collection's own image if set (client can upload a custom one),
-         otherwise fall back to the first photographed product's draped shot so nothing looks empty. {%- endcomment -%}
+      {%- comment -%} Tile art is the collection's own image, set in Products > Collections.
+         There is deliberately no product-photo fallback: borrowing the first product gave
+         back-view catalogue shots and, where two collections share a supplier, two tiles
+         that looked identical. The branded plate below holds the space until an image
+         is uploaded, which then appears here with no code change. {%- endcomment -%}
       {%- assign img = col.image -%}
-      {%- if img == blank and col != blank -%}
-        {%- for cp in col.products limit: 12 -%}
-          {%- if cp.tags contains 'no-photo' -%}{%- continue -%}{%- endif -%}
-          {%- assign img = cp.images[1] | default: cp.featured_image -%}
-          {%- if img != blank -%}{%- break -%}{%- endif -%}
-        {%- endfor -%}
-      {%- endif -%}
-      <a class="zcol__card" href="{{ href }}">
+      <a class="zcol__card{% if img == blank %} zcol__card--ph{% endif %}" href="{{ href }}">
         <span class="zcol__media">
           {%- if img != blank -%}
             <img src="{{ img | image_url: width: 800 }}" alt="{{ name | escape }}" width="{{ img.width }}" height="{{ img.height }}" loading="lazy">
           {%- else -%}
-            <span class="zcol__ph"><span class="zcol__phnum">Image {{ forloop.index }}</span></span>
+            <span class="zcol__ph"><span class="zcol__phmark">Zaria</span></span>
           {%- endif -%}
         </span>
         <span class="zcol__veil"></span>
