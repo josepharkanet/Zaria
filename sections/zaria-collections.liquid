@@ -2,11 +2,18 @@
 {%- assign sc = section.settings -%}
 {%- comment -%}
   Zaria: fixed category grid (client requested a Freya-style "Explore Collections" tile view).
-  Handles + names are read from settings that are NOT present in templates/index.json, so the
-  schema defaults render 9 tiles reliably even though index.json is editor-owned and ignores pushes.
+  The tile lists use FRESH setting ids. The old cat_handles / cat_names were written into
+  templates/index.json by the theme editor, and that file ignores pushes, so a changed default
+  on those ids would never reach the storefront. Renaming orphans the stale values and lets the
+  defaults below render. The same applies to columns and tile shape, which are derived here
+  rather than read from the editor-owned settings.
 {%- endcomment -%}
-{%- assign cat_handles = sc.cat_handles | split: ',' -%}
-{%- assign cat_names = sc.cat_names | split: ',' -%}
+{%- assign cat_handles = sc.tile_handles | split: ',' -%}
+{%- assign cat_names = sc.tile_labels | split: ',' -%}
+{%- comment -%} Columns follow the number of tiles, so the row always fills its width. {%- endcomment -%}
+{%- assign ncols = cat_handles.size -%}
+{%- if ncols > 4 -%}{%- assign ncols = 4 -%}{%- endif -%}
+{%- if ncols < 1 -%}{%- assign ncols = 1 -%}{%- endif -%}
 <style>
   #shopify-section-{{ section.id }} .zcol{background:{% if sc.scheme == 'soft' %}#f5f5f5{% else %}#ffffff{% endif %};
     color:#111;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;
@@ -18,9 +25,9 @@
     font-size:clamp(22px,3vw,34px);line-height:1.14;letter-spacing:.16em;text-transform:uppercase;margin:0}
   #shopify-section-{{ section.id }} .zcol__rule{width:54px;height:1px;background:#d9d2c6;margin:18px auto 0}
   #shopify-section-{{ section.id }} .zcol__grid{max-width:1280px;margin:0 auto;display:grid;
-    grid-template-columns:repeat({{ sc.cols }},1fr);gap:clamp(10px,1.4vw,18px)}
+    grid-template-columns:repeat({{ ncols }},1fr);gap:clamp(10px,1.4vw,18px)}
   #shopify-section-{{ section.id }} .zcol__card{position:relative;display:block;text-decoration:none;color:#fff;overflow:hidden;background:#efece7}
-  #shopify-section-{{ section.id }} .zcol__media{display:block;position:relative;aspect-ratio:{{ sc.tile_ratio }};overflow:hidden;background:#e7e2da}
+  #shopify-section-{{ section.id }} .zcol__media{display:block;position:relative;aspect-ratio:3/4;overflow:hidden;background:#e7e2da}
   #shopify-section-{{ section.id }} .zcol__media img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s ease}
   #shopify-section-{{ section.id }} .zcol__card:hover .zcol__media img{transform:scale(1.06)}
   #shopify-section-{{ section.id }} .zcol__veil{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.16),rgba(0,0,0,.44));transition:background .3s ease}
@@ -35,7 +42,10 @@
   #shopify-section-{{ section.id }} .zcol__phnum{position:absolute;top:10px;left:10px;font-size:10px;letter-spacing:.14em;color:#9a9081;
     text-transform:uppercase;background:#fff;padding:3px 8px;border:1px solid #e0dad0}
   @media (max-width:900px){#shopify-section-{{ section.id }} .zcol__grid{grid-template-columns:repeat(2,1fr)}}
-  @media (max-width:520px){#shopify-section-{{ section.id }} .zcol__grid{grid-template-columns:1fr}}
+  /* Two across on phones, not one. Four full-width tiles made the section a long scroll,
+     and a pair of portrait tiles reads as a grid of categories rather than a list. */
+  @media (max-width:520px){#shopify-section-{{ section.id }} .zcol__grid{grid-template-columns:repeat(2,1fr);gap:10px}
+    #shopify-section-{{ section.id }} .zcol__label{font-size:11px;letter-spacing:.14em}}
 </style>
 <section class="zcol">
   <div class="zcol__head">
@@ -84,19 +94,9 @@
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
     { "type": "text", "id": "overline", "label": "Overline", "default": "The Fabric House" },
     { "type": "text", "id": "title", "label": "Heading", "default": "Explore Collections" },
-    {
-      "type": "select", "id": "cols", "label": "Columns (desktop)",
-      "options": [ { "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" } ],
-      "default": "3"
-    },
-    {
-      "type": "select", "id": "tile_ratio", "label": "Tile shape",
-      "options": [ { "value": "1/1", "label": "Square" }, { "value": "4/5", "label": "Tall" }, { "value": "3/4", "label": "Portrait" }, { "value": "4/3", "label": "Landscape" } ],
-      "default": "1/1"
-    },
-    { "type": "paragraph", "content": "Tiles read from the two lists below (comma separated, same order). Each tile uses that collection's image, or falls back to a product photo. To set a custom tile image, add an image to the collection in Products > Collections." },
-    { "type": "textarea", "id": "cat_handles", "label": "Collection handles", "default": "luxe-silks,fine-cottons,chiffons-organza,linen-blends,velvets,tulle-3d-work,silk-blends,sequins-embroidery,hand-painted" },
-    { "type": "textarea", "id": "cat_names", "label": "Tile labels", "default": "Luxe Silks,Fine Cottons,Chiffons & Organza,Linen Blends,Velvets,Tulle & 3D Work,Silk Blends,Sequins & Embroidery,Hand-Painted" },
+    { "type": "paragraph", "content": "Tiles read from the two lists below (comma separated, same order). Each tile uses that collection's image, or falls back to a product photo. To set a custom tile image, add an image to the collection in Products > Collections. Columns follow the number of tiles." },
+    { "type": "textarea", "id": "tile_handles", "label": "Collection handles", "default": "all-fabrics,abayas,kaftans,ready-to-wear" },
+    { "type": "textarea", "id": "tile_labels", "label": "Tile labels", "default": "Textiles,Abayas,Jalabiya,Ready to Wear" },
     { "type": "range", "id": "padding_top", "label": "Padding top", "min": 32, "max": 140, "step": 4, "unit": "px", "default": 88 },
     { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 24, "max": 140, "step": 4, "unit": "px", "default": 48 }
   ],
