@@ -13,11 +13,9 @@
     background:linear-gradient(90deg,rgba(18,12,11,.74),rgba(18,12,11,.46) 44%,rgba(18,12,11,.14) 64%,rgba(18,12,11,0))}
   #shopify-section-{{ section.id }} .zfr__inner{position:relative;z-index:1;width:100%;max-width:1280px;margin:0 auto;padding:64px clamp(24px,5vw,64px);
     display:flex;flex-direction:column;align-items:flex-start;text-align:left;color:#fff}
-  {%- comment -%}The theme forces every [class*="eyebrow"] to var(--gold) with !important, and
-     --gold is near-black since the house went monochrome, so this overline was invisible on a
-     pale backdrop and is invisible on a dark one. Outranked here by specificity.{%- endcomment -%}
-  #shopify-section-{{ section.id }} .zfr .zfr__eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;
-    margin:0 0 20px;color:#f1dfe2 !important;text-shadow:0 1px 12px rgba(20,10,14,.6)}
+  {%- comment -%}Section overlines are hidden house-wide in theme.css (display:none !important),
+     so this never paints. Kept styled for the day that rule is lifted.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zfr__eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;margin:0 0 20px;color:#f4dfe3;text-shadow:0 1px 12px rgba(20,10,14,.6)}
   #shopify-section-{{ section.id }} .zfr__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     font-size:clamp(30px,5vw,58px);line-height:1.08;letter-spacing:.01em;margin:0}
   #shopify-section-{{ section.id }} .zfr__sub{font-size:clamp(14px,1.5vw,17px);line-height:1.75;margin:22px 0 0;max-width:44ch;
