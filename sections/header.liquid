@@ -106,14 +106,17 @@
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 0.9rem; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__logo { grid-area: logo; justify-self: center; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav { grid-area: secondary-nav; justify-self: end; }
-    /* Zaria: the icons sat hard against the right edge while the matching column on the far
-       left is empty, so the bar read right-heavy. Measured at 1440 there were 122px of dead
-       space between the last link and the icons. Pulling them in leaves a right margin that
-       roughly mirrors the empty left column. Only from 1400px, where there is slack: below
-       that the six links need every pixel and the icons must stay put. */
+    /* Zaria: the icons sit at the far end of their column while the links sit at the near
+       end, beside the logo, so every pixel the window gains opens between GIFTS and the
+       search glass. A fixed inset could not hold it: at 1512 the hole was 90px, at 1920 it
+       would be 296px and it keeps growing. The margin therefore tracks half the viewport,
+       which is the rate the column grows, so the gap after the last link stays put however
+       wide the screen is. Clamped at both ends: 24px so the icons never touch the links,
+       560px so a very wide monitor cannot drag them into the middle. Only from 1400px,
+       because below that the six links need every pixel and the icons must stay put. */
     @media screen and (min-width: 1400px) {
       #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav {
-        margin-inline-end: clamp(40px, 4.5vw, 110px);
+        margin-inline-end: clamp(24px, calc(50vw - 668px), 560px);
       }
     }
     /* Zaria: nav type — six links leave room for a larger, more legible size down to 1000px */
