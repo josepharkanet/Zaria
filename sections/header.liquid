@@ -106,6 +106,16 @@
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 0.9rem; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__logo { grid-area: logo; justify-self: center; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav { grid-area: secondary-nav; justify-self: end; }
+    /* Zaria: the icons sat hard against the right edge while the matching column on the far
+       left is empty, so the bar read right-heavy. Measured at 1440 there were 122px of dead
+       space between the last link and the icons. Pulling them in leaves a right margin that
+       roughly mirrors the empty left column. Only from 1400px, where there is slack: below
+       that the six links need every pixel and the icons must stay put. */
+    @media screen and (min-width: 1400px) {
+      #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav {
+        margin-inline-end: clamp(40px, 4.5vw, 110px);
+      }
+    }
     /* Zaria: nav type — six links leave room for a larger, more legible size down to 1000px */
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half a,
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half summary { font-size: 13px; letter-spacing: 0.10em; }
