@@ -236,7 +236,26 @@
 
 <div class="zpdp">
   <p class="zpdp__crumb">
-    <a href="{{ routes.root_url }}">Home</a> / {% if is_fragrance %}<a href="{{ routes.root_url }}collections/fragrance">Fragrance</a>{% else %}<a href="{{ routes.root_url }}collections/all-fabrics">Fabrics</a>{% endif %} / {{ product.title }}
+    {%- comment -%}Every garment used to read "Home / Fabrics", because the crumb only knew
+      fragrance from everything else. A jalabiya belongs under its own collection.{%- endcomment -%}
+    {%- liquid
+      assign crumb_url = 'collections/all-fabrics'
+      assign crumb_label = 'Fabrics'
+      if is_fragrance
+        assign crumb_url = 'collections/fragrance'
+        assign crumb_label = 'Fragrance'
+      elsif product.type == 'Jalabiya'
+        assign crumb_url = 'collections/jalabiya'
+        assign crumb_label = 'Jalabiya'
+      elsif product.type == 'Abaya'
+        assign crumb_url = 'collections/abayas'
+        assign crumb_label = 'Abayas'
+      elsif product.type == 'Sheila'
+        assign crumb_url = 'collections/accessories'
+        assign crumb_label = 'Sheila &amp; Accessories'
+      endif
+    -%}
+    <a href="{{ routes.root_url }}">Home</a> / <a href="{{ routes.root_url }}{{ crumb_url }}">{{ crumb_label }}</a> / {{ product.title }}
   </p>
 
   <div class="zpdp__grid">
@@ -264,7 +283,7 @@
 
     <!-- INFO -->
     <div class="zpdp__info">
-      <p class="zpdp__eyebrow">{% if is_fragrance %}{% if fr_conc != blank %}{{ fr_conc }}{% else %}Zaria Fragrance{% endif %}{% if fr_family != blank %} &middot; {{ fr_family }}{% endif %}{% else %}{% if ftype != blank %}{{ ftype }}{% else %}Zaria Fabric{% endif %}{% if origin != blank %} &middot; {{ origin }}{% endif %}{% endif %}</p>
+      <p class="zpdp__eyebrow">{% if is_fragrance %}{% if fr_conc != blank %}{{ fr_conc }}{% else %}Zaria Fragrance{% endif %}{% if fr_family != blank %} &middot; {{ fr_family }}{% endif %}{% else %}{% if ftype != blank %}{{ ftype }}{% elsif is_garment %}{{ product.type | default: 'Zaria' }}{% else %}Zaria Fabric{% endif %}{% if origin != blank %} &middot; {{ origin }}{% endif %}{% endif %}</p>
       <h1 class="zpdp__title">{{ product.title }}</h1>
 
       {%- if por -%}
