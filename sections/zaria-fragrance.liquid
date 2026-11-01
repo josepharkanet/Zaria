@@ -2,15 +2,16 @@
 {%- assign sc = section.settings -%}
 <style>
   #shopify-section-{{ section.id }} .zfr{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;
-    min-height:{{ sc.height | default: 54 }}vh;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;background:#20161a}
+    min-height:{{ sc.height | default: 54 }}vh;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;background:#141414}
   #shopify-section-{{ section.id }} .zfr__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sc.focal | default: 'center' }}}
   {%- comment -%}The picture wrapper is positioned so it never becomes a stray flex item in the band{%- endcomment -%}
   #shopify-section-{{ section.id }} .zfr__bgwrap{position:absolute;inset:0}
   {%- comment -%}The scrim darkens the reading side. It was a cream wash when the banner held a
-     pale marble still life; the photograph behind it now is dark and warm, so cream over cream
-     left the copy unreadable and the type reads white instead.{%- endcomment -%}
+     pale marble still life; the photograph is black and white now, so the scrim is neutral and
+     the type reads white. The plate carries its own darkened blur on the left, so this stays
+     light enough to leave that texture visible.{%- endcomment -%}
   #shopify-section-{{ section.id }} .zfr__veil{position:absolute;inset:0;
-    background:linear-gradient(90deg,rgba(18,12,11,.74),rgba(18,12,11,.46) 44%,rgba(18,12,11,.14) 64%,rgba(18,12,11,0))}
+    background:linear-gradient(90deg,rgba(10,10,10,.56),rgba(10,10,10,.3) 44%,rgba(10,10,10,.08) 64%,rgba(10,10,10,0))}
   #shopify-section-{{ section.id }} .zfr__inner{position:relative;z-index:1;width:100%;max-width:1280px;margin:0 auto;padding:64px clamp(24px,5vw,64px);
     display:flex;flex-direction:column;align-items:flex-start;text-align:left;color:#fff}
   {%- comment -%}Section overlines are hidden house-wide in theme.css (display:none !important),
@@ -19,7 +20,7 @@
   #shopify-section-{{ section.id }} .zfr__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     font-size:clamp(30px,5vw,58px);line-height:1.08;letter-spacing:.01em;margin:0}
   #shopify-section-{{ section.id }} .zfr__sub{font-size:clamp(14px,1.5vw,17px);line-height:1.75;margin:22px 0 0;max-width:44ch;
-    color:rgba(255,255,255,.9);text-shadow:0 1px 14px rgba(16,10,9,.5)}
+    color:rgba(255,255,255,.9);text-shadow:0 1px 14px rgba(10,10,10,.55)}
   #shopify-section-{{ section.id }} .zfr__actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
   {%- comment -%}Not a button. The fragrance collections hold no stock yet, so this is a
      standing note and must not invite a click: no href, no hover, default cursor.{%- endcomment -%}
@@ -27,7 +28,7 @@
     text-transform:uppercase;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.07);
     color:#fff;cursor:default;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
   @media (max-width:749px){#shopify-section-{{ section.id }} .zfr__inner{align-items:center;text-align:center}
-    #shopify-section-{{ section.id }} .zfr__veil{background:linear-gradient(rgba(16,10,9,.42),rgba(16,10,9,.66))}}
+    #shopify-section-{{ section.id }} .zfr__veil{background:linear-gradient(rgba(10,10,10,.4),rgba(10,10,10,.64))}}
 </style>
 <section class="zfr">
   {%- comment -%}
