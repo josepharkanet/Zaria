@@ -3,7 +3,10 @@
 <style>
   #shopify-section-{{ section.id }} .zfr{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;
     min-height:{{ sc.height | default: 54 }}vh;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;background:#141414}
-  #shopify-section-{{ section.id }} .zfr__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sc.focal | default: 'center' }}}
+  #shopify-section-{{ section.id }} .zfr__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sc.focal_point | default: '75% 0%' }}}
+  {%- comment -%}Anchored top-right. Whatever the band has to crop, it takes from the bottom and
+     from the empty left of the frame, never from the profile or the flacon. Fresh id because
+     templates/index.json holds "center" against focal and ignores pushes.{%- endcomment -%}
   {%- comment -%}The picture wrapper is positioned so it never becomes a stray flex item in the band{%- endcomment -%}
   #shopify-section-{{ section.id }} .zfr__bgwrap{position:absolute;inset:0}
   {%- comment -%}The scrim darkens the reading side. It was a cream wash when the banner held a
@@ -41,8 +44,10 @@
     {%- if sc.bg_image != blank -%}
       <img class="zfr__bg" src="{{ sc.bg_image | image_url: width: 2200 }}" alt="{{ sc.title | default: 'Zaria Fragrance' | escape }}" loading="lazy" width="{{ sc.bg_image.width }}" height="{{ sc.bg_image.height }}">
     {%- else -%}
-      <source media="(min-width: 750px)" srcset="{{ 'zaria-scent-banner.jpg' | asset_url }}">
-      <img class="zfr__bg" src="{{ 'zaria-scent-banner-m.jpg' | asset_url }}" alt="{{ sc.title | default: 'Zaria Fragrance' | escape }}" loading="lazy" width="860" height="1000">
+      {%- comment -%}1024, not 750: a tablet held upright makes this band almost square, and a
+         3.2:1 plate in a square box keeps only its middle. Uprights get the portrait cut.{%- endcomment -%}
+      <source media="(min-width: 1024px)" srcset="{{ 'zaria-scent-banner.jpg' | asset_url }}">
+      <img class="zfr__bg" src="{{ 'zaria-scent-banner-m.jpg' | asset_url }}" alt="{{ sc.title | default: 'Zaria Fragrance' | escape }}" loading="lazy" width="860" height="1024">
     {%- endif -%}
   </picture>
   <div class="zfr__veil"></div>
@@ -60,7 +65,7 @@
   "name": "Zaria Fragrance",
   "settings": [
     { "type": "image_picker", "id": "bg_image", "label": "Background image (optional)" },
-    { "type": "text", "id": "focal", "label": "Image focal point", "default": "center" },
+    { "type": "text", "id": "focal_point", "label": "Image focal point", "default": "75% 0%", "info": "CSS object-position. The default holds the top and the right, so any crop is taken off the bottom." },
     { "type": "text", "id": "eyebrow", "label": "Overline", "default": "The Maison" },
     { "type": "text", "id": "title", "label": "Heading", "default": "The Art of Scent" },
     { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Oud, amber and rose, composed into a signature olfactory wardrobe, perfumes, bakhoor and home fragrance in the Zaria spirit." },
