@@ -94,18 +94,15 @@
   }
 
   /* ---------- Zaria: slim invitation band (replaces the homepage story) ---------- */
-  {%- comment -%}The band between the hero and the collections. It was a thin strip with one
-     small line in it, which read as a caption rather than the house speaking. It now carries
-     the height and the type size of a statement, with the line broken over three so it holds
-     the middle of the page.{%- endcomment -%}
-  #shopify-section-{{ section.id }} .zst-invite{background:#f5f5f5;text-align:center;padding:clamp(86px,11vw,158px) clamp(20px,5vw,48px);font-family:var(--text-font-family,'Jost'),'Jost',sans-serif}
-  #shopify-section-{{ section.id }} .zst-invite__inner{max-width:1040px;margin:0 auto}
-  #shopify-section-{{ section.id }} .zst-invite__eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:#8a8178;margin:0 0 22px}
-  #shopify-section-{{ section.id }} .zst-invite__rule{width:54px;height:1px;background:#cfc7bd;margin:0 auto 34px}
-  #shopify-section-{{ section.id }} .zst-invite__lead{font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;font-weight:300;
-    font-size:clamp(23px,3.1vw,41px);line-height:1.36;letter-spacing:.012em;color:#241d1a;margin:0 auto;max-width:23ch}
-  @media(max-width:600px){#shopify-section-{{ section.id }} .zst-invite{padding-block:clamp(66px,16vw,96px)}
-    #shopify-section-{{ section.id }} .zst-invite__lead{max-width:17ch}}
+  {%- comment -%}The weight here belongs to the overline, not the sentence. An earlier pass
+     scaled the sentence up to 41px and it swamped the band; the house name is what wanted the
+     size and the spacing. The sentence is back at the size it always was.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zst-invite{background:#f5f5f5;text-align:center;padding:clamp(62px,8vw,108px) clamp(20px,5vw,48px);font-family:var(--text-font-family,'Jost'),'Jost',sans-serif}
+  #shopify-section-{{ section.id }} .zst-invite__inner{max-width:760px;margin:0 auto}
+  #shopify-section-{{ section.id }} .zst-invite__eyebrow{font-size:clamp(13px,1.25vw,17px);letter-spacing:.46em;text-transform:uppercase;
+    color:#8a8178;margin:0 0 34px;text-indent:.46em}
+  #shopify-section-{{ section.id }} .zst-invite__lead{font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;font-weight:400;font-size:clamp(16px,1.8vw,20px);line-height:1.65;letter-spacing:.015em;color:#2a241f;margin:0}
+  @media(max-width:600px){#shopify-section-{{ section.id }} .zst-invite__eyebrow{letter-spacing:.34em;text-indent:.34em;margin-bottom:26px}}
 </style>
 
 {%- if template.suffix == 'story' -%}
@@ -219,7 +216,6 @@
   <section class="zst-invite">
     <div class="zst-invite__inner">
       <p class="zst-invite__eyebrow">The House of Zaria</p>
-      <div class="zst-invite__rule" aria-hidden="true"></div>
       <p class="zst-invite__lead">Fine fabrics and modest couture, designed and made in Dubai.</p>
     </div>
   </section>
