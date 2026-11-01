@@ -6,34 +6,40 @@
   #shopify-section-{{ section.id }} .zfr__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ sc.focal | default: 'center' }}}
   {%- comment -%}The picture wrapper is positioned so it never becomes a stray flex item in the band{%- endcomment -%}
   #shopify-section-{{ section.id }} .zfr__bgwrap{position:absolute;inset:0}
-  #shopify-section-{{ section.id }} .zfr__veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(250,246,242,.5),rgba(250,246,242,.1) 44%,rgba(250,246,242,0) 64%)}
+  {%- comment -%}The scrim darkens the reading side. It was a cream wash when the banner held a
+     pale marble still life; the photograph behind it now is dark and warm, so cream over cream
+     left the copy unreadable and the type reads white instead.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zfr__veil{position:absolute;inset:0;
+    background:linear-gradient(90deg,rgba(18,12,11,.74),rgba(18,12,11,.46) 44%,rgba(18,12,11,.14) 64%,rgba(18,12,11,0))}
   #shopify-section-{{ section.id }} .zfr__inner{position:relative;z-index:1;width:100%;max-width:1280px;margin:0 auto;padding:64px clamp(24px,5vw,64px);
-    display:flex;flex-direction:column;align-items:flex-start;text-align:left;color:#2a1d20}
+    display:flex;flex-direction:column;align-items:flex-start;text-align:left;color:#fff}
   #shopify-section-{{ section.id }} .zfr__eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;margin:0 0 20px;color:#f4dfe3;text-shadow:0 1px 12px rgba(20,10,14,.6)}
   #shopify-section-{{ section.id }} .zfr__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     font-size:clamp(30px,5vw,58px);line-height:1.08;letter-spacing:.01em;margin:0}
-  #shopify-section-{{ section.id }} .zfr__sub{font-size:clamp(14px,1.5vw,17px);line-height:1.75;margin:22px 0 0;max-width:44ch;opacity:.92}
+  #shopify-section-{{ section.id }} .zfr__sub{font-size:clamp(14px,1.5vw,17px);line-height:1.75;margin:22px 0 0;max-width:44ch;
+    color:rgba(255,255,255,.9);text-shadow:0 1px 14px rgba(16,10,9,.5)}
   #shopify-section-{{ section.id }} .zfr__actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
-  #shopify-section-{{ section.id }} .zfr__btn{display:inline-block;text-decoration:none;padding:15px 40px;font-size:12px;letter-spacing:.22em;
-    {%- comment -%}Neutral dark grey: the old #241a1e carried a plum cast that fought the monochrome frame{%- endcomment -%}
-    text-transform:uppercase;border:1px solid #3a3a3a;background:#3a3a3a;color:#fff;transition:background .2s,color .2s}
-  #shopify-section-{{ section.id }} .zfr__btn:hover{background:transparent;color:#3a3a3a}
-  #shopify-section-{{ section.id }} .zfr__btn--ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.7)}
-  #shopify-section-{{ section.id }} .zfr__btn--ghost:hover{background:#fff;color:#161616;border-color:#fff}
+  {%- comment -%}Not a button. The fragrance collections hold no stock yet, so this is a
+     standing note and must not invite a click: no href, no hover, default cursor.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zfr__soon{display:inline-block;padding:15px 40px;font-size:12px;letter-spacing:.26em;
+    text-transform:uppercase;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.07);
+    color:#fff;cursor:default;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
   @media (max-width:749px){#shopify-section-{{ section.id }} .zfr__inner{align-items:center;text-align:center}
-    #shopify-section-{{ section.id }} .zfr__veil{background:linear-gradient(rgba(250,246,242,.4),rgba(250,246,242,.6))}}
+    #shopify-section-{{ section.id }} .zfr__veil{background:linear-gradient(rgba(16,10,9,.42),rgba(16,10,9,.66))}}
 </style>
 <section class="zfr">
   {%- comment -%}
-    Zaria: the packaged frame is close to 2:1 with the flacon right of centre, and a tall phone
-    band centre-cropped onto bare marble, so phones take their own crop held on the bottle.
+    Zaria: the desktop frame is 2:1 with the flacon right of centre so the copy never sits on it,
+    and a tall phone band centre-cropped onto the hand, so phones take their own crop.
+    The picker id is bg_image, not image: templates/index.json still holds the old perfume.png
+    against "image" and that file ignores pushes, so a fresh id is what lets these assets render.
   {%- endcomment -%}
   <picture class="zfr__bgwrap">
-    {%- if sc.image != blank -%}
-      <img class="zfr__bg" src="{{ sc.image | image_url: width: 2200 }}" alt="{{ sc.title | default: 'Zaria Fragrance' | escape }}" loading="lazy" width="{{ sc.image.width }}" height="{{ sc.image.height }}">
+    {%- if sc.bg_image != blank -%}
+      <img class="zfr__bg" src="{{ sc.bg_image | image_url: width: 2200 }}" alt="{{ sc.title | default: 'Zaria Fragrance' | escape }}" loading="lazy" width="{{ sc.bg_image.width }}" height="{{ sc.bg_image.height }}">
     {%- else -%}
-      <source media="(min-width: 750px)" srcset="{{ 'zaria-fragrance-banner.jpg' | asset_url }}">
-      <img class="zfr__bg" src="{{ 'zaria-fragrance-banner-m.jpg' | asset_url }}" alt="{{ sc.title | default: 'Zaria Fragrance' | escape }}" loading="lazy" width="860" height="1000">
+      <source media="(min-width: 750px)" srcset="{{ 'zaria-scent-banner.jpg' | asset_url }}">
+      <img class="zfr__bg" src="{{ 'zaria-scent-banner-m.jpg' | asset_url }}" alt="{{ sc.title | default: 'Zaria Fragrance' | escape }}" loading="lazy" width="860" height="1000">
     {%- endif -%}
   </picture>
   <div class="zfr__veil"></div>
@@ -42,7 +48,7 @@
     <h2 class="zfr__title">{{ sc.title | default: 'The Art of Scent' }}</h2>
     <p class="zfr__sub">{{ sc.subheading | default: 'Oud, amber and rose, composed into a signature olfactory wardrobe, perfumes, bakhoor and home fragrance in the Zaria spirit.' }}</p>
     <div class="zfr__actions">
-      <a class="zfr__btn" href="{{ sc.button_url | default: routes.root_url | append: 'collections/fragrance' }}">{{ sc.button_label | default: 'Discover Fragrance' }}</a>
+      <span class="zfr__soon">{{ sc.note_label | default: 'Coming Soon' }}</span>
     </div>
   </div>
 </section>
@@ -50,13 +56,12 @@
 {
   "name": "Zaria Fragrance",
   "settings": [
-    { "type": "image_picker", "id": "image", "label": "Background image (optional)" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image (optional)" },
     { "type": "text", "id": "focal", "label": "Image focal point", "default": "center" },
     { "type": "text", "id": "eyebrow", "label": "Overline", "default": "The Maison" },
     { "type": "text", "id": "title", "label": "Heading", "default": "The Art of Scent" },
     { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Oud, amber and rose, composed into a signature olfactory wardrobe, perfumes, bakhoor and home fragrance in the Zaria spirit." },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "Discover Fragrance" },
-    { "type": "url", "id": "button_url", "label": "Button link" },
+    { "type": "text", "id": "note_label", "label": "Status note", "default": "Coming Soon", "info": "Shown as a plain mark, not a link. Fragrance has no stock yet." },
     { "type": "range", "id": "height", "label": "Height", "min": 40, "max": 92, "step": 2, "unit": "vh", "default": 54 }
   ],
   "presets": [ { "name": "Zaria Fragrance" } ]
