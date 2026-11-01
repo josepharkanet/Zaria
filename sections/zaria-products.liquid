@@ -76,8 +76,13 @@
           {%- if brand != blank -%}<span class="zpr__brand">{{ brand }}</span>{%- endif -%}
           <span class="zpr__name">{{ product.title }}</span>
           <span class="zpr__price">
-            {%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}
-            {{ product.price | money }}
+            {%- comment -%}A piece whose price is not set yet shows AED 0.00 otherwise.{%- endcomment -%}
+            {%- if product.tags contains 'Price on Request' -%}
+              Price on request
+            {%- else -%}
+              {%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}
+              {{ product.price | money }}
+            {%- endif -%}
           </span>
         </a>
       {%- endfor -%}
