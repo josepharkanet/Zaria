@@ -1,7 +1,10 @@
 {% comment %}Zaria - product row / new arrivals - Arkanet Technologies{% endcomment %}
 {%- assign sc = section.settings -%}
 {%- comment -%} Zaria: fall back to the All Fabrics collection when none is chosen in the editor {%- endcomment -%}
-{%- assign coll = sc.collection | default: collections['all-fabrics'] -%}
+{%- comment -%}Fresh id. templates/index.json holds all-fabrics against "collection" and
+  ignores pushes, which is why a strip headed New Arrivals was showing fabric swatches. The
+  default is the New collection, which every jalabiya now carries a tag for.{%- endcomment -%}
+{%- assign coll = sc.source_collection | default: collections['new'] -%}
 <style>
   #shopify-section-{{ section.id }} .zpr{background:{% if sc.scheme == 'soft' %}#fafafa{% else %}#ffffff{% endif %};
     color:#111;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;
@@ -118,7 +121,7 @@
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
     { "type": "text", "id": "eyebrow", "label": "Overline", "default": "New In" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "New arrivals" },
-    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "collection", "id": "source_collection", "label": "Collection", "info": "Leave empty to use New." },
     { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 12, "step": 1, "default": 5 },
     {
       "type": "select", "id": "columns", "label": "Columns (desktop)",
