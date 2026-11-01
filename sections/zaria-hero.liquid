@@ -15,28 +15,28 @@
 {%- else -%}
   {%- assign su = 'zaria-hero-s1.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s1-m.jpg' | asset_url -%}
 {%- endif -%}
-{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^52||' -%}
+{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^52^^46||' -%}
 
 {%- if sc.slide_2 != blank -%}
   {%- assign su = sc.slide_2 | image_url: width: 2000 -%}{%- assign sm = sc.slide_2 | image_url: width: 900 -%}
 {%- else -%}
   {%- assign su = 'zaria-hero-s2.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s2-m.jpg' | asset_url -%}
 {%- endif -%}
-{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^36||' -%}
+{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^36^^40||' -%}
 
 {%- if sc.slide_3 != blank -%}
   {%- assign su = sc.slide_3 | image_url: width: 2000 -%}{%- assign sm = sc.slide_3 | image_url: width: 900 -%}
 {%- else -%}
   {%- assign su = 'zaria-hero-s3.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s3-m.jpg' | asset_url -%}
 {%- endif -%}
-{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^60||' -%}
+{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^60^^26||' -%}
 
 {%- if sc.slide_4 != blank -%}
   {%- assign su = sc.slide_4 | image_url: width: 2000 -%}{%- assign sm = sc.slide_4 | image_url: width: 900 -%}
 {%- else -%}
   {%- assign su = 'zaria-hero-s4.jpg' | asset_url -%}{%- assign sm = 'zaria-hero-s4-m.jpg' | asset_url -%}
 {%- endif -%}
-{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^57' -%}
+{%- assign slides = slides | append: su | append: '^^' | append: sm | append: '^^57^^18' -%}
 
 
 {%- assign slide_list = slides | split: '||' -%}
@@ -90,7 +90,11 @@
     #shopify-section-{{ section.id }} .zhero{min-height:{{ sc.height_desktop }}vh}
     #shopify-section-{{ section.id }} .zhero__inner{padding:72px 48px}
     {%- comment -%}Zaria: wide frames crop at the sides, so each slide holds its own focal column{%- endcomment -%}
-    #shopify-section-{{ section.id }} .zhero__img{object-position:var(--fx,50%) 50%}
+    /* The desktop band is wider than the 16:9 frame, so cover trims top and bottom. Centred,
+       that took the models' heads off on a laptop: at 1440x820 the hero box is 1440x705 while
+       the image scales to 1440x809, losing 52px from each edge. Each slide now carries its own
+       vertical focal, so the crop comes off the floor rather than the face. */
+    #shopify-section-{{ section.id }} .zhero__img{object-position:var(--fx,50%) var(--fy,50%)}
     #shopify-section-{{ section.id }} .zhero__dots{bottom:34px}
   }
   @media (prefers-reduced-motion: reduce){
@@ -103,7 +107,7 @@
     <div class="zhero__track" data-track>
       {%- for s in slide_list -%}
         {%- assign p = s | split: '^^' -%}
-        <div class="zhero__slide" style="--fx:{{ p[2] }}%" aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
+        <div class="zhero__slide" style="--fx:{{ p[2] }}%;--fy:{{ p[3] | default: 50 }}%" aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
           {%- comment -%}
             Zaria: the phone crop is the fallback, not the override. With the wide file in the
             img tag a phone fetched both, 2.2MB instead of 0.8MB, so the big frame now hangs
