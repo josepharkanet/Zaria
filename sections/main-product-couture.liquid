@@ -153,8 +153,19 @@
   #shopify-section-{{ section.id }} .zpdp__price{font-size:19px;letter-spacing:.04em;color:#161616;margin:0 0 4px}
   #shopify-section-{{ section.id }} .zpdp__price .zpdp__cut{color:#a0a0a0;text-decoration:line-through;margin-right:10px}
   #shopify-section-{{ section.id }} .zpdp__price--por{letter-spacing:.14em;text-transform:uppercase;font-size:14px}
-  #shopify-section-{{ section.id }} .zpdp__ask{margin:0 0 12px}
-  #shopify-section-{{ section.id }} .zpdp__askform{display:grid;gap:12px;margin-top:16px;max-width:430px}
+  {%- comment -%}The ask button is not a cart button. It borrowed .zpdp__atc at first, whose
+     width comes from being a flex child of the buy row; standing alone it collapsed to a
+     cramped black block with the words against its edges.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zpdp__ask{margin:2px 0 14px;max-width:430px}
+  #shopify-section-{{ section.id }} .zpdp__askbtn{display:flex;align-items:center;justify-content:center;gap:13px;
+    width:100%;height:56px;background:#161616;color:#fff;border:1px solid #161616;font-family:inherit;
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;border-radius:0;
+    transition:background .22s ease,color .22s ease}
+  #shopify-section-{{ section.id }} .zpdp__askbtn:hover{background:transparent;color:#161616}
+  #shopify-section-{{ section.id }} .zpdp__askbtn[disabled]{background:#c9c9c9;border-color:#c9c9c9;color:#fff;cursor:not-allowed}
+  #shopify-section-{{ section.id }} .zpdp__askbtn svg{width:17px;height:17px;flex:none}
+  #shopify-section-{{ section.id }} .zpdp__askhint{margin:12px 0 0;font-size:12.5px;line-height:1.7;color:#6a6a6a}
+  #shopify-section-{{ section.id }} .zpdp__askform{display:grid;gap:14px;margin-top:18px;max-width:430px}
   #shopify-section-{{ section.id }} .zpdp__askintro{margin:0;font-size:14px;line-height:1.6;color:#4a4a4a}
   #shopify-section-{{ section.id }} .zpdp__askl{display:grid;gap:6px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a6a}
   #shopify-section-{{ section.id }} .zpdp__askl span{letter-spacing:.08em;text-transform:none;color:#a0a0a0}
@@ -370,14 +381,17 @@
 
       {%- if por -%}
       <div class="zpdp__ask" data-zask>
-        <button type="button" class="zpdp__atc" data-zask-open>Ask for Price</button>
+        <button type="button" class="zpdp__askbtn" data-zask-open>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="1.5"/><path d="m3 6 9 6.5L21 6"/></svg>
+          Ask for Price
+        </button>
+        <p class="zpdp__askhint">Tell us where to reach you and we will send the price for this piece.</p>
         <form class="zpdp__askform" data-zask-form hidden>
-          <p class="zpdp__askintro">Leave your details and we will send you the price for the <strong>{{ product.title | escape }}</strong>.</p>
           <label class="zpdp__askl">Name<input type="text" name="name" required autocomplete="name"></label>
           <label class="zpdp__askl">Email<input type="email" name="email" required autocomplete="email" inputmode="email"></label>
           <label class="zpdp__askl">Phone <span>optional</span><input type="tel" name="phone" autocomplete="tel" inputmode="tel"></label>
           <label class="zpdp__askl">Anything we should know? <span>optional</span><textarea name="note" rows="2"></textarea></label>
-          <button type="submit" class="zpdp__atc" data-zask-send>Send</button>
+          <button type="submit" class="zpdp__askbtn" data-zask-send>Send</button>
           <p class="zpdp__askmsg" data-zask-msg role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -475,6 +489,7 @@
       msg=box.querySelector('[data-zask-msg]'),send=box.querySelector('[data-zask-send]');
   open.addEventListener('click',function(){
     form.hidden=false; open.hidden=true;
+    var hint=box.querySelector('.zpdp__askhint'); if(hint)hint.hidden=true;
     var first=form.querySelector('input'); if(first)first.focus();
   });
   form.addEventListener('submit',function(e){
