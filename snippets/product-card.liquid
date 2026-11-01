@@ -231,9 +231,14 @@
           </a>
         {%- endif -%}
 
-        {%- comment -%} Price sits under the product name {%- endcomment -%}
+        {%- comment -%} Price sits under the product name. A piece tagged Price on Request
+          has no price to quote yet, so the card says so rather than showing AED 0.00. {%- endcomment -%}
         {%- if show_prices -%}
-          {%- render 'price-list', product: product, context: 'card' -%}
+          {%- if product.tags contains 'Price on Request' -%}
+            <span class="zcard__por">Price on request</span>
+          {%- else -%}
+            {%- render 'price-list', product: product, context: 'card' -%}
+          {%- endif -%}
         {%- endif -%}
       </div>
     {%- endif -%}

@@ -10125,3 +10125,6 @@ product-card,.product-card,.product-card__figure,.product-card__media,.product-c
 .zaria-cs__eyebrow{font-family:"Jost",sans-serif;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#8a8178;margin:0 0 14px;}
 .zaria-cs__title{font-family:"Jost",sans-serif;font-weight:300;font-size:clamp(28px,5vw,46px);letter-spacing:.1em;text-transform:uppercase;color:#161616;margin:0 0 16px;line-height:1.1;}
 .zaria-cs__text{color:#6a645c;font-size:15px;line-height:1.85;max-width:42ch;margin:0 auto 30px;}
+
+/* ===== Zaria: pieces whose price is not set yet ===== */
+.zcard__por{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a6a6a}
