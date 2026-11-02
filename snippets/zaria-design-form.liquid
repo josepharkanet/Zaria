@@ -75,8 +75,8 @@
           <label>Piece</label>
           <select name="properties[Piece]" required>
             <option value="">Please choose&hellip;</option>
-            <option>Abaya</option><option>Gown</option>
-            <option>Jalabiya</option><option>Two-piece</option><option>Sheila</option><option>Other</option>
+            {%- comment -%}The shop's own three, plus Other.{%- endcomment -%}
+            <option>Abaya</option><option>Jalabiya</option><option>Sheila</option><option>Other</option>
           </select>
         </div>
         <div class="zdf-field">

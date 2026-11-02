@@ -17,7 +17,9 @@
 
 {%- comment -%} field spec: "key:Label:half-cm-min:half-cm-max" (value = h / 2, so 0.5 steps). Order = diagram numbers. {%- endcomment -%}
 {%- assign zds_fields = 'neck_open:Neck Open:26:35,shoulder:Shoulder to Shoulder:26:37,sleeve_loose:Sleeve Loose:12:25,sleeve:Sleeve Length:52:68,sleeve_open:Sleeve Open:18:25,bust:Bust:76:117,waist:Waist:76:124,hips:Hip:86:136,length:Length:100:130,bottom_open:Bottom Open:30:48' | split: ',' -%}
-{%- assign zds_garments = 'Gown,Abaya,Jalabiya,Two-piece,Other' | split: ',' -%}
+{%- comment -%}The same three the shop sells, plus Other. Gown and Two-piece were categories
+   the site does not have, so a brief could name a piece nobody could point at.{%- endcomment -%}
+{%- assign zds_garments = 'Abaya,Jalabiya,Sheila,Other' | split: ',' -%}
 {%- assign zds_occasions = 'Wedding,Engagement,Eid,Party / Evening,Everyday,Other' | split: ',' -%}
 {%- assign zds_fabrics = 'Luxe Silks,Fine Cottons,Chiffons & Organza,Linen Blends,Velvets,Tulle & 3D Work,Silk Blends,Sequins & Embroidery,Hand-Painted,Not sure advise me' | split: ',' -%}
 {%- assign zds_boutiques = 'Dubai boutique,Online / video consultation' | split: ',' -%}
