@@ -72,10 +72,15 @@
          keeps serving the previous version of the section.{%- endcomment -%}
       {%- assign zpr_key = zpr_h | strip -%}
       {%- assign zpr_cat = collections[zpr_key] -%}
+      {%- comment -%}No break here. Inside this nested loop it ended the outer one as well, so
+         the strip collected a single handle and showed one card from one category.{%- endcomment -%}
+      {%- assign zpr_got = false -%}
       {%- for zpr_p in zpr_cat.products limit: 6 -%}
-        {%- unless zpr_p.tags contains 'no-photo' -%}
-          {%- assign zpr_list = zpr_list | append: zpr_p.handle | append: ',' -%}
-          {%- break -%}
+        {%- unless zpr_got -%}
+          {%- unless zpr_p.tags contains 'no-photo' -%}
+            {%- assign zpr_list = zpr_list | append: zpr_p.handle | append: ',' -%}
+            {%- assign zpr_got = true -%}
+          {%- endunless -%}
         {%- endunless -%}
       {%- endfor -%}
     {%- endfor -%}
@@ -90,7 +95,7 @@
     {%- endfor -%}
   {%- endif -%}
   {%- assign zpr_handles = zpr_list | split: ',' -%}
-  <div class="zpr__grid" data-zpr-src="{{ zpr_mix | default: 'single' }}" data-zpr-n="{{ zpr_handles.size }}">
+  <div class="zpr__grid">
     {%- if zpr_handles.size > 0 -%}
       {%- assign zpr_shown = 0 -%}
       {%- for zpr_handle in zpr_handles -%}
