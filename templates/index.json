@@ -187,7 +187,9 @@
       "type": "zaria-feature",
       "settings": {
         "scheme": "white",
-        "video_asset": "zaria-feature.mp4",
+        "video_asset": "",
+        "image_asset": "zaria-feature-still.jpg",
+        "image_alt": "Hand-embroidered cuff and beaded tassel on a Zaria floral jalabiya",
         "bg_color": "#f5f5f5",
         "image_side": "left",
         "ratio": "4/5",

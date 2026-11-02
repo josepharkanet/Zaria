@@ -29,8 +29,16 @@
 <section class="zft {% if sc.image_side == 'right' %}zft--right{% endif %}">
   <div class="zft__inner">
     <div class="zft__media">
-      {%- assign zft_vid = sc.video_asset | default: 'zaria-hero-model.mp4' -%}
-      {%- if zft_vid != blank -%}
+      {%- comment -%}
+        A still named in image_asset wins over the clip, so the homepage can show a photograph
+        from the shoot while the careers page keeps its video. The old `default` filter here
+        quietly substituted another clip when the video field was cleared, which made the
+        schema's "leave blank to show the image instead" untrue.
+      {%- endcomment -%}
+      {%- assign zft_vid = sc.video_asset -%}
+      {%- if sc.image_asset != blank -%}
+        <img class="zft__default" src="{{ sc.image_asset | asset_url }}" alt="{{ sc.image_alt | default: 'Zaria ready-to-wear' | escape }}" width="1400" height="1750" loading="lazy">
+      {%- elsif zft_vid != blank -%}
         {%- comment -%}
           Zaria: this clip sits below the fold, so the source is held in data-src and nothing is
           fetched until the section scrolls into view. It plays on phones as well as desktop now
@@ -89,6 +97,8 @@
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
     { "type": "image_picker", "id": "image", "label": "Image (used as video poster / fallback)" },
     { "type": "text", "id": "video_asset", "label": "Video file in assets", "default": "zaria-feature.mp4", "info": "e.g. zaria-feature.mp4 — leave blank to show the image instead" },
+    { "type": "text", "id": "image_asset", "label": "Still file in assets", "info": "e.g. zaria-feature-still.jpg — shown instead of the video when filled" },
+    { "type": "text", "id": "image_alt", "label": "Still description", "info": "Read aloud by screen readers." },
     { "type": "color", "id": "bg_color", "label": "Section background", "default": "#f5f5f5" },
     {
       "type": "select", "id": "image_side", "label": "Image side",
