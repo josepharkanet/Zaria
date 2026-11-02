@@ -325,14 +325,12 @@
         <div class="zpdp__desc">{{ product.description }}</div>
       {%- endif -%}
 
+      {%- comment -%}Make only. The country is on the metafield and in the item master, but the
+         attribute strip a few centimetres below already carries Origin, and printing it twice
+         read as a mistake.{%- endcomment -%}
       {%- assign z_make = product.metafields.custom.supplier -%}
-      {%- assign z_coo  = product.metafields.custom.country_of_origin -%}
-      {%- if z_make != blank or z_coo != blank -%}
-        <p class="zpdp__prov">
-          {%- if z_make != blank -%}<strong>Make:</strong> {{ z_make }}{%- endif -%}
-          {%- if z_make != blank and z_coo != blank -%}<br>{%- endif -%}
-          {%- if z_coo != blank -%}<strong>Country of origin:</strong> {{ z_coo }}{%- endif -%}
-        </p>
+      {%- if z_make != blank -%}
+        <p class="zpdp__prov"><strong>Make:</strong> {{ z_make }}</p>
       {%- endif -%}
 
       {%- if has_attrs -%}
