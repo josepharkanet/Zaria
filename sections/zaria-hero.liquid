@@ -54,7 +54,11 @@
     will-change:transform;transition:transform .85s cubic-bezier(.72,0,.22,1)}
   #shopify-section-{{ section.id }} .zhero__slide{flex:0 0 100%;position:relative;height:100%;overflow:hidden}
   #shopify-section-{{ section.id }} .zhero__slide picture{display:block;width:100%;height:100%}
-  #shopify-section-{{ section.id }} .zhero__img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
+  {%- comment -%}The top edge of the photograph is always the top of the band, on every screen.
+     A centred crop took heads off wherever the window was short and wide: a 1366x660 Windows
+     laptop makes this box 2.41:1 while the picture is 1.78:1, so 332px of height has to go
+     somewhere. It comes off the hem now, never off the face.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zhero__img{width:100%;height:100%;object-fit:cover;object-position:50% 0%;display:block}
   #shopify-section-{{ section.id }} .zhero__veil{position:absolute;inset:0;pointer-events:none;background:#000;opacity:{{ sc.overlay | divided_by: 100.0 }}}
   {%- comment -%}
     Zaria: the controls take their tone from the text colour setting, because these frames are
@@ -92,12 +96,11 @@
   @media (min-width:750px){
     #shopify-section-{{ section.id }} .zhero{min-height:{{ sc.height_desktop }}vh}
     #shopify-section-{{ section.id }} .zhero__inner{padding:72px 48px}
-    {%- comment -%}Zaria: wide frames crop at the sides, so each slide holds its own focal column{%- endcomment -%}
-    /* The desktop band is wider than the 16:9 frame, so cover trims top and bottom. Centred,
-       that took the models' heads off on a laptop: at 1440x820 the hero box is 1440x705 while
-       the image scales to 1440x809, losing 52px from each edge. Each slide now carries its own
-       vertical focal, so the crop comes off the floor rather than the face. */
-    #shopify-section-{{ section.id }} .zhero__img{object-position:var(--fx,50%) var(--fy,50%)}
+    {%- comment -%}Zaria: wide frames crop at the sides, so each slide keeps its own focal
+       column. The vertical is fixed to the top for every slide and every window, which is
+       what --fy used to tune per slide; it is left in the pack format but no longer read,
+       so a stored pack with four values still parses.{%- endcomment -%}
+    #shopify-section-{{ section.id }} .zhero__img{object-position:var(--fx,50%) 0%}
     #shopify-section-{{ section.id }} .zhero__dots{bottom:34px}
   }
   @media (prefers-reduced-motion: reduce){
