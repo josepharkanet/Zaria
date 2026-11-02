@@ -101,13 +101,18 @@
         <div class="zdf-field"><label>Colour palette</label><input name="properties[Colour]" placeholder="e.g. ivory, emerald"></div>
         <div class="zdf-field"><label>Event date (optional)</label><input type="date" name="properties[Event date]"></div>
       </div>
+      {%- comment -%}Two sources, because Ready-to-Wear holds only jalabiyas and abayas: the
+         sheilas live in the accessories collection, so choosing Sheila found nothing.{%- endcomment -%}
+      {%- assign zdf_srcs = 'ready-to-wear,accessories' | split: ',' -%}
       {%- assign zdf_designs = collections['ready-to-wear'].products -%}
       {%- if zdf_designs.size > 0 -%}
       <div class="zdf-field">
         <label>Start from one of our designs <span>optional</span></label>
         <div class="zdf-picks" data-zdf-picks>
           <button type="button" class="zdf-pick zdf-pick--none is-on" data-zdf-pick="" data-zdf-handle=""><span>From scratch</span></button>
-          {%- for zp in zdf_designs limit: 60 -%}
+          {%- for zdf_s in zdf_srcs -%}
+          {%- assign zdf_key = zdf_s | strip -%}
+          {%- for zp in collections[zdf_key].products limit: 40 -%}
             {%- if zp.featured_image != blank -%}
               {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 6 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
               <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}" data-zdf-type="{{ zp.type | escape }}">
@@ -118,6 +123,7 @@
                 </span>
               </button>
             {%- endif -%}
+          {%- endfor -%}
           {%- endfor -%}
         </div>
         <p class="zdf-picks-empty" data-zdf-picks-empty hidden>No ready-made designs in this category yet. Describe it below instead.</p>
