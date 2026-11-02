@@ -64,34 +64,23 @@
   {%- assign zpr_list = '' -%}
   {%- assign zpr_mix = sc.mix_handles | default: 'luxe-silks,fine-cottons,chiffons-organza,velvets' -%}
   {%- if zpr_mix != blank -%}
+    {%- comment -%}One loop, and .first instead of a nested loop with a break. The break was
+       ending the outer loop as well, so the strip gathered a single handle.{%- endcomment -%}
     {%- assign zpr_cats = zpr_mix | split: ',' -%}
     {%- for zpr_h in zpr_cats -%}
-      {%- comment -%}Liquid does not allow a filter inside a bracket lookup, so the handle is
-         stripped into its own variable first. Written the other way it is a parse error and the
-         whole file is rejected by the GitHub sync, which fails silently: the storefront simply
-         keeps serving the previous version of the section.{%- endcomment -%}
       {%- assign zpr_key = zpr_h | strip -%}
-      {%- assign zpr_cat = collections[zpr_key] -%}
-      {%- comment -%}No break here. Inside this nested loop it ended the outer one as well, so
-         the strip collected a single handle and showed one card from one category.{%- endcomment -%}
-      {%- assign zpr_got = false -%}
-      {%- for zpr_p in zpr_cat.products limit: 6 -%}
-        {%- unless zpr_got -%}
-          {%- unless zpr_p.tags contains 'no-photo' -%}
-            {%- assign zpr_list = zpr_list | append: zpr_p.handle | append: ',' -%}
-            {%- assign zpr_got = true -%}
-          {%- endunless -%}
-        {%- endunless -%}
-      {%- endfor -%}
+      {%- assign zpr_first = collections[zpr_key].products.first -%}
+      {%- if zpr_first != blank -%}
+        {%- assign zpr_list = zpr_list | append: zpr_first.handle | append: ',' -%}
+      {%- endif -%}
     {%- endfor -%}
-  {%- else -%}
+  {%- endif -%}
+  {%- if zpr_list == blank -%}
     {%- assign zpr_n = 0 -%}
     {%- for zpr_p in coll.products -%}
       {%- if zpr_n >= sc.limit -%}{%- break -%}{%- endif -%}
-      {%- unless zpr_p.tags contains 'no-photo' -%}
-        {%- assign zpr_list = zpr_list | append: zpr_p.handle | append: ',' -%}
-        {%- assign zpr_n = zpr_n | plus: 1 -%}
-      {%- endunless -%}
+      {%- assign zpr_list = zpr_list | append: zpr_p.handle | append: ',' -%}
+      {%- assign zpr_n = zpr_n | plus: 1 -%}
     {%- endfor -%}
   {%- endif -%}
   {%- assign zpr_handles = zpr_list | split: ',' -%}
