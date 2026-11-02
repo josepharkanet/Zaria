@@ -41,7 +41,10 @@
   #shopify-section-{{ section.id }} .zcol__cap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center}
   #shopify-section-{{ section.id }} .zcol__label{display:inline-block;border:1px solid rgba(255,255,255,.85);
     padding:12px 22px;font-size:clamp(11px,1vw,13px);letter-spacing:.2em;text-transform:uppercase;line-height:1.3;
-    color:#fff;background:rgba(20,20,20,.30);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);text-shadow:0 1px 6px rgba(0,0,0,.45);transition:background .3s ease,color .3s ease,border-color .3s ease}
+    {%- comment -%}No plate behind the label and no shadow under it: the tiles carry their own
+       photographs now, dark enough at the centre for white type to read against the hairline
+       alone. Put the plate back only if a pale image goes in.{%- endcomment -%}
+    color:#fff;background:transparent;transition:background .3s ease,color .3s ease,border-color .3s ease}
   #shopify-section-{{ section.id }} .zcol__card:hover .zcol__label{background:rgba(255,255,255,.95);color:#141414;border-color:#fff}
   /* Shown until the client uploads a collection image. A quiet linen plate with the
      wordmark, rather than a hazard-stripe swatch, so the row still looks like the house

@@ -59,10 +59,7 @@
     {%- comment -%}Global heading font: Bodoni Moda (classic luxury Didone){%- endcomment -%}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    {%- comment -%}Jost 500 comes from Google because Shopify only serves this theme Jost 400 and
-      700, and 500 is the weight the house line on the homepage needs: 400 reads thin at 20px
-      and 700 is a headline.{%- endcomment -%}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Jost:wght@500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&display=swap">
 
     {%- unless settings.heading_font.system? -%}
       <link rel="preload" href="{{ settings.heading_font | font_url }}" as="font" type="font/woff2" crossorigin>
