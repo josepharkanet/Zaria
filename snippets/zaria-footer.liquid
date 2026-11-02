@@ -29,8 +29,8 @@
   .zaria-footer__brand{display:flex;flex-direction:column;max-width:340px;
     border-right:1px solid #ececec;padding-right:48px}
   /* high specificity + !important: theme sets `.zaria-footer img{width:100%}` which was squashing the square logo */
-  .zaria-footer__brand .zaria-footer__logo{width:196px!important;height:auto!important;max-width:196px;
-    object-fit:contain;display:block;margin:0 0 20px}
+  .zaria-footer__brand .zaria-footer__logo{width:150px!important;height:auto!important;max-width:150px;
+    object-fit:contain;display:block;margin:0 0 18px}
   .zaria-footer__tagline{color:#6c6c6c;font-size:13.5px;line-height:1.8;letter-spacing:.012em;margin:0 0 18px;max-width:32ch}
   .zaria-footer__contact{margin:28px 0 0;display:flex;flex-direction:column;gap:8px}
   .zaria-footer__loc{margin:0;color:#a6a6a6;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase}
@@ -112,9 +112,9 @@
     <div class="zaria-footer__grid">
 
       <div class="zaria-footer__brand">
-        {%- comment -%}The burgundy lockup, as the footer carried before. It brings its own
-          "modest, grace, elegance" line, which the header wordmark cannot.{%- endcomment -%}
-        <img class="zaria-footer__logo" src="{{ 'zaria-logo-color.png' | asset_url }}" alt="{{ shop.name | escape }}" width="3352" height="1432" loading="lazy">
+        {%- comment -%}The full lockup, floral mark and all. A square file, so it sits at the
+          width that keeps its height in proportion to the links beside it.{%- endcomment -%}
+        <img class="zaria-footer__logo" src="{{ 'zaria-logo-full.png' | asset_url }}" alt="{{ shop.name | escape }}" width="2150" height="2155" loading="lazy">
         {%- if zf_tagline != blank -%}<p class="zaria-footer__tagline">{{ zf_tagline }}</p>{%- endif -%}
 
         <div class="zaria-footer__contact">
