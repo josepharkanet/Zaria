@@ -30,14 +30,17 @@
   #shopify-section-{{ section.id }} .zcol__media{display:block;position:relative;aspect-ratio:3/4;overflow:hidden;background:#e7e2da}
   #shopify-section-{{ section.id }} .zcol__media img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s ease}
   #shopify-section-{{ section.id }} .zcol__card:hover .zcol__media img{transform:scale(1.06)}
-  #shopify-section-{{ section.id }} .zcol__veil{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.16),rgba(0,0,0,.44));transition:background .3s ease}
+  {%- comment -%}No wash over the picture at rest. It used to run from 16% to 44% black top to
+     bottom, which was there to hold white type over any image and was dulling every tile.
+     The hover tint stays, lightly, as the only cue besides the label flipping to white.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zcol__veil{position:absolute;inset:0;background:transparent;transition:background .3s ease}
   /* Over the pale placeholder the photographic veil would just grey it down, and the label
      needs ink rather than white to read. */
   #shopify-section-{{ section.id }} .zcol__card--ph .zcol__veil{background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,.06))}
   #shopify-section-{{ section.id }} .zcol__card--ph:hover .zcol__veil{background:linear-gradient(to bottom,rgba(0,0,0,.02),rgba(0,0,0,.10))}
   #shopify-section-{{ section.id }} .zcol__card--ph .zcol__label{border-color:rgba(17,17,17,.45);color:#111;background:rgba(255,255,255,.55);text-shadow:none}
   #shopify-section-{{ section.id }} .zcol__card--ph:hover .zcol__label{background:#111;color:#fff;border-color:#111}
-  #shopify-section-{{ section.id }} .zcol__card:hover .zcol__veil{background:linear-gradient(to bottom,rgba(0,0,0,.30),rgba(0,0,0,.54))}
+  #shopify-section-{{ section.id }} .zcol__card:hover .zcol__veil{background:rgba(0,0,0,.18)}
   #shopify-section-{{ section.id }} .zcol__cap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center}
   #shopify-section-{{ section.id }} .zcol__label{display:inline-block;border:1px solid rgba(255,255,255,.85);
     padding:12px 22px;font-size:clamp(11px,1vw,13px);letter-spacing:.2em;text-transform:uppercase;line-height:1.3;
