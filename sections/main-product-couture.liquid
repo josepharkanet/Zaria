@@ -179,6 +179,11 @@
   #shopify-section-{{ section.id }} .zpdp__tax{font-size:11px;letter-spacing:.08em;color:#9a9a9a;margin:0 0 22px}
   #shopify-section-{{ section.id }} .zpdp__rule{border:0;border-top:1px solid #ece8e2;margin:22px 0}
   #shopify-section-{{ section.id }} .zpdp__desc{font-size:14px;line-height:1.85;color:#57534e;margin:0 0 22px}
+  {%- comment -%}Make and country sit with the SKU, which the import wrote into the body copy
+     with the same type. These two come from metafields instead, so they stay data: the item
+     master reads them back and a blank one simply does not print.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zpdp__prov{margin:-14px 0 22px;font-size:13px;color:#8a8178;letter-spacing:.04em;line-height:1.9}
+  #shopify-section-{{ section.id }} .zpdp__prov strong{font-weight:500;color:#6a645c}
   #shopify-section-{{ section.id }} .zpdp__desc p{margin:0 0 10px}
 
   /* attribute list */
@@ -318,6 +323,16 @@
 
       {%- if product.description != blank -%}
         <div class="zpdp__desc">{{ product.description }}</div>
+      {%- endif -%}
+
+      {%- assign z_make = product.metafields.custom.supplier -%}
+      {%- assign z_coo  = product.metafields.custom.country_of_origin -%}
+      {%- if z_make != blank or z_coo != blank -%}
+        <p class="zpdp__prov">
+          {%- if z_make != blank -%}<strong>Make:</strong> {{ z_make }}{%- endif -%}
+          {%- if z_make != blank and z_coo != blank -%}<br>{%- endif -%}
+          {%- if z_coo != blank -%}<strong>Country of origin:</strong> {{ z_coo }}{%- endif -%}
+        </p>
       {%- endif -%}
 
       {%- if has_attrs -%}
