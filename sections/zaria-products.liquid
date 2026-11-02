@@ -66,7 +66,12 @@
   {%- if zpr_mix != blank -%}
     {%- assign zpr_cats = zpr_mix | split: ',' -%}
     {%- for zpr_h in zpr_cats -%}
-      {%- assign zpr_cat = collections[zpr_h | strip] -%}
+      {%- comment -%}Liquid does not allow a filter inside a bracket lookup, so the handle is
+         stripped into its own variable first. Written the other way it is a parse error and the
+         whole file is rejected by the GitHub sync, which fails silently: the storefront simply
+         keeps serving the previous version of the section.{%- endcomment -%}
+      {%- assign zpr_key = zpr_h | strip -%}
+      {%- assign zpr_cat = collections[zpr_key] -%}
       {%- for zpr_p in zpr_cat.products limit: 6 -%}
         {%- unless zpr_p.tags contains 'no-photo' -%}
           {%- assign zpr_list = zpr_list | append: zpr_p.handle | append: ',' -%}
