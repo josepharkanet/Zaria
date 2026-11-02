@@ -7,7 +7,7 @@
 
     <title>
       {%- if request.page_type == 'index' -%}
-        Zaria | Fine Fabrics &amp; Modest Couture, UAE Fabric House
+        Zaria | Fine Fabrics &amp; Ready-to-Wear, UAE Fabric House
       {%- elsif page_title == blank -%}
         {{- shop.name -}}
       {%- else -%}
@@ -19,7 +19,7 @@
     </title>
 
     {%- if request.page_type == 'index' -%}
-      <meta name="description" content="Zaria is a UAE house of fine fabrics and modest couture. Premium silk, cotton, chiffon and embellished cloth by the metre, plus made-to-measure design.">
+      <meta name="description" content="Zaria is a UAE house of fine fabrics and ready-to-wear. Premium silk, cotton, chiffon and embellished cloth by the metre, with abayas and jalabiyas designed in Dubai.">
     {%- elsif page_description -%}
       <meta name="description" content="{{ page_description | escape }}">
     {%- else -%}
@@ -29,11 +29,11 @@
         if request.page_type == 'collection' and collection.description != blank
           assign zmeta = collection.description | strip_html | strip_newlines | truncate: 155
         elsif request.page_type == 'collection'
-          assign zmeta = collection.title | append: ' from Zaria, a UAE house of fine fabrics and modest couture. Shop the collection or commission a made-to-measure piece.'
+          assign zmeta = collection.title | append: ' from Zaria, a UAE house of fine fabrics and ready-to-wear. Shop the collection.'
         elsif request.page_type == 'page' and page.content != blank
           assign zmeta = page.content | strip_html | strip_newlines | truncate: 155
         elsif request.page_type == 'page'
-          assign zmeta = page.title | append: ' at Zaria, a UAE house of fine fabrics and modest couture in Dubai.'
+          assign zmeta = page.title | append: ' at Zaria, a UAE house of fine fabrics and ready-to-wear in Dubai.'
         elsif request.page_type == 'article' and article.excerpt_or_content != blank
           assign zmeta = article.excerpt_or_content | strip_html | strip_newlines | truncate: 155
         elsif request.page_type == 'blog'
