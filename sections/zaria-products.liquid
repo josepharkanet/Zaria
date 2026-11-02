@@ -1,10 +1,11 @@
 {% comment %}Zaria - product row / new arrivals - Arkanet Technologies{% endcomment %}
 {%- assign sc = section.settings -%}
 {%- comment -%} Zaria: fall back to the All Fabrics collection when none is chosen in the editor {%- endcomment -%}
-{%- comment -%}Fresh id. templates/index.json holds all-fabrics against "collection" and
-  ignores pushes, which is why a strip headed New Arrivals was showing fabric swatches. The
-  default is the New collection, which every jalabiya now carries a tag for.{%- endcomment -%}
-{%- assign coll = sc.source_collection | default: collections['new'] -%}
+{%- comment -%}Fresh id, because templates/index.json holds a value against "collection" and
+  ignores pushes. This strip shows fabric and is headed Explore Unique Fabrics to match; it
+  briefly pointed at the New collection when the mismatch looked like the other kind of
+  mistake.{%- endcomment -%}
+{%- assign coll = sc.source_collection | default: collections['all-fabrics'] -%}
 <style>
   #shopify-section-{{ section.id }} .zpr{background:{% if sc.scheme == 'soft' %}#fafafa{% else %}#ffffff{% endif %};
     color:#111;font-family:var(--text-font-family,'Jost'),'Jost',sans-serif;
@@ -51,7 +52,10 @@
 </style>
 <section class="zpr">
   <div class="zpr__head">
-    {%- if sc.heading != blank -%}<h2 class="zpr__title">{{ sc.heading }}</h2>{%- endif -%}
+    {%- comment -%}Fresh id: templates/index.json holds "New Arrivals" against "heading" and
+      ignores pushes.{%- endcomment -%}
+    {%- assign zpr_title = sc.title_text | default: 'Explore Unique Fabrics' -%}
+    {%- if zpr_title != blank -%}<h2 class="zpr__title">{{ zpr_title }}</h2>{%- endif -%}
   </div>
   <div class="zpr__grid">
     {%- if coll != blank and coll.products.size > 0 -%}
@@ -125,7 +129,7 @@
   "settings": [
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
     { "type": "text", "id": "eyebrow", "label": "Overline", "default": "New In" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "New arrivals" },
+    { "type": "text", "id": "title_text", "label": "Heading", "default": "Explore Unique Fabrics" },
     { "type": "collection", "id": "source_collection", "label": "Collection", "info": "Leave empty to use New." },
     { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 12, "step": 1, "default": 5 },
     {
