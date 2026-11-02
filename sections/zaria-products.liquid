@@ -57,12 +57,41 @@
     {%- assign zpr_title = sc.title_text | default: 'Explore Unique Fabrics' -%}
     {%- if zpr_title != blank -%}<h2 class="zpr__title">{{ zpr_title }}</h2>{%- endif -%}
   </div>
+  {%- comment -%}One cloth from each kind, not four of the same jacquard in four colours. The
+    strip used to take the newest four out of All Fabrics, which are usually a single delivery
+    and look it. It now takes the newest piece from each named category, so the row shows a
+    silk, a cotton, a sheer and a pile. Leave the list empty to go back to one collection.{%- endcomment -%}
+  {%- assign zpr_list = '' -%}
+  {%- assign zpr_mix = sc.mix_handles | default: 'luxe-silks,fine-cottons,chiffons-organza,velvets' -%}
+  {%- if zpr_mix != blank -%}
+    {%- assign zpr_cats = zpr_mix | split: ',' -%}
+    {%- for zpr_h in zpr_cats -%}
+      {%- assign zpr_cat = collections[zpr_h | strip] -%}
+      {%- for zpr_p in zpr_cat.products limit: 6 -%}
+        {%- unless zpr_p.tags contains 'no-photo' -%}
+          {%- assign zpr_list = zpr_list | append: zpr_p.handle | append: ',' -%}
+          {%- break -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- assign zpr_n = 0 -%}
+    {%- for zpr_p in coll.products -%}
+      {%- if zpr_n >= sc.limit -%}{%- break -%}{%- endif -%}
+      {%- unless zpr_p.tags contains 'no-photo' -%}
+        {%- assign zpr_list = zpr_list | append: zpr_p.handle | append: ',' -%}
+        {%- assign zpr_n = zpr_n | plus: 1 -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endif -%}
+  {%- assign zpr_handles = zpr_list | split: ',' -%}
   <div class="zpr__grid">
-    {%- if coll != blank and coll.products.size > 0 -%}
+    {%- if zpr_handles.size > 0 -%}
       {%- assign zpr_shown = 0 -%}
-      {%- for product in coll.products -%}
+      {%- for zpr_handle in zpr_handles -%}
         {%- if zpr_shown >= sc.limit -%}{%- break -%}{%- endif -%}
-        {%- if product.tags contains 'no-photo' -%}{%- continue -%}{%- endif -%}
+        {%- assign product = all_products[zpr_handle] -%}
+        {%- if product == empty or product.title == blank -%}{%- continue -%}{%- endif -%}
         {%- assign zpr_shown = zpr_shown | plus: 1 -%}
         {%- assign brand = product.metafields.custom.brand.value.name.value | first -%}
         <a href="{{ product.url }}" class="zpr__card">
@@ -130,7 +159,8 @@
     { "type": "select", "id": "scheme", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "soft", "label": "Soft grey" } ], "default": "white" },
     { "type": "text", "id": "eyebrow", "label": "Overline", "default": "New In" },
     { "type": "text", "id": "title_text", "label": "Heading", "default": "Explore Unique Fabrics" },
-    { "type": "collection", "id": "source_collection", "label": "Collection", "info": "Leave empty to use New." },
+    { "type": "collection", "id": "source_collection", "label": "Collection", "info": "Used only when the category list below is empty." },
+    { "type": "textarea", "id": "mix_handles", "label": "One from each of these categories", "default": "luxe-silks,fine-cottons,chiffons-organza,velvets", "info": "Comma separated collection handles. Clear this to show the newest from a single collection instead." },
     { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 12, "step": 1, "default": 5 },
     {
       "type": "select", "id": "columns", "label": "Columns (desktop)",
