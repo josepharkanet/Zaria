@@ -30,11 +30,11 @@
   #shopify-section-{{ section.id }} .zpr__media::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(26,18,16,.42),rgba(26,18,16,0) 48%);opacity:0;transition:opacity .45s ease}
   #shopify-section-{{ section.id }} .zpr__view{position:absolute;left:0;right:0;bottom:18px;z-index:2;color:#fff;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s ease;pointer-events:none}
   #shopify-section-{{ section.id }} .zpr__view i{font-style:normal;border-bottom:1px solid rgba(255,255,255,.55);padding-bottom:4px}
-  #shopify-section-{{ section.id }} .zpr__card:hover .i1{opacity:0}
-  #shopify-section-{{ section.id }} .zpr__card:hover .i2{opacity:1}
-  #shopify-section-{{ section.id }} .zpr__card:hover .zpr__media img{transform:scale(1.05)}
-  #shopify-section-{{ section.id }} .zpr__card:hover .zpr__media::after{opacity:1}
-  #shopify-section-{{ section.id }} .zpr__card:hover .zpr__view{opacity:1;transform:none}
+  {%- comment -%}No hover on these cards. The swap to the second photograph, the scale, the dark
+     wash and the Discover line are all gone: the cloth is the whole point and it should sit
+     still. The second image and the caption stay in the markup, hidden, so the behaviour can
+     come back by restoring these five rules.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zpr__view{display:none}
   #shopify-section-{{ section.id }} .zpr__brand{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#a99f94;margin:0 0 7px}
   #shopify-section-{{ section.id }} .zpr__name{font-size:13.5px;letter-spacing:.03em;line-height:1.5;margin:0 0 8px;max-width:26ch;
     display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
