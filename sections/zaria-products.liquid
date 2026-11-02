@@ -90,7 +90,7 @@
     {%- endfor -%}
   {%- endif -%}
   {%- assign zpr_handles = zpr_list | split: ',' -%}
-  <div class="zpr__grid">
+  <div class="zpr__grid" data-zpr-src="{{ zpr_mix | default: 'single' }}" data-zpr-n="{{ zpr_handles.size }}">
     {%- if zpr_handles.size > 0 -%}
       {%- assign zpr_shown = 0 -%}
       {%- for zpr_handle in zpr_handles -%}
