@@ -30,13 +30,22 @@
   .zdf-picks{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
   .zdf-picks::-webkit-scrollbar{height:4px}
   .zdf-picks::-webkit-scrollbar-thumb{background:#d7d2ca}
-  .zdf-pick{flex:0 0 auto;scroll-snap-align:start;width:86px;border:1px solid #e6e2db;background:#fff;padding:0 0 6px;
+  .zdf-pick{position:relative;flex:0 0 auto;scroll-snap-align:start;width:132px;border:1px solid #e6e2db;background:#fff;padding:0 0 7px;
     cursor:pointer;font-family:inherit;text-align:center;transition:border-color .2s ease,box-shadow .2s ease}
   .zdf-pick:hover{border-color:#b9b2a7}
   .zdf-pick.is-on{border-color:#161616;box-shadow:inset 0 0 0 1px #161616}
-  .zdf-pick img{display:block;width:100%;height:114px;object-fit:cover;object-position:50% 12%}
-  .zdf-pick span{display:block;font-size:10px;line-height:1.35;letter-spacing:.02em;color:#6a6a6a;padding:6px 5px 0}
-  .zdf-pick--none{display:flex;align-items:center;justify-content:center;height:146px;padding:0 10px}
+  .zdf-pick img{display:block;width:100%;height:176px;object-fit:cover;object-position:50% 10%}
+  .zdf-pick span{display:block;font-size:11px;line-height:1.35;letter-spacing:.02em;color:#6a6a6a;padding:7px 6px 0}
+  .zdf-pick--none{display:flex;align-items:center;justify-content:center;height:212px;padding:0 12px}
+  /* A look at the piece without leaving the brief. Hands the image to the theme's own lightbox. */
+  .zdf-zoom{position:absolute;top:6px;right:6px;width:26px;height:26px;border:0;border-radius:50%;
+    background:rgba(255,255,255,.9);color:#161616;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    opacity:0;transition:opacity .2s ease}
+  .zdf-pick:hover .zdf-zoom,.zdf-pick:focus-within .zdf-zoom{opacity:1}
+  .zdf-zoom svg{width:14px;height:14px}
+  @media (hover:none){.zdf-zoom{opacity:1}}
+  .zdf-pick[hidden]{display:none}
+  .zdf-picks-empty{font-size:12px;color:#a0a0a0;padding:8px 2px}
   .zdf-pick--none span{padding:0;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#161616}
   .zdf-picks-more{display:inline-block;margin-top:2px;font-size:11px;letter-spacing:.1em;color:#6a6a6a}
   .zdf-field label{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a6a;margin:0 0 7px}
@@ -100,13 +109,18 @@
           <button type="button" class="zdf-pick zdf-pick--none is-on" data-zdf-pick="" data-zdf-handle=""><span>From scratch</span></button>
           {%- for zp in zdf_designs limit: 60 -%}
             {%- if zp.featured_image != blank -%}
-              <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}">
-                <img src="{{ zp.featured_image | image_url: width: 190 }}" alt="{{ zp.title | escape }}" loading="lazy" width="86" height="114">
+              {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 6 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+              <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}" data-zdf-type="{{ zp.type | escape }}">
+                <img src="{{ zp.featured_image | image_url: width: 300 }}" alt="{{ zp.title | escape }}" loading="lazy" width="132" height="176">
                 <span>{{ zp.title | split: ' ' | slice: 0, 2 | join: ' ' }}</span>
+                <span class="zdf-zoom" role="button" tabindex="0" aria-label="Look closer at {{ zp.title | escape }}" data-zoom-gallery="{{ zp_gallery }}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"/></svg>
+                </span>
               </button>
             {%- endif -%}
           {%- endfor -%}
         </div>
+        <p class="zdf-picks-empty" data-zdf-picks-empty hidden>No ready-made designs in this category yet. Describe it below instead.</p>
         <a class="zdf-picks-more" href="{{ routes.root_url }}collections/ready-to-wear">See the whole collection &rarr;</a>
         <input type="hidden" name="properties[Our design]" value="" data-zdf-pickval>
         <input type="hidden" name="properties[_design_handle]" value="" data-zdf-pickhandle>
@@ -137,12 +151,37 @@
     var pickVal = overlay.querySelector('[data-zdf-pickval]');
     var pickHandle = overlay.querySelector('[data-zdf-pickhandle]');
     picks.addEventListener('click', function (e) {
+      if (e.target.closest('.zdf-zoom')) return;   /* the lightbox handles that one */
       var b = e.target.closest('.zdf-pick');
       if (!b) return;
       picks.querySelectorAll('.zdf-pick').forEach(function (x) { x.classList.remove('is-on'); });
       b.classList.add('is-on');
       pickVal.value = b.getAttribute('data-zdf-pick') || '';
       pickHandle.value = b.getAttribute('data-zdf-handle') || '';
+    });
+  }
+  /* Show only the designs that match the piece being asked for. */
+  var pieceSel = overlay.querySelector('select[name="properties[Piece]"]');
+  if (pieceSel && picks) {
+    var emptyNote = overlay.querySelector('[data-zdf-picks-empty]');
+    pieceSel.addEventListener('change', function () {
+      var want = pieceSel.value;
+      var any = false;
+      picks.querySelectorAll('.zdf-pick').forEach(function (b) {
+        if (b.classList.contains('zdf-pick--none')) return;
+        var t = b.getAttribute('data-zdf-type') || '';
+        var show = !want || want === 'Other' || t === want;
+        b.hidden = !show;
+        if (show) any = true;
+        if (!show && b.classList.contains('is-on')) {
+          b.classList.remove('is-on');
+          picks.querySelector('.zdf-pick--none').classList.add('is-on');
+          overlay.querySelector('[data-zdf-pickval]').value = '';
+          overlay.querySelector('[data-zdf-pickhandle]').value = '';
+        }
+      });
+      if (emptyNote) emptyNote.hidden = any;
+      picks.scrollLeft = 0;
     });
   }
   var form = overlay.querySelector('[data-zdf-form]');
