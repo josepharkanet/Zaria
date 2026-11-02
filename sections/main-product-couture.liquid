@@ -226,9 +226,15 @@
   #shopify-section-{{ section.id }} .zpdp__acc-body{padding:0 0 18px;font-size:13px;line-height:1.85;color:#57534e}
 
   /* related */
-  #shopify-section-{{ section.id }} .zpdp__related{max-width:1360px;margin:60px auto 10px;padding:0 clamp(16px,3vw,44px)}
+  {%- comment -%}A band of its own, not a tail on the product. A hairline and a shift to the
+     warm paper ground separate it from the details above, and the heading drops to the small
+     letter-spaced size every other section heading on the site uses.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zpdp__relband{background:#faf8f5;border-top:1px solid #ece7e0;margin-top:clamp(56px,7vw,96px);
+    padding:clamp(44px,5vw,72px) 0 clamp(40px,4.5vw,64px)}
+  #shopify-section-{{ section.id }} .zpdp__related{max-width:1360px;margin:0 auto;padding:0 clamp(16px,3vw,44px)}
   #shopify-section-{{ section.id }} .zpdp__related h2{font-family:var(--heading-font-family,'Jost'),'Jost',serif;font-weight:400;text-align:center;
-    font-size:clamp(20px,2.4vw,28px);text-transform:uppercase;letter-spacing:.12em;margin:0 0 28px}
+    font-size:clamp(13px,1.3vw,16px);text-transform:uppercase;letter-spacing:.22em;color:#161616;margin:0 0 10px}
+  #shopify-section-{{ section.id }} .zpdp__relrule{width:46px;height:1px;background:#d9d2c6;margin:0 auto clamp(26px,3vw,38px)}
   #shopify-section-{{ section.id }} .zpdp__rel-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
   @media (min-width:750px){#shopify-section-{{ section.id }} .zpdp__rel-grid{grid-template-columns:repeat(4,1fr)}}
   #shopify-section-{{ section.id }} .zpdp__rel{text-decoration:none;color:#161616}
@@ -456,8 +462,10 @@
 </div>
 
 {%- if relcol and relcol.products.size > 1 -%}
+  <section class="zpdp__relband">
   <div class="zpdp__related">
     <h2>You may also like</h2>
+    <div class="zpdp__relrule" aria-hidden="true"></div>
     <div class="zpdp__rel-grid">
       {%- assign shown = 0 -%}
       {%- for rp in relcol.products -%}
@@ -475,6 +483,7 @@
       {%- endfor -%}
     </div>
   </div>
+  </section>
 {%- endif -%}
 
 <script>
