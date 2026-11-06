@@ -18,16 +18,10 @@
     centred text crosses the model's face and her pale dress, where white type on white fabric
     vanished, so the shade is concentrated where the words are and lets the edges stay open.
   {%- endcomment -%}
-  #shopify-section-{{ section.id }} .zdl__veil{position:absolute;inset:0;
-    background:radial-gradient(ellipse 58% 64% at 50% 50%,rgba(12,9,10,.66) 0%,rgba(12,9,10,.40) 52%,rgba(12,9,10,0) 78%),
-      linear-gradient(rgba(18,12,14,.26),rgba(18,12,14,.42))}
-  /* Zaria: on a phone the band is tall and narrow, so a wide photograph is cropped to a sliver
-     and the radial veil then covers nearly all of it — the hero went almost black. Lighten the
-     veil and let it fall from the foot instead, which still carries the type. */
-  @media(max-width:749px){
-    #shopify-section-{{ section.id }} .zdl__veil{
-      background:linear-gradient(to top,rgba(14,10,12,.68) 0%,rgba(14,10,12,.34) 54%,rgba(14,10,12,.16) 100%)}
-  }
+  /* Zaria: no dark overlay on the photograph (client, 2026-11-07). The veil existed to hold white
+     type over the picture; with it gone the words have to find their own ground, so they sit on the
+     clear part of the frame in charcoal, exactly as the Our Story hero does. */
+  #shopify-section-{{ section.id }} .zdl__veil{position:absolute;inset:0;background:none}
   #shopify-section-{{ section.id }} .zdl__inner{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:70px clamp(24px,5vw,48px);text-align:center;color:#fff}
   #shopify-section-{{ section.id }} .zdl__overline{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#ecdde1;margin:0 0 20px}
   #shopify-section-{{ section.id }} .zdl__heading{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
@@ -37,6 +31,24 @@
     font-size:12px;letter-spacing:.22em;text-transform:uppercase;border:1px solid #fff;transition:background .2s ease,color .2s ease}
   #shopify-section-{{ section.id }} .zdl__btn:hover{background:transparent;color:#fff}
   /* Light variant: airy, contained, no dark image block */
+  /* words on the clear ground, charcoal, once there is room beside the subject */
+  @media(min-width:861px){
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light){display:flex;align-items:center}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__inner{
+      margin-right:auto;margin-left:0;text-align:left;max-width:min(46%,560px);
+      padding-left:clamp(40px,6vw,96px);padding-right:0;color:#1a1a1a}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__overline{color:#1a1a1a !important;opacity:1}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__title{color:#1a1a1a !important}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__body{color:rgba(26,26,26,.78)}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__btn{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__btn:hover{background:transparent;color:#1a1a1a}
+  }
+  /* a phone crops the clear ground away, so the words stay white and ride a soft shadow instead */
+  @media(max-width:860px){
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__overline,
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__title,
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__body{text-shadow:0 1px 18px rgba(0,0,0,.62)}
+  }
   #shopify-section-{{ section.id }} .zdl.zdl--light{min-height:0;background:#faf8f5;display:block}
   #shopify-section-{{ section.id }} .zdl--light .zdl__inner{color:#141414;padding:clamp(54px,7vw,86px) clamp(24px,5vw,48px)}
   #shopify-section-{{ section.id }} .zdl--light .zdl__overline{color:#8a8178}
