@@ -14,8 +14,8 @@
       "settings": {
         "scheme": "dark",
         "image": "shopify://shop_images/ALS_7578.jpg",
-        "image_asset": "zaria-story-hero.jpg",
-        "focal": "64% center",
+        "image_asset": "zaria-dyl-hero.jpg",
+        "focal": "center",
         "height": 66,
         "overline": "Custom Design",
         "heading": "Design Your Look",
