@@ -51,11 +51,13 @@
   /* Zaria: the overline inherits a dark colour from the page scheme, which disappears against
      a photograph. Hold it white wherever it sits over the scrim. */
   #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__over{color:#fff !important;opacity:.92}
+  /* No scrim over the photograph. It existed to hold white type over moving footage. */
+  #shopify-section-{{ section.id }} .zab-hero--still::after{background:none}
   @media(min-width:861px){
-    /* The still carries its own clear ground on the right, so set the words there in charcoal
-       and drop the scrim, which only ever existed to hold white type over moving footage. */
+    /* The still carries its own clear ground on the right, so set the words there, in charcoal
+       against the pale backdrop. Narrower screens crop that ground away and keep them white
+       over the cloth, bottom left. */
     #shopify-section-{{ section.id }} .zab-hero--still{align-items:center}
-    #shopify-section-{{ section.id }} .zab-hero--still::after{background:none}
     #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__in{margin-left:auto;max-width:min(46%,560px);padding-left:0;padding-right:clamp(40px,6vw,96px)}
     #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__over{color:#1a1a1a !important;opacity:1}
     #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title{color:#1a1a1a}
