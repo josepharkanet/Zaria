@@ -70,7 +70,7 @@
       Shopify Files, which this store's app cannot write, and its old reference had stopped
       resolving — naming an asset keeps the background in git with the rest of the theme.
     {%- endcomment -%}
-    <img class="zdl__bg" src="{{ section.settings.image_asset | asset_url }}" alt="" width="2400" height="1200" loading="lazy">
+    <img class="zdl__bg" src="{{ section.settings.image_asset | asset_url }}" alt="" width="2400" height="1200" loading="eager" fetchpriority="high">
   {%- elsif section.settings.image != blank -%}
     <img class="zdl__bg" src="{{ section.settings.image | image_url: width: 2200 }}" alt="" width="2200" height="1237" loading="lazy">
   {%- else -%}
