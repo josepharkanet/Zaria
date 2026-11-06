@@ -45,6 +45,9 @@
     position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   /* Zaria: zoom the hero video slightly so any tool watermark near the edges/corners is cropped out of frame */
   #shopify-section-{{ section.id }} .zab-hero__vid{transform:scale(1.16);transform-origin:center center}
+  /* Zaria: a still named in image_asset replaces the clips. The photograph carries its subject
+     left of centre, so hold the frame there when the hero box crops to portrait on phones. */
+  #shopify-section-{{ section.id }} .zab-hero__still{object-position:36% center}
   #shopify-section-{{ section.id }} .zab-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.12) 0%,rgba(10,10,10,.15) 40%,rgba(10,10,10,.62) 100%)}
   #shopify-section-{{ section.id }} .zab-hero__in{position:relative;z-index:2;padding:clamp(28px,6vw,76px);max-width:860px}
   #shopify-section-{{ section.id }} .zab-hero__over{color:#fff;opacity:.9}
@@ -116,7 +119,9 @@
             {%- if vsrc.url != blank -%}{%- assign vurls = vurls | append: vsrc.url | append: '||' -%}{%- endif -%}
           {%- endif -%}
         {%- endfor -%}
-        {%- if vurls != blank -%}
+        {%- if sc.image_asset != blank -%}
+          <img class="zab-hero__still" src="{{ sc.image_asset | asset_url }}" alt="{{ sc.image_alt | default: sc.hero_heading | escape }}" width="2400" height="1200" loading="eager" fetchpriority="high">
+        {%- elsif vurls != blank -%}
           <video id="zabv-{{ section.id }}" class="zab-hero__vid" muted autoplay playsinline preload="auto"{% if sc.hero_image != blank %} poster="{{ sc.hero_image | image_url: width: 1600 }}"{% endif %}></video>
           <script>
             (function(){
@@ -229,10 +234,12 @@
     { "type": "url", "id": "link_url", "label": "Link" },
     { "type": "header", "content": "About page - Hero" },
     { "type": "paragraph", "content": "These settings only affect the page that uses the 'story' template (the About / Our Story page)." },
-    { "type": "paragraph", "content": "Add up to 3 hero videos. They play one after another on a loop. Leave empty to use the hero image." },
+    { "type": "paragraph", "content": "A still file in assets replaces the clips. Otherwise add up to 3 hero videos and they play one after another on a loop." },
     { "type": "video", "id": "hero_video_1", "label": "Hero video 1" },
     { "type": "video", "id": "hero_video_2", "label": "Hero video 2" },
     { "type": "video", "id": "hero_video_3", "label": "Hero video 3" },
+    { "type": "text", "id": "image_asset", "label": "Still file in assets", "info": "e.g. zaria-story-hero.jpg — shown instead of the videos when filled" },
+    { "type": "text", "id": "image_alt", "label": "Still description", "info": "Read aloud by screen readers." },
     { "type": "image_picker", "id": "hero_image", "label": "Hero image / video poster (used if no video)" },
     { "type": "text", "id": "hero_overline", "label": "Hero overline", "default": "The House of Zaria" },
     { "type": "text", "id": "hero_heading", "label": "Hero heading", "default": "Elegance, made in the Emirates" },
