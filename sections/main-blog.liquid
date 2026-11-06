@@ -10,9 +10,10 @@
      without dimming the whole shot, and holding the words to a column stops a long title
      running the full width and colliding with whatever the picture has in the middle. */
   #shopify-section-{{ section.id }} .featured-blog-post .content-over-media { position: relative; }
+  /* Same scrim the article hero uses, so a centred title holds over a pale picture too. */
   #shopify-section-{{ section.id }} .featured-blog-post .content-over-media::after {
     content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    background: linear-gradient(to top, rgba(10,10,10,.72) 0%, rgba(10,10,10,.42) 28%, rgba(10,10,10,0) 62%);
+    background: linear-gradient(to top, rgba(0,0,0,.74) 0%, rgba(0,0,0,.34) 46%, rgba(0,0,0,.12) 100%);
   }
   /* Zaria: the archive hero now reads exactly like the article page's own hero header
      (sections/main-article.liquid .zaria-ahero) — centred, sentence case, a letterspaced
@@ -23,11 +24,12 @@
   #shopify-section-{{ section.id }} .featured-blog-post .zaria-feat__eyebrow {
     font-family: var(--text-font-family, 'Jost'), 'Jost', sans-serif;
     text-transform: uppercase; letter-spacing: .3em; font-size: 11px; margin: 0 0 18px; opacity: .92;
-    color: #fff; border-bottom: 1px solid rgba(255,255,255,.45); display: inline-block; padding-bottom: 3px;
+    /* the page colour scheme sets this dark with !important, so match its weight or it vanishes */
+    color: #fff !important; border-bottom: 1px solid rgba(255,255,255,.45); display: inline-block; padding-bottom: 3px;
   }
   #shopify-section-{{ section.id }} .featured-blog-post .zaria-feat__title {
     font-family: var(--heading-font-family, 'Jost'), 'Jost', sans-serif; font-weight: 400;
-    color: #fff; margin: 0 auto; max-width: 22ch; text-transform: none;
+    color: #fff !important; margin: 0 auto; max-width: 22ch; text-transform: none;
     font-size: clamp(26px, 4.0vw, 50px); line-height: 1.08; letter-spacing: .012em; text-wrap: balance;
   }
   /* The theme hands this button a transparent text colour from the section settings, so the
