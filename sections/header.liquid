@@ -106,6 +106,12 @@
     #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 0.9rem; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__logo { grid-area: logo; justify-self: center; }
     #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav { grid-area: secondary-nav; justify-self: end; }
+    /* Zaria: the glass and the heart move to the empty balancing column at the far left,
+       so the bar reads search/saved, menu, wordmark, menu, bag/account. */
+    #shopify-section-{{ section.id }} .zaria-header-split .header__utility-nav { grid-area: zhedge; justify-self: start; }
+    #shopify-section-{{ section.id }} .header__utility-list {
+      display: flex; align-items: center; column-gap: .9rem; margin: 0; padding: 0; list-style: none;
+    }
     /* Zaria: the icons sit at the far end of their column while the links sit at the near
        end, beside the logo, so every pixel the window gains opens between GIFTS and the
        search glass. A fixed inset could not hold it: at 1512 the hole was 90px, at 1920 it
@@ -154,6 +160,7 @@
   #shopify-section-{{ section.id }} .header__nav-half summary,
   #shopify-section-{{ section.id }} .header__secondary-nav a,
   #shopify-section-{{ section.id }} .header__secondary-nav button,
+  #shopify-section-{{ section.id }} .header__utility-nav a,
   #shopify-section-{{ section.id }} .header__lang-toggle .lang-toggle { color: #1a1a1a !important; }
   #shopify-section-{{ section.id }} .header__nav-icon { color: #1a1a1a; }
   #shopify-section-{{ section.id }} .header__logo-image--transparent { display: none !important; }
@@ -448,6 +455,37 @@
       --------------------------------------------------------------------------------------------------------------------
     {%- endcomment -%}
 
+    {%- comment -%}
+      --------------------------------------------------------------------------------------------------------------------
+      UTILITY RAIL — search and wishlist, set at the far left of the split layout. Icon only: a
+      text label here would run into SHOP. Narrow screens drop this and keep the heart beside the
+      bag in the secondary nav, which is where there is room for it.
+      --------------------------------------------------------------------------------------------------------------------
+    {%- endcomment -%}
+
+    {%- if section.settings.layout == 'logo_center_navigation_below' -%}
+      <nav class="header__utility-nav md-max:hidden" aria-label="{{ 'header.general.search' | t | escape }}">
+        <ul class="unstyled-list header__utility-list">
+          {%- if section.settings.enable_search -%}
+            <li class="header__search-link">
+              <a href="{{ routes.search_url }}" aria-controls="header-search-{{ section.id }}">
+                <span class="sr-only">{{ 'header.general.search' | t }}</span>
+                {%- render 'icon' with 'search', class: 'header__nav-icon' -%}
+              </a>
+            </li>
+          {%- endif -%}
+
+          <li class="header__wishlist-link relative">
+            <a href="/pages/wishlist" aria-label="{{ 'customer.wishlist.title' | t | default: 'Wishlist' }}">
+              <span class="sr-only">Wishlist</span>
+              {%- render 'icon' with 'heart', class: 'header__nav-icon' -%}
+              <span class="header__wishlist-count" data-zar-wishlist-count style="display:none">0</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    {%- endif -%}
+
     <nav class="header__secondary-nav" aria-label="{{ 'header.general.secondary_navigation' | t | escape }}">
       {%- liquid
         if section.settings.show_country_selector and localization.available_countries.size > 1
@@ -501,7 +539,7 @@
           </li>
         {%- endif -%}
 
-        {%- if section.settings.enable_search -%}
+        {%- if section.settings.enable_search and section.settings.layout != 'logo_center_navigation_below' -%}
           <li class="header__search-link md-max:hidden">
             <a href="{{ routes.search_url }}" aria-controls="header-search-{{ section.id }}">
               <span class="sr-only">{{ 'header.general.search' | t }}</span>
@@ -519,7 +557,7 @@
         {%- endif -%}
 
         {%- comment -%}Wishlist: our own heart icon linking to the self-contained Saved page{%- endcomment -%}
-        <li class="header__wishlist-link relative">
+        <li class="header__wishlist-link relative{% if section.settings.layout == 'logo_center_navigation_below' %} md:hidden{% endif %}">
           <a href="/pages/wishlist" aria-label="{{ 'customer.wishlist.title' | t | default: 'Wishlist' }}">
             <span class="sr-only">Wishlist</span>
             {%- render 'icon' with 'heart', class: 'header__nav-icon' -%}
