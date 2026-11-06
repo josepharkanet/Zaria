@@ -9758,6 +9758,9 @@ facets-drawer .button:hover {
     row-gap: 0.6rem;
     align-items: start;
     text-align: left;
+    /* the grid card's own padding is zeroed in this layout, which left the picture and the
+       title sitting hard against the top edge of the grey row — give the row room to breathe */
+    padding: 1.75rem 1.75rem 1.75rem 1.5rem !important;
   }
 
   /* let the three info sections sit directly in the card grid */
