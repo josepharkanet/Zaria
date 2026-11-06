@@ -22,7 +22,6 @@
 {%- assign zds_garments = 'Abaya,Jalabiya,Sheila,Other' | split: ',' -%}
 {%- assign zds_occasions = 'Wedding,Engagement,Eid,Party / Evening,Everyday,Other' | split: ',' -%}
 {%- assign zds_fabrics = 'Luxe Silks,Fine Cottons,Chiffons & Organza,Linen Blends,Velvets,Tulle & 3D Work,Silk Blends,Sequins & Embroidery,Hand-Painted,Not sure advise me' | split: ',' -%}
-{%- assign zds_boutiques = 'Dubai boutique,Online / video consultation' | split: ',' -%}
 {%- assign zds_lengths = '53,54,55,56,57,58,59,60,61' | split: ',' -%}
 
 <style>
@@ -69,6 +68,7 @@
   #shopify-section-{{ section.id }} .zds textarea{min-height:104px;resize:vertical;line-height:1.7}
   #shopify-section-{{ section.id }} .zds ::placeholder{color:#a6a6a6}
   #shopify-section-{{ section.id }} .zds__row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  #shopify-section-{{ section.id }} .zds__fixed{margin:0;padding:11px 0 0;font-size:15px;color:#1a1a1a;line-height:1.4}
   #shopify-section-{{ section.id }} .zds__hint{font-size:13px;color:#6a6a6a;line-height:1.7;margin:0 0 16px}
 
   #shopify-section-{{ section.id }} .zds__modes{display:flex;gap:10px;margin:12px 0 0}
@@ -287,15 +287,20 @@
     </div>
 
     <p class="zds__h">Consultation</p>
+    {%- comment -%}
+      Zaria: consultations are online only, so there is nothing to choose. The "Where" select is gone
+      and the mode travels as a fixed hidden value, which keeps the stored request and the studio
+      board reading the same as every record before it.
+    {%- endcomment -%}
     <div class="zds__row">
       <div class="zds__field"><label class="zds__label" for="zds-pref-{{ section.id }}">Preferred date</label>
         <input id="zds-pref-{{ section.id }}" type="date" name="preferred_date"></div>
-      <div class="zds__field"><label class="zds__label" for="zds-where-{{ section.id }}">Where</label>
-        <select id="zds-where-{{ section.id }}" name="boutique">
-          <option value="">Please choose&hellip;</option>
-          {%- for b in zds_boutiques -%}<option value="{{ b | escape }}">{{ b }}</option>{%- endfor -%}
-        </select></div>
+      <div class="zds__field zds__field--note">
+        <span class="zds__label">Where</span>
+        <p class="zds__fixed">Online / video consultation</p>
+      </div>
     </div>
+    <input type="hidden" name="boutique" value="Online / video consultation">
 
     <button class="zds__submit" type="submit" data-zds-submit>{{ sc.button_label | default: 'Send my design request' }}</button>
     <p class="zds__err" data-zds-err hidden></p>
