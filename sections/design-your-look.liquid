@@ -21,6 +21,13 @@
   #shopify-section-{{ section.id }} .zdl__veil{position:absolute;inset:0;
     background:radial-gradient(ellipse 58% 64% at 50% 50%,rgba(12,9,10,.66) 0%,rgba(12,9,10,.40) 52%,rgba(12,9,10,0) 78%),
       linear-gradient(rgba(18,12,14,.26),rgba(18,12,14,.42))}
+  /* Zaria: on a phone the band is tall and narrow, so a wide photograph is cropped to a sliver
+     and the radial veil then covers nearly all of it — the hero went almost black. Lighten the
+     veil and let it fall from the foot instead, which still carries the type. */
+  @media(max-width:749px){
+    #shopify-section-{{ section.id }} .zdl__veil{
+      background:linear-gradient(to top,rgba(14,10,12,.68) 0%,rgba(14,10,12,.34) 54%,rgba(14,10,12,.16) 100%)}
+  }
   #shopify-section-{{ section.id }} .zdl__inner{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:70px clamp(24px,5vw,48px);text-align:center;color:#fff}
   #shopify-section-{{ section.id }} .zdl__overline{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#ecdde1;margin:0 0 20px}
   #shopify-section-{{ section.id }} .zdl__heading{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
