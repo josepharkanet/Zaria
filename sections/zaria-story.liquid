@@ -48,6 +48,19 @@
   /* Zaria: a still named in image_asset replaces the clips. The photograph carries its subject
      left of centre, so hold the frame there when the hero box crops to portrait on phones. */
   #shopify-section-{{ section.id }} .zab-hero__still{object-position:36% center}
+  /* Zaria: the overline inherits a dark colour from the page scheme, which disappears against
+     a photograph. Hold it white wherever it sits over the scrim. */
+  #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__over{color:#fff !important;opacity:.92}
+  @media(min-width:861px){
+    /* The still carries its own clear ground on the right, so set the words there in charcoal
+       and drop the scrim, which only ever existed to hold white type over moving footage. */
+    #shopify-section-{{ section.id }} .zab-hero--still{align-items:center}
+    #shopify-section-{{ section.id }} .zab-hero--still::after{background:none}
+    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__in{margin-left:auto;max-width:min(42%,460px);padding-right:clamp(40px,6vw,96px)}
+    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__over{color:#1a1a1a !important;opacity:1}
+    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title{color:#1a1a1a}
+    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title .u{border-bottom-color:#1a1a1a}
+  }
   #shopify-section-{{ section.id }} .zab-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.12) 0%,rgba(10,10,10,.15) 40%,rgba(10,10,10,.62) 100%)}
   #shopify-section-{{ section.id }} .zab-hero__in{position:relative;z-index:2;padding:clamp(28px,6vw,76px);max-width:860px}
   #shopify-section-{{ section.id }} .zab-hero__over{color:#fff;opacity:.9}
@@ -107,7 +120,7 @@
   {%- comment -%} ===== Editorial About layout ===== {%- endcomment -%}
   <div class="zab">
 
-    <div class="zab-hero">
+    <div class="zab-hero{% if sc.image_asset != blank %} zab-hero--still{% endif %}">
       <div class="zab-hero__media">
         {%- assign vurls = '' -%}
         {%- for n in (1..3) -%}
