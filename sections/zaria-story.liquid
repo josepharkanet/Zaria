@@ -92,7 +92,12 @@
 
   /* people */
   #shopify-section-{{ section.id }} .zab-people{padding:clamp(20px,3vw,40px) 0 clamp(56px,8vw,104px)}
-  #shopify-section-{{ section.id }} .zab-people__row{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,26px);align-items:stretch}
+  /* Zaria: minmax(0,1fr) rather than 1fr. A bare 1fr is minmax(auto,1fr), so the text box's
+     min-content width pushed the tracks uneven; the portraits then stretched to the row height
+     and aspect-ratio drove their width back out past the narrow track, so the picture sat on top
+     of the words. Equal tracks plus min-width:0 keeps width authoritative and height derived. */
+  #shopify-section-{{ section.id }} .zab-people__row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2vw,26px);align-items:stretch}
+  #shopify-section-{{ section.id }} .zab-people__row > *{min-width:0}
   #shopify-section-{{ section.id }} .zab-portrait{position:relative;aspect-ratio:3/4;overflow:hidden;background:#ededed}
   #shopify-section-{{ section.id }} .zab-portrait img{width:100%;height:100%;object-fit:cover}
   #shopify-section-{{ section.id }} .zab-people__box{border:1px solid #141414;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:clamp(24px,2.4vw,34px);text-align:left}
@@ -115,8 +120,10 @@
   @media(max-width:860px){
     #shopify-section-{{ section.id }} .zab-story__grid,#shopify-section-{{ section.id }} .zab-featured__grid-wrap{grid-template-columns:1fr}
     #shopify-section-{{ section.id }} .zab-story__cols{column-count:1}
-    #shopify-section-{{ section.id }} .zab-people__row{grid-template-columns:repeat(2,1fr)}
-    #shopify-section-{{ section.id }} .zab-people__box{aspect-ratio:3/4}
+    #shopify-section-{{ section.id }} .zab-people__row{grid-template-columns:repeat(2,minmax(0,1fr))}
+    /* The box reads as a paragraph, not a tile: at phone width a quarter-row column left it
+       about 112px of text between the padding. Give it the full width on its own row. */
+    #shopify-section-{{ section.id }} .zab-people__box{grid-column:1 / -1;aspect-ratio:auto}
     #shopify-section-{{ section.id }} .zab-tiles{grid-template-columns:repeat(2,1fr)}
     #shopify-section-{{ section.id }} .zab-tile--tall{grid-row:auto;aspect-ratio:1/1}
   }
