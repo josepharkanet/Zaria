@@ -9734,7 +9734,17 @@ facets-drawer .button:hover {
 
   /* ── List view (the "compact" toggle): one product per row, split into three horizontal sections ──
         [ image + name ]   [ description ]   [ price + add to cart + details ] */
-  .collection .product-list[collection-desktop-layout="compact"] { --product-list-items-per-row: 1 !important; }
+  /* ── List view, one product per row. The variable alone is not enough: the base .product-list
+     sizes its tracks from calc(100% / min(99, 1) - ...), and dividing by a min() expression is
+     invalid at computed-value time, so the track width is dropped and repeat(auto-fit, …) falls
+     back to four columns that overflow the row — on an iPad in landscape (1024px, where these
+     rules first apply) that put each title in a sliver beside its picture and clipped it.
+     State the single column outright instead of asking the calc to produce it. ── */
+  .collection .product-list[collection-desktop-layout="compact"] {
+    --product-list-items-per-row: 1 !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-auto-flow: row !important;
+  }
 
   .collection .product-list[collection-desktop-layout="compact"] .product-card {
     display: grid;
