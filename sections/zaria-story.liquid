@@ -46,8 +46,12 @@
   /* Zaria: zoom the hero video slightly so any tool watermark near the edges/corners is cropped out of frame */
   #shopify-section-{{ section.id }} .zab-hero__vid{transform:scale(1.16);transform-origin:center center}
   /* Zaria: a still named in image_asset replaces the clips. The photograph carries its subject
-     right of centre, so hold the frame there when the hero box crops to portrait on phones. */
-  #shopify-section-{{ section.id }} .zab-hero__still{object-position:64% center}
+     right of centre, so hold the frame there when the hero box crops to portrait on phones.
+     Pinned to the top edge: on a wide, short window the box is wider than the 2:1 picture and
+     cover spills it vertically, and a centred crop takes that spill off the top, which cuts the
+     model's head. Anchoring the top sends the whole crop to the hem instead, where there is
+     only floor to lose. */
+  #shopify-section-{{ section.id }} .zab-hero__still{object-position:64% top}
   /* Zaria: the overline inherits a dark colour from the page scheme, which disappears against
      a photograph. Hold it white wherever it sits over the scrim. */
   #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__over{color:#fff !important;opacity:.92}
