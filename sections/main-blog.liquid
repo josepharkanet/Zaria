@@ -14,14 +14,28 @@
     content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
     background: linear-gradient(to top, rgba(10,10,10,.72) 0%, rgba(10,10,10,.42) 28%, rgba(10,10,10,0) 62%);
   }
-  #shopify-section-{{ section.id }} .featured-blog-post .prose { max-width: min(62ch, 78%); }
-  #shopify-section-{{ section.id }} .featured-blog-post .prose .h2 {
-    font-size: clamp(22px, 2.6vw, 38px); line-height: 1.16; letter-spacing: .01em; text-wrap: balance;
+  /* Zaria: the archive hero now reads exactly like the article page's own hero header
+     (sections/main-article.liquid .zaria-ahero) — centred, sentence case, a letterspaced
+     category above it. Keep the two in step if either is ever restyled. */
+  #shopify-section-{{ section.id }} .featured-blog-post .zaria-feat__inner {
+    text-align: center; width: 100%; color: #fff; padding: clamp(28px, 5vw, 64px) clamp(16px, 4vw, 48px);
   }
-  @media (max-width: 749px) {
-    #shopify-section-{{ section.id }} .featured-blog-post .prose { max-width: 100%; }
-    #shopify-section-{{ section.id }} .featured-blog-post .prose .h2 { font-size: clamp(19px, 5.2vw, 26px); }
+  #shopify-section-{{ section.id }} .featured-blog-post .zaria-feat__eyebrow {
+    font-family: var(--text-font-family, 'Jost'), 'Jost', sans-serif;
+    text-transform: uppercase; letter-spacing: .3em; font-size: 11px; margin: 0 0 18px; opacity: .92;
+    color: #fff; border-bottom: 1px solid rgba(255,255,255,.45); display: inline-block; padding-bottom: 3px;
   }
+  #shopify-section-{{ section.id }} .featured-blog-post .zaria-feat__title {
+    font-family: var(--heading-font-family, 'Jost'), 'Jost', sans-serif; font-weight: 400;
+    color: #fff; margin: 0 auto; max-width: 22ch; text-transform: none;
+    font-size: clamp(26px, 4.0vw, 50px); line-height: 1.08; letter-spacing: .012em; text-wrap: balance;
+  }
+  /* The theme hands this button a transparent text colour from the section settings, so the
+     label was invisible on its white pill. Set both sides here rather than rely on the setting. */
+  #shopify-section-{{ section.id }} .featured-blog-post .button {
+    background: #fff !important; color: #1a1a1a !important; margin-top: clamp(20px, 2.4vw, 30px);
+  }
+  #shopify-section-{{ section.id }} .featured-blog-post .button:hover { background: #1a1a1a !important; color: #fff !important; }
   #shopify-section-{{ section.id }} .blog-post-card__title { transition: color .2s ease; }
   #shopify-section-{{ section.id }} .blog-post-card:hover .blog-post-card__title { color: #7a1f34; }
 </style>
@@ -107,8 +121,11 @@
                         ph_class: 'zaria-ph--dark zaria-ph--hero'
                       -%}
 
-                      <div class="prose place-self-end-start">
-                        <h2 class="h2">
+                      <div class="prose zaria-feat__inner place-self-center">
+                        {%- if article.tags.size > 0 -%}
+                          <p class="zaria-feat__eyebrow">{{ article.tags | first }}</p>
+                        {%- endif -%}
+                        <h2 class="h2 zaria-feat__title">
                           {%- if article -%}
                             {{ article.title }}
                           {%- else -%}
