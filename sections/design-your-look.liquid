@@ -43,11 +43,19 @@
     #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__btn{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
     #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__btn:hover{background:transparent;color:#1a1a1a}
   }
-  /* a phone crops the clear ground away, so the words stay white and ride a soft shadow instead */
+  /* A phone shows roughly a third of the frame, and centred on the embroidery there is nowhere
+     legible for the words without the overlay we removed. Slide the crop towards the clear ground
+     instead: about three quarters pale wall with the embroidery entering at the right, and the
+     words in charcoal on the pale part, exactly as on a wide screen. */
   @media(max-width:860px){
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__overline,
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__title,
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__body{text-shadow:0 1px 18px rgba(0,0,0,.62)}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__bg{object-position:14% center}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__inner{
+      text-align:left;max-width:72%;margin-left:0;margin-right:auto;
+      padding-left:clamp(20px,6vw,34px);padding-right:0;color:#1a1a1a}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__overline{color:#1a1a1a !important;opacity:1}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__title{color:#1a1a1a !important}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__body{color:rgba(26,26,26,.78)}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__btn{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
   }
   #shopify-section-{{ section.id }} .zdl.zdl--light{min-height:0;background:#faf8f5;display:block}
   #shopify-section-{{ section.id }} .zdl--light .zdl__inner{color:#141414;padding:clamp(54px,7vw,86px) clamp(24px,5vw,48px)}
