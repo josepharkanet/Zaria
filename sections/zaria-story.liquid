@@ -46,8 +46,8 @@
   /* Zaria: zoom the hero video slightly so any tool watermark near the edges/corners is cropped out of frame */
   #shopify-section-{{ section.id }} .zab-hero__vid{transform:scale(1.16);transform-origin:center center}
   /* Zaria: a still named in image_asset replaces the clips. The photograph carries its subject
-     left of centre, so hold the frame there when the hero box crops to portrait on phones. */
-  #shopify-section-{{ section.id }} .zab-hero__still{object-position:36% center}
+     right of centre, so hold the frame there when the hero box crops to portrait on phones. */
+  #shopify-section-{{ section.id }} .zab-hero__still{object-position:64% center}
   /* Zaria: the overline inherits a dark colour from the page scheme, which disappears against
      a photograph. Hold it white wherever it sits over the scrim. */
   #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__over{color:#fff !important;opacity:.92}
@@ -60,11 +60,11 @@
     #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title{text-shadow:0 1px 16px rgba(0,0,0,.55)}
   }
   @media(min-width:861px){
-    /* The still carries its own clear ground on the right, so set the words there, in charcoal
+    /* The still carries its own clear ground on the left, so set the words there, in charcoal
        against the pale backdrop. Narrower screens crop that ground away and keep them white
        over the cloth, bottom left. */
     #shopify-section-{{ section.id }} .zab-hero--still{align-items:center}
-    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__in{margin-left:auto;max-width:min(46%,560px);padding-left:0;padding-right:clamp(40px,6vw,96px)}
+    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__in{margin-right:auto;max-width:min(46%,560px);padding-left:clamp(40px,6vw,96px);padding-right:0}
     #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__over{color:#1a1a1a !important;opacity:1}
     #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title{color:#1a1a1a}
     #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title .u{border-bottom-color:#1a1a1a}
