@@ -12,8 +12,9 @@
     "hero": {
       "type": "design-your-look",
       "settings": {
-        "scheme": "light",
+        "scheme": "dark",
         "image": "shopify://shop_images/ALS_7578.jpg",
+        "image_asset": "zaria-story-hero.jpg",
         "focal": "center",
         "height": 66,
         "overline": "Custom Design",

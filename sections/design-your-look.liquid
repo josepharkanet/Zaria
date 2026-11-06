@@ -45,6 +45,13 @@
     {%- assign zdl_vsrc = zdl_video.sources | where: 'format', 'mp4' | first -%}
     {%- unless zdl_vsrc -%}{%- assign zdl_vsrc = zdl_video.sources | first -%}{%- endunless -%}
     <video class="zdl__bg zdl__bg--video" src="{{ zdl_vsrc.url }}" autoplay muted loop playsinline preload="auto"{% if section.settings.image != blank %} poster="{{ section.settings.image | image_url: width: 1600 }}"{% endif %}></video>
+  {%- elsif section.settings.image_asset != blank -%}
+    {%- comment -%}
+      Zaria: a file named in image_asset wins over the picker. The picker needs the image in
+      Shopify Files, which this store's app cannot write, and its old reference had stopped
+      resolving — naming an asset keeps the background in git with the rest of the theme.
+    {%- endcomment -%}
+    <img class="zdl__bg" src="{{ section.settings.image_asset | asset_url }}" alt="" width="2400" height="1200" loading="lazy">
   {%- elsif section.settings.image != blank -%}
     <img class="zdl__bg" src="{{ section.settings.image | image_url: width: 2200 }}" alt="" width="2200" height="1237" loading="lazy">
   {%- else -%}
@@ -76,6 +83,7 @@
     { "type": "select", "id": "scheme", "label": "Style", "options": [ { "value": "dark", "label": "Dark image banner" }, { "value": "light", "label": "Light" } ], "default": "dark" },
     { "type": "video", "id": "background_video", "label": "Background video (overrides image)" },
     { "type": "image_picker", "id": "image", "label": "Background image / video poster (optional)" },
+    { "type": "text", "id": "image_asset", "label": "Background file in assets", "info": "e.g. zaria-story-hero.jpg \u2014 used instead of the picker above" },
     { "type": "text", "id": "focal", "label": "Image focal point", "default": "center" },
     { "type": "range", "id": "height", "label": "Height", "min": 44, "max": 90, "step": 2, "unit": "vh", "default": 62 },
     { "type": "text", "id": "overline", "label": "Overline", "default": "The Atelier" },
