@@ -565,6 +565,21 @@
           </a>
         </li>
 
+        {%- comment -%}
+          Zaria: WhatsApp beside the bag. Most of the enquiries this shop takes arrive on WhatsApp,
+          so the thread should be one tap from any page rather than only from Contact. Drawn as the
+          outline mark so it matches the weight of the bag and the account icon either side of it.
+        {%- endcomment -%}
+        {%- assign zar_wa = section.settings.whatsapp_number | remove: ' ' | remove: '+' | remove: '-' | remove: '(' | remove: ')' -%}
+        {%- if zar_wa != blank -%}
+          <li class="header__whatsapp-link">
+            <a href="https://wa.me/{{ zar_wa }}" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
+              <span class="sr-only">Chat with us on WhatsApp</span>
+              {%- render 'icon' with 'whatsapp-line', class: 'header__nav-icon' -%}
+            </a>
+          </li>
+        {%- endif -%}
+
         <li class="relative header__cart-link">
           <a
             href="{{ routes.cart_url }}"
@@ -832,6 +847,13 @@
       "id": "show_icons",
       "label": "t:sections.header.show_icons",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp number",
+      "info": "Shown as a chat icon beside the bag. Leave empty to hide it.",
+      "default": "+971 52 725 6423"
     },
     {
       "type": "header",
