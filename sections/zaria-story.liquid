@@ -55,13 +55,22 @@
   /* Zaria: the overline inherits a dark colour from the page scheme, which disappears against
      a photograph. Hold it white wherever it sits over the scrim. */
   #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__over{color:#fff !important;opacity:.92}
-  /* No scrim over the photograph. It existed to hold white type over moving footage.
-     Narrow screens still set the words over the picture, so carry them on a soft shadow
-     instead, which holds them over cloth and over pale floor without dimming the shot. */
+  /* No scrim over the photograph, at any width. */
   #shopify-section-{{ section.id }} .zab-hero--still::after{background:none !important}
   @media(max-width:860px){
-    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__over,
-    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title{text-shadow:0 1px 16px rgba(0,0,0,.55)}
+    /* A narrow window crops this photograph to the model, and what little pale floor it keeps
+       moves with the viewport's shape: on a short window the words land on the floor, on a tall
+       one they land on the dress. White reads on one and vanishes on the other, and charcoal does
+       the reverse. With no scrim allowed to settle it, the words come off the picture altogether
+       and sit beneath it in charcoal, on the section's own ground. Nothing is washed over and
+       nothing has to be read against cloth. The picture keeps a set height rather than an aspect
+       ratio, so a 800px window does not get a thousand-pixel-tall block. */
+    #shopify-section-{{ section.id }} .zab-hero--still{display:block;min-height:0;background:transparent}
+    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__media{position:relative;inset:auto;width:100%;height:min(64vh,520px);overflow:hidden}
+    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__in{padding:clamp(20px,5vw,28px) clamp(20px,6vw,34px) 0;max-width:none}
+    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__over{color:#1a1a1a !important;opacity:1}
+    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title{color:#1a1a1a}
+    #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title .u{border-bottom-color:#1a1a1a}
   }
   @media(min-width:861px){
     /* The still carries its own clear ground on the left, so set the words there, in charcoal
