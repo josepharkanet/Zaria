@@ -17,8 +17,14 @@
     background:linear-gradient(90deg,rgba(252,250,247,.94) 0%,rgba(252,250,247,.80) 34%,rgba(252,250,247,.30) 56%,rgba(252,250,247,0) 74%)}
   #shopify-section-{{ section.id }} .zct__hero-in{position:relative;z-index:1;max-width:540px;padding:56px clamp(24px,5vw,56px);color:#111}
   #shopify-section-{{ section.id }} .zct__hero-eyebrow{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:#6a6a6a;margin:0 0 16px}
+  {%- comment -%}
+    Zaria: the house hero title is small, uppercase and widely tracked, the same setting as
+    DESIGN YOUR LOOK on Custom Design and JOURNAL on the blog. This one was a 52px sentence-case
+    heading, which read as a different brand on the same site. Measured off those two pages:
+    Jost 400, clamp(16px,1.5vw,18px), .1em tracking, uppercase.
+  {%- endcomment -%}
   #shopify-section-{{ section.id }} .zct__hero-title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
-    font-size:clamp(30px,4.4vw,52px);line-height:1.1;letter-spacing:.01em;margin:0;color:#111}
+    font-size:clamp(16px,1.5vw,18px);line-height:1.16;letter-spacing:.1em;text-transform:uppercase;margin:0;color:#111}
   #shopify-section-{{ section.id }} .zct__hero-intro{color:#4a4a4a;font-size:clamp(14px,1.5vw,16px);line-height:1.85;margin:18px 0 0;max-width:44ch}
   @media (max-width:749px){
     #shopify-section-{{ section.id }} .zct__hero{align-items:flex-start;justify-content:center;text-align:center;min-height:430px}
