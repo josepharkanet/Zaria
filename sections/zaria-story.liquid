@@ -58,7 +58,7 @@
   /* No scrim over the photograph. It existed to hold white type over moving footage.
      Narrow screens still set the words over the picture, so carry them on a soft shadow
      instead, which holds them over cloth and over pale floor without dimming the shot. */
-  #shopify-section-{{ section.id }} .zab-hero--still::after{background:none}
+  #shopify-section-{{ section.id }} .zab-hero--still::after{background:none !important}
   @media(max-width:860px){
     #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__over,
     #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title{text-shadow:0 1px 16px rgba(0,0,0,.55)}
@@ -73,7 +73,11 @@
     #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title{color:#1a1a1a}
     #shopify-section-{{ section.id }} .zab-hero--still .zab-hero__title .u{border-bottom-color:#1a1a1a}
   }
-  #shopify-section-{{ section.id }} .zab-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.12) 0%,rgba(10,10,10,.15) 40%,rgba(10,10,10,.62) 100%)}
+  /* Zaria: the scrim belongs to the video hero only, where white type sits over moving footage.
+     It used to be written unscoped, and because it came after the .zab-hero--still override at
+     equal specificity it won the cascade and washed the photograph dark anyway. Scoped here so
+     the still hero is the untouched photograph the client asked for. */
+  #shopify-section-{{ section.id }} .zab-hero:not(.zab-hero--still)::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.12) 0%,rgba(10,10,10,.15) 40%,rgba(10,10,10,.62) 100%)}
   #shopify-section-{{ section.id }} .zab-hero__in{position:relative;z-index:2;padding:clamp(28px,6vw,76px);max-width:860px}
   #shopify-section-{{ section.id }} .zab-hero__over{color:#fff;opacity:.9}
   #shopify-section-{{ section.id }} .zab-hero__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
