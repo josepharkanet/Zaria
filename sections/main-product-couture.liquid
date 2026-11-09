@@ -210,11 +210,13 @@
   #shopify-section-{{ section.id }} .zpdp__desc p{margin:0 0 10px}
 
   /* attribute list */
-  {%- comment -%}The dividers are the grid's own gap showing through, so the strip still reads
-     as one framed block when five attributes wrap onto a second row.{%- endcomment -%}
-  #shopify-section-{{ section.id }} .zpdp__attrs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
-    background:#ece8e2;border:1px solid #ece8e2;margin:6px 0 30px}
-  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:flex-start;gap:8px;padding:17px 13px;min-width:0;background:#fff}
+  {%- comment -%}Each cell draws its own right and bottom rule, so five attributes can wrap
+     onto a second row and the empty place at the end of it stays white rather than showing a
+     grey panel, which is what a grid gap left behind.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zpdp__attrs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    background:#fff;border:1px solid #ece8e2;margin:6px 0 30px;overflow:hidden}
+  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:flex-start;gap:8px;padding:17px 13px;min-width:0;background:#fff;
+    box-shadow:inset -1px -1px 0 #ece8e2}
   #shopify-section-{{ section.id }} .zpdp__attr>div{min-width:0}
   @media (max-width:600px){
     #shopify-section-{{ section.id }} .zpdp__attrs{grid-template-columns:repeat(2,minmax(0,1fr))}
