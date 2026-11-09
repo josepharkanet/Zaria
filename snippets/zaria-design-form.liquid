@@ -6,6 +6,10 @@
   Usage: {% render 'zaria-design-form', product: product, variant: fv %}
 {%- endcomment -%}
 {%- assign zdf_variant = variant | default: product.selected_or_first_available_variant -%}
+{%- comment -%}Zaria: the brief puts the fabric itself in the cart, so it has to respect the
+  three-metre minimum cut like any other fabric line.{%- endcomment -%}
+{%- assign zdf_qty = 1 -%}
+{%- if product.tags contains 'Fabric' -%}{%- assign zdf_qty = 3 -%}{%- endif -%}
 <style>
   .zdf-trigger{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:14px;padding:15px;
     background:transparent;border:1px solid var(--wine,#7a1f34);color:var(--wine,#7a1f34);font-family:'Jost',sans-serif;
@@ -75,7 +79,7 @@
 
     <form class="zdf-form" action="{{ routes.cart_add_url }}" method="post" data-zdf-form>
       <input type="hidden" name="id" value="{{ zdf_variant.id }}">
-      <input type="hidden" name="quantity" value="1">
+      <input type="hidden" name="quantity" value="{{ zdf_qty }}">
       <input type="hidden" name="properties[Request]" value="Design your look">
       <input type="hidden" name="properties[_fabric_handle]" value="{{ product.handle }}">
 

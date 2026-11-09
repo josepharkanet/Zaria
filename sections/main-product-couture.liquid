@@ -56,6 +56,18 @@
   endif
 
   comment
+    Zaria: fabric is cut by the metre and three metres is the shortest length the atelier
+    will cut, so the quantity box opens at three and steps a metre at a time. Everything
+    else keeps the ordinary single-unit box.
+  endcomment
+  assign is_fabric = false
+  assign qty_min = 1
+  if product.tags contains 'Fabric'
+    assign is_fabric = true
+    assign qty_min = 3
+  endif
+
+  comment
     Price on request. The piece carries no price yet, so the page must not quote one and
     must not let anyone buy. It is a tag and not a price of zero, because a price of zero
     is also what a genuinely free item looks like and we would rather not guess.
@@ -209,6 +221,8 @@
   #shopify-section-{{ section.id }} .zpdp__qbtn{width:42px;height:100%;border:0;background:none;cursor:pointer;font-size:17px;line-height:1;color:#161616;display:flex;align-items:center;justify-content:center;padding:0;transition:color .2s}
   #shopify-section-{{ section.id }} .zpdp__qbtn:hover{color:var(--wine)}
   #shopify-section-{{ section.id }} .zpdp__qty{border:0;background:none;width:34px;height:100%;text-align:center;font-family:inherit;font-size:14px;color:#161616;padding:0;-moz-appearance:textfield}
+  #shopify-section-{{ section.id }} .zpdp__quom{padding:0 12px 0 2px;font-size:12px;letter-spacing:.14em;text-transform:lowercase;color:#8a8a8a}
+  #shopify-section-{{ section.id }} .zpdp__qhint{margin:10px 0 0;font-size:12px;line-height:1.6;color:#8a8a8a}
   #shopify-section-{{ section.id }} .zpdp__qty::-webkit-outer-spin-button,
   #shopify-section-{{ section.id }} .zpdp__qty::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
   #shopify-section-{{ section.id }} .zpdp__atc{flex:1 1 160px;height:54px;background:#161616;color:#fff;border:1px solid #161616;font-family:inherit;
@@ -434,16 +448,18 @@
         <div class="zpdp__buy-row">
           <div class="zpdp__qty-wrap">
             <button type="button" class="zpdp__qbtn" data-qstep="-1" aria-label="Decrease quantity">&minus;</button>
-            <input type="number" name="quantity" class="zpdp__qty" value="1" min="1" inputmode="numeric" aria-label="Quantity">
+            <input type="number" name="quantity" class="zpdp__qty" value="{{ qty_min }}" min="{{ qty_min }}" step="1" data-qmin="{{ qty_min }}" inputmode="numeric" aria-label="Quantity{% if is_fabric %} in metres{% endif %}">
             <button type="button" class="zpdp__qbtn" data-qstep="1" aria-label="Increase quantity">+</button>
+            {%- if is_fabric -%}<span class="zpdp__quom">m</span>{%- endif -%}
           </div>
           <button type="submit" name="add" class="zpdp__atc" {% unless product.available %}disabled{% endunless %}>
             {%- if product.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}
           </button>
           {%- if product.available and is_garment == false -%}
-            <a class="zpdp__buynow" data-zpdp-buynow data-variant="{{ fv.id }}" href="/checkout?variant={{ fv.id }}&quantity=1">Buy it Now</a>
+            <a class="zpdp__buynow" data-zpdp-buynow data-variant="{{ fv.id }}" href="/checkout?variant={{ fv.id }}&quantity={{ qty_min }}">Buy it Now</a>
           {%- endif -%}
         </div>
+        {%- if is_fabric -%}<p class="zpdp__qhint">Sold by the metre. Three metres is the shortest length we cut.</p>{%- endif -%}
       {%- endform -%}
       {%- endif -%}
 
@@ -539,9 +555,11 @@
 })();
 (function(){
   var f=document.getElementById('zpdp-form');
-  if(f){f.querySelectorAll('[data-qstep]').forEach(function(b){b.addEventListener('click',function(){var i=f.querySelector('.zpdp__qty');var v=parseInt(i.value||'1',10)+parseInt(b.getAttribute('data-qstep'),10);i.value=v<1?1:v;});});}
+  if(f){f.querySelectorAll('[data-qstep]').forEach(function(b){b.addEventListener('click',function(){var i=f.querySelector('.zpdp__qty');var lo=parseInt(i.getAttribute('data-qmin')||'1',10);var v=parseInt(i.value||lo,10)+parseInt(b.getAttribute('data-qstep'),10);i.value=v<lo?lo:v;});});
+     var qin=f.querySelector('.zpdp__qty');
+     if(qin){qin.addEventListener('change',function(){var lo=parseInt(qin.getAttribute('data-qmin')||'1',10);var v=parseInt(qin.value||lo,10);if(isNaN(v)||v<lo)qin.value=lo;});}}
   var bn=document.querySelector('[data-zpdp-buynow]');
-  if(bn){bn.addEventListener('click',function(){var q=1,vid=bn.getAttribute('data-variant');if(f){var qi=f.querySelector('.zpdp__qty');if(qi)q=Math.max(1,parseInt(qi.value||'1',10));var vs=f.querySelector('select.zpdp__variant');if(vs&&vs.value)vid=vs.value;}bn.setAttribute('href','/checkout?variant='+vid+'&quantity='+q);});}
+  if(bn){bn.addEventListener('click',function(){var q=1,vid=bn.getAttribute('data-variant');if(f){var qi=f.querySelector('.zpdp__qty');if(qi){var lo=parseInt(qi.getAttribute('data-qmin')||'1',10);q=Math.max(lo,parseInt(qi.value||lo,10));}var vs=f.querySelector('select.zpdp__variant');if(vs&&vs.value)vid=vs.value;}bn.setAttribute('href','/checkout?variant='+vid+'&quantity='+q);});}
 })();
 (function(){
   var root=document.getElementById('zpdp-gal-{{ section.id }}');

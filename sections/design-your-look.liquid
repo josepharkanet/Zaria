@@ -39,8 +39,14 @@
   @media(min-width:861px){
     #shopify-section-{{ section.id }} .zdl:not(.zdl--light){display:flex;align-items:center}
     #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__inner{
-      margin-right:auto;margin-left:0;text-align:left;max-width:min(33%,420px);
+      margin-right:auto;margin-left:0;text-align:left;max-width:min(42%,460px);
       padding-left:clamp(40px,6vw,96px);padding-right:0}
+    {%- comment -%}
+      The column is cut wide enough for the sentence to close on its third line. At 46ch the
+      last two words dropped alone onto a fourth, which reads as a mistake rather than a line.
+    {%- endcomment -%}
+    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__body{
+      max-width:52ch;margin-left:0;margin-right:auto}
   }
   /* A phone shows roughly a third of the frame, so slide the crop towards the clear ground
      instead of centring on the embroidery: the words keep a quiet piece of wall to sit on. */

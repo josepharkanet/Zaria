@@ -10,7 +10,20 @@
 {%- assign zmm_is_abaya = false -%}
 {%- if product.type == 'Abaya' or product.tags contains 'Abaya' -%}{%- assign zmm_is_abaya = true -%}{%- endif -%}
 
-{%- comment -%} field spec: "Label:half-cm-min:half-cm-max" (value = h / 2, so 0.5 cm steps). Order = diagram numbers. {%- endcomment -%}
+{%- comment -%}
+  Readymade only. The older ready-to-wear jalabiyas and abayas are cut and finished before they
+  reach the shop, so there is nothing to measure: they take a standard size and the made-to-measure
+  half of this form would promise something the atelier is not offering on them. Carrying the tag
+  "No Customisation" leaves the size and the size chart and drops the Customized mode.
+{%- endcomment -%}
+{%- assign zmm_nocust = false -%}
+{%- if product.tags contains 'No Customisation' -%}{%- assign zmm_nocust = true -%}{%- endif -%}
+
+{%- comment -%}
+  field spec: "Label:half-inch-min:half-inch-max" (value = h / 2, so half-inch steps). Order =
+  diagram numbers. The figures are inches, matching the size chart; they used to be written into
+  the order as centimetres, which was simply wrong. Each option now carries both units.
+{%- endcomment -%}
 {%- assign zmm_fields = "Neck Open:26:35,Shoulder to Shoulder:26:37,Sleeve Loose:12:25,Sleeve Length:52:68,Sleeve Open:18:25,Bust:76:117,Waist:76:124,Hip:86:136,Length:100:130,Bottom Open:30:48" | split: ',' -%}
 
 <style>
@@ -20,6 +33,8 @@
   .zmm__head .req{color:var(--wine,#7a1f34)}
   .zmm__sub{font-size:13px;color:#8a8a8a;margin:0;max-width:46ch;line-height:1.6}
   .zmm__modes{display:flex;gap:10px;margin:14px 0 0}
+  .zmm__modes[hidden]{display:none}
+  .zmm__units{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a79f93;margin:14px 0 0}
   .zmm__mode{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;
     border:1px solid #d7d2ca;background:#fff;padding:15px 12px;font-size:12px;letter-spacing:.14em;
     text-transform:uppercase;color:#4a4a4a;transition:border-color .15s ease,color .15s ease,background .15s ease}
@@ -92,23 +107,25 @@
   }
 </style>
 
-<div class="zmm" data-zmm>
+<div class="zmm" data-zmm{% if zmm_nocust %} data-zmm-readyonly{% endif %}>
   <div class="zmm__top">
     <div>
-      <p class="zmm__head">Choose your size <span class="req">*</span></p>
-      <p class="zmm__sub" data-zmm-sub>Select Readymade for a standard size, or Customized to have it cut to your measurements.</p>
+      <p class="zmm__head">{% if zmm_nocust %}Size{% else %}Choose your size{% endif %} <span class="req">*</span></p>
+      <p class="zmm__sub" data-zmm-sub>{% if zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}Select Readymade for a standard size, or Customized to have it cut to your measurements.{% endif %}</p>
     </div>
   </div>
 
-  <div class="zmm__modes">
+  <div class="zmm__modes"{% if zmm_nocust %} hidden{% endif %}>
     <label class="zmm__mode" data-zmm-modelabel>
-      <input type="radio" name="properties[Size Type]" value="Readymade" data-zmm-mode="ready" required>
+      <input type="radio" name="properties[Size Type]" value="Readymade" data-zmm-mode="ready" required{% if zmm_nocust %} checked{% endif %}>
       Readymade
     </label>
+    {%- unless zmm_nocust -%}
     <label class="zmm__mode" data-zmm-modelabel>
       <input type="radio" name="properties[Size Type]" value="Customized" data-zmm-mode="custom">
       Customized
     </label>
+    {%- endunless -%}
   </div>
 
   {%- comment -%} ===== READYMADE ===== {%- endcomment -%}
@@ -121,14 +138,16 @@
       <select name="properties[Length]" data-zmm-in="ready" disabled>
         {%- if zmm_len != blank -%}
           {%- for L in zmm_all_len -%}
+            {%- assign Lcm = L | times: 2.54 | round: 1 -%}
             {%- if L == zmm_len -%}
-              <option value="{{ L }} inches" selected>{{ L }} inches</option>
+              <option value="{{ L }} in ({{ Lcm }} cm)" selected>{{ L }} in &middot; {{ Lcm }} cm</option>
             {%- else -%}
-              <option value="" disabled>{{ L }} inches (not available)</option>
+              <option value="" disabled>{{ L }} in &middot; {{ Lcm }} cm (not available)</option>
             {%- endif -%}
           {%- endfor -%}
           {%- unless zmm_all_len contains zmm_len -%}
-            <option value="{{ zmm_len }} inches" selected>{{ zmm_len }} inches</option>
+            {%- assign Lcm = zmm_len | times: 2.54 | round: 1 -%}
+            <option value="{{ zmm_len }} in ({{ Lcm }} cm)" selected>{{ zmm_len }} in &middot; {{ Lcm }} cm</option>
           {%- endunless -%}
         {%- else -%}
           <option value="One Size" selected>One Size</option>
@@ -137,10 +156,13 @@
       <div class="zmm__chart">{% render 'zaria-size-chart' %}</div>
     </div>
     <input type="hidden" name="properties[Size]" value="One Size" data-zmm-in="ready" disabled>
-    <p class="zmm__hint">This piece is available in <b>{% if zmm_len != blank %}{{ zmm_len }}&quot;{% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }}&quot; sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements, or choose <b>Customized</b> to have it cut to your own measurements.</p>
+    {%- assign zmm_len_cm = zmm_len | times: 2.54 | round: 1 -%}
+    {%- assign zmm_slv_cm = zmm_slv | times: 2.54 | round: 1 -%}
+    <p class="zmm__hint">This piece is available in <b>{% if zmm_len != blank %}{{ zmm_len }} in ({{ zmm_len_cm }} cm){% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }} in ({{ zmm_slv_cm }} cm) sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements{% unless zmm_nocust %}, or choose <b>Customized</b> to have it cut to your own measurements{% endunless %}.</p>
   </div>
 
   {%- comment -%} ===== CUSTOMIZED (visual) ===== {%- endcomment -%}
+  {%- unless zmm_nocust -%}
   <div class="zmm__panel" data-zmm-panel="custom" hidden>
     <div class="zmm__visual">
       <div class="zmm__figure" aria-hidden="true">
@@ -181,7 +203,7 @@
       </div>
 
       <div>
-        <p class="zmm__prog"><b data-zmm-count>0</b> of {{ zmm_fields.size }} measurements added</p>
+        <p class="zmm__prog"><b data-zmm-count>0</b> of {{ zmm_fields.size }} measurements added <span class="zmm__fname" style="letter-spacing:.06em">&mdash; inches, with the centimetre beside it</span></p>
         <div class="zmm__fields">
           {%- for f in zmm_fields -%}
             {%- assign fp = f | split: ':' -%}
@@ -191,7 +213,7 @@
             <div class="zmm__field" data-zmm-field="{{ forloop.index }}">
               <div class="zmm__fhead">
                 <span class="zmm__num">{{ forloop.index }}</span>
-                <span class="zmm__fname">{{ flabel }} <span class="u">(in)</span></span>
+                <span class="zmm__fname">{{ flabel }}</span>
               </div>
               <select name="properties[{{ flabel }}]" data-zmm-req data-zmm-in="custom" data-zmm-field-select="{{ forloop.index }}" disabled>
                 <option value="">-- Select --</option>
@@ -199,7 +221,8 @@
                   {%- assign whole = h | divided_by: 2 -%}
                   {%- assign rem = h | modulo: 2 -%}
                   {%- if rem == 0 -%}{%- capture lab -%}{{ whole }}{%- endcapture -%}{%- else -%}{%- capture lab -%}{{ whole }}.5{%- endcapture -%}{%- endif -%}
-                  <option value="{{ lab }} cm">{{ lab }}</option>
+                  {%- assign labcm = h | times: 1.27 | round: 1 -%}
+                  <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in &middot; {{ labcm }} cm</option>
                 {%- endfor -%}
               </select>
             </div>
@@ -208,6 +231,7 @@
       </div>
     </div>
   </div>
+  {%- endunless -%}
 
   {%- comment -%} ===== SHEILA (abayas) + COMMENT ===== {%- endcomment -%}
   <div class="zmm__panel" data-zmm-panel="extra" hidden>
@@ -226,7 +250,7 @@
         <textarea name="properties[Comment]" data-zmm-in="extra" rows="3" placeholder="Anything we should know (preferences, deadline, occasion)…" disabled></textarea>
       </div>
     </div>
-    <p class="zmm__hint">Made to order. Customized pieces are cut to your measurements and cannot be exchanged for fit.</p>
+    {%- unless zmm_nocust -%}<p class="zmm__hint">Made to order. Customized pieces are cut to your measurements and cannot be exchanged for fit.</p>{%- endunless -%}
   </div>
 </div>
 
@@ -268,6 +292,9 @@
       if(which==='custom') refreshProgress();
     }
     modes.forEach(function(r){ r.addEventListener('change', function(){ setActive(r.getAttribute('data-zmm-mode')==='ready'?'ready':'custom'); }); });
+
+    // Readymade-only pieces have no choice to make, so open on the size straight away.
+    if(root.hasAttribute('data-zmm-readyonly')) setActive('ready');
 
     // per-field: update progress + light up the matching diagram point on focus
     root.querySelectorAll('[data-zmm-field-select]').forEach(function(sel){

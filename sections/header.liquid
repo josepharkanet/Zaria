@@ -68,6 +68,24 @@
     font-size: 12px;
     white-space: nowrap;
   }
+  /* Zaria: the promotion is the one item in the rail that has to be seen, so it reads as a
+     filled pill rather than another word in the line. The colour is a setting, so a future
+     promotion can take a different one without a code change. */
+  #shopify-section-{{ section.id }} .header__primary-nav-item > a.zar-navpromo,
+  #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo {
+    display: inline-block;
+    background: {{ section.settings.promo_color | default: '#7a1f34' }};
+    color: #fff !important;
+    padding: 8px 18px;
+    line-height: 1;
+    border: 1px solid {{ section.settings.promo_color | default: '#7a1f34' }};
+    transition: background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo:hover {
+    background: transparent;
+    color: {{ section.settings.promo_color | default: '#7a1f34' }} !important;
+    border-color: {{ section.settings.promo_color | default: '#7a1f34' }};
+  }
   #shopify-section-{{ section.id }} .header__logo-text {
     text-transform: uppercase;
     letter-spacing: 0.22em;
@@ -285,7 +303,7 @@
                         <a href="{{ routes.root_url }}collections/abayas">Ready-to-Wear</a>
                       </div>
                       <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/sale" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'shawl' %}Sale</a>
+                        <a href="{{ routes.root_url }}collections/promotion" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'shawl' %}Promotion</a>
                       </div>
                     </div></div>
                   {%- when 'fabrics' -%}
@@ -368,7 +386,7 @@
                   <a
                     href="{{ link_href }}"
                     data-title="{{ link.title | escape }}"
-                    class="block {% if section.settings.menu_text_font == 'heading' %}h6{% endif %}"
+                    class="block {% if section.settings.menu_text_font == 'heading' %}h6{% endif %}{% if link_title_downcase == 'promotion' %} zar-navpromo{% endif %}"
                     {% if link.current %}
                       aria-current="page"
                     {% endif %}
@@ -634,8 +652,8 @@
         menu: sidebar_menu,
         color_scheme: section.settings.sidebar_color_scheme,
         show_dividers: section.settings.sidebar_show_dividers,
-        open_second_level_menus: section.settings.sidebar_open_second_level_menus
-
+        open_second_level_menus: section.settings.sidebar_open_second_level_menus,
+        promo_color: section.settings.promo_color
       -%}
     {%- endif -%}
   </x-header>
@@ -847,6 +865,13 @@
       "id": "show_icons",
       "label": "t:sections.header.show_icons",
       "default": true
+    },
+    {
+      "type": "color",
+      "id": "promo_color",
+      "label": "Promotion button colour",
+      "info": "Fills a menu item named Promotion.",
+      "default": "#7a1f34"
     },
     {
       "type": "text",

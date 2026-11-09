@@ -23,15 +23,34 @@
       assign max_quantity = max_quantity | default: 999999 | at_most: variant.quantity_rule.max
     endif
 
+    comment
+      Zaria: fabric is cut by the metre and the atelier will not cut a length under three,
+      so the selector floors there and steps a metre at a time. Shopify's own quantity rules
+      are a B2B catalogue feature on this plan, so the floor lives here instead, where the
+      cart, the drawer and the product page all read it. A line can still be taken out of the
+      cart with its Remove link.
+    endcomment
+    assign zar_qty_product = line_item.product | default: variant.product
+    assign zar_qty_min = variant.quantity_rule.min | default: 1
+    assign zar_qty_step = variant.quantity_rule.increment | default: 1
+    assign zar_is_fabric = false
+    if zar_qty_product.tags contains 'Fabric'
+      assign zar_is_fabric = true
+      assign zar_qty_min = 3
+      assign zar_qty_step = 1
+    endif
+
     if line_item != blank
       assign quantity_value = line_item.quantity
     else
       if quick_order
         assign quantity_value = cart | item_count_for_variant: variant.id
       else
-        assign quantity_value = variant.quantity_rule.min | default: 1
+        assign quantity_value = zar_qty_min
       endif
     endif
+
+    assign zar_qty_down = quantity_value | minus: zar_qty_step
   -%}
 
   {%- if line_item == blank -%}
@@ -40,16 +59,21 @@
       type="button"
       tabindex="-1"
       class="quantity-selector__button"
-      {% if quantity_value == 0 or quick_order != true and quantity_value <= variant.quantity_rule.min %}
+      {% if quantity_value == 0 or quick_order != true and quantity_value <= zar_qty_min %}
         disabled
       {% endif %}
     >
       <span class="sr-only">{{ 'product.quantity.decrease_quantity' | t }}</span>
       {%- render 'icon' with 'minus', width: 10 -%}
     </button>
+  {%- elsif zar_is_fabric and zar_qty_down < zar_qty_min -%}
+    <button type="button" tabindex="-1" class="quantity-selector__button" disabled>
+      <span class="sr-only">{{ 'product.quantity.decrease_quantity' | t }}</span>
+      {%- render 'icon' with 'minus', width: 10 -%}
+    </button>
   {%- else -%}
     <a
-      href="{{ routes.cart_change_url }}?id={{ line_item.key }}&quantity={{ line_item.quantity | minus: line_item.variant.quantity_rule.increment }}"
+      href="{{ routes.cart_change_url }}?id={{ line_item.key }}&quantity={{ zar_qty_down }}"
       class="quantity-selector__button"
     >
       <span class="sr-only">{{ 'product.quantity.decrease_quantity' | t }}</span>
@@ -64,8 +88,8 @@
       value="{{ quantity_value }}"
       name="{% if line_item != blank %}updates[]{% else %}quantity{% endif %}"
       inputmode="numeric"
-      step="{{ variant.quantity_rule.increment }}"
-      min="{{ variant.quantity_rule.min }}"
+      step="{{ zar_qty_step }}"
+      min="{{ zar_qty_min }}"
       {% if max_quantity != blank %}
         max="{{ max_quantity }}"
       {% endif %}
@@ -100,7 +124,7 @@
     </button>
   {%- else -%}
     <a
-      href="{{ routes.cart_change_url }}?id={{ line_item.key }}&quantity={{ line_item.quantity | plus: line_item.variant.quantity_rule.increment }}"
+      href="{{ routes.cart_change_url }}?id={{ line_item.key }}&quantity={{ line_item.quantity | plus: zar_qty_step }}"
       class="quantity-selector__button"
     >
       <span class="sr-only">{{ 'product.quantity.increase_quantity' | t }}</span>
