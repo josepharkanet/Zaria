@@ -20,7 +20,7 @@
 {%- comment -%}The same three the shop sells, plus Other. Gown and Two-piece were categories
    the site does not have, so a brief could name a piece nobody could point at.{%- endcomment -%}
 {%- assign zds_garments = 'Abaya,Jalabiya,Sheila,Other' | split: ',' -%}
-{%- assign zds_occasions = 'Wedding,Engagement,Eid,Party / Evening,Everyday,Other' | split: ',' -%}
+{%- comment -%}Occasion was dropped from the brief at the client's request, 2026-11-09.{%- endcomment -%}
 {%- assign zds_fabrics = 'Luxe Silks,Fine Cottons,Chiffons & Organza,Linen Blends,Velvets,Tulle & 3D Work,Silk Blends,Sequins & Embroidery,Hand-Painted,Not sure advise me' | split: ',' -%}
 {%- assign zds_lengths = '53,54,55,56,57,58,59,60,61' | split: ',' -%}
 
@@ -165,11 +165,6 @@
         <select id="zds-garment-{{ section.id }}" name="garment" required>
           <option value="">Please choose&hellip;</option>
           {%- for g in zds_garments -%}<option value="{{ g | escape }}">{{ g }}</option>{%- endfor -%}
-        </select></div>
-      <div class="zds__field"><label class="zds__label" for="zds-occasion-{{ section.id }}">Occasion</label>
-        <select id="zds-occasion-{{ section.id }}" name="occasion">
-          <option value="">Please choose&hellip;</option>
-          {%- for o in zds_occasions -%}<option value="{{ o | escape }}">{{ o }}</option>{%- endfor -%}
         </select></div>
     </div>
     <div class="zds__row" data-zds-piecerow>

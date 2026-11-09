@@ -68,16 +68,37 @@
     font-size: 12px;
     white-space: nowrap;
   }
+  {%- liquid
+    assign zar_promo_hex = section.settings.promo_color | default: '#7a1f34'
+    assign zar_promo_ring = zar_promo_hex | color_modify: 'alpha', 0.42
+    assign zar_promo_glow = zar_promo_hex | color_modify: 'alpha', 0.5
+    assign zar_promo_gone = zar_promo_hex | color_modify: 'alpha', 0
+  -%}
   /* Zaria: the promotion is the one item in the rail that has to be seen, so it takes the
      house colour while the rest of the line stays charcoal. Colour only, no pill: the client
-     asked for the word highlighted, not a button (2026-11-09). */
+     asked for the word highlighted, not a button. Every three seconds it splashes: a ring
+     breaks out of the word and fades, with a small pop and a glow behind the letters. The ring
+     is a box-shadow rather than a pseudo-element, so nothing can land on top of the text or
+     behind the header's own background. */
   #shopify-section-{{ section.id }} .header__primary-nav-item > a.zar-navpromo,
   #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo {
-    color: {{ section.settings.promo_color | default: '#7a1f34' }} !important;
+    color: {{ zar_promo_hex }} !important;
+    display: inline-block;
+    border-radius: 999px;
     transition: opacity .2s ease;
+    animation: zar-promo-splash 3s ease-out infinite;
   }
   #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo:hover {
     opacity: .72;
+  }
+  @keyframes zar-promo-splash {
+    0%, 72% { transform: scale(1); box-shadow: 0 0 0 0 {{ zar_promo_ring }}; text-shadow: none; }
+    82%     { transform: scale(1.08); box-shadow: 0 0 0 11px {{ zar_promo_gone }}; text-shadow: 0 0 16px {{ zar_promo_glow }}; }
+    90%     { transform: scale(.99); box-shadow: 0 0 0 14px {{ zar_promo_gone }}; }
+    100%    { transform: scale(1); box-shadow: 0 0 0 0 {{ zar_promo_gone }}; text-shadow: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo { animation: none; }
   }
   #shopify-section-{{ section.id }} .header__logo-text {
     text-transform: uppercase;
@@ -312,7 +333,6 @@
                       </div>
                       <div class="zaria-mega__col">
                         <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'veil' %}Sheila &amp; Accessories</a>
-                        <a href="{{ routes.root_url }}collections/accessories">Chiffon Sheila</a>
                         <a href="{{ routes.root_url }}collections/abayas">Ready-to-Wear</a>
                       </div>
                       <div class="zaria-mega__col">
@@ -369,9 +389,6 @@
                     <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
                       <div class="zaria-mega__col">
                         <a href="{{ routes.root_url }}collections/abayas" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'abaya' %}Abayas</a>
-                        <a href="{{ routes.root_url }}collections/abayas">Classic</a>
-                        <a href="{{ routes.root_url }}collections/abayas">Occasion</a>
-                        <a href="{{ routes.root_url }}collections/abayas">Bridal</a>
                       </div>
                       <div class="zaria-mega__col">
                         <a href="{{ routes.root_url }}collections/jalabiya" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'jalabiya' %}Jalabiya</a>
@@ -380,14 +397,12 @@
                       </div>
                       <div class="zaria-mega__col">
                         <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'veil' %}Sheila &amp; Accessories</a>
-                        <a href="{{ routes.root_url }}collections/accessories">Chiffon Sheila</a>
                       </div>
                     </div></div>
                   {%- when 'accessories' -%}
                     <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
                       <div class="zaria-mega__col">
                         <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'veil' %}Sheila &amp; Accessories</a>
-                        <a href="{{ routes.root_url }}collections/accessories">Chiffon Sheila</a>
                       </div>
                     </div></div>
                 {%- endcase -%}

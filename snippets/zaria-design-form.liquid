@@ -92,17 +92,11 @@
             <option>Abaya</option><option>Jalabiya</option><option>Sheila</option><option>Other</option>
           </select>
         </div>
-        <div class="zdf-field">
-          <label>Occasion</label>
-          <select name="properties[Occasion]">
-            <option value="">Please choose&hellip;</option>
-            <option>Wedding</option><option>Engagement</option><option>Eid</option>
-            <option>Evening / Party</option><option>Everyday</option><option>Other</option>
-          </select>
-        </div>
+        {%- comment -%}Occasion was dropped at the client's request (2026-11-09); the brief
+          reads the same without it and nothing downstream requires the property.{%- endcomment -%}
+        <div class="zdf-field"><label>Colour palette</label><input name="properties[Colour]" placeholder="e.g. ivory, emerald"></div>
       </div>
       <div class="zdf-row">
-        <div class="zdf-field"><label>Colour palette</label><input name="properties[Colour]" placeholder="e.g. ivory, emerald"></div>
         <div class="zdf-field"><label>Event date (optional)</label><input type="date" name="properties[Event date]"></div>
       </div>
       {%- comment -%}Two sources, because Ready-to-Wear holds only jalabiyas and abayas: the
