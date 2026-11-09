@@ -316,7 +316,8 @@
         <textarea name="properties[Comment]" data-zmm-in="extra" rows="3" placeholder="Anything we should know (preferences, deadline, occasion)…" disabled></textarea>
       </div>
     </div>
-    {%- unless zmm_nocust -%}<p class="zmm__hint">Made to order. Customized pieces are cut to your measurements and cannot be exchanged for fit.</p>{%- endunless -%}
+    {%- comment -%} Only true of the Customized side, so it is shown only there. {%- endcomment -%}
+    {%- unless zmm_nocust -%}<p class="zmm__hint" data-zmm-customnote hidden>Made to order. Customized pieces are cut to your measurements and cannot be exchanged for fit.</p>{%- endunless -%}
   </div>
 </div>
 
@@ -348,6 +349,7 @@
     function setActive(which){
       ['ready','custom'].forEach(function(n){ var p=panel(n); if(p) p.hidden = (n!==which); });
       var extra = panel('extra'); if(extra) extra.hidden = false;
+      var cnote = root.querySelector('[data-zmm-customnote]'); if(cnote) cnote.hidden = (which !== 'custom');
       root.querySelectorAll('[data-zmm-in]').forEach(function(el){
         var grp = el.getAttribute('data-zmm-in');
         var on = (grp === which) || (grp === 'extra');
