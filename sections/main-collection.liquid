@@ -38,17 +38,23 @@
   endif
 -%}
 
-{%- comment -%}Shop All used to bounce itself to ?zaria=1, so the first page a shopper saw was
-  shuffled. It still bounces, because /collections/all is Shopify's automatic collection and has
-  no sort order of its own to set: left alone it falls back to alphabetical, which put four
-  Italian silks at the top. The bounce now asks for newest instead of random.{%- endcomment -%}
+{%- comment -%}
+  Shop All bounces itself to a sort, because /collections/all is Shopify's automatic collection
+  and has no order of its own: left alone it falls back to alphabetical, which put four Italian
+  silks at the top. It asked for newest, and that made it a copy of New, which is also newest
+  first and already holds a third of the catalogue: the two pages opened on the same fabrics in
+  the same order (client, 2026-11-09). It asks for dearest first instead, which is not an
+  arbitrary swap: the atelier's own pieces cost more than almost every fabric, so the first two
+  pages are ready-to-wear with a handful of embellished tulles among them, and the fabric wall
+  follows. New keeps the newest, Shop All opens with the house.
+{%- endcomment -%}
 {%- unless request.design_mode -%}
   {%- if collection.handle == 'all' -%}
     <script>
       (function () {
         var p = new URLSearchParams(window.location.search);
         if (!p.has('sort_by') && !p.has('zaria')) {
-          p.set('sort_by', 'created-descending');
+          p.set('sort_by', 'price-descending');
           window.location.replace(window.location.pathname + '?' + p.toString());
         }
       })();
