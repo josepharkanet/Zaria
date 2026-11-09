@@ -121,8 +121,16 @@
 
 <script>
 (function(){
-  var open=document.querySelector('[data-zsc-open]');
-  var overlay=document.querySelector('[data-zsc-overlay]');
+  /* Bind to THIS copy of the guide, not the first one on the page: the fabric page carries
+     one of its own and the design brief renders a second inside the size form. */
+  var me=document.currentScript, el=me?me.previousElementSibling:null, overlay=null, open=null;
+  while(el){
+    if(!overlay&&el.matches&&el.matches('[data-zsc-overlay]')) overlay=el;
+    else if(overlay&&el.matches&&el.matches('[data-zsc-open]')){ open=el; break; }
+    el=el.previousElementSibling;
+  }
+  if(!overlay) overlay=document.querySelector('[data-zsc-overlay]');
+  if(!open) open=document.querySelector('[data-zsc-open]');
   if(!open||!overlay)return;
   var closeEls=overlay.querySelectorAll('[data-zsc-close]');
   /* The table is written in inches, which is how the atelier cuts. Rather than keep a second

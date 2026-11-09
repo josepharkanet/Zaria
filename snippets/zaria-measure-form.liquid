@@ -7,6 +7,14 @@
   {% render 'zaria-measure-form', product: product %}
 {%- endcomment -%}
 
+{%- comment -%}
+  Optional parameters, for the design brief which renders this form without a product:
+    show_comment: false  - the brief has its own description box, so drop this one
+  With no product at all the form falls to its cut-to-order side, which is what a brief is.
+{%- endcomment -%}
+{%- assign zmm_show_comment = true -%}
+{%- if show_comment == false -%}{%- assign zmm_show_comment = false -%}{%- endif -%}
+
 {%- assign zmm_is_abaya = false -%}
 {%- if product.type == 'Abaya' or product.tags contains 'Abaya' -%}{%- assign zmm_is_abaya = true -%}{%- endif -%}
 
@@ -310,10 +318,12 @@
         </select>
       </div>
       {%- endif -%}
+      {%- if zmm_show_comment -%}
       <div class="zmm__field zmm__field--full">
         <div class="zmm__fhead"><span class="zmm__fname">Comment / special request</span></div>
         <textarea name="properties[Comment]" data-zmm-in="extra" rows="3" placeholder="Anything we should know (preferences, deadline, occasion)…" disabled></textarea>
       </div>
+      {%- endif -%}
     </div>
     {%- comment -%} Only true of the Customized side, so it is shown only there. {%- endcomment -%}
     {%- unless zmm_nocust -%}<p class="zmm__hint" data-zmm-customnote hidden>Made to order. Customized pieces are cut to your measurements and cannot be exchanged for fit.</p>{%- endunless -%}

@@ -29,9 +29,10 @@
   .zdf-fabric svg{flex:none;color:var(--wine,#7a1f34)}
   .zdf-fabric b{font-weight:500}
   .zdf-field{margin-bottom:15px}
+  .zdf-field--size{margin-top:4px;padding-top:4px;border-top:1px solid #f0ece6}
   /* Pick one of the house's own pieces to start from, rather than describing a shape in words.
-     The categories are the ones the menu lists, and the row carries four tiles at a time -
-     From scratch and three pieces - each whole, rather than a fourth cut off at the edge. */
+     The categories are the ones the menu lists, and the row carries three tiles at a time,
+     each whole rather than a fourth cut off at the edge - big enough to judge a garment by. */
   .zdf-field label span{letter-spacing:.08em;text-transform:none;color:#a0a0a0}
   .zdf-field label .zdf-req{color:var(--wine,#7a1f34);letter-spacing:0}
   .zdf-cats{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
@@ -47,7 +48,7 @@
   .zdf-picks{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;
     scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .zdf-picks::-webkit-scrollbar{display:none}
-  .zdf-pick{position:relative;flex:0 0 calc((100% - 30px) / 4);scroll-snap-align:start;border:1px solid #e6e2db;
+  .zdf-pick{position:relative;flex:0 0 calc((100% - 20px) / 3);scroll-snap-align:start;border:1px solid #e6e2db;
     background:#fff;padding:0 0 7px;cursor:pointer;font-family:inherit;text-align:center;
     transition:border-color .2s ease,box-shadow .2s ease}
   .zdf-pick:hover{border-color:#b9b2a7}
@@ -131,7 +132,7 @@
         Abayas, then Jalabiya's two - Ramadan 2027 and Freya Collections - then Sheila &
         Accessories. Before this the row was one flat list of everything ready-to-wear in
         newest-first order, which read as a new-arrivals strip and buried the collections.
-        Four tiles show at a time (From scratch and three pieces) and the arrows move a page.
+        Three tiles show at a time and the arrows move a page.
         Every piece in the category is here to be chosen - there is no link out to the
         collection, because the choice has to be made in this form - up to the fifty a Liquid
         loop will hand over from one collection without paginating.
@@ -187,9 +188,15 @@
       <div class="zdf-field"><label>Describe the design</label>
         <textarea name="properties[Design notes]" placeholder="Silhouette, sleeves, neckline, embroidery, inspiration&hellip;"></textarea>
       </div>
-      {%- comment -%}Asked for, not offered: the atelier cannot start without them.{%- endcomment -%}
-      <div class="zdf-field"><label>Measurements <span class="zdf-req">*</span></label>
-        <textarea name="properties[Measurements]" required placeholder="Bust, waist, hips, length &mdash; in inches or cm"></textarea>
+      {%- comment -%}
+        The size is chosen here, not typed. This is the product page's own form, rendered
+        without a product so it opens on its cut-to-order side: Readymade asks for the size,
+        the length and the sleeve; Customized opens the sketch and its ten measurements. Its
+        own comment box is off, the brief has one above. A choice is required - the form
+        refuses to submit without one.
+      {%- endcomment -%}
+      <div class="zdf-field zdf-field--size">
+        {% render 'zaria-measure-form', show_comment: false %}
       </div>
       <div class="zdf-field"><label>Best contact / WhatsApp</label><input name="properties[Contact]" placeholder="Phone or WhatsApp for your consultation"></div>
 
