@@ -134,8 +134,9 @@
         newest-first order, which read as a new-arrivals strip and buried the collections.
         Three tiles show at a time and the arrows move a page.
         Every piece in the category is here to be chosen - there is no link out to the
-        collection, because the choice has to be made in this form - up to the fifty a Liquid
-        loop will hand over from one collection without paginating.
+        collection, because the choice has to be made in this form. A Liquid loop hands over
+        fifty products at a time, so each category is read in fifties until its own count runs
+        out; Freya Collections alone is a hundred.
       {%- endcomment -%}
       {%- assign zdf_groups = 'abayas,ramadan-2027,freya,accessories' | split: ',' -%}
       {%- assign zdf_pieces = 'Abaya,Jalabiya,Jalabiya,Sheila' | split: ',' -%}
@@ -160,8 +161,13 @@
           </button>
           <div class="zdf-picks" data-zdf-picks>
             <button type="button" class="zdf-pick zdf-pick--none is-on" data-zdf-pick="" data-zdf-handle=""><span>From scratch</span></button>
+            {%- assign zdf_offsets = '0,50,100,150,200' | split: ',' -%}
             {%- for g in zdf_groups -%}
-            {%- for zp in collections[g].products limit: 50 -%}
+            {%- assign zdf_total = collections[g].all_products_count -%}
+            {%- for zdf_off in zdf_offsets -%}
+            {%- assign zdf_offn = zdf_off | plus: 0 -%}
+            {%- if zdf_offn < zdf_total -%}
+            {%- for zp in collections[g].products limit: 50 offset: zdf_offn -%}
               {%- if zp.featured_image != blank -%}
                 {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 3 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
                 <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}" data-zdf-group="{{ g }}"{% unless g == zdf_first %} hidden{% endunless %}>
@@ -172,6 +178,8 @@
                   </span>
                 </button>
               {%- endif -%}
+            {%- endfor -%}
+            {%- endif -%}
             {%- endfor -%}
             {%- endfor -%}
           </div>
