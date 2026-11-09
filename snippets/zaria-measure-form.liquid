@@ -195,7 +195,7 @@
       <div class="zmm__field">
         <div class="zmm__fhead"><span class="zmm__fname">Length</span></div>
         <select name="properties[Length]" data-zmm-in="ready" disabled>
-          <option value="Standard 61 in (155 cm)" selected>Standard &mdash; 61 in (155 cm)</option>
+          <option value="Standard 61 in (155 cm)" selected>Standard 61 in (155 cm)</option>
           {%- for h in (100..130) -%}
             {%- assign whole = h | divided_by: 2 -%}
             {%- assign rem = h | modulo: 2 -%}
@@ -208,7 +208,7 @@
       <div class="zmm__field">
         <div class="zmm__fhead"><span class="zmm__fname">Sleeve Length</span></div>
         <select name="properties[Sleeve Length]" data-zmm-in="ready" disabled>
-          <option value="Standard for the size chosen" selected>Standard for the size chosen</option>
+          <option value="Standard for the size chosen" selected>Standard</option>
           {%- for h in (52..68) -%}
             {%- assign whole = h | divided_by: 2 -%}
             {%- assign rem = h | modulo: 2 -%}
@@ -220,7 +220,7 @@
       </div>
     </div>
     <div class="zmm__readyfoot">
-      <p class="zmm__hint">Cut to order in the size you choose. Neck, shoulder, bust, waist and hip follow the chart; the length and the sleeve are yours to set, and left as they are they come at the standard for your size.</p>
+      <p class="zmm__hint">Cut to order in the size you choose; bust, waist and hip follow the chart. The length and the sleeve are yours to set, and left as they are they come at the standard for your size.</p>
       <div class="zmm__chart">{% render 'zaria-size-chart' %}</div>
     </div>
     {%- endif -%}
