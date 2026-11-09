@@ -77,7 +77,6 @@
   .zdf-pick[hidden]{display:none}
   .zdf-picks-empty{font-size:12px;color:#a0a0a0;padding:8px 2px}
   .zdf-pick--none span{padding:0;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#161616}
-  .zdf-picks-more{display:inline-block;margin-top:2px;font-size:11px;letter-spacing:.1em;color:#6a6a6a}
   .zdf-field label{display:block;font-size:var(--zf-label-size);letter-spacing:var(--zf-label-track);text-transform:uppercase;color:var(--zf-label);margin:0 0 var(--zf-label-gap);line-height:1.4}
   .zdf-modal input,.zdf-modal select,.zdf-modal textarea{width:100%;box-sizing:border-box;font-family:inherit;
     font-size:var(--zf-size);letter-spacing:.01em;color:var(--zf-ink);background:var(--zf-bg);
@@ -130,12 +129,16 @@
         Accessories. Before this the row was one flat list of everything ready-to-wear in
         newest-first order, which read as a new-arrivals strip and buried the collections.
         Four tiles show at a time (From scratch and three pieces) and the arrows move a page.
+        Every piece in the category is here to be chosen - there is no link out to the
+        collection, because the choice has to be made in this form - up to the fifty a Liquid
+        loop will hand over from one collection without paginating.
       {%- endcomment -%}
       {%- assign zdf_groups = 'abayas,ramadan-2027,freya,accessories' | split: ',' -%}
       {%- assign zdf_pieces = 'Abaya,Jalabiya,Jalabiya,Sheila' | split: ',' -%}
       {%- assign zdf_any = 0 -%}
       {%- for g in zdf_groups -%}{%- assign zdf_any = zdf_any | plus: collections[g].products.size -%}{%- endfor -%}
       {%- if zdf_any > 0 -%}
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="zdf-zoomic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"/></symbol></svg>
       <div class="zdf-field">
         <label>Start from one of our designs <span>optional</span></label>
         <div class="zdf-cats" data-zdf-cats>
@@ -151,17 +154,17 @@
           <button type="button" class="zdf-nav zdf-nav--prev" data-zdf-prev aria-label="Previous designs" disabled>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"/></svg>
           </button>
-          <div class="zdf-picks" data-zdf-picks data-zdf-root="{{ routes.root_url }}">
+          <div class="zdf-picks" data-zdf-picks>
             <button type="button" class="zdf-pick zdf-pick--none is-on" data-zdf-pick="" data-zdf-handle=""><span>From scratch</span></button>
             {%- for g in zdf_groups -%}
-            {%- for zp in collections[g].products limit: 16 -%}
+            {%- for zp in collections[g].products limit: 50 -%}
               {%- if zp.featured_image != blank -%}
-                {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 6 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
-                <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}" data-zdf-group="{{ g }}" data-zdf-type="{{ zp.type | escape }}"{% unless g == zdf_first %} hidden{% endunless %}>
-                  <img src="{{ zp.featured_image | image_url: width: 400 }}" alt="{{ zp.title | escape }}" loading="lazy" width="132" height="176">
+                {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 3 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+                <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}" data-zdf-group="{{ g }}"{% unless g == zdf_first %} hidden{% endunless %}>
+                  <img src="{{ zp.featured_image | image_url: width: 320 }}" alt="{{ zp.title | escape }}" loading="lazy" width="132" height="176">
                   <span>{{ zp.title | split: ' ' | slice: 0, 2 | join: ' ' }}</span>
                   <span class="zdf-zoom" role="button" tabindex="0" aria-label="Look closer at {{ zp.title | escape }}" data-zoom-gallery="{{ zp_gallery }}">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"/></svg>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#zdf-zoomic"></use></svg>
                   </span>
                 </button>
               {%- endif -%}
@@ -173,7 +176,6 @@
           </button>
         </div>
         <p class="zdf-picks-empty" data-zdf-picks-empty hidden>No ready-made designs in this category yet. Describe it below instead.</p>
-        <a class="zdf-picks-more" data-zdf-more href="{{ routes.root_url }}collections/{{ zdf_first }}">See the whole collection &rarr;</a>
         <input type="hidden" name="properties[Our design]" value="" data-zdf-pickval>
         <input type="hidden" name="properties[_design_handle]" value="" data-zdf-pickhandle>
       </div>
@@ -220,10 +222,8 @@
   var refreshNav = function () {};
   if (picks && cats) {
     var emptyNote = overlay.querySelector('[data-zdf-picks-empty]');
-    var moreLink = overlay.querySelector('[data-zdf-more]');
     var navPrev = overlay.querySelector('[data-zdf-prev]');
     var navNext = overlay.querySelector('[data-zdf-next]');
-    var root = picks.getAttribute('data-zdf-root') || '/';
 
     refreshNav = function () {
       if (!navPrev || !navNext) return;
@@ -248,7 +248,6 @@
       cats.querySelectorAll('[data-zdf-cat]').forEach(function (c) {
         c.classList.toggle('is-on', c.getAttribute('data-zdf-cat') === g);
       });
-      if (moreLink) moreLink.href = root + 'collections/' + g;
       var openTab = cats.querySelector('[data-zdf-cat="' + g + '"]');
       if (pieceField && openTab) pieceField.value = openTab.getAttribute('data-zdf-piece') || '';
       if (emptyNote) emptyNote.hidden = any;
