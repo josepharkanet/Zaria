@@ -58,14 +58,14 @@
     justify-content:center;cursor:pointer;padding:0;z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.09);
     transition:opacity .2s ease,border-color .2s ease,visibility .2s ease}
   .zdf-nav:hover{border-color:#161616}
-  .zdf-nav--prev{left:-8px}
-  .zdf-nav--next{right:-8px}
+  .zdf-nav--prev{left:-15px}
+  .zdf-nav--next{right:-15px}
   .zdf-nav[disabled]{opacity:0;visibility:hidden;pointer-events:none}
   .zdf-nav svg{width:15px;height:15px}
   @media(max-width:560px){
     .zdf-pick{flex:0 0 calc((100% - 10px) / 2)}
-    .zdf-nav--prev{left:-4px}
-    .zdf-nav--next{right:-4px}
+    .zdf-nav--prev{left:-6px}
+    .zdf-nav--next{right:-6px}
   }
   /* A look at the piece without leaving the brief. Hands the image to the theme's own lightbox. */
   .zdf-zoom{position:absolute;top:6px;right:6px;width:26px;height:26px;border:0;border-radius:50%;
@@ -115,21 +115,15 @@
       <input type="hidden" name="properties[_fabric_handle]" value="{{ product.handle }}">
 
       {%- comment -%}
-        Three fields have gone from this brief at the client's request (2026-11-09):
-        Occasion, Colour palette and Event date. This form always opens from a fabric the
-        customer has already chosen, so its colour is settled before the form appears, and
-        the designer who follows up asks about timing in the same conversation. Nothing
-        downstream requires any of the three properties. What is left is the one thing the
-        brief cannot do without: which piece to cut.
+        Four fields have gone from this brief at the client's request (2026-11-09): Occasion,
+        Colour palette, Event date and the Piece dropdown. The form always opens from a fabric
+        the customer has already chosen, so its colour is settled before the form appears; the
+        designer who follows up asks about timing in the same conversation; and the category
+        the customer is browsing already says which piece it is, so asking again was asking
+        twice. Piece still reaches the order - the hidden field below carries whatever the open
+        category cuts.
       {%- endcomment -%}
-      <div class="zdf-field">
-        <label>Piece</label>
-        <select name="properties[Piece]" required>
-          <option value="">Please choose&hellip;</option>
-          {%- comment -%}The shop's own three, plus Other.{%- endcomment -%}
-          <option>Abaya</option><option>Jalabiya</option><option>Sheila</option><option>Other</option>
-        </select>
-      </div>
+      <input type="hidden" name="properties[Piece]" value="" data-zdf-piecefield>
       {%- comment -%}
         The designs are offered by category, the same four the menu lists under Ready to Wear:
         Abayas, then Jalabiya's two - Ramadan 2027 and Freya Collections - then Sheila &
@@ -219,9 +213,11 @@
       pickHandle.value = b.getAttribute('data-zdf-handle') || '';
     });
   }
-  // The categories are the menu's. One is open at a time; the arrows move a page of tiles.
-  var pieceSel = overlay.querySelector('select[name="properties[Piece]"]');
+  // The categories are the menu's. One is open at a time; the arrows move a page of tiles,
+  // and the open one tells the order which piece this is.
+  var pieceField = overlay.querySelector('[data-zdf-piecefield]');
   var cats = overlay.querySelector('[data-zdf-cats]');
+  var refreshNav = function () {};
   if (picks && cats) {
     var emptyNote = overlay.querySelector('[data-zdf-picks-empty]');
     var moreLink = overlay.querySelector('[data-zdf-more]');
@@ -229,12 +225,12 @@
     var navNext = overlay.querySelector('[data-zdf-next]');
     var root = picks.getAttribute('data-zdf-root') || '/';
 
-    function updateNav() {
+    refreshNav = function () {
       if (!navPrev || !navNext) return;
       var max = picks.scrollWidth - picks.clientWidth;
       navPrev.disabled = picks.scrollLeft <= 2;
       navNext.disabled = picks.scrollLeft >= max - 2;
-    }
+    };
 
     function showGroup(g) {
       var any = false;
@@ -253,48 +249,33 @@
         c.classList.toggle('is-on', c.getAttribute('data-zdf-cat') === g);
       });
       if (moreLink) moreLink.href = root + 'collections/' + g;
+      var openTab = cats.querySelector('[data-zdf-cat="' + g + '"]');
+      if (pieceField && openTab) pieceField.value = openTab.getAttribute('data-zdf-piece') || '';
       if (emptyNote) emptyNote.hidden = any;
       picks.scrollLeft = 0;
-      setTimeout(updateNav, 30);
+      setTimeout(refreshNav, 30);
     }
 
     cats.querySelectorAll('[data-zdf-cat]').forEach(function (c) {
       c.addEventListener('click', function () { showGroup(c.getAttribute('data-zdf-cat')); });
     });
 
-    // Naming the piece opens the first category that cuts it.
-    if (pieceSel) {
-      pieceSel.addEventListener('change', function () {
-        var want = pieceSel.value;
-        if (!want || want === 'Other') return;
-        var match = cats.querySelector('[data-zdf-piece="' + want + '"]');
-        if (match) showGroup(match.getAttribute('data-zdf-cat'));
-      });
-    }
+    // The category that is open when the modal first draws is the piece until one is chosen.
+    var firstTab = cats.querySelector('[data-zdf-cat].is-on') || cats.querySelector('[data-zdf-cat]');
+    if (pieceField && firstTab) pieceField.value = firstTab.getAttribute('data-zdf-piece') || '';
 
     function page(dir) {
       picks.scrollBy({ left: dir * picks.clientWidth, behavior: 'smooth' });
-      setTimeout(updateNav, 420);
+      setTimeout(refreshNav, 420);
     }
     if (navPrev) navPrev.addEventListener('click', function () { page(-1); });
     if (navNext) navNext.addEventListener('click', function () { page(1); });
-    picks.addEventListener('scroll', updateNav, { passive: true });
-    window.addEventListener('resize', updateNav);
-    setTimeout(updateNav, 120);
+    picks.addEventListener('scroll', refreshNav, { passive: true });
+    window.addEventListener('resize', refreshNav);
+    setTimeout(refreshNav, 120);
   }
-  // Choosing a design when no piece is named says which piece it is.
-  if (picks && pieceSel && cats) {
-    picks.addEventListener('click', function (e) {
-      if (pieceSel.value) return;
-      var b = e.target.closest('.zdf-pick');
-      var cat = b && b.getAttribute('data-zdf-group');
-      var tab = cat && cats.querySelector('[data-zdf-cat="' + cat + '"]');
-      if (tab) pieceSel.value = tab.getAttribute('data-zdf-piece') || '';
-    });
-  }
-
   var form = overlay.querySelector('[data-zdf-form]');
-  function open(){ overlay.classList.add('is-open'); document.body.style.overflow='hidden'; }
+  function open(){ overlay.classList.add('is-open'); document.body.style.overflow='hidden'; setTimeout(refreshNav, 80); }
   function close(){ overlay.classList.remove('is-open'); document.body.style.overflow=''; }
   openers.forEach(function(b){ b.addEventListener('click', open); });
   overlay.querySelectorAll('[data-zdf-close]').forEach(function(b){ b.addEventListener('click', close); });
