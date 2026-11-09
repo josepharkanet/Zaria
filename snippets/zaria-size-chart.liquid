@@ -16,7 +16,7 @@
     <div class="zsc__head">
       <p class="zsc__eyebrow">Zaria Atelier</p>
       <h2 class="zsc__title">Size Guide</h2>
-      <p class="zsc__note">Measurements in inches, with the centimetre beneath each one. Sizes are indicative; for a made-to-measure fit, choose Design Your Look.</p>
+      <p class="zsc__note">Measurements in inches, with the centimetre in brackets beneath. Sizes are indicative; for a made-to-measure fit, choose Design Your Look.</p>
     </div>
 
     <div class="zsc__body">
@@ -140,10 +140,10 @@
       if(td.querySelector('.zsc__cm'))return;
       var inches=zscInches(td.textContent);
       if(isNaN(inches))return;
-      var cm=Math.round(inches*2.54*10)/10;
+      var cm=Math.round(inches*2.54);
       var el=document.createElement('span');
       el.className='zsc__cm';
-      el.textContent=cm+' cm';
+      el.textContent='('+cm+' cm)';
       td.appendChild(el);
     });
   }

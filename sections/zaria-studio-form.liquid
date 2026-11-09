@@ -9,13 +9,18 @@
   Field names match the API one for one. If a field is renamed here it must be renamed
   in server.js buildRequest() too, or the value silently stops reaching the designer.
 
-  The measurement sketch and its 0.5cm dropdowns mirror snippets/zaria-measure-form.liquid,
+  The measurement sketch and its half-inch dropdowns mirror snippets/zaria-measure-form.liquid,
   and the size guide is that same snippet, rendered.
 {%- endcomment -%}
 {%- assign sc = section.settings -%}
 {%- assign api = sc.api_url | default: 'https://studio.zaria.ae/api/request' -%}
 
-{%- comment -%} field spec: "key:Label:half-cm-min:half-cm-max" (value = h / 2, so 0.5 steps). Order = diagram numbers. {%- endcomment -%}
+{%- comment -%}
+  field spec: "key:Label:half-inch-min:half-inch-max" (value = h / 2, so half-inch steps).
+  Order = diagram numbers. The figures are inches, matching the size chart and the product
+  page; they used to be labelled centimetres, which was simply wrong. Every option now
+  states the inch with the centimetre in brackets.
+{%- endcomment -%}
 {%- assign zds_fields = 'neck_open:Neck Open:26:35,shoulder:Shoulder to Shoulder:26:37,sleeve_loose:Sleeve Loose:12:25,sleeve:Sleeve Length:52:68,sleeve_open:Sleeve Open:18:25,bust:Bust:76:117,waist:Waist:76:124,hips:Hip:86:136,length:Length:100:130,bottom_open:Bottom Open:30:48' | split: ',' -%}
 {%- comment -%}The same three the shop sells, plus Other. Gown and Two-piece were categories
    the site does not have, so a brief could name a piece nobody could point at.{%- endcomment -%}
@@ -51,31 +56,36 @@
     margin:34px 0 14px;padding-top:26px;border-top:1px solid #ededed}
   #shopify-section-{{ section.id }} .zds__h--first{margin-top:0;padding-top:0;border-top:none}
   #shopify-section-{{ section.id }} .zds__field{margin-bottom:20px}
-  #shopify-section-{{ section.id }} .zds__label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a6a6a;margin:0 0 7px}
+  #shopify-section-{{ section.id }} .zds__label{display:block;font-size:var(--zf-label-size);letter-spacing:var(--zf-label-track);text-transform:uppercase;color:var(--zf-label);margin:0 0 var(--zf-label-gap);line-height:1.4}
   #shopify-section-{{ section.id }} .zds .req{color:#7a1f34}
   #shopify-section-{{ section.id }} .zds input,
   #shopify-section-{{ section.id }} .zds select,
-  #shopify-section-{{ section.id }} .zds textarea{width:100%;padding:12px 13px;border:1px solid #ededed;border-radius:2px;background:#fff;
-    font-family:inherit;font-size:15px;color:#111;line-height:1.3}
+  #shopify-section-{{ section.id }} .zds textarea{width:100%;box-sizing:border-box;font-family:inherit;font-size:var(--zf-size);
+    letter-spacing:.01em;color:var(--zf-ink);background:var(--zf-bg);border:1px solid var(--zf-line);
+    border-radius:var(--zf-radius);transition:border-color .18s ease,box-shadow .18s ease}
+  #shopify-section-{{ section.id }} .zds input,  #shopify-section-{{ section.id }} .zds select{height:var(--zf-h);padding:0 var(--zf-px);line-height:1.3}
   {%- comment -%}Own chevron with room to breathe: the native one sits hard against the border.{%- endcomment -%}
-  #shopify-section-{{ section.id }} .zds select{-webkit-appearance:none;-moz-appearance:none;appearance:none;padding-right:42px;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1.6 L6 6.4 L11 1.6' fill='none' stroke='%23161616' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-    background-repeat:no-repeat;background-position:right 15px center;background-size:11px 7px}
+  #shopify-section-{{ section.id }} .zds select{-webkit-appearance:none;-moz-appearance:none;appearance:none;cursor:pointer;
+    padding-right:var(--zf-pr);background-image:var(--zf-arrow);background-repeat:no-repeat;
+    background-position:var(--zf-arrow-pos);background-size:var(--zf-arrow-size)}
   #shopify-section-{{ section.id }} .zds select::-ms-expand{display:none}
+  #shopify-section-{{ section.id }} .zds input:hover,  #shopify-section-{{ section.id }} .zds select:hover,  #shopify-section-{{ section.id }} .zds textarea:hover{border-color:var(--zf-line-hover)}
   #shopify-section-{{ section.id }} .zds input:focus,
   #shopify-section-{{ section.id }} .zds select:focus,
-  #shopify-section-{{ section.id }} .zds textarea:focus{outline:none;border-color:#111;box-shadow:0 0 0 3px rgba(17,17,17,.08)}
-  #shopify-section-{{ section.id }} .zds textarea{min-height:104px;resize:vertical;line-height:1.7}
+  #shopify-section-{{ section.id }} .zds textarea:focus{outline:none;border-color:var(--zf-line-focus);box-shadow:var(--zf-ring)}
+  #shopify-section-{{ section.id }} .zds textarea{min-height:104px;padding:14px var(--zf-px);resize:vertical;line-height:1.7}
   #shopify-section-{{ section.id }} .zds ::placeholder{color:#a6a6a6}
-  #shopify-section-{{ section.id }} .zds__row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  #shopify-section-{{ section.id }} .zds__fixed{margin:0;padding:11px 0 0;font-size:15px;color:#1a1a1a;line-height:1.4}
-  #shopify-section-{{ section.id }} .zds__hint{font-size:13px;color:#6a6a6a;line-height:1.7;margin:0 0 16px}
+  #shopify-section-{{ section.id }} .zds__row{display:grid;grid-template-columns:1fr 1fr;gap:var(--zf-gap)}
+  #shopify-section-{{ section.id }} .zds__fixed{margin:0;padding:11px 0 0;font-size:var(--zf-size);color:#1a1a1a;line-height:1.4}
+  #shopify-section-{{ section.id }} .zds__punit{letter-spacing:.04em;text-transform:none;color:#a8a097}
+  #shopify-section-{{ section.id }} .zds__hint{font-size:var(--zf-hint-size);color:var(--zf-hint);line-height:1.7;margin:0 0 16px}
 
   #shopify-section-{{ section.id }} .zds__modes{display:flex;gap:10px;margin:12px 0 0}
-  #shopify-section-{{ section.id }} .zds__mode{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;
-    border:1px solid #d7d2ca;background:#fff;padding:14px 12px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#4a4a4a;
-    transition:border-color .15s,color .15s,background .15s}
-  #shopify-section-{{ section.id }} .zds__mode:hover{border-color:#161616;color:#161616}
+  #shopify-section-{{ section.id }} .zds__mode{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;
+    height:var(--zf-h);border:1px solid var(--zf-line);background:var(--zf-bg);padding:0 12px;font-size:12px;
+    letter-spacing:.14em;text-transform:uppercase;color:#4a4a4a;
+    transition:border-color .18s,color .18s,background .18s}
+  #shopify-section-{{ section.id }} .zds__mode:hover{border-color:var(--zf-line-hover);color:#161616}
   #shopify-section-{{ section.id }} .zds__mode input{width:16px;height:16px;margin:0;accent-color:#7a1f34}
   #shopify-section-{{ section.id }} .zds__mode.is-active{border-color:#7a1f34;color:#161616;background:#fbf7f8}
   #shopify-section-{{ section.id }} .zds__panel{margin-top:16px}
@@ -200,16 +210,18 @@
           <select id="zds-len-{{ section.id }}" name="size" data-zds-in="ready" disabled>
             {%- for L in zds_lengths -%}
               {%- if L == sc.rtw_length -%}
-                <option value="{{ L }} inches" selected>{{ L }} inches</option>
+                {%- assign zds_lcm = L | times: 2.54 | round: 0 -%}
+                <option value="{{ L }} in ({{ zds_lcm }} cm)" selected>{{ L }} in ({{ zds_lcm }} cm)</option>
               {%- else -%}
-                <option value="" disabled>{{ L }} inches (not available)</option>
+                {%- assign zds_lcm = L | times: 2.54 | round: 0 -%}
+                <option value="" disabled>{{ L }} in ({{ zds_lcm }} cm) &mdash; not available</option>
               {%- endif -%}
             {%- endfor -%}
           </select>
         </div>
         <div class="zds__chart">{% render 'zaria-size-chart' %}</div>
       </div>
-      <p class="zds__hint" style="margin-top:14px">This piece is available in <b>{{ sc.rtw_length }}&quot; length</b> only, with a <b>{{ sc.rtw_sleeve }}&quot; sleeve</b>. Open the <b>Size Chart</b> for full measurements, or choose <b>Customized</b> to have it cut to your own measurements.</p>
+      <p class="zds__hint" style="margin-top:14px">{%- assign zds_rl = sc.rtw_length | times: 2.54 | round: 0 -%}{%- assign zds_rs = sc.rtw_sleeve | times: 2.54 | round: 0 -%}This piece is available in <b>{{ sc.rtw_length }} in ({{ zds_rl }} cm) length</b> only, with a <b>{{ sc.rtw_sleeve }} in ({{ zds_rs }} cm) sleeve</b>. Open the <b>Size Chart</b> for full measurements, or choose <b>Customized</b> to have it cut to your own measurements.</p>
     </div>
 
     <div class="zds__panel" data-zds-panel="custom" hidden>
@@ -245,7 +257,7 @@
           <p class="zds__figcap">Where we measure</p>
         </div>
         <div>
-          <p class="zds__prog"><b data-zds-count>0</b> of {{ zds_fields.size }} measurements added</p>
+          <p class="zds__prog"><b data-zds-count>0</b> of {{ zds_fields.size }} measurements added <span class="zds__punit">&mdash; inches, with the centimetre in brackets</span></p>
           <div class="zds__mfields">
             {%- for f in zds_fields -%}
               {%- assign fp = f | split: ':' -%}
@@ -254,14 +266,15 @@
               <div class="zds__mfield" data-zds-field="{{ forloop.index }}">
                 <span class="zds__badge">{{ forloop.index }}</span>
                 <span>
-                  <span class="zds__mname">{{ fp[1] }} (cm)</span>
+                  <span class="zds__mname">{{ fp[1] }}</span>
                   <select name="m_{{ fp[0] }}" data-zds-in="custom" data-zds-field-select="{{ forloop.index }}" disabled>
                     <option value="">&ndash; Select &ndash;</option>
                     {%- for h in (hmin..hmax) -%}
                       {%- assign whole = h | divided_by: 2 -%}
                       {%- assign rem = h | modulo: 2 -%}
                       {%- if rem == 0 -%}{%- assign lab = whole | append: '' -%}{%- else -%}{%- assign lab = whole | append: '.5' -%}{%- endif -%}
-                      <option value="{{ lab }}">{{ lab }}</option>
+                      {%- assign labcm = h | times: 1.27 | round: 0 -%}
+                      <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in ({{ labcm }} cm)</option>
                     {%- endfor -%}
                   </select>
                 </span>

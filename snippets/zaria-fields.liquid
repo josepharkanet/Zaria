@@ -1,0 +1,69 @@
+{%- comment -%}
+  Zaria — the field system. Every form on the site was styled where it was written, so the
+  shop had five different text boxes: three border colours, two corner radii, four heights,
+  two type sizes, and selects that kept the browser's own arrow jammed against their right
+  edge. These are the figures each form now reads from, so a change here moves all of them.
+
+  Rendered once, in <head>, after theme.css. Forms use the tokens rather than these classes
+  where they already carry their own selectors, so nothing fights over specificity.
+{%- endcomment -%}
+<style>
+  :root{
+    /* the control itself */
+    --zf-h:52px;                   /* one height for selects, inputs, buttons beside them */
+    --zf-px:16px;                  /* breathing room at the sides */
+    --zf-pr:46px;                  /* right padding on a select, so the words clear the arrow */
+    --zf-size:14px;
+    --zf-bg:#fff;
+    --zf-ink:#161616;
+    --zf-line:#dcd6cd;
+    --zf-line-hover:#b6ada1;
+    --zf-line-focus:#161616;
+    --zf-ring:0 0 0 3px rgba(122,31,52,.09);
+    --zf-radius:0;
+    --zf-disabled:#b9b1a6;
+
+    /* the words around it */
+    --zf-label:#6a6a6a;
+    --zf-label-size:11px;
+    --zf-label-track:.16em;
+    --zf-hint:#8d867d;
+    --zf-hint-size:12.5px;
+
+    /* spacing */
+    --zf-gap:16px;                 /* between fields */
+    --zf-label-gap:8px;            /* between a label and its control */
+
+    /* the arrow: drawn, not the browser's, and inset from the edge */
+    --zf-arrow:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1.7 L6 6.3 L11 1.7' fill='none' stroke='%23161616' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    --zf-arrow-pos:right var(--zf-px) center;
+    --zf-arrow-size:11px 7px;
+  }
+
+  {%- comment -%} 16px keeps iOS from zooming the page the moment a field takes focus. {%- endcomment -%}
+  @media (max-width:749px){
+    :root{ --zf-h:50px; --zf-px:14px; --zf-pr:42px; --zf-size:16px; }
+  }
+
+  /* Generic classes, for markup written after this snippet. */
+  .zfields{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--zf-gap)}
+  .zfield{display:flex;flex-direction:column;min-width:0}
+  .zfield--full{grid-column:1 / -1}
+  .zfield__label{display:block;margin:0 0 var(--zf-label-gap);font-size:var(--zf-label-size);
+    letter-spacing:var(--zf-label-track);text-transform:uppercase;color:var(--zf-label);line-height:1.4}
+  .zfield__label .req{color:var(--wine,#7a1f34)}
+  .zfield__label .opt{letter-spacing:.06em;text-transform:none;color:#a8a097}
+  .zfield__hint{margin:var(--zf-label-gap) 0 0;font-size:var(--zf-hint-size);line-height:1.65;color:var(--zf-hint)}
+  .zfield select,.zfield input,.zfield textarea{
+    width:100%;box-sizing:border-box;font-family:inherit;font-size:var(--zf-size);letter-spacing:.01em;
+    color:var(--zf-ink);background:var(--zf-bg);border:1px solid var(--zf-line);border-radius:var(--zf-radius);
+    transition:border-color .18s ease,box-shadow .18s ease}
+  .zfield select,.zfield input{height:var(--zf-h);padding:0 var(--zf-px)}
+  .zfield textarea{min-height:96px;padding:14px var(--zf-px);line-height:1.6;resize:vertical}
+  .zfield select{-webkit-appearance:none;-moz-appearance:none;appearance:none;cursor:pointer;
+    padding-right:var(--zf-pr);background-image:var(--zf-arrow);background-repeat:no-repeat;
+    background-position:var(--zf-arrow-pos);background-size:var(--zf-arrow-size)}
+  .zfield select:hover,.zfield input:hover,.zfield textarea:hover{border-color:var(--zf-line-hover)}
+  .zfield select:focus,.zfield input:focus,.zfield textarea:focus{outline:none;border-color:var(--zf-line-focus);box-shadow:var(--zf-ring)}
+  .zfield select:disabled,.zfield input:disabled{color:var(--zf-disabled);background:#faf8f5;cursor:not-allowed}
+</style>

@@ -31,47 +31,46 @@
   .zmm__top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
   .zmm__head{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#161616;margin:0 0 4px}
   .zmm__head .req{color:var(--wine,#7a1f34)}
-  .zmm__sub{font-size:13px;color:#8a8a8a;margin:0;max-width:46ch;line-height:1.6}
+  .zmm__sub{font-size:13px;color:var(--zf-hint);margin:0;max-width:52ch;line-height:1.65}
   .zmm__modes{display:flex;gap:10px;margin:14px 0 0}
   .zmm__modes[hidden]{display:none}
   .zmm__units{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a79f93;margin:14px 0 0}
-  .zmm__mode{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;
-    border:1px solid #d7d2ca;background:#fff;padding:15px 12px;font-size:12px;letter-spacing:.14em;
-    text-transform:uppercase;color:#4a4a4a;transition:border-color .15s ease,color .15s ease,background .15s ease}
-  .zmm__mode:hover{border-color:#161616;color:#161616}
+  .zmm__mode{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;
+    height:var(--zf-h);border:1px solid var(--zf-line);background:var(--zf-bg);padding:0 12px;font-size:12px;
+    letter-spacing:.14em;text-transform:uppercase;color:#4a4a4a;
+    transition:border-color .18s ease,color .18s ease,background .18s ease}
+  .zmm__mode:hover{border-color:var(--zf-line-hover);color:#161616}
   .zmm__mode input{accent-color:var(--wine,#7a1f34);width:16px;height:16px;margin:0}
   .zmm__mode.is-active{border-color:var(--wine,#7a1f34);color:#161616;background:#fbf7f8}
   .zmm__panel{margin-top:18px}
   .zmm__panel[hidden]{display:none}
-  .zmm select,.zmm textarea{width:100%;border:1px solid #d7d2ca;background:#fff;padding:13px 12px;font:inherit;
-    font-size:14px;color:#161616;border-radius:0;box-sizing:border-box}
-  .zmm select:focus,.zmm textarea:focus{outline:none;border-color:#161616}
-  .zmm textarea{min-height:76px;resize:vertical;line-height:1.6}
-  .zmm__label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a6a6a;margin:0 0 6px}
+  .zmm select,.zmm textarea{width:100%;box-sizing:border-box;font-family:inherit;font-size:var(--zf-size);
+    letter-spacing:.01em;color:var(--zf-ink);background:var(--zf-bg);border:1px solid var(--zf-line);
+    border-radius:var(--zf-radius);transition:border-color .18s ease,box-shadow .18s ease}
+  .zmm select{height:var(--zf-h);padding:0 var(--zf-pr) 0 var(--zf-px);cursor:pointer;
+    -webkit-appearance:none;-moz-appearance:none;appearance:none;
+    background-image:var(--zf-arrow);background-repeat:no-repeat;
+    background-position:var(--zf-arrow-pos);background-size:var(--zf-arrow-size)}
+  .zmm textarea{min-height:96px;padding:14px var(--zf-px);resize:vertical;line-height:1.6}
+  .zmm select:hover,.zmm textarea:hover{border-color:var(--zf-line-hover)}
+  .zmm select:focus,.zmm textarea:focus{outline:none;border-color:var(--zf-line-focus);box-shadow:var(--zf-ring)}
+  .zmm select option{color:var(--zf-ink)}
+  .zmm select option:disabled{color:var(--zf-disabled)}
+  .zmm__label{font-size:var(--zf-label-size);letter-spacing:var(--zf-label-track);text-transform:uppercase;
+    color:var(--zf-label);margin:0 0 var(--zf-label-gap);line-height:1.4}
   .zmm__label .req{color:var(--wine,#7a1f34)}
-  .zmm__hint{font-size:12px;color:#9a9a9a;margin:12px 0 0;line-height:1.6}
+  .zmm__hint{font-size:var(--zf-hint-size);color:var(--zf-hint);margin:12px 0 0;line-height:1.65}
 
   /* Readymade */
   .zmm__ready-grid{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:2px}
-  .zmm__ready-grid .zmm__label{margin:0;white-space:nowrap;font-size:11px;letter-spacing:.14em;color:#6a6a6a}
-  .zmm__ready-grid select{
-    -webkit-appearance:none;-moz-appearance:none;appearance:none;
-    width:auto;min-width:154px;padding:12px 40px 12px 15px;
-    border:1px solid #d7d2ca;background-color:#fff;border-radius:0;cursor:pointer;
-    font-family:inherit;font-size:14px;letter-spacing:.05em;color:#161616;line-height:1.2;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1.6 L6 6.4 L11 1.6' fill='none' stroke='%23161616' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-    background-repeat:no-repeat;background-position:right 14px center;background-size:11px 7px;
-    transition:border-color .18s ease,box-shadow .18s ease}
-  .zmm__ready-grid select:hover{border-color:#161616}
-  .zmm__ready-grid select:focus{outline:none;border-color:var(--wine,#7a1f34);box-shadow:0 0 0 2px rgba(122,31,52,.1)}
-  .zmm__ready-grid select option{color:#161616}
-  .zmm__ready-grid select option:disabled{color:#b9b1a6}
+  .zmm__ready-grid .zmm__label{margin:0;white-space:nowrap}
+  .zmm__ready-grid select{width:auto;min-width:188px}
   .zmm__ready-grid .zmm__chart{margin-left:4px;padding-left:18px;border-left:1px solid #ece8e2}
   .zmm__ready-grid .zmm__chart .zsc__open{padding:0}
   @media (max-width:600px){
     .zmm__ready-grid{gap:9px 16px}
     .zmm__ready-grid .zmm__label{flex:0 0 100%}
-    .zmm__ready-grid select{min-width:0;width:150px;flex:0 0 auto;padding:11px 36px 11px 13px}
+    .zmm__ready-grid select{min-width:0;width:160px;flex:0 0 auto}
     .zmm__ready-grid .zmm__chart{margin-left:0;padding-left:0;border-left:0;flex:0 1 auto}
   }
 
@@ -88,7 +87,7 @@
   .zmm__mark.is-active{transform:scale(1.28)}
   .zmm__mark.is-active circle{stroke:#161616}
 
-  .zmm__fields{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+  .zmm__fields{display:grid;grid-template-columns:1fr 1fr;gap:var(--zf-gap)}
   .zmm__fname .req{color:var(--wine,#7a1f34)}
   .zmm__fields--ready{margin-top:4px}
   .zmm__readyfoot{display:flex;align-items:flex-start;justify-content:space-between;gap:10px 20px;flex-wrap:wrap;margin-top:16px}
@@ -97,11 +96,11 @@
   .zmm__readyfoot .zsc__open{padding:0}
   .zmm__field{display:flex;flex-direction:column;position:relative}
   .zmm__field--full{grid-column:1 / -1}
-  .zmm__fhead{display:flex;align-items:center;gap:8px;margin:0 0 6px}
+  .zmm__fhead{display:flex;align-items:center;gap:8px;margin:0 0 var(--zf-label-gap);min-height:20px}
   .zmm__num{flex:none;width:20px;height:20px;border-radius:50%;background:#f1ece3;color:#8a7a53;border:1px solid #e0d8c8;
     font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;transition:background .18s ease,color .18s ease,border-color .18s ease}
   .zmm__field.is-done .zmm__num{background:var(--wine,#7a1f34);color:#fff;border-color:var(--wine,#7a1f34)}
-  .zmm__fname{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5a5a5a}
+  .zmm__fname{font-size:var(--zf-label-size);letter-spacing:var(--zf-label-track);text-transform:uppercase;color:var(--zf-label);line-height:1.4}
   .zmm__fname .u{color:#b3aca0;letter-spacing:.02em}
   .zmm__prog{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8a8a;margin:2px 0 14px}
   .zmm__prog b{color:var(--wine,#7a1f34);font-weight:500}
@@ -160,16 +159,16 @@
       <select name="properties[Length]" data-zmm-in="ready" disabled>
         {%- if zmm_len != blank -%}
           {%- for L in zmm_all_len -%}
-            {%- assign zmm_lcm = L | times: 2.54 | round: 1 -%}
+            {%- assign zmm_lcm = L | times: 2.54 | round: 0 -%}
             {%- if L == zmm_len -%}
-              <option value="{{ L }} in ({{ zmm_lcm }} cm)" selected>{{ L }} in &middot; {{ zmm_lcm }} cm</option>
+              <option value="{{ L }} in ({{ zmm_lcm }} cm)" selected>{{ L }} in ({{ zmm_lcm }} cm)</option>
             {%- else -%}
-              <option value="" disabled>{{ L }} in &middot; {{ zmm_lcm }} cm (not available)</option>
+              <option value="" disabled>{{ L }} in ({{ zmm_lcm }} cm) &mdash; not available</option>
             {%- endif -%}
           {%- endfor -%}
           {%- unless zmm_all_len contains zmm_len -%}
-            {%- assign zmm_lcm = zmm_len | times: 2.54 | round: 1 -%}
-            <option value="{{ zmm_len }} in ({{ zmm_lcm }} cm)" selected>{{ zmm_len }} in &middot; {{ zmm_lcm }} cm</option>
+            {%- assign zmm_lcm = zmm_len | times: 2.54 | round: 0 -%}
+            <option value="{{ zmm_len }} in ({{ zmm_lcm }} cm)" selected>{{ zmm_len }} in ({{ zmm_lcm }} cm)</option>
           {%- endunless -%}
         {%- else -%}
           <option value="One Size" selected>One Size</option>
@@ -178,44 +177,44 @@
       <div class="zmm__chart">{% render 'zaria-size-chart' %}</div>
     </div>
     <input type="hidden" name="properties[Size]" value="One Size" data-zmm-in="ready" disabled>
-    {%- assign zmm_len_cm = zmm_len | times: 2.54 | round: 1 -%}
-    {%- assign zmm_slv_cm = zmm_slv | times: 2.54 | round: 1 -%}
+    {%- assign zmm_len_cm = zmm_len | times: 2.54 | round: 0 -%}
+    {%- assign zmm_slv_cm = zmm_slv | times: 2.54 | round: 0 -%}
     <p class="zmm__hint">This piece is available in <b>{% if zmm_len != blank %}{{ zmm_len }} in ({{ zmm_len_cm }} cm){% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }} in ({{ zmm_slv_cm }} cm) sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements{% unless zmm_nocust %}, or choose <b>Customized</b> to have it cut to your own measurements{% endunless %}.</p>
     {%- else -%}
     <div class="zmm__fields zmm__fields--ready">
       <div class="zmm__field zmm__field--full">
-        <div class="zmm__fhead"><span class="zmm__fname">Size <span class="req">*</span> <span class="u">french &middot; international</span></span></div>
+        <div class="zmm__fhead"><span class="zmm__fname">Size <span class="req">*</span> <span class="u">french (intl)</span></span></div>
         <select name="properties[Size]" data-zmm-req data-zmm-in="ready" disabled>
           <option value="">-- Select --</option>
           {%- for s in zmm_sizes -%}
             {%- assign sp = s | split: ':' -%}
-            <option value="{{ sp[0] }} ({{ sp[1] }})">{{ sp[0] }} &middot; {{ sp[1] }}</option>
+            <option value="{{ sp[0] }} ({{ sp[1] }})">{{ sp[0] }} ({{ sp[1] }})</option>
           {%- endfor -%}
         </select>
       </div>
       <div class="zmm__field">
-        <div class="zmm__fhead"><span class="zmm__fname">Length <span class="u">in &middot; cm</span></span></div>
+        <div class="zmm__fhead"><span class="zmm__fname">Length</span></div>
         <select name="properties[Length]" data-zmm-in="ready" disabled>
-          <option value="Standard 61 in (154.9 cm)" selected>Standard &middot; 61 in &middot; 154.9 cm</option>
+          <option value="Standard 61 in (155 cm)" selected>Standard &mdash; 61 in (155 cm)</option>
           {%- for h in (100..130) -%}
             {%- assign whole = h | divided_by: 2 -%}
             {%- assign rem = h | modulo: 2 -%}
             {%- if rem == 0 -%}{%- capture lab -%}{{ whole }}{%- endcapture -%}{%- else -%}{%- capture lab -%}{{ whole }}.5{%- endcapture -%}{%- endif -%}
-            {%- assign labcm = h | times: 1.27 | round: 1 -%}
-            <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in &middot; {{ labcm }} cm</option>
+            {%- assign labcm = h | times: 1.27 | round: 0 -%}
+            <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in ({{ labcm }} cm)</option>
           {%- endfor -%}
         </select>
       </div>
       <div class="zmm__field">
-        <div class="zmm__fhead"><span class="zmm__fname">Sleeve Length <span class="u">in &middot; cm</span></span></div>
+        <div class="zmm__fhead"><span class="zmm__fname">Sleeve Length</span></div>
         <select name="properties[Sleeve Length]" data-zmm-in="ready" disabled>
           <option value="Standard for the size chosen" selected>Standard for the size chosen</option>
           {%- for h in (52..68) -%}
             {%- assign whole = h | divided_by: 2 -%}
             {%- assign rem = h | modulo: 2 -%}
             {%- if rem == 0 -%}{%- capture lab -%}{{ whole }}{%- endcapture -%}{%- else -%}{%- capture lab -%}{{ whole }}.5{%- endcapture -%}{%- endif -%}
-            {%- assign labcm = h | times: 1.27 | round: 1 -%}
-            <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in &middot; {{ labcm }} cm</option>
+            {%- assign labcm = h | times: 1.27 | round: 0 -%}
+            <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in ({{ labcm }} cm)</option>
           {%- endfor -%}
         </select>
       </div>
@@ -269,7 +268,7 @@
       </div>
 
       <div>
-        <p class="zmm__prog"><b data-zmm-count>0</b> of {{ zmm_fields.size }} measurements added <span class="zmm__fname" style="letter-spacing:.06em">&mdash; inches, with the centimetre beside it</span></p>
+        <p class="zmm__prog"><b data-zmm-count>0</b> of {{ zmm_fields.size }} measurements added <span class="zmm__fname" style="letter-spacing:.06em">&mdash; inches, with the centimetre in brackets</span></p>
         <div class="zmm__fields">
           {%- for f in zmm_fields -%}
             {%- assign fp = f | split: ':' -%}
@@ -287,8 +286,8 @@
                   {%- assign whole = h | divided_by: 2 -%}
                   {%- assign rem = h | modulo: 2 -%}
                   {%- if rem == 0 -%}{%- capture lab -%}{{ whole }}{%- endcapture -%}{%- else -%}{%- capture lab -%}{{ whole }}.5{%- endcapture -%}{%- endif -%}
-                  {%- assign labcm = h | times: 1.27 | round: 1 -%}
-                  <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in &middot; {{ labcm }} cm</option>
+                  {%- assign labcm = h | times: 1.27 | round: 0 -%}
+                  <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in ({{ labcm }} cm)</option>
                 {%- endfor -%}
               </select>
             </div>

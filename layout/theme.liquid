@@ -97,6 +97,8 @@
     {{- 'theme.css' | asset_url | stylesheet_tag: preload: true -}}
     {%- comment -%} After theme.css, so the app's design overrides the theme's defaults. {%- endcomment -%}
     {%- render 'zar-design-vars' -%}
+    {%- comment -%} One look for every form on the site: see the snippet for the figures. {%- endcomment -%}
+    {%- render 'zaria-fields' -%}
     <script src="{{ 'zar-wishlist.js' | asset_url }}" defer></script>
     {%- comment -%}
       Live translate mode: loads when the URL carries ?elxt=<edit key>, and then
