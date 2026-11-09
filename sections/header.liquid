@@ -70,35 +70,43 @@
   }
   {%- liquid
     assign zar_promo_hex = section.settings.promo_color | default: '#7a1f34'
-    assign zar_promo_ring = zar_promo_hex | color_modify: 'alpha', 0.42
-    assign zar_promo_glow = zar_promo_hex | color_modify: 'alpha', 0.5
+    assign zar_promo_ring = zar_promo_hex | color_modify: 'alpha', 0.45
+    assign zar_promo_glow = zar_promo_hex | color_modify: 'alpha', 0.55
     assign zar_promo_gone = zar_promo_hex | color_modify: 'alpha', 0
   -%}
   /* Zaria: the promotion is the one item in the rail that has to be seen, so it takes the
      house colour while the rest of the line stays charcoal. Colour only, no pill: the client
-     asked for the word highlighted, not a button. Every three seconds it splashes: a ring
-     breaks out of the word and fades, with a small pop and a glow behind the letters. The ring
-     is a box-shadow rather than a pseudo-element, so nothing can land on top of the text or
-     behind the header's own background. */
+     asked for the word highlighted, not a button. Every three seconds it splashes.
+     The ring rides on the LIST ITEM, not the link: the theme carries
+     "…, nav a { box-shadow: none !important }", and an important declaration beats an
+     animation, so a ring on the anchor can never be drawn. The pop and the glow stay on the
+     word itself, where transform and text-shadow are not overridden. */
   #shopify-section-{{ section.id }} .header__primary-nav-item > a.zar-navpromo,
   #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo {
     color: {{ zar_promo_hex }} !important;
     display: inline-block;
-    border-radius: 999px;
     transition: opacity .2s ease;
-    animation: zar-promo-splash 3s ease-out infinite;
+    animation: zar-promo-pop 3s ease-out infinite;
   }
   #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo:hover {
     opacity: .72;
   }
-  @keyframes zar-promo-splash {
-    0%, 72% { transform: scale(1); box-shadow: 0 0 0 0 {{ zar_promo_ring }}; text-shadow: none; }
-    82%     { transform: scale(1.08); box-shadow: 0 0 0 11px {{ zar_promo_gone }}; text-shadow: 0 0 16px {{ zar_promo_glow }}; }
-    90%     { transform: scale(.99); box-shadow: 0 0 0 14px {{ zar_promo_gone }}; }
-    100%    { transform: scale(1); box-shadow: 0 0 0 0 {{ zar_promo_gone }}; text-shadow: none; }
+  #shopify-section-{{ section.id }} .zar-promo-item {
+    border-radius: 999px;
+    animation: zar-promo-ring 3s ease-out infinite;
+  }
+  @keyframes zar-promo-ring {
+    0%, 72% { box-shadow: 0 0 0 0 {{ zar_promo_ring }}; }
+    100%    { box-shadow: 0 0 0 16px {{ zar_promo_gone }}; }
+  }
+  @keyframes zar-promo-pop {
+    0%, 72%, 100% { transform: scale(1); text-shadow: 0 0 0 {{ zar_promo_gone }}; }
+    80%           { transform: scale(1.1); text-shadow: 0 0 18px {{ zar_promo_glow }}; }
+    88%           { transform: scale(.98); }
   }
   @media (prefers-reduced-motion: reduce) {
-    #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo { animation: none; }
+    #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo,
+    #shopify-section-{{ section.id }} .zar-promo-item { animation: none; }
   }
   #shopify-section-{{ section.id }} .header__logo-text {
     text-transform: uppercase;
@@ -409,7 +417,7 @@
               {%- endcapture -%}
 
               {%- capture nav_li -%}
-              <li class="header__primary-nav-item">
+              <li class="header__primary-nav-item{% if zar_is_promo %} zar-promo-item{% endif %}">
            {%- if zar_is_promo or link.levels == 0 and mega_menu_block == '' and zaria_mega_links == blank -%}
                   <a
                     href="{{ link_href }}"
