@@ -226,6 +226,28 @@
     padding: 10px 26px;
   }
   #shopify-section-{{ section.id }} .header__dropdown-menu a:hover { color: #7a1f34 !important; }
+  /* The two jalabiya lines belong to Jalabiya, so they sit in under it rather than beside it.
+     Shown rather than hidden behind a second hover: there are only two of them and they are
+     what the menu is for. */
+  #shopify-section-{{ section.id }} .zar-submenu { margin: 2px 0 4px; }
+  #shopify-section-{{ section.id }} .zar-submenu a {
+    position: relative;
+    padding: 7px 26px 7px 46px;
+    font-size: 11px;
+    letter-spacing: .09em;
+    color: #9a938a !important;
+  }
+  #shopify-section-{{ section.id }} .zar-submenu a::before {
+    content: "";
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    width: 10px;
+    height: 1px;
+    background: #d9d2c8;
+  }
+  #shopify-section-{{ section.id }} .zar-submenu a:hover { color: #7a1f34 !important; }
+  #shopify-section-{{ section.id }} .zar-submenu a:hover::before { background: #7a1f34; }
 
   #shopify-section-{{ section.id }} .zaria-mega .zaria-mega__col a { color: #6a6a6a !important; }
   #shopify-section-{{ section.id }} .zaria-mega .zaria-mega__head { color: #1a1a1a !important; }
@@ -419,9 +441,12 @@
                   {%- when 'ready-to-wear' -%}
                     <ul class="header__dropdown-menu unstyled-list" role="list">
                       <li><a href="{{ routes.root_url }}collections/abayas" class="link-faded-reverse">Abayas</a></li>
-                      <li><a href="{{ routes.root_url }}collections/jalabiya" class="link-faded-reverse">Jalabiya</a></li>
-                      <li><a href="{{ routes.root_url }}collections/ramadan-2027" class="link-faded-reverse">Ramadan 2027</a></li>
-                      <li><a href="{{ routes.root_url }}collections/freya" class="link-faded-reverse">Freya Collections</a></li>
+                      <li><a href="{{ routes.root_url }}collections/jalabiya" class="link-faded-reverse">Jalabiya</a>
+                        <ul class="zar-submenu unstyled-list" role="list">
+                          <li><a href="{{ routes.root_url }}collections/ramadan-2027" class="link-faded-reverse">Ramadan 2027</a></li>
+                          <li><a href="{{ routes.root_url }}collections/freya" class="link-faded-reverse">Freya Collections</a></li>
+                        </ul>
+                      </li>
                       <li><a href="{{ routes.root_url }}collections/accessories" class="link-faded-reverse">Sheila &amp; Accessories</a></li>
                     </ul>
                 {%- endcase -%}

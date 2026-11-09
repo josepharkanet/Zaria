@@ -69,6 +69,9 @@
         .zaria-msub__panel{display:flex;flex-direction:column;padding:2px 0 12px 16px}
         .zaria-msub__panel a{display:block;padding:9px 0;color:#6a6a6a;text-decoration:none;font-size:14px;letter-spacing:.02em}
         .zaria-msub__panel a:active,.zaria-msub__panel a:hover{color:#1a1a1a}
+        /* The two jalabiya lines belong to Jalabiya, so the drawer steps them in as well. */
+        .zaria-msub__panel a.zar-subsub{position:relative;padding-left:22px;font-size:13px;color:#9a938a}
+        .zaria-msub__panel a.zar-subsub::before{content:"";position:absolute;left:2px;top:50%;width:10px;height:1px;background:#d9d2c8}
         /* The promotion takes the house colour here too, the word only. */
         .header-sidebar__linklist-button.zar-sidepromo{color:{{ promo_color | default: '#7a1f34' }}}
       </style>
