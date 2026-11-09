@@ -122,6 +122,7 @@
     var startDist = 0, startScale = 1, startMid = null, startTx = 0, startTy = 0;
     var dragging = false, swiping = false, dragX = 0, dragY = 0, startX = 0, startY = 0;
     var lastTap = 0, lockedY = 0, didLock = false;
+    var fromBackdrop = false, travelled = 0;
 
     function draw(eased) {
       img.classList.toggle('is-eased', !!eased);
@@ -247,7 +248,13 @@
     lb.querySelector('.zqz__close').addEventListener('click', close);
 
     // ---- pointers: pinch, pan, swipe, double-tap ----
+    // The arrows and the close sit inside the stage, and capturing the pointer would retarget
+    // their click to the stage itself - which is how pressing an arrow came to close the viewer.
+    function onControl(e) { return !!(e.target.closest && e.target.closest('.zqz__nav,.zqz__close')); }
     stage.addEventListener('pointerdown', function (e) {
+      if (onControl(e)) return;
+      fromBackdrop = !(e.target.closest && e.target.closest('.zqz__frame'));
+      travelled = 0;
       stage.setPointerCapture && stage.setPointerCapture(e.pointerId);
       pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
       if (pointers.size === 2) {
@@ -266,6 +273,8 @@
 
     stage.addEventListener('pointermove', function (e) {
       if (!pointers.has(e.pointerId)) return;
+      var was = pointers.get(e.pointerId);
+      travelled += Math.abs(e.clientX - was.x) + Math.abs(e.clientY - was.y);
       pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
       if (pointers.size === 2 && startMid) {
@@ -321,7 +330,7 @@
 
     // double tap / double click to zoom at that point
     stage.addEventListener('pointerup', function (e) {
-      if (pointers.size) return;
+      if (pointers.size || onControl(e) || travelled > 12) return;
       var now = Date.now();
       if (now - lastTap < 320) {
         var p = centreOffset(e.clientX, e.clientY);
@@ -330,9 +339,10 @@
       } else lastTap = now;
     });
 
-    // a single click on the backdrop closes; on the picture it does nothing (double-click zooms)
+    // a single click on the dark around the picture closes; on the picture it does nothing
     stage.addEventListener('click', function (e) {
-      if (e.target === stage && scale <= 1.01) close();
+      if (onControl(e)) return;
+      if (fromBackdrop && travelled < 12 && scale <= 1.01) close();
     });
 
     stage.addEventListener('wheel', function (e) {

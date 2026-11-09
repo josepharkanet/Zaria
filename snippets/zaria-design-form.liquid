@@ -134,9 +134,10 @@
         newest-first order, which read as a new-arrivals strip and buried the collections.
         Three tiles show at a time and the arrows move a page.
         Every piece in the category is here to be chosen - there is no link out to the
-        collection, because the choice has to be made in this form. A Liquid loop hands over
-        fifty products at a time, so each category is read in fifties until its own count runs
-        out; Freya Collections alone is a hundred.
+        collection, because the choice has to be made in this form. Liquid hands over fifty
+        products from a collection and no more (offsets past that return nothing), and Freya
+        Collections alone is a hundred, so a category whose count is higher than the tiles
+        drawn for it fetches the rest from its own products.json the first time it is opened.
       {%- endcomment -%}
       {%- assign zdf_groups = 'abayas,ramadan-2027,freya,accessories' | split: ',' -%}
       {%- assign zdf_pieces = 'Abaya,Jalabiya,Jalabiya,Sheila' | split: ',' -%}
@@ -151,7 +152,7 @@
           {%- for g in zdf_groups -%}
             {%- if collections[g].products.size > 0 -%}
               {%- if zdf_first == '' -%}{%- assign zdf_first = g -%}{%- endif -%}
-              <button type="button" class="zdf-cat{% if g == zdf_first %} is-on{% endif %}" data-zdf-cat="{{ g }}" data-zdf-piece="{{ zdf_pieces[forloop.index0] }}">{{ collections[g].title }}</button>
+              <button type="button" class="zdf-cat{% if g == zdf_first %} is-on{% endif %}" data-zdf-cat="{{ g }}" data-zdf-piece="{{ zdf_pieces[forloop.index0] }}" data-zdf-count="{{ collections[g].all_products_count }}">{{ collections[g].title }}</button>
             {%- endif -%}
           {%- endfor -%}
         </div>
@@ -161,13 +162,8 @@
           </button>
           <div class="zdf-picks" data-zdf-picks>
             <button type="button" class="zdf-pick zdf-pick--none is-on" data-zdf-pick="" data-zdf-handle=""><span>From scratch</span></button>
-            {%- assign zdf_offsets = '0,50,100,150,200' | split: ',' -%}
             {%- for g in zdf_groups -%}
-            {%- assign zdf_total = collections[g].all_products_count -%}
-            {%- for zdf_off in zdf_offsets -%}
-            {%- assign zdf_offn = zdf_off | plus: 0 -%}
-            {%- if zdf_offn < zdf_total -%}
-            {%- for zp in collections[g].products limit: 50 offset: zdf_offn -%}
+            {%- for zp in collections[g].products limit: 50 -%}
               {%- if zp.featured_image != blank -%}
                 {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 3 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
                 <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}" data-zdf-group="{{ g }}"{% unless g == zdf_first %} hidden{% endunless %}>
@@ -178,8 +174,6 @@
                   </span>
                 </button>
               {%- endif -%}
-            {%- endfor -%}
-            {%- endif -%}
             {%- endfor -%}
             {%- endfor -%}
           </div>
@@ -271,15 +265,71 @@
       if (emptyNote) emptyNote.hidden = any;
       picks.scrollLeft = 0;
       setTimeout(refreshNav, 30);
+      fillUp(g);
     }
 
     cats.querySelectorAll('[data-zdf-cat]').forEach(function (c) {
       c.addEventListener('click', function () { showGroup(c.getAttribute('data-zdf-cat')); });
     });
 
+    // Liquid stops at fifty. A category that holds more fetches the rest, once, from the
+    // collection's own products.json, and builds the same tile the template would have.
+    var filled = {};
+    function sized(url, w) { return String(url).replace(/(\.[a-z]+)(\?|$)/i, '_' + w + 'x$1$2'); }
+    function fillUp(g) {
+      if (filled[g]) return;
+      var tab = cats.querySelector('[data-zdf-cat="' + g + '"]');
+      var want = tab ? parseInt(tab.getAttribute('data-zdf-count'), 10) || 0 : 0;
+      var have = picks.querySelectorAll('[data-zdf-group="' + g + '"]').length;
+      if (!want || have >= want) { filled[g] = true; return; }
+      filled[g] = true;
+      fetch('/collections/' + g + '/products.json?limit=250', { headers: { Accept: 'application/json' } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) {
+          if (!j || !j.products) return;
+          var seen = {};
+          picks.querySelectorAll('[data-zdf-group="' + g + '"]').forEach(function (b) {
+            seen[b.getAttribute('data-zdf-handle')] = true;
+          });
+          var open = cats.querySelector('[data-zdf-cat].is-on');
+          var isOpen = open && open.getAttribute('data-zdf-cat') === g;
+          var frag = document.createDocumentFragment();
+          j.products.forEach(function (pr) {
+            if (seen[pr.handle] || !pr.images || !pr.images.length) return;
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'zdf-pick';
+            b.setAttribute('data-zdf-pick', pr.title);
+            b.setAttribute('data-zdf-handle', pr.handle);
+            b.setAttribute('data-zdf-group', g);
+            if (!isOpen) b.hidden = true;
+            var im = document.createElement('img');
+            im.src = sized(pr.images[0].src, 320);
+            im.alt = pr.title;
+            im.loading = 'lazy';
+            im.width = 132; im.height = 176;
+            var cap = document.createElement('span');
+            cap.textContent = pr.title.split(' ').slice(0, 2).join(' ');
+            var zoom = document.createElement('span');
+            zoom.className = 'zdf-zoom';
+            zoom.setAttribute('role', 'button');
+            zoom.setAttribute('tabindex', '0');
+            zoom.setAttribute('aria-label', 'Look closer at ' + pr.title);
+            zoom.setAttribute('data-zoom-gallery', pr.images.slice(0, 3).map(function (i) { return sized(i.src, 1400); }).join('|'));
+            zoom.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#zdf-zoomic"></use></svg>';
+            b.appendChild(im); b.appendChild(cap); b.appendChild(zoom);
+            frag.appendChild(b);
+          });
+          picks.appendChild(frag);
+          refreshNav();
+        })
+        .catch(function () {});
+    }
+
     // The category that is open when the modal first draws is the piece until one is chosen.
     var firstTab = cats.querySelector('[data-zdf-cat].is-on') || cats.querySelector('[data-zdf-cat]');
     if (pieceField && firstTab) pieceField.value = firstTab.getAttribute('data-zdf-piece') || '';
+    if (firstTab) fillUp(firstTab.getAttribute('data-zdf-cat'));
 
     // Our own easing, with the snapping held off while it runs: scroll snapping drags every
     // small step of an animated scroll back to the nearest snap point, so the row never moves.

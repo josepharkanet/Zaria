@@ -214,16 +214,19 @@
   #shopify-section-{{ section.id }} .zpdp__attrrow{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
   #shopify-section-{{ section.id }} .zpdp__attrrow + .zpdp__attrrow{border-top:1px solid #ece8e2}
   #shopify-section-{{ section.id }} .zpdp__attr + .zpdp__attr{border-left:1px solid #ece8e2}
-  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:flex-start;gap:8px;padding:17px 13px;min-width:0;background:#fff}
+  {%- comment -%}Label and value on one line: the strip was three lines tall for two words.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:center;gap:9px;padding:11px 14px;min-width:0;background:#fff}
+  #shopify-section-{{ section.id }} .zpdp__attr>span:last-child{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;min-width:0}
   #shopify-section-{{ section.id }} .zpdp__attr>div{min-width:0}
   @media (max-width:600px){
-    #shopify-section-{{ section.id }} .zpdp__attr{flex-direction:column;gap:7px;padding:13px 10px}
-    #shopify-section-{{ section.id }} .zpdp__attr-l{white-space:normal}
+    #shopify-section-{{ section.id }} .zpdp__attr{gap:7px;padding:10px 9px}
+    #shopify-section-{{ section.id }} .zpdp__attr>span:last-child{display:block}
+    #shopify-section-{{ section.id }} .zpdp__attr-l{white-space:normal;margin-bottom:2px}
   }
-  #shopify-section-{{ section.id }} .zpdp__attr-ic{flex:none;color:var(--wine);margin-top:1px;display:inline-flex}
-  #shopify-section-{{ section.id }} .zpdp__attr-ic svg{width:22px;height:22px;display:block}
-  #shopify-section-{{ section.id }} .zpdp__attr-l{display:block;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:#a89f94;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  #shopify-section-{{ section.id }} .zpdp__attr-v{display:block;font-size:14px;letter-spacing:.02em;color:#2a2a2a}
+  #shopify-section-{{ section.id }} .zpdp__attr-ic{flex:none;color:var(--wine);display:inline-flex}
+  #shopify-section-{{ section.id }} .zpdp__attr-ic svg{width:19px;height:19px;display:block}
+  #shopify-section-{{ section.id }} .zpdp__attr-l{display:block;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:#a89f94;white-space:nowrap}
+  #shopify-section-{{ section.id }} .zpdp__attr-v{display:block;font-size:13.5px;letter-spacing:.02em;color:#2a2a2a;min-width:0;overflow-wrap:anywhere}
 
   /* form */
   #shopify-section-{{ section.id }} .zpdp__form{margin:0 0 18px}
