@@ -206,6 +206,27 @@
   #shopify-section-{{ section.id }} .header__logo-image--transparent { display: none !important; }
   #shopify-section-{{ section.id }} .header__logo-image--zaria-color { width: auto; max-height: 48px; }
   /* white mega panel: dark ink text, wine hover */
+  /* The plain dropdown (Ready to Wear) is a theme panel, so it takes the header's own
+     background, which this header paints black, while the nav colour rule paints its links
+     #1a1a1a: black on black. It reads on the same white ground as the mega panels instead. */
+  #shopify-section-{{ section.id }} .header__dropdown-menu {
+    background: #fff !important;
+    border: 1px solid #efe9e4;
+    box-shadow: 0 26px 44px rgba(20, 12, 14, .12);
+    padding: 12px 0;
+    min-width: 14rem;
+  }
+  #shopify-section-{{ section.id }} .header__dropdown-menu::before { display: none; }
+  #shopify-section-{{ section.id }} .header__dropdown-menu a {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: #6a6a6a !important;
+    padding: 10px 26px;
+  }
+  #shopify-section-{{ section.id }} .header__dropdown-menu a:hover { color: #7a1f34 !important; }
+
   #shopify-section-{{ section.id }} .zaria-mega .zaria-mega__col a { color: #6a6a6a !important; }
   #shopify-section-{{ section.id }} .zaria-mega .zaria-mega__head { color: #1a1a1a !important; }
   #shopify-section-{{ section.id }} .zaria-mega .zaria-mega__col a:hover { color: #7a1f34 !important; }
