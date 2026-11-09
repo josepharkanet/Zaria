@@ -280,6 +280,10 @@
       var from = picks.scrollLeft;
       var max = picks.scrollWidth - picks.clientWidth;
       var to = Math.max(0, Math.min(max, from + dir * picks.clientWidth));
+      // land on a tile edge rather than a few pixels into one
+      var tile = picks.querySelector('.zdf-pick:not([hidden])');
+      var pitch = tile ? tile.offsetWidth + 10 : 0;
+      if (pitch > 20 && to < max - 2) to = Math.round(to / pitch) * pitch;
       if (Math.abs(to - from) < 2) return;
       var t0 = performance.now(), ms = 300;
       if (gliding) cancelAnimationFrame(gliding);
