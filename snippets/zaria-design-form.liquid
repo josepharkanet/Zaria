@@ -273,20 +273,23 @@
     var firstTab = cats.querySelector('[data-zdf-cat].is-on') || cats.querySelector('[data-zdf-cat]');
     if (pieceField && firstTab) pieceField.value = firstTab.getAttribute('data-zdf-piece') || '';
 
-    // Our own easing: see the note on scroll-behavior above.
+    // Our own easing, with the snapping held off while it runs: scroll snapping drags every
+    // small step of an animated scroll back to the nearest snap point, so the row never moves.
     var gliding = null;
     function page(dir) {
       var from = picks.scrollLeft;
       var max = picks.scrollWidth - picks.clientWidth;
       var to = Math.max(0, Math.min(max, from + dir * picks.clientWidth));
+      if (Math.abs(to - from) < 2) return;
       var t0 = performance.now(), ms = 300;
       if (gliding) cancelAnimationFrame(gliding);
+      picks.style.scrollSnapType = 'none';
       (function step(now) {
         var k = Math.min(1, (now - t0) / ms);
         var e = 1 - Math.pow(1 - k, 3);
         picks.scrollLeft = from + (to - from) * e;
         if (k < 1) gliding = requestAnimationFrame(step);
-        else { gliding = null; refreshNav(); }
+        else { gliding = null; picks.style.scrollSnapType = ''; refreshNav(); }
       })(t0);
     }
     if (navPrev) navPrev.addEventListener('click', function () { page(-1); });
