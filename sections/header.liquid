@@ -70,10 +70,12 @@
   }
   {%- assign zar_promo_hex = section.settings.promo_color | default: '#7a1f34' -%}
   /* Zaria: the promotion is the one item in the rail that has to be seen, so it takes the
-     house colour while the rest of the line stays charcoal. Nothing else: no pill, and no
-     motion. It splashed every three seconds for a while and the client asked for something
-     quieter, so the word simply reads in the house colour and the theme's own hover
-     underline behaves exactly as it does on every other item. */
+     house colour while the rest of the line stays charcoal. No pill: it splashed every three
+     seconds once and read as shouting. What it has instead is a light passing over the word
+     every four seconds - the brass of the house drawn through the letters themselves, a
+     little over a second to cross and then still. The letters are painted by a gradient
+     clipped to the text, so a browser that cannot do that keeps the plain wine word, and a
+     reader who has asked for less motion gets no sweep at all. */
   #shopify-section-{{ section.id }} .header__primary-nav-item > a.zar-navpromo,
   #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo {
     color: {{ zar_promo_hex }} !important;
@@ -81,6 +83,35 @@
   }
   #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo:hover {
     opacity: .72;
+  }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo {
+      background-image: linear-gradient(
+        100deg,
+        {{ zar_promo_hex }} 0%,
+        {{ zar_promo_hex }} 42%,
+        #c9a86a 50%,
+        {{ zar_promo_hex }} 58%,
+        {{ zar_promo_hex }} 100%
+      );
+      background-size: 300% 100%;
+      background-repeat: no-repeat;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: zar-promo-sheen 4s ease-in-out infinite;
+    }
+  }
+  @keyframes zar-promo-sheen {
+    0%   { background-position: 150% 0; }
+    32%  { background-position: -50% 0; }
+    100% { background-position: -50% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+  #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo {
+      animation: none;
+      -webkit-text-fill-color: {{ zar_promo_hex }};
+    }
   }
   #shopify-section-{{ section.id }} .header__logo-text {
     text-transform: uppercase;
