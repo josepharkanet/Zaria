@@ -82,7 +82,104 @@
   #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo:hover {
     opacity: .72;
   }
+  #shopify-section-{{ section.id }} .header__logo-text {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-weight: 400;
+    font-family: var(--heading-font-family), Georgia, serif;
+  }
 
+  /* Zaria: black header bar (override scheme vars so nav, icons + wordmark go white) */
+  #shopify-section-{{ section.id }} .header {
+    --background: 17 17 17 / 1.0;
+    --text-color: 255 255 255;
+    background-color: rgb(17 17 17);
+  }
+  #shopify-section-{{ section.id }} .header input,
+  #shopify-section-{{ section.id }} .header .search__input {
+    color: rgb(255 255 255);
+  }
+  #shopify-section-{{ section.id }} .header input::placeholder {
+    color: rgb(255 255 255 / 0.55);
+  }
+  #shopify-section-{{ section.id }} .header__logo-image--zaria {
+    width: auto;
+    max-height: 66px;
+  }
+
+  /* Zaria: single-line header — menu split around a centered logo, icons floated right */
+  @media screen and (min-width: 1000px) {
+    #shopify-section-{{ section.id }} .header.zaria-header-split { position: relative; }
+    /* Zaria: gutters so the two nav groups (six links) get room and never overlap the icons */
+    #shopify-section-{{ section.id }} .header.zaria-header-split { column-gap: 10px; padding-inline: 16px; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__primary-nav { display: contents; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half {
+      display: flex; align-items: center; flex-wrap: nowrap; gap: 0 1rem; margin: 0; padding: 0; list-style: none;
+    }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { grid-area: nav-left; justify-self: end; padding-inline-end: 0.9rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { grid-area: nav-right; justify-self: start; padding-inline-start: 0.9rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__logo { grid-area: logo; justify-self: center; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav { grid-area: secondary-nav; justify-self: end; }
+    /* Zaria: the glass and the heart move to the empty balancing column at the far left,
+       so the bar reads search/saved, menu, wordmark, menu, bag/account. */
+    #shopify-section-{{ section.id }} .zaria-header-split .header__utility-nav { grid-area: zhedge; justify-self: start; }
+    #shopify-section-{{ section.id }} .header__utility-list {
+      display: flex; align-items: center; column-gap: .9rem; margin: 0; padding: 0; list-style: none;
+    }
+    /* Zaria: the icons sit at the far end of their column while the links sit at the near
+       end, beside the logo, so every pixel the window gains opens between GIFTS and the
+       search glass. A fixed inset could not hold it: at 1512 the hole was 90px, at 1920 it
+       would be 296px and it keeps growing. The margin therefore tracks half the viewport,
+       which is the rate the column grows, so the gap after the last link stays put however
+       wide the screen is. Clamped at both ends: 24px so the icons never touch the links,
+       700px so a very wide monitor cannot drag them into the middle. Only from 1400px,
+       because below that the six links need every pixel and the icons must stay put. */
+    @media screen and (min-width: 1400px) {
+      #shopify-section-{{ section.id }} .zaria-header-split .header__secondary-nav {
+        margin-inline-end: clamp(24px, calc(50vw - 668px), 700px);
+      }
+    }
+    /* Zaria: nav type — six links leave room for a larger, more legible size down to 1000px */
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half a,
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half summary { font-size: 13px; letter-spacing: 0.10em; }
+  }
+  /* Zaria: mid desktops — a little more air once there is room */
+  @media screen and (min-width: 1200px) {
+    #shopify-section-{{ section.id }} .header.zaria-header-split { padding-inline: 20px; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half { gap: 0 1.5rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { padding-inline-end: 1.3rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { padding-inline-start: 1.3rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half a,
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half summary { font-size: 14px; letter-spacing: 0.12em; }
+  }
+  /* Zaria: wide desktops — full couture spacing */
+  @media screen and (min-width: 1400px) {
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half { gap: 0 2rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--left { padding-inline-end: 1.8rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half--right { padding-inline-start: 1.8rem; }
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half a,
+    #shopify-section-{{ section.id }} .zaria-header-split .header__nav-half summary { font-size: 15px; letter-spacing: 0.16em; }
+  }
+  /* Zaria: smaller, refined header icons */
+  #shopify-section-{{ section.id }} .header__nav-icon { width: 1.15rem; height: auto; }
+  #shopify-section-{{ section.id }} .header__secondary-nav { column-gap: .65rem; flex-wrap: nowrap; }
+  #shopify-section-{{ section.id }} .header__lang-toggle .lang-toggle { font-size: 12px; letter-spacing: .1em; }
+
+  /* Zaria: white header bar, dark nav + icons, colour logo */
+  #shopify-section-{{ section.id }} .header { background: #ffffff !important; }
+  #shopify-section-{{ section.id }} .header.header--line { border-bottom: 1px solid #e0ddd8 !important; }
+  #shopify-section-{{ section.id }} .header__primary-nav a,
+  #shopify-section-{{ section.id }} .header__primary-nav summary,
+  #shopify-section-{{ section.id }} .header__nav-half a,
+  #shopify-section-{{ section.id }} .header__nav-half summary,
+  #shopify-section-{{ section.id }} .header__secondary-nav a,
+  #shopify-section-{{ section.id }} .header__secondary-nav button,
+  #shopify-section-{{ section.id }} .header__utility-nav a,
+  #shopify-section-{{ section.id }} .header__lang-toggle .lang-toggle { color: #1a1a1a !important; }
+  #shopify-section-{{ section.id }} .header__nav-icon { color: #1a1a1a; }
+  #shopify-section-{{ section.id }} .header__logo-image--transparent { display: none !important; }
+  #shopify-section-{{ section.id }} .header__logo-image--zaria-color { width: auto; max-height: 48px; }
+  /* white mega panel: dark ink text, wine hover */
   /* The plain dropdown (Ready to Wear) is a theme panel, so it takes the header's own
      background, which this header paints black, while the nav colour rule paints its links
      #1a1a1a: black on black. It reads on the same white ground as the mega panels instead. */
