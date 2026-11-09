@@ -102,10 +102,13 @@
       animation: zar-promo-sheen 4s ease-in-out infinite;
     }
   }
+  {%- comment -%}Only 0% to 100% paints: a background-position outside that range pushes a
+     no-repeat image clear of the word, and with the text fill transparent the word simply
+     disappears. It rests at 0%, where the window sits on the wine end of the gradient.{%- endcomment -%}
   @keyframes zar-promo-sheen {
-    0%   { background-position: 150% 0; }
-    32%  { background-position: -50% 0; }
-    100% { background-position: -50% 0; }
+    0%   { background-position: 100% 0; }
+    30%  { background-position: 0% 0; }
+    100% { background-position: 0% 0; }
   }
   @media (prefers-reduced-motion: reduce) {
   #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo {
