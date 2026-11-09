@@ -346,13 +346,22 @@
       var t0 = performance.now(), ms = 300;
       if (gliding) cancelAnimationFrame(gliding);
       picks.style.scrollSnapType = 'none';
+      function land() {
+        gliding = null;
+        picks.scrollLeft = to;
+        picks.style.scrollSnapType = '';
+        refreshNav();
+      }
       (function step(now) {
         var k = Math.min(1, (now - t0) / ms);
         var e = 1 - Math.pow(1 - k, 3);
         picks.scrollLeft = from + (to - from) * e;
         if (k < 1) gliding = requestAnimationFrame(step);
-        else { gliding = null; picks.style.scrollSnapType = ''; refreshNav(); }
+        else land();
       })(t0);
+      // Animation frames are throttled in a page that is not being looked at, so if the
+      // easing has not finished by the time it should have, the row simply arrives.
+      setTimeout(function () { if (gliding) { cancelAnimationFrame(gliding); land(); } }, ms + 160);
     }
     if (navPrev) navPrev.addEventListener('click', function () { page(-1); });
     if (navNext) navNext.addEventListener('click', function () { page(1); });
