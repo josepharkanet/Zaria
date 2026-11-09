@@ -6,7 +6,10 @@
   @param {boolean} [show_dividers] - whether dividers are shown for the collapsible
   @param {boolean} [open_second_level_menus] - if true, second level dropdown are open by default
   @param {object} [section]
-  @param {string} [promo_color] - fill for a menu item named Promotion
+  @param {string} [promo_color] - fill for the promotion button
+  @param {string} [promo_menu_item] - the menu item published as the promotion button
+  @param {string} [promo_label] - the promotion button's text
+  @param {string} [promo_url] - the promotion button's link
 {%- enddoc -%}
 
 {%- comment -%}
@@ -74,10 +77,23 @@
       <ul class="header-sidebar__linklist {% if show_dividers %}divide-y{% endif %} unstyled-list" role="list">
         {%- for link in menu.links -%}
           {%- assign zlt = link.title | strip | downcase -%}
+          {%- comment -%}The promotion carries the same label and link as the desktop rail.{%- endcomment -%}
+          {%- assign zpromo_src = promo_menu_item | strip | downcase -%}
+          {%- assign zis_promo = false -%}
+          {%- if zlt == 'promotion' -%}{%- assign zis_promo = true -%}
+          {%- elsif zpromo_src != blank and zlt == zpromo_src -%}{%- assign zis_promo = true -%}{%- endif -%}
+          {%- assign zlink_label = link.title -%}
+          {%- assign zlink_href = link.url -%}
+          {%- if zis_promo -%}
+            {%- assign zlink_label = promo_label | default: 'Promotion' -%}
+            {%- assign zlink_href = promo_url | default: '/collections/promotion' -%}
+          {%- endif -%}
           {%- assign zsub = false -%}
           {%- if zlt == 'fabrics' or zlt == 'fragrance' or zlt == 'ready to wear' or zlt == 'ready-to-wear' -%}{%- assign zsub = true -%}{%- endif -%}
           <li>
-            {%- if link.links.size > 0 -%}
+            {%- if zis_promo -%}
+              <a href="{{ zlink_href }}" class="header-sidebar__linklist-button zar-sidepromo">{{ zlink_label }}</a>
+            {%- elsif link.links.size > 0 -%}
               <button
                 type="button"
                 class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}"
@@ -96,7 +112,7 @@
                 <div class="zaria-msub__panel">{%- render 'zaria-nav-sub', title: link.title -%}</div>
               </details>
             {%- else -%}
-              <a href="{{ link.url }}" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}{% if zlt == 'promotion' %} zar-sidepromo{% endif %}">
+              <a href="{{ link.url }}" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">
                 {{- link.title -}}
               </a>
             {%- endif -%}

@@ -269,6 +269,26 @@
                 if link_title_downcase == 'catalog'
                   assign link_href = routes.root_url | append: 'collections/all-fabrics'
                 endif
+
+                # Zaria: the promotion. Shopify's navigation sits behind a scope this store's
+                # app does not hold, so the item is renamed here: the menu entry named in
+                # "Promotion replaces" is published under the promotion label and link, and an
+                # item actually named Promotion is picked up too, for the day the menu itself
+                # is edited. Clear the setting to switch it off.
+                assign zar_promo_src = section.settings.promo_menu_item | strip | downcase
+                assign zar_promo_label = section.settings.promo_label | default: 'Promotion'
+                assign zar_promo_url = section.settings.promo_url | default: '/collections/promotion'
+                assign zar_is_promo = false
+                if link_title_downcase == 'promotion'
+                  assign zar_is_promo = true
+                elsif zar_promo_src != blank and link_title_downcase == zar_promo_src
+                  assign zar_is_promo = true
+                endif
+                assign zar_link_label = link.title
+                if zar_is_promo
+                  assign zar_link_label = zar_promo_label
+                  assign link_href = zar_promo_url
+                endif
                 assign mega_menu_block = ''
                 for block in section.blocks
                   assign menu_item_downcase = block.settings.menu_item | strip | downcase
@@ -382,16 +402,16 @@
 
               {%- capture nav_li -%}
               <li class="header__primary-nav-item">
-           {%- if link.levels == 0 and mega_menu_block == '' and zaria_mega_links == blank -%}
+           {%- if zar_is_promo or link.levels == 0 and mega_menu_block == '' and zaria_mega_links == blank -%}
                   <a
                     href="{{ link_href }}"
-                    data-title="{{ link.title | escape }}"
-                    class="block {% if section.settings.menu_text_font == 'heading' %}h6{% endif %}{% if link_title_downcase == 'promotion' %} zar-navpromo{% endif %}"
+                    data-title="{{ zar_link_label | escape }}"
+                    class="block {% if section.settings.menu_text_font == 'heading' %}h6{% endif %}{% if zar_is_promo %} zar-navpromo{% endif %}"
                     {% if link.current %}
                       aria-current="page"
                     {% endif %}
                   >
-                    {{- link.title | replace: '-', ' ' -}}
+                    {{- zar_link_label | replace: '-', ' ' -}}
                   </a>
                 {%- else -%}
                   {%- capture disclosure_content -%}
@@ -653,7 +673,10 @@
         color_scheme: section.settings.sidebar_color_scheme,
         show_dividers: section.settings.sidebar_show_dividers,
         open_second_level_menus: section.settings.sidebar_open_second_level_menus,
-        promo_color: section.settings.promo_color
+        promo_color: section.settings.promo_color,
+        promo_menu_item: section.settings.promo_menu_item,
+        promo_label: section.settings.promo_label,
+        promo_url: section.settings.promo_url
       -%}
     {%- endif -%}
   </x-header>
@@ -865,6 +888,25 @@
       "id": "show_icons",
       "label": "t:sections.header.show_icons",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "promo_menu_item",
+      "label": "Promotion replaces",
+      "info": "The menu item to publish as the promotion button. Leave empty to turn the button off.",
+      "default": "Gifts"
+    },
+    {
+      "type": "text",
+      "id": "promo_label",
+      "label": "Promotion button text",
+      "default": "Promotion"
+    },
+    {
+      "type": "text",
+      "id": "promo_url",
+      "label": "Promotion button link",
+      "default": "/collections/promotion"
     },
     {
       "type": "color",

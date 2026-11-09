@@ -138,16 +138,16 @@
       <select name="properties[Length]" data-zmm-in="ready" disabled>
         {%- if zmm_len != blank -%}
           {%- for L in zmm_all_len -%}
-            {%- assign Lcm = L | times: 2.54 | round: 1 -%}
+            {%- assign zmm_lcm = L | times: 2.54 | round: 1 -%}
             {%- if L == zmm_len -%}
-              <option value="{{ L }} in ({{ Lcm }} cm)" selected>{{ L }} in &middot; {{ Lcm }} cm</option>
+              <option value="{{ L }} in ({{ zmm_lcm }} cm)" selected>{{ L }} in &middot; {{ zmm_lcm }} cm</option>
             {%- else -%}
-              <option value="" disabled>{{ L }} in &middot; {{ Lcm }} cm (not available)</option>
+              <option value="" disabled>{{ L }} in &middot; {{ zmm_lcm }} cm (not available)</option>
             {%- endif -%}
           {%- endfor -%}
           {%- unless zmm_all_len contains zmm_len -%}
-            {%- assign Lcm = zmm_len | times: 2.54 | round: 1 -%}
-            <option value="{{ zmm_len }} in ({{ Lcm }} cm)" selected>{{ zmm_len }} in &middot; {{ Lcm }} cm</option>
+            {%- assign zmm_lcm = zmm_len | times: 2.54 | round: 1 -%}
+            <option value="{{ zmm_len }} in ({{ zmm_lcm }} cm)" selected>{{ zmm_len }} in &middot; {{ zmm_lcm }} cm</option>
           {%- endunless -%}
         {%- else -%}
           <option value="One Size" selected>One Size</option>
