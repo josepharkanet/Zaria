@@ -166,7 +166,7 @@
             {%- for g in zdf_groups -%}
             {%- for zp in collections[g].products limit: 50 -%}
               {%- if zp.featured_image != blank -%}
-                {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 3 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+                {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 6 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
                 <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}" data-zdf-group="{{ g }}"{% unless g == zdf_first %} hidden{% endunless %}>
                   <img src="{{ zp.featured_image | image_url: width: 320 }}" alt="{{ zp.title | escape }}" loading="lazy" width="132" height="176">
                   <span>{{ zp.title | split: ' ' | slice: 0, 2 | join: ' ' }}</span>
@@ -315,7 +315,7 @@
             zoom.setAttribute('role', 'button');
             zoom.setAttribute('tabindex', '0');
             zoom.setAttribute('aria-label', 'Look closer at ' + pr.title);
-            zoom.setAttribute('data-zoom-gallery', pr.images.slice(0, 3).map(function (i) { return sized(i.src, 1400); }).join('|'));
+            zoom.setAttribute('data-zoom-gallery', pr.images.slice(0, 6).map(function (i) { return sized(i.src, 1400); }).join('|'));
             zoom.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#zdf-zoomic"></use></svg>';
             b.appendChild(im); b.appendChild(cap); b.appendChild(zoom);
             frag.appendChild(b);
