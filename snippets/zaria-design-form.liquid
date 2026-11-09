@@ -41,8 +41,11 @@
   .zdf-cat:hover{border-color:#b9b2a7;color:#161616}
   .zdf-cat.is-on{border-color:#161616;background:#161616;color:#fff}
   .zdf-carousel{position:relative}
-  .zdf-picks{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;scroll-behavior:smooth;
-    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  {%- comment -%}No scroll-behavior:smooth here: inside a modal that has only just been shown,
+     the browser quietly refuses the animated scroll and the row never moves. The arrows animate
+     it themselves.{%- endcomment -%}
+  .zdf-picks{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .zdf-picks::-webkit-scrollbar{display:none}
   .zdf-pick{position:relative;flex:0 0 calc((100% - 30px) / 4);scroll-snap-align:start;border:1px solid #e6e2db;
     background:#fff;padding:0 0 7px;cursor:pointer;font-family:inherit;text-align:center;
@@ -263,9 +266,21 @@
     var firstTab = cats.querySelector('[data-zdf-cat].is-on') || cats.querySelector('[data-zdf-cat]');
     if (pieceField && firstTab) pieceField.value = firstTab.getAttribute('data-zdf-piece') || '';
 
+    // Our own easing: see the note on scroll-behavior above.
+    var gliding = null;
     function page(dir) {
-      picks.scrollBy({ left: dir * picks.clientWidth, behavior: 'smooth' });
-      setTimeout(refreshNav, 420);
+      var from = picks.scrollLeft;
+      var max = picks.scrollWidth - picks.clientWidth;
+      var to = Math.max(0, Math.min(max, from + dir * picks.clientWidth));
+      var t0 = performance.now(), ms = 300;
+      if (gliding) cancelAnimationFrame(gliding);
+      (function step(now) {
+        var k = Math.min(1, (now - t0) / ms);
+        var e = 1 - Math.pow(1 - k, 3);
+        picks.scrollLeft = from + (to - from) * e;
+        if (k < 1) gliding = requestAnimationFrame(step);
+        else { gliding = null; refreshNav(); }
+      })(t0);
     }
     if (navPrev) navPrev.addEventListener('click', function () { page(-1); });
     if (navNext) navNext.addEventListener('click', function () { page(1); });

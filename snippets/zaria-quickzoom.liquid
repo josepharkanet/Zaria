@@ -17,67 +17,78 @@
 {%- endcomment -%}
 <div class="zqz" id="zaria-quickzoom" aria-hidden="true" role="dialog" aria-label="Product images">
   <div class="zqz__stage" data-zqz-stage>
-    <img class="zqz__img" data-zqz-img alt="" src="" draggable="false">
+    <div class="zqz__frame" data-zqz-frame>
+      <span class="zqz__count" aria-hidden="true"></span>
+      <button class="zqz__close" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="zqz__clip" data-zqz-clip>
+        <img class="zqz__img" data-zqz-img alt="" src="" draggable="false">
+      </div>
+      <button class="zqz__nav zqz__nav--prev" type="button" aria-label="Previous image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"/></svg>
+      </button>
+      <button class="zqz__nav zqz__nav--next" type="button" aria-label="Next image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 L16 12 L9 19"/></svg>
+      </button>
+      <div class="zqz__dots" data-zqz-dots aria-hidden="true"></div>
+      <span class="zqz__hint" data-zqz-hint></span>
+    </div>
   </div>
-  <button class="zqz__close" type="button" aria-label="Close">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-  </button>
-  <button class="zqz__nav zqz__nav--prev" type="button" aria-label="Previous image">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"/></svg>
-  </button>
-  <button class="zqz__nav zqz__nav--next" type="button" aria-label="Next image">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 L16 12 L9 19"/></svg>
-  </button>
-  <span class="zqz__count" aria-hidden="true"></span>
-  <span class="zqz__hint" data-zqz-hint></span>
-  <div class="zqz__dots" data-zqz-dots aria-hidden="true"></div>
 </div>
 <style>
   .zqz{position:fixed;inset:0;z-index:10050;display:none;background:rgba(14,12,12,.96);
     -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
   .zqz.is-open{display:block}
   .zqz__stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    overflow:hidden;touch-action:none;cursor:zoom-in}
+    touch-action:none;cursor:zoom-in;padding:68px 72px}
   .zqz.is-zoomed .zqz__stage{cursor:grab}
   .zqz.is-panning .zqz__stage{cursor:grabbing}
-  .zqz__img{display:block;max-width:92vw;max-height:82vh;object-fit:contain;transform-origin:center center;
-    will-change:transform;-webkit-user-drag:none;user-select:none}
+  {%- comment -%}Everything hangs off the picture's own box, so the arrows and the close sit
+     beside it rather than out at the corners of a wide screen.{%- endcomment -%}
+  .zqz__frame{position:relative;display:inline-block;max-width:100%;max-height:100%}
+  .zqz__clip{display:block;overflow:hidden;line-height:0}
+  .zqz__img{display:block;max-width:min(92vw, calc(100vw - 150px));max-height:min(82vh, calc(100vh - 150px));
+    object-fit:contain;transform-origin:center center;will-change:transform;-webkit-user-drag:none;user-select:none}
   .zqz__img.is-eased{transition:transform .26s cubic-bezier(.2,.7,.3,1)}
   .zqz__img.is-swapping{opacity:0;transition:opacity .13s ease}
 
-  .zqz__close{position:absolute;top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));
-    z-index:3;width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.1);color:#fff;
+  .zqz__close{position:absolute;bottom:calc(100% + 12px);right:-6px;
+    z-index:3;width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;
     display:grid;place-items:center;cursor:pointer;padding:0;transition:background .15s ease}
   .zqz__close:hover{background:rgba(255,255,255,.22)}
   .zqz__close svg{width:20px;height:20px}
 
-  .zqz__nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:52px;height:52px;border-radius:50%;
-    border:0;background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0;
+  .zqz__nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:48px;height:48px;border-radius:50%;
+    border:0;background:rgba(255,255,255,.12);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0;
     transition:background .15s ease,opacity .2s ease}
   .zqz__nav:hover{background:rgba(255,255,255,.22)}
   .zqz__nav svg{width:20px;height:20px}
-  .zqz__nav--prev{left:18px}
-  .zqz__nav--next{right:18px}
+  .zqz__nav--prev{left:-60px}
+  .zqz__nav--next{right:-60px}
   .zqz__nav[hidden]{display:none}
   .zqz.is-zoomed .zqz__nav{opacity:0;pointer-events:none}
 
-  .zqz__count{position:absolute;top:max(24px,env(safe-area-inset-top));left:0;right:0;text-align:center;
+  .zqz__count{position:absolute;bottom:calc(100% + 24px);left:0;right:0;text-align:center;
     color:rgba(255,255,255,.78);font-size:12px;letter-spacing:.18em;pointer-events:none}
-  .zqz__hint{position:absolute;bottom:max(22px,env(safe-area-inset-bottom));left:0;right:0;text-align:center;
+  .zqz__hint{position:absolute;top:calc(100% + 34px);left:50%;transform:translateX(-50%);white-space:nowrap;
     color:rgba(255,255,255,.6);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;pointer-events:none;
-    transition:opacity .2s ease;padding:0 16px}
+    transition:opacity .2s ease}
   .zqz.is-zoomed .zqz__hint{opacity:0}
-  .zqz__dots{position:absolute;bottom:max(50px,calc(env(safe-area-inset-bottom) + 28px));left:0;right:0;
+  .zqz__dots{position:absolute;top:calc(100% + 14px);left:0;right:0;
     display:flex;justify-content:center;gap:7px;pointer-events:none;transition:opacity .2s ease}
   .zqz__dots span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.3)}
   .zqz__dots span.is-on{background:rgba(255,255,255,.9)}
   .zqz.is-zoomed .zqz__dots{opacity:0}
 
-  @media(max-width:699px){
-    .zqz__img{max-width:100vw;max-height:78vh}
-    .zqz__nav{width:44px;height:44px;background:rgba(255,255,255,.08)}
-    .zqz__nav--prev{left:6px}
-    .zqz__nav--next{right:6px}
+  @media(max-width:860px){
+    .zqz__stage{padding:60px 12px}
+    .zqz__img{max-width:100vw;max-height:min(74vh, calc(100vh - 170px))}
+    .zqz__nav{width:44px;height:44px;background:rgba(20,16,16,.45);backdrop-filter:blur(2px)}
+    .zqz__nav--prev{left:8px}
+    .zqz__nav--next{right:8px}
+    .zqz__close{right:0;bottom:calc(100% + 10px)}
+    .zqz__hint{white-space:normal;width:84vw;text-align:center;top:calc(100% + 30px)}
   }
   @media(hover:none){
     .zqz__nav{opacity:.55}
@@ -95,6 +106,7 @@
   (function () {
     var lb = document.getElementById('zaria-quickzoom'); if (!lb) return;
     var stage = lb.querySelector('[data-zqz-stage]');
+    var clip = lb.querySelector('[data-zqz-clip]');
     var img = lb.querySelector('[data-zqz-img]');
     var prev = lb.querySelector('.zqz__nav--prev');
     var next = lb.querySelector('.zqz__nav--next');
@@ -118,11 +130,11 @@
       if (eased) setTimeout(function () { img.classList.remove('is-eased'); }, 280);
     }
 
-    // The picture may be panned only as far as its own edge.
+    // The picture may be panned only as far as its own edge, within its own frame.
     function bounds() {
-      var sw = stage.clientWidth, sh = stage.clientHeight;
+      var cw = clip.clientWidth, ch = clip.clientHeight;
       var iw = img.offsetWidth * scale, ih = img.offsetHeight * scale;
-      return { x: Math.max(0, (iw - sw) / 2), y: Math.max(0, (ih - sh) / 2) };
+      return { x: Math.max(0, (iw - cw) / 2), y: Math.max(0, (ih - ch) / 2) };
     }
     function clamp() {
       var b = bounds();
@@ -143,7 +155,7 @@
       draw(eased);
     }
     function centreOffset(clientX, clientY) {
-      var r = stage.getBoundingClientRect();
+      var r = clip.getBoundingClientRect();
       return { x: clientX - (r.left + r.width / 2), y: clientY - (r.top + r.height / 2) };
     }
 
@@ -296,7 +308,7 @@
       if (swiping) {
         var moved = tx;
         swiping = false; dragging = false;
-        if (Math.abs(moved) > Math.max(45, stage.clientWidth * 0.12)) {
+        if (Math.abs(moved) > Math.max(45, clip.clientWidth * 0.12)) {
           go(moved < 0 ? 1 : -1);
         } else { tx = 0; draw(true); }
         return;
