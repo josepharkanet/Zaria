@@ -81,6 +81,7 @@
           {%- if zlt == 'promotion' -%}{%- assign zis_promo = true -%}
           {%- elsif zpromo_src != blank and zlt == zpromo_src -%}{%- assign zis_promo = true -%}{%- endif -%}
           {%- assign zlink_label = link.title -%}
+          {%- if zlt == 'shop' -%}{%- assign zlink_label = 'Shop All' -%}{%- endif -%}
           {%- assign zlink_href = link.url -%}
           {%- if zis_promo -%}
             {%- assign zlink_label = promo_label | default: 'Promotion' -%}
@@ -111,7 +112,7 @@
               </details>
             {%- else -%}
               <a href="{{ link.url }}" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">
-                {{- link.title -}}
+                {{- zlink_label -}}
               </a>
             {%- endif -%}
           </li>

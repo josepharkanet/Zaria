@@ -307,6 +307,11 @@
                   assign zar_is_promo = true
                 endif
                 assign zar_link_label = link.title
+                # Shop opens the whole catalogue, so it says so. The menu item itself is still
+                # named "Shop" in Shopify, which this store's app cannot rename.
+                if link_title_downcase == 'shop'
+                  assign zar_link_label = 'Shop All'
+                endif
                 if zar_is_promo
                   assign zar_link_label = zar_promo_label
                   assign link_href = zar_promo_url
@@ -325,28 +330,8 @@
               {%- comment -%} Zaria: hardcoded category mega-menus (no menu nesting needed) {%- endcomment -%}
               {%- capture zaria_mega_links -%}
                 {%- case link_title_downcase -%}
-                  {%- when 'shop' -%}
-                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.all_products_collection_url }}" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'tag' %}Shop All</a>
-                        <a href="{{ routes.root_url }}collections/new" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'silk' %}New In</a>
-                        <a href="{{ routes.root_url }}collections/all-fabrics" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'cotton' %}Fabrics</a>
-                        <a href="{{ routes.root_url }}collections/gift-sets" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'gift' %}Gifts</a>
-                      </div>
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/fragrance" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'perfume' %}Fragrance</a>
-                        <a href="{{ routes.root_url }}collections/perfumes">Perfumes</a>
-                        <a href="{{ routes.root_url }}collections/home-fragrance">Home Fragrance</a>
-                        <a href="{{ routes.root_url }}collections/gift-sets">Gift Sets</a>
-                      </div>
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'veil' %}Sheila &amp; Accessories</a>
-                        <a href="{{ routes.root_url }}collections/abayas">Ready-to-Wear</a>
-                      </div>
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/promotion" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'shawl' %}Promotion</a>
-                      </div>
-                    </div></div>
+                  {%- comment -%}Shop carries no panel: it is the whole catalogue, and the
+                    panel only repeated items that are already in the rail (client, 2026-11-09).{%- endcomment -%}
                   {%- when 'fabrics' -%}
                     <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
                       <div class="zaria-mega__col">
