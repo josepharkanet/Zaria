@@ -29,18 +29,44 @@
   .zdf-fabric svg{flex:none;color:var(--wine,#7a1f34)}
   .zdf-fabric b{font-weight:500}
   .zdf-field{margin-bottom:15px}
-  /* Pick one of the house's own pieces to start from, rather than describing a shape in words. */
+  /* Pick one of the house's own pieces to start from, rather than describing a shape in words.
+     The categories are the ones the menu lists, and the row carries four tiles at a time -
+     From scratch and three pieces - each whole, rather than a fourth cut off at the edge. */
   .zdf-field label span{letter-spacing:.08em;text-transform:none;color:#a0a0a0}
-  .zdf-picks{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
-  .zdf-picks::-webkit-scrollbar{height:4px}
-  .zdf-picks::-webkit-scrollbar-thumb{background:#d7d2ca}
-  .zdf-pick{position:relative;flex:0 0 auto;scroll-snap-align:start;width:132px;border:1px solid #e6e2db;background:#fff;padding:0 0 7px;
-    cursor:pointer;font-family:inherit;text-align:center;transition:border-color .2s ease,box-shadow .2s ease}
+  .zdf-field label .zdf-req{color:var(--wine,#7a1f34);letter-spacing:0}
+  .zdf-cats{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+  .zdf-cat{border:1px solid #e6e2db;background:#fff;padding:9px 13px;font-family:inherit;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:#6a6a6a;cursor:pointer;line-height:1;
+    transition:border-color .18s ease,color .18s ease,background .18s ease}
+  .zdf-cat:hover{border-color:#b9b2a7;color:#161616}
+  .zdf-cat.is-on{border-color:#161616;background:#161616;color:#fff}
+  .zdf-carousel{position:relative}
+  .zdf-picks{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;scroll-behavior:smooth;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .zdf-picks::-webkit-scrollbar{display:none}
+  .zdf-pick{position:relative;flex:0 0 calc((100% - 30px) / 4);scroll-snap-align:start;border:1px solid #e6e2db;
+    background:#fff;padding:0 0 7px;cursor:pointer;font-family:inherit;text-align:center;
+    transition:border-color .2s ease,box-shadow .2s ease}
   .zdf-pick:hover{border-color:#b9b2a7}
   .zdf-pick.is-on{border-color:#161616;box-shadow:inset 0 0 0 1px #161616}
-  .zdf-pick img{display:block;width:100%;height:176px;object-fit:cover;object-position:50% 10%}
+  .zdf-pick img{display:block;width:100%;aspect-ratio:3 / 4;height:auto;object-fit:cover;object-position:50% 12%}
   .zdf-pick span{display:block;font-size:11px;line-height:1.35;letter-spacing:.02em;color:#6a6a6a;padding:7px 6px 0}
-  .zdf-pick--none{display:flex;align-items:center;justify-content:center;height:212px;padding:0 12px}
+  .zdf-pick--none{display:flex;align-items:center;justify-content:center;padding:0 10px}
+  /* Arrows: one page at a time, and they step aside at either end. */
+  .zdf-nav{position:absolute;top:44%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;
+    border:1px solid #e0dbd3;background:rgba(255,255,255,.97);color:#161616;display:flex;align-items:center;
+    justify-content:center;cursor:pointer;padding:0;z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.09);
+    transition:opacity .2s ease,border-color .2s ease,visibility .2s ease}
+  .zdf-nav:hover{border-color:#161616}
+  .zdf-nav--prev{left:-8px}
+  .zdf-nav--next{right:-8px}
+  .zdf-nav[disabled]{opacity:0;visibility:hidden;pointer-events:none}
+  .zdf-nav svg{width:15px;height:15px}
+  @media(max-width:560px){
+    .zdf-pick{flex:0 0 calc((100% - 10px) / 2)}
+    .zdf-nav--prev{left:-4px}
+    .zdf-nav--next{right:-4px}
+  }
   /* A look at the piece without leaving the brief. Hands the image to the theme's own lightbox. */
   .zdf-zoom{position:absolute;top:6px;right:6px;width:26px;height:26px;border:0;border-radius:50%;
     background:rgba(255,255,255,.9);color:#161616;cursor:pointer;display:flex;align-items:center;justify-content:center;
@@ -104,34 +130,56 @@
           <option>Abaya</option><option>Jalabiya</option><option>Sheila</option><option>Other</option>
         </select>
       </div>
-      {%- comment -%}One source now. Ready-to-Wear held only jalabiyas and abayas, so the
-         sheilas had to be pulled from the accessories collection as well; they carry the
-         Ready-to-Wear tag since 2026-11-09 and reading both would show each one twice.{%- endcomment -%}
-      {%- assign zdf_srcs = 'ready-to-wear' | split: ',' -%}
-      {%- assign zdf_designs = collections['ready-to-wear'].products -%}
-      {%- if zdf_designs.size > 0 -%}
+      {%- comment -%}
+        The designs are offered by category, the same four the menu lists under Ready to Wear:
+        Abayas, then Jalabiya's two - Ramadan 2027 and Freya Collections - then Sheila &
+        Accessories. Before this the row was one flat list of everything ready-to-wear in
+        newest-first order, which read as a new-arrivals strip and buried the collections.
+        Four tiles show at a time (From scratch and three pieces) and the arrows move a page.
+      {%- endcomment -%}
+      {%- assign zdf_groups = 'abayas,ramadan-2027,freya,accessories' | split: ',' -%}
+      {%- assign zdf_pieces = 'Abaya,Jalabiya,Jalabiya,Sheila' | split: ',' -%}
+      {%- assign zdf_any = 0 -%}
+      {%- for g in zdf_groups -%}{%- assign zdf_any = zdf_any | plus: collections[g].products.size -%}{%- endfor -%}
+      {%- if zdf_any > 0 -%}
       <div class="zdf-field">
         <label>Start from one of our designs <span>optional</span></label>
-        <div class="zdf-picks" data-zdf-picks>
-          <button type="button" class="zdf-pick zdf-pick--none is-on" data-zdf-pick="" data-zdf-handle=""><span>From scratch</span></button>
-          {%- for zdf_s in zdf_srcs -%}
-          {%- assign zdf_key = zdf_s | strip -%}
-          {%- for zp in collections[zdf_key].products limit: 40 -%}
-            {%- if zp.featured_image != blank -%}
-              {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 6 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
-              <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}" data-zdf-type="{{ zp.type | escape }}">
-                <img src="{{ zp.featured_image | image_url: width: 300 }}" alt="{{ zp.title | escape }}" loading="lazy" width="132" height="176">
-                <span>{{ zp.title | split: ' ' | slice: 0, 2 | join: ' ' }}</span>
-                <span class="zdf-zoom" role="button" tabindex="0" aria-label="Look closer at {{ zp.title | escape }}" data-zoom-gallery="{{ zp_gallery }}">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"/></svg>
-                </span>
-              </button>
+        <div class="zdf-cats" data-zdf-cats>
+          {%- assign zdf_first = '' -%}
+          {%- for g in zdf_groups -%}
+            {%- if collections[g].products.size > 0 -%}
+              {%- if zdf_first == '' -%}{%- assign zdf_first = g -%}{%- endif -%}
+              <button type="button" class="zdf-cat{% if g == zdf_first %} is-on{% endif %}" data-zdf-cat="{{ g }}" data-zdf-piece="{{ zdf_pieces[forloop.index0] }}">{{ collections[g].title }}</button>
             {%- endif -%}
           {%- endfor -%}
-          {%- endfor -%}
+        </div>
+        <div class="zdf-carousel">
+          <button type="button" class="zdf-nav zdf-nav--prev" data-zdf-prev aria-label="Previous designs" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"/></svg>
+          </button>
+          <div class="zdf-picks" data-zdf-picks data-zdf-root="{{ routes.root_url }}">
+            <button type="button" class="zdf-pick zdf-pick--none is-on" data-zdf-pick="" data-zdf-handle=""><span>From scratch</span></button>
+            {%- for g in zdf_groups -%}
+            {%- for zp in collections[g].products limit: 16 -%}
+              {%- if zp.featured_image != blank -%}
+                {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 6 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+                <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}" data-zdf-group="{{ g }}" data-zdf-type="{{ zp.type | escape }}"{% unless g == zdf_first %} hidden{% endunless %}>
+                  <img src="{{ zp.featured_image | image_url: width: 400 }}" alt="{{ zp.title | escape }}" loading="lazy" width="132" height="176">
+                  <span>{{ zp.title | split: ' ' | slice: 0, 2 | join: ' ' }}</span>
+                  <span class="zdf-zoom" role="button" tabindex="0" aria-label="Look closer at {{ zp.title | escape }}" data-zoom-gallery="{{ zp_gallery }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"/></svg>
+                  </span>
+                </button>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- endfor -%}
+          </div>
+          <button type="button" class="zdf-nav zdf-nav--next" data-zdf-next aria-label="More designs">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 L16 12 L9 19"/></svg>
+          </button>
         </div>
         <p class="zdf-picks-empty" data-zdf-picks-empty hidden>No ready-made designs in this category yet. Describe it below instead.</p>
-        <a class="zdf-picks-more" href="{{ routes.root_url }}collections/ready-to-wear">See the whole collection &rarr;</a>
+        <a class="zdf-picks-more" data-zdf-more href="{{ routes.root_url }}collections/{{ zdf_first }}">See the whole collection &rarr;</a>
         <input type="hidden" name="properties[Our design]" value="" data-zdf-pickval>
         <input type="hidden" name="properties[_design_handle]" value="" data-zdf-pickhandle>
       </div>
@@ -140,8 +188,9 @@
       <div class="zdf-field"><label>Describe the design</label>
         <textarea name="properties[Design notes]" placeholder="Silhouette, sleeves, neckline, embroidery, inspiration&hellip;"></textarea>
       </div>
-      <div class="zdf-field"><label>Measurements (optional)</label>
-        <textarea name="properties[Measurements]" placeholder="Bust, waist, hips, length in inches or cm&hellip; or leave blank to measure at your fitting"></textarea>
+      {%- comment -%}Asked for, not offered: the atelier cannot start without them.{%- endcomment -%}
+      <div class="zdf-field"><label>Measurements <span class="zdf-req">*</span></label>
+        <textarea name="properties[Measurements]" required placeholder="Bust, waist, hips, length &mdash; in inches or cm"></textarea>
       </div>
       <div class="zdf-field"><label>Best contact / WhatsApp</label><input name="properties[Contact]" placeholder="Phone or WhatsApp for your consultation"></div>
 
@@ -170,17 +219,27 @@
       pickHandle.value = b.getAttribute('data-zdf-handle') || '';
     });
   }
-  /* Show only the designs that match the piece being asked for. */
+  // The categories are the menu's. One is open at a time; the arrows move a page of tiles.
   var pieceSel = overlay.querySelector('select[name="properties[Piece]"]');
-  if (pieceSel && picks) {
+  var cats = overlay.querySelector('[data-zdf-cats]');
+  if (picks && cats) {
     var emptyNote = overlay.querySelector('[data-zdf-picks-empty]');
-    pieceSel.addEventListener('change', function () {
-      var want = pieceSel.value;
+    var moreLink = overlay.querySelector('[data-zdf-more]');
+    var navPrev = overlay.querySelector('[data-zdf-prev]');
+    var navNext = overlay.querySelector('[data-zdf-next]');
+    var root = picks.getAttribute('data-zdf-root') || '/';
+
+    function updateNav() {
+      if (!navPrev || !navNext) return;
+      var max = picks.scrollWidth - picks.clientWidth;
+      navPrev.disabled = picks.scrollLeft <= 2;
+      navNext.disabled = picks.scrollLeft >= max - 2;
+    }
+
+    function showGroup(g) {
       var any = false;
-      picks.querySelectorAll('.zdf-pick').forEach(function (b) {
-        if (b.classList.contains('zdf-pick--none')) return;
-        var t = b.getAttribute('data-zdf-type') || '';
-        var show = !want || want === 'Other' || t === want;
+      picks.querySelectorAll('[data-zdf-group]').forEach(function (b) {
+        var show = b.getAttribute('data-zdf-group') === g;
         b.hidden = !show;
         if (show) any = true;
         if (!show && b.classList.contains('is-on')) {
@@ -190,10 +249,50 @@
           overlay.querySelector('[data-zdf-pickhandle]').value = '';
         }
       });
+      cats.querySelectorAll('[data-zdf-cat]').forEach(function (c) {
+        c.classList.toggle('is-on', c.getAttribute('data-zdf-cat') === g);
+      });
+      if (moreLink) moreLink.href = root + 'collections/' + g;
       if (emptyNote) emptyNote.hidden = any;
       picks.scrollLeft = 0;
+      setTimeout(updateNav, 30);
+    }
+
+    cats.querySelectorAll('[data-zdf-cat]').forEach(function (c) {
+      c.addEventListener('click', function () { showGroup(c.getAttribute('data-zdf-cat')); });
+    });
+
+    // Naming the piece opens the first category that cuts it.
+    if (pieceSel) {
+      pieceSel.addEventListener('change', function () {
+        var want = pieceSel.value;
+        if (!want || want === 'Other') return;
+        var match = cats.querySelector('[data-zdf-piece="' + want + '"]');
+        if (match) showGroup(match.getAttribute('data-zdf-cat'));
+      });
+    }
+
+    function page(dir) {
+      picks.scrollBy({ left: dir * picks.clientWidth, behavior: 'smooth' });
+      setTimeout(updateNav, 420);
+    }
+    if (navPrev) navPrev.addEventListener('click', function () { page(-1); });
+    if (navNext) navNext.addEventListener('click', function () { page(1); });
+    picks.addEventListener('scroll', updateNav, { passive: true });
+    window.addEventListener('resize', updateNav);
+    setTimeout(updateNav, 120);
+  }
+  // Choosing a design when no piece is named says which piece it is.
+  if (picks && pieceSel && cats) {
+    picks.addEventListener('click', function (e) {
+      if (pieceSel.value) return;
+      var b = e.target.closest('.zdf-pick');
+      var cat = b && b.getAttribute('data-zdf-group');
+      var tab = cat && cats.querySelector('[data-zdf-cat="' + cat + '"]');
+      if (tab) pieceSel.value = tab.getAttribute('data-zdf-piece') || '';
     });
   }
+
   var form = overlay.querySelector('[data-zdf-form]');
   function open(){ overlay.classList.add('is-open'); document.body.style.overflow='hidden'; }
   function close(){ overlay.classList.remove('is-open'); document.body.style.overflow=''; }
