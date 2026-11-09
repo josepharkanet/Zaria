@@ -99,9 +99,10 @@
       <div class="zdf-row">
         <div class="zdf-field"><label>Event date (optional)</label><input type="date" name="properties[Event date]"></div>
       </div>
-      {%- comment -%}Two sources, because Ready-to-Wear holds only jalabiyas and abayas: the
-         sheilas live in the accessories collection, so choosing Sheila found nothing.{%- endcomment -%}
-      {%- assign zdf_srcs = 'ready-to-wear,accessories' | split: ',' -%}
+      {%- comment -%}One source now. Ready-to-Wear held only jalabiyas and abayas, so the
+         sheilas had to be pulled from the accessories collection as well; they carry the
+         Ready-to-Wear tag since 2026-11-09 and reading both would show each one twice.{%- endcomment -%}
+      {%- assign zdf_srcs = 'ready-to-wear' | split: ',' -%}
       {%- assign zdf_designs = collections['ready-to-wear'].products -%}
       {%- if zdf_designs.size > 0 -%}
       <div class="zdf-field">
