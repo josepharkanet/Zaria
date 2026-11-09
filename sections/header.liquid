@@ -68,23 +68,16 @@
     font-size: 12px;
     white-space: nowrap;
   }
-  /* Zaria: the promotion is the one item in the rail that has to be seen, so it reads as a
-     filled pill rather than another word in the line. The colour is a setting, so a future
-     promotion can take a different one without a code change. */
+  /* Zaria: the promotion is the one item in the rail that has to be seen, so it takes the
+     house colour while the rest of the line stays charcoal. Colour only, no pill: the client
+     asked for the word highlighted, not a button (2026-11-09). */
   #shopify-section-{{ section.id }} .header__primary-nav-item > a.zar-navpromo,
   #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo {
-    display: inline-block;
-    background: {{ section.settings.promo_color | default: '#7a1f34' }};
-    color: #fff !important;
-    padding: 8px 18px;
-    line-height: 1;
-    border: 1px solid {{ section.settings.promo_color | default: '#7a1f34' }};
-    transition: background .2s ease, color .2s ease, border-color .2s ease;
+    color: {{ section.settings.promo_color | default: '#7a1f34' }} !important;
+    transition: opacity .2s ease;
   }
   #shopify-section-{{ section.id }} .header__primary-nav a.zar-navpromo:hover {
-    background: transparent;
-    color: {{ section.settings.promo_color | default: '#7a1f34' }} !important;
-    border-color: {{ section.settings.promo_color | default: '#7a1f34' }};
+    opacity: .72;
   }
   #shopify-section-{{ section.id }} .header__logo-text {
     text-transform: uppercase;
@@ -899,20 +892,20 @@
     {
       "type": "text",
       "id": "promo_label",
-      "label": "Promotion button text",
+      "label": "Promotion menu text",
       "default": "Promotion"
     },
     {
       "type": "text",
       "id": "promo_url",
-      "label": "Promotion button link",
+      "label": "Promotion menu link",
       "default": "/collections/promotion"
     },
     {
       "type": "color",
       "id": "promo_color",
-      "label": "Promotion button colour",
-      "info": "Fills a menu item named Promotion.",
+      "label": "Promotion highlight colour",
+      "info": "Colours the promotion item in the menu.",
       "default": "#7a1f34"
     },
     {
