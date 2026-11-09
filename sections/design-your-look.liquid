@@ -31,32 +31,32 @@
     font-size:12px;letter-spacing:.22em;text-transform:uppercase;border:1px solid #fff;transition:background .2s ease,color .2s ease}
   #shopify-section-{{ section.id }} .zdl__btn:hover{background:transparent;color:#fff}
   /* Light variant: airy, contained, no dark image block */
-  /* words on the clear ground, charcoal, once there is room beside the subject */
+  /* The words step off the subject and onto the clear part of the frame once there is room.
+     Which ink they take belongs to the photograph, not to this rule: the Custom Design hero is a
+     pale room and reads in charcoal, while the homepage frame is a dark wall and needs white.
+     Charcoal was written in here unconditionally and the words vanished on the dark frames
+     (client, 2026-11-09), so the tone is a setting now and the layout stays shared. */
   @media(min-width:861px){
     #shopify-section-{{ section.id }} .zdl:not(.zdl--light){display:flex;align-items:center}
     #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__inner{
       margin-right:auto;margin-left:0;text-align:left;max-width:min(33%,420px);
-      padding-left:clamp(40px,6vw,96px);padding-right:0;color:#1a1a1a}
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__overline{color:#1a1a1a !important;opacity:1}
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__title{color:#1a1a1a !important}
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__body{color:rgba(26,26,26,.78)}
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__btn{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__btn:hover{background:transparent;color:#1a1a1a}
+      padding-left:clamp(40px,6vw,96px);padding-right:0}
   }
-  /* A phone shows roughly a third of the frame, and centred on the embroidery there is nowhere
-     legible for the words without the overlay we removed. Slide the crop towards the clear ground
-     instead: about three quarters pale wall with the embroidery entering at the right, and the
-     words in charcoal on the pale part, exactly as on a wide screen. */
+  /* A phone shows roughly a third of the frame, so slide the crop towards the clear ground
+     instead of centring on the embroidery: the words keep a quiet piece of wall to sit on. */
   @media(max-width:860px){
     #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__bg{object-position:14% center}
     #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__inner{
       text-align:left;max-width:72%;margin-left:0;margin-right:auto;
-      padding-left:clamp(20px,6vw,34px);padding-right:0;color:#1a1a1a}
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__overline{color:#1a1a1a !important;opacity:1}
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__title{color:#1a1a1a !important}
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__body{color:rgba(26,26,26,.78)}
-    #shopify-section-{{ section.id }} .zdl:not(.zdl--light) .zdl__btn{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+      padding-left:clamp(20px,6vw,34px);padding-right:0}
   }
+  /* Charcoal ink: only for a frame pale enough to carry it. */
+  #shopify-section-{{ section.id }} .zdl.zdl--ink .zdl__inner{color:#1a1a1a}
+  #shopify-section-{{ section.id }} .zdl.zdl--ink .zdl__overline{color:#1a1a1a;opacity:1}
+  #shopify-section-{{ section.id }} .zdl.zdl--ink .zdl__heading{color:#1a1a1a}
+  #shopify-section-{{ section.id }} .zdl.zdl--ink .zdl__body{color:rgba(26,26,26,.78)}
+  #shopify-section-{{ section.id }} .zdl.zdl--ink .zdl__btn{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+  #shopify-section-{{ section.id }} .zdl.zdl--ink .zdl__btn:hover{background:transparent;color:#1a1a1a}
   #shopify-section-{{ section.id }} .zdl.zdl--light{min-height:0;background:#faf8f5;display:block}
   #shopify-section-{{ section.id }} .zdl--light .zdl__inner{color:#141414;padding:clamp(54px,7vw,86px) clamp(24px,5vw,48px)}
   #shopify-section-{{ section.id }} .zdl--light .zdl__overline{color:#8a8178}
@@ -65,7 +65,7 @@
   #shopify-section-{{ section.id }} .zdl--light .zdl__btn{background:#161616;color:#fff;border-color:#161616}
   #shopify-section-{{ section.id }} .zdl--light .zdl__btn:hover{background:#7a1f34;border-color:#7a1f34;color:#fff}
 </style>
-<section class="zdl{% if section.settings.scheme == 'light' %} zdl--light{% endif %}">
+<section class="zdl{% if section.settings.scheme == 'light' %} zdl--light{% elsif section.settings.text_tone == 'ink' %} zdl--ink{% endif %}">
   {%- unless section.settings.scheme == 'light' -%}
   {%- assign zdl_video = section.settings.background_video -%}
   {%- if zdl_video != blank and zdl_video.sources.size > 0 -%}
@@ -108,6 +108,7 @@
   "name": "Design Your Look",
   "settings": [
     { "type": "select", "id": "scheme", "label": "Style", "options": [ { "value": "dark", "label": "Dark image banner" }, { "value": "light", "label": "Light" } ], "default": "dark" },
+    { "type": "select", "id": "text_tone", "label": "Words on the photograph", "info": "White suits a dark frame; charcoal suits a pale one.", "options": [ { "value": "light", "label": "White" }, { "value": "ink", "label": "Charcoal" } ], "default": "light" },
     { "type": "video", "id": "background_video", "label": "Background video (overrides image)" },
     { "type": "image_picker", "id": "image", "label": "Background image / video poster (optional)" },
     { "type": "text", "id": "image_asset", "label": "Background file in assets", "info": "e.g. zaria-story-hero.jpg \u2014 used instead of the picker above" },

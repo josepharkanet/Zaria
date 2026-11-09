@@ -14,6 +14,7 @@
       "settings": {
         "scheme": "dark",
         "image": "shopify://shop_images/ALS_7578.jpg",
+        "text_tone": "ink",
         "image_asset": "zaria-dyl-hero.jpg",
         "focal": "center",
         "height": 66,
