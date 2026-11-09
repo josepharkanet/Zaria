@@ -89,6 +89,12 @@
   .zmm__mark.is-active circle{stroke:#161616}
 
   .zmm__fields{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+  .zmm__fname .req{color:var(--wine,#7a1f34)}
+  .zmm__fields--ready{margin-top:4px}
+  .zmm__readyfoot{display:flex;align-items:flex-start;justify-content:space-between;gap:10px 20px;flex-wrap:wrap;margin-top:16px}
+  .zmm__readyfoot .zmm__hint{margin:0;flex:1 1 280px;max-width:54ch}
+  .zmm__readyfoot .zmm__chart{flex:0 0 auto}
+  .zmm__readyfoot .zsc__open{padding:0}
   .zmm__field{display:flex;flex-direction:column;position:relative}
   .zmm__field--full{grid-column:1 / -1}
   .zmm__fhead{display:flex;align-items:center;gap:8px;margin:0 0 6px}
@@ -132,7 +138,23 @@
   {%- assign zmm_len = product.metafields.custom.length.value -%}
   {%- assign zmm_all_len = '53,54,55,56,57,58,59,60,61' | split: ',' -%}
   {%- assign zmm_slv = product.metafields.custom.sleeve_length.value -%}
+
+  {%- comment -%}
+    Two kinds of ready-to-wear piece sit behind this panel. One is already finished in the atelier
+    at the length it has, so the size is a statement rather than a choice: that is the piece with a
+    length metafield, or one carrying "No Customisation". The other is cut to order in a standard
+    size — the Ramadan 2027 jalabiyas — and for those "One Size" said nothing. They ask instead for
+    the three figures the cutter needs: the size, the length and the sleeve. The full ten
+    measurements stay with Customized.
+  {%- endcomment -%}
+  {%- assign zmm_fixed = false -%}
+  {%- if zmm_len != blank -%}{%- assign zmm_fixed = true -%}{%- endif -%}
+  {%- if zmm_nocust -%}{%- assign zmm_fixed = true -%}{%- endif -%}
+  {%- comment -%} French size : international equivalent, as printed in the size chart. {%- endcomment -%}
+  {%- assign zmm_sizes = '36:XS,38:S,40:M,42:L,44:XL,46:XXL,48:3XL,50:4XL,52:5XL,54:6XL' | split: ',' -%}
+
   <div class="zmm__panel" data-zmm-panel="ready" hidden>
+    {%- if zmm_fixed -%}
     <div class="zmm__ready-grid">
       <div class="zmm__label">Length <span class="req">*</span></div>
       <select name="properties[Length]" data-zmm-in="ready" disabled>
@@ -159,6 +181,50 @@
     {%- assign zmm_len_cm = zmm_len | times: 2.54 | round: 1 -%}
     {%- assign zmm_slv_cm = zmm_slv | times: 2.54 | round: 1 -%}
     <p class="zmm__hint">This piece is available in <b>{% if zmm_len != blank %}{{ zmm_len }} in ({{ zmm_len_cm }} cm){% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }} in ({{ zmm_slv_cm }} cm) sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements{% unless zmm_nocust %}, or choose <b>Customized</b> to have it cut to your own measurements{% endunless %}.</p>
+    {%- else -%}
+    <div class="zmm__fields zmm__fields--ready">
+      <div class="zmm__field zmm__field--full">
+        <div class="zmm__fhead"><span class="zmm__fname">Size <span class="req">*</span> <span class="u">french &middot; international</span></span></div>
+        <select name="properties[Size]" data-zmm-req data-zmm-in="ready" disabled>
+          <option value="">-- Select --</option>
+          {%- for s in zmm_sizes -%}
+            {%- assign sp = s | split: ':' -%}
+            <option value="{{ sp[0] }} ({{ sp[1] }})">{{ sp[0] }} &middot; {{ sp[1] }}</option>
+          {%- endfor -%}
+        </select>
+      </div>
+      <div class="zmm__field">
+        <div class="zmm__fhead"><span class="zmm__fname">Length <span class="u">in &middot; cm</span></span></div>
+        <select name="properties[Length]" data-zmm-in="ready" disabled>
+          <option value="Standard 61 in (154.9 cm)" selected>Standard &middot; 61 in &middot; 154.9 cm</option>
+          {%- for h in (100..130) -%}
+            {%- assign whole = h | divided_by: 2 -%}
+            {%- assign rem = h | modulo: 2 -%}
+            {%- if rem == 0 -%}{%- capture lab -%}{{ whole }}{%- endcapture -%}{%- else -%}{%- capture lab -%}{{ whole }}.5{%- endcapture -%}{%- endif -%}
+            {%- assign labcm = h | times: 1.27 | round: 1 -%}
+            <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in &middot; {{ labcm }} cm</option>
+          {%- endfor -%}
+        </select>
+      </div>
+      <div class="zmm__field">
+        <div class="zmm__fhead"><span class="zmm__fname">Sleeve Length <span class="u">in &middot; cm</span></span></div>
+        <select name="properties[Sleeve Length]" data-zmm-in="ready" disabled>
+          <option value="Standard for the size chosen" selected>Standard for the size chosen</option>
+          {%- for h in (52..68) -%}
+            {%- assign whole = h | divided_by: 2 -%}
+            {%- assign rem = h | modulo: 2 -%}
+            {%- if rem == 0 -%}{%- capture lab -%}{{ whole }}{%- endcapture -%}{%- else -%}{%- capture lab -%}{{ whole }}.5{%- endcapture -%}{%- endif -%}
+            {%- assign labcm = h | times: 1.27 | round: 1 -%}
+            <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in &middot; {{ labcm }} cm</option>
+          {%- endfor -%}
+        </select>
+      </div>
+    </div>
+    <div class="zmm__readyfoot">
+      <p class="zmm__hint">Cut to order in the size you choose. Neck, shoulder, bust, waist and hip follow the chart; the length and the sleeve are yours to set, and left as they are they come at the standard for your size.</p>
+      <div class="zmm__chart">{% render 'zaria-size-chart' %}</div>
+    </div>
+    {%- endif -%}
   </div>
 
   {%- comment -%} ===== CUSTOMIZED (visual) ===== {%- endcomment -%}
