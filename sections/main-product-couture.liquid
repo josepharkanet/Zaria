@@ -121,10 +121,23 @@
     assign attr_count = 1
   endif
 
+  comment
+    What to show under "You may also like". A garment used to fall back to whichever
+    collection Shopify listed first, which is how a Ramadan 2027 jalabiya came to be shown
+    beside a Freya one. The pieces now come from the narrowest collection the product itself
+    belongs to: its own drop before its category, its category before ready-to-wear.
+  endcomment
   if is_fragrance
     assign relcol = product.collections | where: 'handle', 'fragrance' | first
-  else
+  elsif product.tags contains 'Fabric'
     assign relcol = product.collections | where: 'handle', 'all-fabrics' | first
+  else
+    assign zrel_order = 'ramadan-2027,freya,abayas,jalabiya,accessories,ready-to-wear' | split: ','
+    for zrel_h in zrel_order
+      unless relcol
+        assign relcol = product.collections | where: 'handle', zrel_h | first
+      endunless
+    endfor
   endif
   unless relcol
     assign relcol = product.collections.first
@@ -538,7 +551,13 @@
         {%- if shown >= 4 -%}{%- break -%}{%- endif -%}
         {%- if rp.id == product.id -%}{%- continue -%}{%- endif -%}
         {%- if rp.tags contains 'no-photo' -%}{%- continue -%}{%- endif -%}
-        {%- assign rp_img = rp.images[1] | default: rp.featured_image -%}
+        {%- comment -%}A bolt of cloth is photographed flat first and draped second, so the
+           card leads with the drape. A garment is photographed front first, and leading with
+           its second shot put a side or a back view on the card.{%- endcomment -%}
+        {%- assign rp_img = rp.featured_image -%}
+        {%- if rp.tags contains 'Fabric' -%}
+          {%- assign rp_img = rp.images[1] | default: rp.featured_image -%}
+        {%- endif -%}
         {%- if rp_img == blank -%}{%- continue -%}{%- endif -%}
         {%- assign shown = shown | plus: 1 -%}
         <a class="zpdp__rel" href="{{ rp.url }}">
