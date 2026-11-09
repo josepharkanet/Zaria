@@ -192,14 +192,13 @@
         <textarea name="properties[Design notes]" placeholder="Silhouette, sleeves, neckline, embroidery, inspiration&hellip;"></textarea>
       </div>
       {%- comment -%}
-        The size is chosen here, not typed. This is the product page's own form, rendered
-        without a product so it opens on its cut-to-order side: Readymade asks for the size,
-        the length and the sleeve; Customized opens the sketch and its ten measurements. Its
-        own comment box is off, the brief has one above. A choice is required - the form
-        refuses to submit without one.
+        The size is taken here, not typed. This is the product page's own form, rendered
+        without a product and with no Readymade side: every piece a brief describes is cut to
+        order, so the sketch and its ten measurements open straight away. Its own comment box
+        is off, the brief has one above.
       {%- endcomment -%}
       <div class="zdf-field zdf-field--size">
-        {% render 'zaria-measure-form', show_comment: false %}
+        {% render 'zaria-measure-form', show_comment: false, custom_only: true %}
       </div>
       <div class="zdf-field"><label>Best contact / WhatsApp</label><input name="properties[Contact]" placeholder="Phone or WhatsApp for your consultation"></div>
 

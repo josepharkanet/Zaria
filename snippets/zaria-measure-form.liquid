@@ -10,10 +10,14 @@
 {%- comment -%}
   Optional parameters, for the design brief which renders this form without a product:
     show_comment: false  - the brief has its own description box, so drop this one
+    custom_only: true    - every piece a brief describes is cut to order, so there is no
+                           Readymade to choose: the measurements open straight away
   With no product at all the form falls to its cut-to-order side, which is what a brief is.
 {%- endcomment -%}
 {%- assign zmm_show_comment = true -%}
 {%- if show_comment == false -%}{%- assign zmm_show_comment = false -%}{%- endif -%}
+{%- assign zmm_customonly = false -%}
+{%- if custom_only == true -%}{%- assign zmm_customonly = true -%}{%- endif -%}
 
 {%- assign zmm_is_abaya = false -%}
 {%- if product.type == 'Abaya' or product.tags contains 'Abaya' -%}{%- assign zmm_is_abaya = true -%}{%- endif -%}
@@ -120,22 +124,24 @@
   }
 </style>
 
-<div class="zmm" data-zmm{% if zmm_nocust %} data-zmm-readyonly{% endif %}>
+<div class="zmm" data-zmm{% if zmm_nocust %} data-zmm-readyonly{% endif %}{% if zmm_customonly %} data-zmm-customonly{% endif %}>
   <div class="zmm__top">
     <div>
-      <p class="zmm__head">{% if zmm_nocust %}Size{% else %}Choose your size{% endif %} <span class="req">*</span></p>
-      <p class="zmm__sub" data-zmm-sub>{% if zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}Select Readymade for a standard size, or Customized to have it cut to your measurements.{% endif %}</p>
+      <p class="zmm__head">{% if zmm_customonly %}Your measurements{% elsif zmm_nocust %}Size{% else %}Choose your size{% endif %} <span class="req">*</span></p>
+      <p class="zmm__sub" data-zmm-sub>{% if zmm_customonly %}Cut to your own measurements. Give us the figures you know and our designer confirms the rest at your fitting.{% elsif zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}Select Readymade for a standard size, or Customized to have it cut to your measurements.{% endif %}</p>
     </div>
   </div>
 
-  <div class="zmm__modes"{% if zmm_nocust %} hidden{% endif %}>
+  <div class="zmm__modes"{% if zmm_nocust or zmm_customonly %} hidden{% endif %}>
+    {%- unless zmm_customonly -%}
     <label class="zmm__mode" data-zmm-modelabel>
       <input type="radio" name="properties[Size Type]" value="Readymade" data-zmm-mode="ready" required{% if zmm_nocust %} checked{% endif %}>
       Readymade
     </label>
+    {%- endunless -%}
     {%- unless zmm_nocust -%}
     <label class="zmm__mode" data-zmm-modelabel>
-      <input type="radio" name="properties[Size Type]" value="Customized" data-zmm-mode="custom">
+      <input type="radio" name="properties[Size Type]" value="Customized" data-zmm-mode="custom"{% if zmm_customonly %} checked{% endif %}>
       Customized
     </label>
     {%- endunless -%}
@@ -160,6 +166,7 @@
   {%- comment -%} French size : international equivalent, as printed in the size chart. {%- endcomment -%}
   {%- assign zmm_sizes = '36:XS,38:S,40:M,42:L,44:XL,46:XXL,48:3XL,50:4XL,52:5XL,54:6XL' | split: ',' -%}
 
+  {%- unless zmm_customonly -%}
   <div class="zmm__panel" data-zmm-panel="ready" hidden>
     {%- if zmm_fixed -%}
     <div class="zmm__ready-grid">
@@ -233,6 +240,7 @@
     </div>
     {%- endif -%}
   </div>
+  {%- endunless -%}
 
   {%- comment -%} ===== CUSTOMIZED (visual) ===== {%- endcomment -%}
   {%- unless zmm_nocust -%}
@@ -370,8 +378,9 @@
     }
     modes.forEach(function(r){ r.addEventListener('change', function(){ setActive(r.getAttribute('data-zmm-mode')==='ready'?'ready':'custom'); }); });
 
-    // Readymade-only pieces have no choice to make, so open on the size straight away.
+    // Nothing to choose at either end: open on the only side there is.
     if(root.hasAttribute('data-zmm-readyonly')) setActive('ready');
+    if(root.hasAttribute('data-zmm-customonly')) setActive('custom');
 
     // per-field: update progress + light up the matching diagram point on focus
     root.querySelectorAll('[data-zmm-field-select]').forEach(function(sel){
