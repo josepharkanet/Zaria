@@ -112,7 +112,14 @@
       <span>In <b>{{ product.title }}</b></span>
     </div>
 
-    <form class="zdf-form" action="{{ routes.cart_add_url }}" method="post" data-zdf-form>
+    {%- comment -%}The brief is a cart line first and a designer's job second: it is added to
+      the order here, and the same answers are posted to the studio board so the designer sees
+      it beside the ones taken by hand. The board needs a name and a way to reach the customer,
+      which is why both are asked for below.{%- endcomment -%}
+    <form class="zdf-form" action="{{ routes.cart_add_url }}" method="post" data-zdf-form
+          data-zdf-api="{{ settings.studio_api_url | default: 'https://studio.zaria.ae/api/request' }}"
+          data-zdf-fabric="{{ product.title | escape }}"
+          data-zdf-fabric-handle="{{ product.handle }}">
       <input type="hidden" name="id" value="{{ zdf_variant.id }}">
       <input type="hidden" name="quantity" value="{{ zdf_qty }}">
       <input type="hidden" name="properties[Request]" value="Design your look">
@@ -200,7 +207,8 @@
       <div class="zdf-field zdf-field--size">
         {% render 'zaria-measure-form', show_comment: false, custom_only: true %}
       </div>
-      <div class="zdf-field"><label>Best contact / WhatsApp</label><input name="properties[Contact]" placeholder="Phone or WhatsApp for your consultation"></div>
+      <div class="zdf-field"><label>Your name <span class="zdf-req">*</span></label><input name="properties[Name]" required autocomplete="name" placeholder="Who the designer should ask for"></div>
+      <div class="zdf-field"><label>Best contact / WhatsApp <span class="zdf-req">*</span></label><input name="properties[Contact]" required autocomplete="tel" placeholder="Phone or WhatsApp for your consultation"></div>
 
       <button type="submit" class="zdf-submit" data-zdf-submit>Add to order &amp; continue</button>
       <p class="zdf-note">Your fabric and brief are added to your order. Confirm details at checkout.<br>Our atelier then reaches out.</p>
@@ -377,6 +385,42 @@
   overlay.addEventListener('click', function(e){ if(e.target===overlay) close(); });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
 
+  // The designers' board keeps its measurements under short keys; the cart keeps them under
+  // the names a person reads on the order. This is the one place the two meet.
+  var ZDF_MEASURE = {
+    'Neck Open':'neck_open', 'Shoulder to Shoulder':'shoulder', 'Sleeve Loose':'sleeve_loose',
+    'Sleeve Length':'sleeve', 'Sleeve Open':'sleeve_open', 'Bust':'bust', 'Waist':'waist',
+    'Hip':'hips', 'Length':'length', 'Bottom Open':'bottom_open'
+  };
+  function toStudio(form, fd) {
+    var api = form.getAttribute('data-zdf-api');
+    if (!api) return Promise.resolve();
+    var get = function (k) { var v = fd.get('properties[' + k + ']'); return v == null ? '' : String(v).trim(); };
+    var name = get('Name'), phone = get('Contact');
+    if (!name || !phone) return Promise.resolve();          // the board refuses a nameless request
+    var design = get('Our design'), handle = fd.get('properties[_design_handle]');
+    var notes = [get('Design notes'), design ? 'Starting from: ' + design : '', get('Comment')]
+      .filter(Boolean).join(' — ');
+    var body = {
+      name: name, phone: phone,
+      garment: get('Piece'),
+      fabric: form.getAttribute('data-zdf-fabric') || '',
+      product_ref: form.getAttribute('data-zdf-fabric-handle') || '',
+      notes: notes,
+      size_type: get('Size Type') || 'Customized',
+      reference_url: handle ? (location.origin + '/products/' + handle) : ''
+    };
+    Object.keys(ZDF_MEASURE).forEach(function (label) {
+      var v = get(label);
+      if (v) body['m_' + ZDF_MEASURE[label]] = v;
+    });
+    var size = get('Size'); if (size) body.size = size;
+    return fetch(api, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body), keepalive: true, mode: 'cors'
+    }).catch(function () { /* the order is still the record; never hold up the checkout */ });
+  }
+
   if(form){
     form.addEventListener('submit', function(e){
       e.preventDefault();
@@ -385,6 +429,7 @@
       var fd = new FormData(form);
       fetch('{{ routes.cart_add_url }}.js', { method:'POST', body: fd, headers:{'Accept':'application/json'} })
         .then(function(r){ if(!r.ok) throw new Error('add failed'); return r.json(); })
+        .then(function(){ return toStudio(form, fd); })
         .then(function(){ window.location.href = '/checkout'; })
         .catch(function(){ if(btn){ btn.disabled=false; btn.textContent='Add to order & continue'; } form.submit(); });
     });
