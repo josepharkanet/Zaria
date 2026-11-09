@@ -53,7 +53,6 @@
   .zdf-pick--none span{padding:0;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#161616}
   .zdf-picks-more{display:inline-block;margin-top:2px;font-size:11px;letter-spacing:.1em;color:#6a6a6a}
   .zdf-field label{display:block;font-size:var(--zf-label-size);letter-spacing:var(--zf-label-track);text-transform:uppercase;color:var(--zf-label);margin:0 0 var(--zf-label-gap);line-height:1.4}
-  .zdf-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--zf-gap)}
   .zdf-modal input,.zdf-modal select,.zdf-modal textarea{width:100%;box-sizing:border-box;font-family:inherit;
     font-size:var(--zf-size);letter-spacing:.01em;color:var(--zf-ink);background:var(--zf-bg);
     border:1px solid var(--zf-line);border-radius:var(--zf-radius);transition:border-color .18s ease,box-shadow .18s ease}
@@ -68,7 +67,6 @@
   .zdf-submit:hover{opacity:.85}
   .zdf-submit:disabled{opacity:.55;cursor:default}
   .zdf-note{font-size:var(--zf-hint-size);color:var(--zf-hint);margin:12px 0 0;text-align:center;line-height:1.65}
-  @media(max-width:560px){.zdf-row{grid-template-columns:1fr}}
 </style>
 
 <button type="button" class="zdf-trigger" data-zdf-open>Design your look with this fabric</button>
@@ -90,21 +88,21 @@
       <input type="hidden" name="properties[Request]" value="Design your look">
       <input type="hidden" name="properties[_fabric_handle]" value="{{ product.handle }}">
 
-      <div class="zdf-row">
-        <div class="zdf-field">
-          <label>Piece</label>
-          <select name="properties[Piece]" required>
-            <option value="">Please choose&hellip;</option>
-            {%- comment -%}The shop's own three, plus Other.{%- endcomment -%}
-            <option>Abaya</option><option>Jalabiya</option><option>Sheila</option><option>Other</option>
-          </select>
-        </div>
-        {%- comment -%}Occasion was dropped at the client's request (2026-11-09); the brief
-          reads the same without it and nothing downstream requires the property.{%- endcomment -%}
-        <div class="zdf-field"><label>Colour palette</label><input name="properties[Colour]" placeholder="e.g. ivory, emerald"></div>
-      </div>
-      <div class="zdf-row">
-        <div class="zdf-field"><label>Event date (optional)</label><input type="date" name="properties[Event date]"></div>
+      {%- comment -%}
+        Three fields have gone from this brief at the client's request (2026-11-09):
+        Occasion, Colour palette and Event date. This form always opens from a fabric the
+        customer has already chosen, so its colour is settled before the form appears, and
+        the designer who follows up asks about timing in the same conversation. Nothing
+        downstream requires any of the three properties. What is left is the one thing the
+        brief cannot do without: which piece to cut.
+      {%- endcomment -%}
+      <div class="zdf-field">
+        <label>Piece</label>
+        <select name="properties[Piece]" required>
+          <option value="">Please choose&hellip;</option>
+          {%- comment -%}The shop's own three, plus Other.{%- endcomment -%}
+          <option>Abaya</option><option>Jalabiya</option><option>Sheila</option><option>Other</option>
+        </select>
       </div>
       {%- comment -%}One source now. Ready-to-Wear held only jalabiyas and abayas, so the
          sheilas had to be pulled from the accessories collection as well; they carry the
