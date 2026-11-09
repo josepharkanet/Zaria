@@ -378,20 +378,6 @@
                         <a href="{{ routes.root_url }}collections/fragrance-accessories">Diffuser Refill</a>
                       </div>
                     </div></div>
-                  {%- when 'ready-to-wear' -%}
-                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/abayas" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'abaya' %}Abayas</a>
-                      </div>
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/jalabiya" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'jalabiya' %}Jalabiya</a>
-                        <a href="{{ routes.root_url }}collections/ramadan-2027">Ramadan 2027</a>
-                        <a href="{{ routes.root_url }}collections/freya">Freya Collections</a>
-                      </div>
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'veil' %}Sheila &amp; Accessories</a>
-                      </div>
-                    </div></div>
                   {%- when 'accessories' -%}
                     <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
                       <div class="zaria-mega__col">
@@ -401,9 +387,28 @@
                 {%- endcase -%}
               {%- endcapture -%}
 
+              {%- comment -%}
+                Ready to Wear reads as an ordinary dropdown, not a full-width panel: it has five
+                destinations and a mega menu made three columns of them, two holding a single
+                link (client, 2026-11-09). Captured separately from zaria_mega_links so the
+                wrapper below picks dropdown-menu-disclosure rather than the mega one.
+              {%- endcomment -%}
+              {%- capture zaria_sub_links -%}
+                {%- case link_title_downcase -%}
+                  {%- when 'ready-to-wear' -%}
+                    <ul class="header__dropdown-menu unstyled-list" role="list">
+                      <li><a href="{{ routes.root_url }}collections/abayas" class="link-faded-reverse">Abayas</a></li>
+                      <li><a href="{{ routes.root_url }}collections/jalabiya" class="link-faded-reverse">Jalabiya</a></li>
+                      <li><a href="{{ routes.root_url }}collections/ramadan-2027" class="link-faded-reverse">Ramadan 2027</a></li>
+                      <li><a href="{{ routes.root_url }}collections/freya" class="link-faded-reverse">Freya Collections</a></li>
+                      <li><a href="{{ routes.root_url }}collections/accessories" class="link-faded-reverse">Sheila &amp; Accessories</a></li>
+                    </ul>
+                {%- endcase -%}
+              {%- endcapture -%}
+
               {%- capture nav_li -%}
               <li class="header__primary-nav-item{% if zar_is_promo %} zar-promo-item{% endif %}">
-           {%- if zar_is_promo or link.levels == 0 and mega_menu_block == '' and zaria_mega_links == blank -%}
+           {%- if zar_is_promo or link.levels == 0 and mega_menu_block == '' and zaria_mega_links == blank and zaria_sub_links == blank -%}
                   <a
                     href="{{ link_href }}"
                     data-title="{{ zar_link_label | escape }}"
@@ -423,6 +428,8 @@
 
                       {%- if zaria_mega_links != blank -%}
   {{- zaria_mega_links -}}
+{%- elsif zaria_sub_links != blank -%}
+  {{- zaria_sub_links -}}
 {%- elsif link_title_downcase == 'brands' -%}
 
   {%- render 'mega-menu-brands' -%}
