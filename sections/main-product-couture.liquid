@@ -357,10 +357,10 @@
 
     <!-- INFO -->
     <div class="zpdp__info">
-      {%- comment -%}Zaria: the ready-to-wear line signs the piece above its name, the way a
-         house label would. Read from the Freya tag, so a piece joining or leaving the line
-         needs no second edit anywhere.{%- endcomment -%}
-      {%- if product.tags contains 'Freya' -%}
+      {%- comment -%}Zaria: Freya signs the piece above its name, the way a house label would -
+         the ready-to-wear line by its tag, and every fabric the house sells, which is all
+         Freya cloth. A piece joining or leaving the line needs no second edit anywhere.{%- endcomment -%}
+      {%- if product.tags contains 'Freya' or product.tags contains 'Fabric' -%}
         <p class="zpdp__brand">Freya</p>
       {%- endif -%}
       <p class="zpdp__eyebrow">{% if is_fragrance %}{% if fr_conc != blank %}{{ fr_conc }}{% else %}Zaria Fragrance{% endif %}{% if fr_family != blank %} &middot; {{ fr_family }}{% endif %}{% else %}{% if ftype != blank %}{{ ftype }}{% elsif is_garment %}{{ product.type | default: 'Zaria' }}{% else %}Zaria Fabric{% endif %}{% if origin != blank %} &middot; {{ origin }}{% endif %}{% endif %}</p>
