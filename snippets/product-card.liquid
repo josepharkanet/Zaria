@@ -193,6 +193,13 @@
     {%- comment -%} Section 1 content: brand, vendor and the product name (sits with the image in list view) {%- endcomment -%}
     {%- if show_title or show_vendor and product.vendor != blank -%}
       <div class="product-card__main v-stack justify-items-center gap-2">
+        {%- comment -%} Zaria: the ready-to-wear line signs its pieces above the name, the way
+          a house label would. Taken from the Freya tag rather than the brand metaobject below,
+          which no product carries. {%- endcomment -%}
+        {%- if product.tags contains 'Freya' -%}
+          <span class="product-card__brand smallcaps text-subdued {% if settings.product_card_text_font == 'heading' %}heading{% endif %}">Freya</span>
+        {%- endif -%}
+
         {%- comment -%} Brand: name + underline in the grid card; logo only in the list view {%- endcomment -%}
         {%- assign card_brand = product.metafields.custom.brand.value -%}
         {%- if card_brand != blank -%}

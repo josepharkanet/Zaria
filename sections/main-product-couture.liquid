@@ -180,6 +180,8 @@
   /* Option A: image column pinned, details scroll; image switches to the 2nd photo partway down (desktop) */
   @media (min-width:1000px){#shopify-section-{{ section.id }} .zpdp__gallery{position:sticky;top:100px;align-self:start}}
   #shopify-section-{{ section.id }} .zpdp__info{position:static}
+  #shopify-section-{{ section.id }} .zpdp__brand{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-size:15px;
+    letter-spacing:.34em;text-transform:uppercase;color:#161616;margin:0 0 9px;line-height:1}
   #shopify-section-{{ section.id }} .zpdp__eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--wine);margin:0 0 14px}
   #shopify-section-{{ section.id }} .zpdp__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     font-size:clamp(18px,1.9vw,25px);line-height:1.3;letter-spacing:.02em;margin:0 0 16px;text-transform:uppercase}
@@ -355,6 +357,12 @@
 
     <!-- INFO -->
     <div class="zpdp__info">
+      {%- comment -%}Zaria: the ready-to-wear line signs the piece above its name, the way a
+         house label would. Read from the Freya tag, so a piece joining or leaving the line
+         needs no second edit anywhere.{%- endcomment -%}
+      {%- if product.tags contains 'Freya' -%}
+        <p class="zpdp__brand">Freya</p>
+      {%- endif -%}
       <p class="zpdp__eyebrow">{% if is_fragrance %}{% if fr_conc != blank %}{{ fr_conc }}{% else %}Zaria Fragrance{% endif %}{% if fr_family != blank %} &middot; {{ fr_family }}{% endif %}{% else %}{% if ftype != blank %}{{ ftype }}{% elsif is_garment %}{{ product.type | default: 'Zaria' }}{% else %}Zaria Fabric{% endif %}{% if origin != blank %} &middot; {{ origin }}{% endif %}{% endif %}</p>
       <h1 class="zpdp__title">{{ product.title }}</h1>
 
