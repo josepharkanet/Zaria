@@ -198,9 +198,9 @@
           which no product carries. {%- endcomment -%}
         {%- comment -%}Its own class, not the theme's: a Zaria rule in theme.css hides
           .product-card__brand outright to strip the stock commerce clutter.
-          Freya signs the ready-to-wear line and the whole bolt room: every fabric the house
-          sells is Freya cloth.{%- endcomment -%}
-        {%- if product.tags contains 'Freya' or product.tags contains 'Fabric' -%}
+          Freya is the cloth label: every fabric the house sells is Freya, and only the cloth
+          carries it. The ready-to-wear lines are named by their own collections.{%- endcomment -%}
+        {%- if product.tags contains 'Fabric' -%}
           <span class="zar-cardbrand">Freya</span>
         {%- endif -%}
 
