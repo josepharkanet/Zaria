@@ -10008,6 +10008,15 @@ h1,h2,h3,h4,h5,h6,.h0,.h1,.h2,.h3,.h4,.h5,.h6{font-family:"Jost",-apple-system,B
 .product-card__brand--logo,
 .product-card .vendor{display:none!important;}
 
+/* ===== Zaria: the ready-to-wear line signs its own cards =====
+   The rule above hides the theme's brand elements wholesale; this line is ours, so it
+   carries its own class and is not caught by it. */
+.product-card .zar-cardbrand{
+  display:block;
+  font-family:"Jost",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:#1a1a1a;
+  line-height:1;margin:0 0 5px;}
+
 /* ===== Zaria: show the full product title on cards (no clamp/ellipsis) ===== */
 .product-card .product-title,
 .product-card .product-title.line-clamp{-webkit-line-clamp:unset!important;display:block!important;overflow:visible!important;max-height:none!important;white-space:normal;}

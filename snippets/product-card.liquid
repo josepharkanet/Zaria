@@ -196,8 +196,10 @@
         {%- comment -%} Zaria: the ready-to-wear line signs its pieces above the name, the way
           a house label would. Taken from the Freya tag rather than the brand metaobject below,
           which no product carries. {%- endcomment -%}
+        {%- comment -%}Its own class, not the theme's: a Zaria rule in theme.css hides
+          .product-card__brand outright to strip the stock commerce clutter.{%- endcomment -%}
         {%- if product.tags contains 'Freya' -%}
-          <span class="product-card__brand smallcaps text-subdued {% if settings.product_card_text_font == 'heading' %}heading{% endif %}">Freya</span>
+          <span class="zar-cardbrand">Freya</span>
         {%- endif -%}
 
         {%- comment -%} Brand: name + underline in the grid card; logo only in the list view {%- endcomment -%}
