@@ -201,7 +201,7 @@
           Freya is the cloth label: every fabric the house sells is Freya, and only the cloth
           carries it. The ready-to-wear lines are named by their own collections.{%- endcomment -%}
         {%- if product.tags contains 'Fabric' -%}
-          <span class="zar-cardbrand">Freya</span>
+          <a href="{{ routes.root_url }}collections/all-fabrics" class="zar-cardbrand">Freya</a>
         {%- endif -%}
 
         {%- comment -%} Brand: name + underline in the grid card; logo only in the list view {%- endcomment -%}

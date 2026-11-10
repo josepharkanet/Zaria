@@ -182,6 +182,8 @@
   #shopify-section-{{ section.id }} .zpdp__info{position:static}
   #shopify-section-{{ section.id }} .zpdp__brand{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-size:15px;
     letter-spacing:.34em;text-transform:uppercase;color:#161616;margin:0 0 13px;line-height:1}
+  #shopify-section-{{ section.id }} .zpdp__brand a{color:inherit;text-decoration:none;transition:color .2s ease}
+  #shopify-section-{{ section.id }} .zpdp__brand a:hover{color:var(--wine)}
   #shopify-section-{{ section.id }} .zpdp__title{font-family:var(--heading-font-family,'Jost'),'Jost',Georgia,serif;font-weight:400;
     font-size:clamp(18px,1.9vw,25px);line-height:1.3;letter-spacing:.02em;margin:0 0 16px;text-transform:uppercase}
   #shopify-section-{{ section.id }} .zpdp__price{font-size:19px;letter-spacing:.04em;color:#161616;margin:0 0 4px}
@@ -360,7 +362,7 @@
          a house label would. Only the cloth carries it; the ready-to-wear lines are named by
          their own collections.{%- endcomment -%}
       {%- if product.tags contains 'Fabric' -%}
-        <p class="zpdp__brand">Freya</p>
+        <p class="zpdp__brand"><a href="{{ routes.root_url }}collections/all-fabrics">Freya</a></p>
       {%- endif -%}
       <h1 class="zpdp__title">{{ product.title }}</h1>
 
