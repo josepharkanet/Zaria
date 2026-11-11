@@ -9,6 +9,14 @@
 
   Usage: {% render 'zaria-fabric-choice', product: product %}
 {%- endcomment -%}
+{%- comment -%}A whole number reads as "3 m", a half as "3.5 m" - never "3.0 m".{%- endcomment -%}
+{%- assign zfc_need = product.metafields.custom.fabric_required.value | default: 3 -%}
+{%- assign zfc_need_round = zfc_need | round -%}
+{%- if zfc_need_round == zfc_need -%}
+  {%- assign zfc_need_say = zfc_need_round -%}
+{%- else -%}
+  {%- assign zfc_need_say = zfc_need -%}
+{%- endif -%}
 <style>
   .zfc{margin:22px 0 4px}
   .zfc__head{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#161616;margin:0 0 4px}
@@ -57,10 +65,11 @@
      data-zfc-src="{{ 'zaria-fabrics.json' | asset_url }}"
      data-zfc-design="{{ product.price }}"
      data-zfc-title="{{ product.title | escape }}"
+     data-zfc-need="{{ product.metafields.custom.fabric_required.value | default: 3 }}"
      data-zfc-money="{{ 123456789 | money }}"
      data-zfc-root="{{ routes.root_url }}">
   <p class="zfc__head">Choose your fabric <span class="req">*</span></p>
-  <p class="zfc__sub">The price above is the making of this piece. Pick the cloth it is cut from and we add it to your order by the metre &mdash; three metres is what this piece takes.</p>
+  <p class="zfc__sub">The price above is the making of this piece. Pick the cloth it is cut from and we add it to your order by the metre &mdash; this one is cut from {{ zfc_need_say }} m.</p>
 
   <div class="zfc__tools">
     <div class="zfc__search"><input type="search" placeholder="Search the cloth&hellip;" data-zfc-q aria-label="Search fabrics"></div>
@@ -110,7 +119,10 @@
   }
   function sized(url, w) { return String(url).replace(/(\.[a-z]+)(\?|$)/i, '_' + w + 'x$1$2'); }
 
-  var ALL = [], BASE = '', MIN = 3, shown = 0, view = [], chosen = null;
+  // What this piece is cut from, in whole metres: cart quantities cannot be fractions.
+  var NEED = parseFloat(root.getAttribute('data-zfc-need')) || 3;
+  var MIN = Math.ceil(NEED);
+  var ALL = [], BASE = '', shown = 0, view = [], chosen = null;
 
   // How many pieces are being made, and therefore how much cloth is cut.
   var qty = form ? form.querySelector('.zpdp__qty') : null;
@@ -194,7 +206,7 @@
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (j) {
       if (!j || !j.rows) { empty.hidden = false; empty.textContent = 'The fabric list could not be loaded. Please call the atelier.'; return; }
-      BASE = j.base; MIN = j.min || 3;
+      BASE = j.base;
       // A bolt counted at less than the shortest cut cannot make this piece. One that has
       // never been counted is offered: most of the cloth carries no count yet.
       ALL = j.rows.filter(function (f) { return f.q === null || f.q >= MIN; });

@@ -12,17 +12,30 @@
   Usage: {% render 'zaria-design-form', product: product, variant: fv %}
 {%- endcomment -%}
 {%- assign zdf_variant = variant | default: product.selected_or_first_available_variant -%}
-{%- assign zdf_min = 3 -%}
+{%- assign zdf_designs = collections['ramadan-2027'].products -%}
 {%- comment -%}
-  Stock: a counted bolt with fewer than three metres left is hidden from the brief entirely.
-  A bolt that has never been counted (inventory_management blank) is not assumed to be empty -
-  most of the cloth has no count against it yet, and hiding all of it would close the studio.
+  Cloth is sold in any length. What sets the length here is the design: each one is cut from
+  its own number of metres, kept on the product as custom.fabric_required and defaulting to
+  three. Cart quantities are whole numbers, so a design that takes three and a half metres
+  cuts four.
+
+  Stock: a counted bolt is only hidden from the brief when it holds less than the least
+  hungry design needs - a bolt that cannot make anything. A bolt that has never been counted
+  (inventory_management blank) is not assumed to be empty: most of the cloth has no count
+  against it yet, and hiding all of it would close the studio.
 {%- endcomment -%}
+{%- assign zdf_need_min = 0 -%}
+{%- for zp in zdf_designs -%}
+  {%- assign zpn = zp.metafields.custom.fabric_required.value | default: 3 | ceil -%}
+  {%- if zdf_need_min == 0 or zpn < zdf_need_min -%}{%- assign zdf_need_min = zpn -%}{%- endif -%}
+{%- endfor -%}
+{%- if zdf_need_min == 0 -%}{%- assign zdf_need_min = 3 -%}{%- endif -%}
 {%- assign zdf_stock_ok = true -%}
-{%- if zdf_variant.inventory_management != blank and zdf_variant.inventory_quantity < zdf_min -%}
+{%- if zdf_variant.inventory_management != blank and zdf_variant.inventory_quantity < zdf_need_min -%}
   {%- assign zdf_stock_ok = false -%}
 {%- endif -%}
-{%- assign zdf_designs = collections['ramadan-2027'].products -%}
+{%- assign zdf_stock = -1 -%}
+{%- if zdf_variant.inventory_management != blank -%}{%- assign zdf_stock = zdf_variant.inventory_quantity -%}{%- endif -%}
 {%- if zdf_stock_ok -%}
 <style>
   .zdf-trigger{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:14px;padding:15px;
@@ -62,6 +75,10 @@
     transition:border-color .2s ease,box-shadow .2s ease}
   .zdf-pick:hover{border-color:#b9b2a7}
   .zdf-pick.is-on{border-color:#161616;box-shadow:inset 0 0 0 1px #161616}
+  .zdf-pick[disabled]{opacity:.42;cursor:not-allowed}
+  .zdf-pick[disabled]:hover{border-color:#e6e2db}
+  .zdf-pick .zdf-pick-x{display:none;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--wine,#7a1f34);padding-top:2px}
+  .zdf-pick[disabled] .zdf-pick-x{display:block}
   .zdf-pick img{display:block;width:100%;aspect-ratio:3 / 4;height:auto;object-fit:cover;object-position:50% 12%}
   .zdf-pick span{display:block;font-size:11px;line-height:1.35;letter-spacing:.02em;color:#6a6a6a;padding:7px 6px 0}
   .zdf-pick .zdf-pick-p{font-size:11.5px;color:#161616;letter-spacing:.04em;padding-top:3px}
@@ -140,10 +157,10 @@
           data-zdf-fabric-handle="{{ product.handle }}"
           data-zdf-fabric-id="{{ zdf_variant.id }}"
           data-zdf-fabric-price="{{ zdf_variant.price }}"
-          data-zdf-min="{{ zdf_min }}"
+          data-zdf-stock="{{ zdf_stock }}"
           data-zdf-money="{{ 123456789 | money }}">
       <input type="hidden" name="id" value="{{ zdf_variant.id }}">
-      <input type="hidden" name="quantity" value="{{ zdf_min }}" data-zdf-qty>
+      <input type="hidden" name="quantity" value="{{ zdf_need_min }}" data-zdf-qty>
       <input type="hidden" name="properties[Request]" value="Design your look">
       <input type="hidden" name="properties[_fabric_handle]" value="{{ product.handle }}">
 
@@ -174,12 +191,15 @@
             {%- for zp in zdf_designs -%}
               {%- if zp.featured_image != blank -%}
                 {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 6 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+                {%- assign zp_need = zp.metafields.custom.fabric_required.value | default: 3 -%}
                 <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}"
                         data-zdf-variant="{{ zp.selected_or_first_available_variant.id }}" data-zdf-price="{{ zp.price }}"
+                        data-zdf-need="{{ zp_need }}"
                         data-zdf-piece="{{ zp.type | default: 'Jalabiya' | escape }}">
                   <img src="{{ zp.featured_image | image_url: width: 320 }}" alt="{{ zp.title | escape }}" loading="lazy" width="132" height="176">
                   <span>{{ zp.title | split: ' ' | slice: 0, 2 | join: ' ' }}</span>
                   <span class="zdf-pick-p">{{ zp.price | money }}</span>
+                  <span class="zdf-pick-x">Not enough cloth</span>
                   <span class="zdf-zoom" role="button" tabindex="0" aria-label="Look closer at {{ zp.title | escape }}" data-zoom-gallery="{{ zp_gallery }}">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#zdf-zoomic"></use></svg>
                   </span>
@@ -205,7 +225,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.5"/></svg>
           <span data-zdf-lift-t></span>
         </p>
-        <div><span data-zdf-sum-fl>Fabric &middot; {{ zdf_min }} m</span><span data-zdf-sum-fv></span></div>
+        <div><span data-zdf-sum-fl>Fabric</span><span data-zdf-sum-fv></span></div>
         <div><span>Design &amp; tailoring</span><span data-zdf-sum-dv></span></div>
         <div class="zdf-sum__t"><span>Total</span><span data-zdf-sum-tv></span></div>
       </div>
@@ -239,7 +259,8 @@
   var form = overlay.querySelector('[data-zdf-form]');
   var picks = overlay.querySelector('[data-zdf-picks]');
   var warn = overlay.querySelector('[data-zdf-warn]');
-  var MIN = parseInt(form.getAttribute('data-zdf-min'), 10) || 3;
+  var STOCK = parseInt(form.getAttribute('data-zdf-stock'), 10);
+  if (isNaN(STOCK)) STOCK = -1;                       // -1: this bolt has never been counted
   var FABRIC_PRICE = parseInt(form.getAttribute('data-zdf-fabric-price'), 10) || 0;
 
   // The shop's own money format, read off a sentinel Liquid rendered, so the totals below
@@ -252,27 +273,30 @@
     return mPre + p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '.' + p[1] + mPost;
   }
 
-  // The quantity box on the page behind is the length being cut. The brief never cuts less
-  // than the minimum, so opening it raises a shorter length to three metres.
+  // The quantity box on the page behind is the length being cut. Cloth is sold in any length;
+  // it is the chosen design that asks for a particular one, so nothing is raised until a
+  // design is picked - and never below what the customer asked for.
   var pageQty = document.querySelector('.zpdp__qty');
+  var NEED = 0, CUT = 0;                              // what the design takes, and in whole metres
   function metres() {
-    var n = pageQty ? parseInt(pageQty.value, 10) : MIN;
-    if (!n || n < MIN) n = MIN;
-    return n;
+    var n = pageQty ? parseInt(pageQty.value, 10) : 0;
+    if (!n || n < 1) n = 1;
+    return Math.max(n, CUT);
   }
-  // What the customer had asked for before the brief raised it, so the summary can say so.
+  // What the customer had asked for before the design lengthened it, so the summary can say so.
   var lifted = 0;
   function liftPageQty() {
-    if (!pageQty) return;
-    var had = parseInt(pageQty.value, 10) || 0;
-    if (had > 0 && had < MIN) {
+    if (!pageQty || !CUT) { lifted = 0; return; }
+    var had = parseInt(pageQty.value, 10) || 1;
+    if (had < CUT) {
       lifted = had;
-      pageQty.value = MIN;
+      pageQty.value = CUT;
       pageQty.dispatchEvent(new Event('change', { bubbles: true }));
     } else {
       lifted = 0;
     }
   }
+  function tidy(n) { return String(Math.round(n * 100) / 100); }
 
   var designPrice = 0, designVariant = '', designTitle = '';
   var sumFL = overlay.querySelector('[data-zdf-sum-fl]');
@@ -286,10 +310,11 @@
     var m = metres();
     if (qtyField) qtyField.value = m;
     if (lift) {
-      lift.hidden = !(lifted > 0 && m === MIN);
+      lift.hidden = !(lifted > 0 && CUT > 0);
       if (!lift.hidden && liftT) {
-        liftT.innerHTML = 'A piece is cut from <b>' + MIN + ' metres</b>, so your ' + lifted +
-          ' m has been raised to ' + MIN + ' m. The cost below is for ' + MIN + ' metres.';
+        liftT.innerHTML = 'The ' + designTitle + ' is cut from <b>' + tidy(NEED) + ' m</b> of cloth' +
+          (CUT !== NEED ? ', and cloth is cut in whole metres' : '') +
+          ', so your ' + lifted + ' m is now ' + CUT + ' m.';
       }
     }
     if (sumFL) sumFL.innerHTML = 'Fabric &middot; ' + m + ' m &times; ' + money(FABRIC_PRICE);
@@ -311,15 +336,26 @@
       if (!b) return;
       picks.querySelectorAll('.zdf-pick').forEach(function (x) { x.classList.remove('is-on'); });
       b.classList.add('is-on');
+      if (b.disabled) return;
       designTitle = b.getAttribute('data-zdf-pick') || '';
       designVariant = b.getAttribute('data-zdf-variant') || '';
       designPrice = parseInt(b.getAttribute('data-zdf-price'), 10) || 0;
+      NEED = parseFloat(b.getAttribute('data-zdf-need')) || 3;
+      CUT = Math.ceil(NEED);
+      liftPageQty();
       if (pickVal) pickVal.value = designTitle;
       if (pickHandle) pickHandle.value = b.getAttribute('data-zdf-handle') || '';
       if (pieceField && b.getAttribute('data-zdf-piece')) pieceField.value = b.getAttribute('data-zdf-piece');
       if (warn) warn.hidden = true;
       retotal();
     });
+
+    // A counted bolt that is shorter than a design needs cannot make it.
+    if (STOCK >= 0) {
+      picks.querySelectorAll('[data-zdf-need]').forEach(function (b) {
+        if (Math.ceil(parseFloat(b.getAttribute('data-zdf-need')) || 3) > STOCK) b.disabled = true;
+      });
+    }
 
     var navPrev = overlay.querySelector('[data-zdf-prev]');
     var navNext = overlay.querySelector('[data-zdf-next]');
@@ -369,7 +405,7 @@
     setTimeout(refreshNav, 120);
   }
 
-  function open(){ overlay.classList.add('is-open'); document.body.style.overflow='hidden'; liftPageQty(); retotal(); setTimeout(refreshNav, 80); }
+  function open(){ overlay.classList.add('is-open'); document.body.style.overflow='hidden'; retotal(); setTimeout(refreshNav, 80); }
   function close(){ overlay.classList.remove('is-open'); document.body.style.overflow=''; }
   openers.forEach(function(b){ b.addEventListener('click', open); });
   overlay.querySelectorAll('[data-zdf-close]').forEach(function(b){ b.addEventListener('click', close); });
