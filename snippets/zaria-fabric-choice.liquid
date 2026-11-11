@@ -1,0 +1,251 @@
+{%- comment -%}
+  Zaria - "Choose your fabric" for the pieces the atelier cuts to order (Ramadan 2027).
+
+  The price on these pages is the making: the cloth is chosen here and charged beside it by
+  the metre, so the order carries two lines - the design, and the three metres it is cut from.
+  The cloth is read from assets/zaria-fabrics.json, built by zaria-ops/build-fabric-index.mjs;
+  a collection loop in Liquid stops at fifty and there are six hundred odd bolts to offer.
+  A bolt counted at less than the shortest cut is left out of the list entirely.
+
+  Usage: {% render 'zaria-fabric-choice', product: product %}
+{%- endcomment -%}
+<style>
+  .zfc{margin:22px 0 4px}
+  .zfc__head{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#161616;margin:0 0 4px}
+  .zfc__head .req{color:var(--wine,#7a1f34)}
+  .zfc__sub{font-size:13px;color:var(--zf-hint);margin:0 0 14px;max-width:54ch;line-height:1.65}
+  .zfc__tools{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+  .zfc__search{flex:1 1 220px;position:relative}
+  .zfc__search input{width:100%;box-sizing:border-box;height:var(--zf-h);padding:0 var(--zf-px);
+    font-family:inherit;font-size:var(--zf-size);color:var(--zf-ink);background:var(--zf-bg);
+    border:1px solid var(--zf-line);border-radius:var(--zf-radius)}
+  .zfc__search input:hover{border-color:var(--zf-line-hover)}
+  .zfc__search input:focus{outline:none;border-color:var(--zf-line-focus);box-shadow:var(--zf-ring)}
+  .zfc__tools select{flex:0 1 220px;box-sizing:border-box;height:var(--zf-h);padding:0 var(--zf-pr) 0 var(--zf-px);
+    font-family:inherit;font-size:var(--zf-size);color:var(--zf-ink);background-color:var(--zf-bg);
+    border:1px solid var(--zf-line);border-radius:var(--zf-radius);-webkit-appearance:none;appearance:none;cursor:pointer;
+    background-image:var(--zf-arrow);background-repeat:no-repeat;background-position:var(--zf-arrow-pos);background-size:var(--zf-arrow-size)}
+  .zfc__grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  @media(max-width:749px){.zfc__grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  .zfc__tile{position:relative;border:1px solid #e6e2db;background:#fff;padding:0 0 8px;cursor:pointer;
+    font-family:inherit;text-align:center;transition:border-color .2s ease,box-shadow .2s ease}
+  .zfc__tile:hover{border-color:#b9b2a7}
+  .zfc__tile.is-on{border-color:#161616;box-shadow:inset 0 0 0 1px #161616}
+  .zfc__tile img{display:block;width:100%;aspect-ratio:1/1;height:auto;object-fit:cover;background:#f6f4f1}
+  .zfc__tile b{display:block;font-weight:400;font-size:11px;line-height:1.35;color:#6a6a6a;padding:7px 6px 0;
+    overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .zfc__tile i{display:block;font-style:normal;font-size:11.5px;color:#161616;letter-spacing:.03em;padding-top:3px}
+  .zfc__tile u{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.92);
+    color:#161616;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;transition:opacity .2s ease}
+  .zfc__tile:hover u,.zfc__tile:focus-within u{opacity:1}
+  @media (hover:none){.zfc__tile u{opacity:1}}
+  .zfc__tile u svg{width:12px;height:12px}
+  .zfc__more{display:block;width:100%;margin-top:12px;padding:12px;background:transparent;border:1px solid var(--zf-line);
+    font-family:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a6a;cursor:pointer}
+  .zfc__more:hover{border-color:#161616;color:#161616}
+  .zfc__empty{font-size:13px;color:var(--zf-hint);padding:10px 2px}
+  .zfc__sum{border:1px solid #ece8e2;background:#fbfaf8;padding:12px 14px;margin:14px 0 0;font-size:13px}
+  .zfc__sum div{display:flex;justify-content:space-between;gap:16px;padding:3px 0;color:#6a6a6a}
+  .zfc__sum div span:last-child{color:#161616;white-space:nowrap}
+  .zfc__sum .zfc__tot{border-top:1px solid #ece8e2;margin-top:6px;padding-top:8px;color:#161616}
+  .zfc__sum .zfc__tot span:last-child{font-size:15px}
+  .zfc__warn{font-size:12.5px;color:var(--wine,#7a1f34);margin:10px 0 0}
+  .zfc__warn[hidden]{display:none}
+</style>
+
+<div class="zfc" data-zfc
+     data-zfc-src="{{ 'zaria-fabrics.json' | asset_url }}"
+     data-zfc-design="{{ product.price }}"
+     data-zfc-title="{{ product.title | escape }}"
+     data-zfc-money="{{ 123456789 | money }}"
+     data-zfc-root="{{ routes.root_url }}">
+  <p class="zfc__head">Choose your fabric <span class="req">*</span></p>
+  <p class="zfc__sub">The price above is the making of this piece. Pick the cloth it is cut from and we add it to your order by the metre &mdash; three metres is the shortest length we cut.</p>
+
+  <div class="zfc__tools">
+    <div class="zfc__search"><input type="search" placeholder="Search the cloth&hellip;" data-zfc-q aria-label="Search fabrics"></div>
+    <select data-zfc-kind aria-label="Fabric type"><option value="">All fabrics</option></select>
+  </div>
+
+  <div class="zfc__grid" data-zfc-grid></div>
+  <p class="zfc__empty" data-zfc-empty hidden>No cloth matches that. Try another word.</p>
+  <button type="button" class="zfc__more" data-zfc-more hidden>Show more</button>
+
+  <div class="zfc__sum">
+    <div><span>Design &amp; tailoring</span><span data-zfc-sum-d></span></div>
+    <div><span data-zfc-sum-fl>Fabric</span><span data-zfc-sum-f>Not chosen yet</span></div>
+    <div class="zfc__tot"><span>Total</span><span data-zfc-sum-t></span></div>
+  </div>
+  <p class="zfc__warn" data-zfc-warn hidden>Please choose the fabric this piece is cut from.</p>
+
+  <input type="hidden" name="properties[Fabric]" value="" data-zfc-name>
+  <input type="hidden" name="properties[_fabric_handle]" value="" data-zfc-handle>
+</div>
+
+<script>
+(function () {
+  var root = document.querySelector('[data-zfc]');
+  if (!root) return;
+  var form = root.closest('form');
+  var grid = root.querySelector('[data-zfc-grid]');
+  var qBox = root.querySelector('[data-zfc-q]');
+  var kind = root.querySelector('[data-zfc-kind]');
+  var more = root.querySelector('[data-zfc-more]');
+  var empty = root.querySelector('[data-zfc-empty]');
+  var warn = root.querySelector('[data-zfc-warn]');
+  var nameF = root.querySelector('[data-zfc-name]');
+  var handleF = root.querySelector('[data-zfc-handle]');
+  var DESIGN = parseInt(root.getAttribute('data-zfc-design'), 10) || 0;
+  var ROOT = root.getAttribute('data-zfc-root') || '/';
+  var PAGE = 24;
+
+  var MT = root.getAttribute('data-zfc-money') || '1,234,567.89';
+  var mn = /[\d.,]+/.exec(MT) || { index: 0, 0: '' };
+  var mPre = MT.slice(0, mn.index), mPost = MT.slice(mn.index + mn[0].length);
+  function money(c) {
+    var p = (Math.round(c) / 100).toFixed(2).split('.');
+    return mPre + p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '.' + p[1] + mPost;
+  }
+  function sized(url, w) { return String(url).replace(/(\.[a-z]+)(\?|$)/i, '_' + w + 'x$1$2'); }
+
+  var ALL = [], BASE = '', MIN = 3, shown = 0, view = [], chosen = null;
+
+  // How many pieces are being made, and therefore how much cloth is cut.
+  var qty = form ? form.querySelector('.zpdp__qty') : null;
+  function pieces() { var n = qty ? parseInt(qty.value, 10) : 1; return n > 0 ? n : 1; }
+
+  function retotal() {
+    var m = MIN * pieces();
+    root.querySelector('[data-zfc-sum-d]').textContent = money(DESIGN * pieces());
+    root.querySelector('[data-zfc-sum-fl]').innerHTML = chosen ? ('Fabric &middot; ' + m + ' m') : 'Fabric';
+    root.querySelector('[data-zfc-sum-f]').textContent = chosen ? money(chosen.p * m) : 'Not chosen yet';
+    root.querySelector('[data-zfc-sum-t]').textContent =
+      chosen ? money(DESIGN * pieces() + chosen.p * m) : money(DESIGN * pieces()) + ' + fabric';
+  }
+  if (qty) qty.addEventListener('change', retotal);
+  // The quantity steppers set the box without firing change, so watch the buttons as well.
+  if (form) form.addEventListener('click', function (e) {
+    if (e.target.closest('[data-qstep]')) setTimeout(retotal, 0);
+  });
+
+  function tile(f) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'zfc__tile' + (chosen && chosen.v === f.v ? ' is-on' : '');
+    b.setAttribute('data-v', f.v);
+    var img = document.createElement('img');
+    img.src = sized(BASE + f.i, 300);
+    img.alt = f.t; img.loading = 'lazy'; img.width = 150; img.height = 150;
+    var t = document.createElement('b'); t.textContent = f.t;
+    var p = document.createElement('i'); p.textContent = money(f.p) + ' / m';
+    var a = document.createElement('u');
+    a.innerHTML = '<a href="' + ROOT + 'products/' + f.h + '" target="_blank" rel="noopener" aria-label="Open ' +
+      f.t.replace(/"/g, '&quot;') + ' in a new tab" style="display:flex;color:inherit">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 16 16 8M9 8h7v7"/></svg></a>';
+    b.appendChild(img); b.appendChild(t); b.appendChild(p); b.appendChild(a);
+    return b;
+  }
+
+  function draw(reset) {
+    if (reset) { grid.innerHTML = ''; shown = 0; }
+    var frag = document.createDocumentFragment();
+    var upto = Math.min(view.length, shown + PAGE);
+    for (var i = shown; i < upto; i++) frag.appendChild(tile(view[i]));
+    grid.appendChild(frag);
+    shown = upto;
+    more.hidden = shown >= view.length;
+    more.textContent = 'Show more (' + (view.length - shown) + ' left)';
+    empty.hidden = view.length > 0;
+  }
+
+  function filter() {
+    var q = (qBox.value || '').trim().toLowerCase();
+    var k = kind.value;
+    view = ALL.filter(function (f) {
+      if (k && f.k !== k) return false;
+      if (!q) return true;
+      return (f.t + ' ' + f.s + ' ' + f.k).toLowerCase().indexOf(q) > -1;
+    });
+    draw(true);
+  }
+
+  grid.addEventListener('click', function (e) {
+    if (e.target.closest('a')) return;
+    var b = e.target.closest('.zfc__tile');
+    if (!b) return;
+    var v = Number(b.getAttribute('data-v'));
+    chosen = ALL.filter(function (f) { return f.v === v; })[0] || null;
+    grid.querySelectorAll('.zfc__tile').forEach(function (x) { x.classList.remove('is-on'); });
+    b.classList.add('is-on');
+    if (nameF) nameF.value = chosen ? chosen.t : '';
+    if (handleF) handleF.value = chosen ? chosen.h : '';
+    warn.hidden = true;
+    retotal();
+  });
+
+  qBox.addEventListener('input', filter);
+  kind.addEventListener('change', filter);
+  more.addEventListener('click', function () { draw(false); });
+
+  fetch(root.getAttribute('data-zfc-src'), { headers: { Accept: 'application/json' } })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) {
+      if (!j || !j.rows) { empty.hidden = false; empty.textContent = 'The fabric list could not be loaded. Please call the atelier.'; return; }
+      BASE = j.base; MIN = j.min || 3;
+      // A bolt counted at less than the shortest cut cannot make this piece. One that has
+      // never been counted is offered: most of the cloth carries no count yet.
+      ALL = j.rows.filter(function (f) { return f.q === null || f.q >= MIN; });
+      var kinds = {};
+      ALL.forEach(function (f) { if (f.k) kinds[f.k] = (kinds[f.k] || 0) + 1; });
+      Object.keys(kinds).sort(function (a, b) { return kinds[b] - kinds[a] || a.localeCompare(b); })
+        .forEach(function (k) {
+          var o = document.createElement('option');
+          o.value = k; o.textContent = k + ' (' + kinds[k] + ')';
+          kind.appendChild(o);
+        });
+      filter();
+      retotal();
+    })
+    .catch(function () { empty.hidden = false; empty.textContent = 'The fabric list could not be loaded. Please call the atelier.'; });
+
+  retotal();
+
+  // Two lines on the order: this piece, and the cloth it is cut from.
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      if (!chosen) {
+        e.preventDefault();
+        warn.hidden = false;
+        root.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        return;
+      }
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      var btn = form.querySelector('.zpdp__atc');
+      var label = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
+
+      var props = {};
+      new FormData(form).forEach(function (v, k) {
+        var m = /^properties\[(.+)\]$/.exec(k);
+        if (m && String(v).trim() !== '') props[m[1]] = v;
+      });
+      var n = pieces(), metres = MIN * n;
+      props['Fabric cut'] = metres + ' m';
+      var id = form.querySelector('[name="id"]');
+      var items = [
+        { id: id ? id.value : '', quantity: n, properties: props },
+        { id: String(chosen.v), quantity: metres, properties: { 'For': root.getAttribute('data-zfc-title') || '', 'Request': 'Cut for a made-to-order piece' } }
+      ];
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ items: items })
+      })
+        .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
+        .then(function () { window.location.href = '/cart'; })
+        .catch(function () { if (btn) { btn.disabled = false; btn.textContent = label; } });
+    }, true);
+  }
+})();
+</script>
