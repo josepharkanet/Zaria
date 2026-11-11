@@ -278,22 +278,20 @@
   // design is picked - and never below what the customer asked for.
   var pageQty = document.querySelector('.zpdp__qty');
   var NEED = 0, CUT = 0;                              // what the design takes, and in whole metres
-  function metres() {
-    var n = pageQty ? parseInt(pageQty.value, 10) : 0;
-    if (!n || n < 1) n = 1;
-    return Math.max(n, CUT);
-  }
-  // What the customer had asked for before the design lengthened it, so the summary can say so.
-  var lifted = 0;
-  function liftPageQty() {
-    if (!pageQty || !CUT) { lifted = 0; return; }
-    var had = parseInt(pageQty.value, 10) || 1;
-    if (had < CUT) {
-      lifted = had;
-      pageQty.value = CUT;
+  // The length the customer themself asked for is remembered apart from the box, because the
+  // box is rewritten every time a design is chosen. Comparing a new design against the box
+  // would have compared it against the last design's answer, and the brief would have said
+  // nothing had changed when it had.
+  var asked = 1, lifted = 0;
+  function readAsked() { if (pageQty) asked = Math.max(1, parseInt(pageQty.value, 10) || 1); }
+  function metres() { return Math.max(asked, CUT || 0) || 1; }
+  function applyLength() {
+    lifted = (CUT && CUT > asked) ? asked : 0;
+    if (!pageQty) return;
+    var want = metres();
+    if ((parseInt(pageQty.value, 10) || 0) !== want) {
+      pageQty.value = want;
       pageQty.dispatchEvent(new Event('change', { bubbles: true }));
-    } else {
-      lifted = 0;
     }
   }
   function tidy(n) { return String(Math.round(n * 100) / 100); }
@@ -342,7 +340,7 @@
       designPrice = parseInt(b.getAttribute('data-zdf-price'), 10) || 0;
       NEED = parseFloat(b.getAttribute('data-zdf-need')) || 3;
       CUT = Math.ceil(NEED);
-      liftPageQty();
+      applyLength();
       if (pickVal) pickVal.value = designTitle;
       if (pickHandle) pickHandle.value = b.getAttribute('data-zdf-handle') || '';
       if (pieceField && b.getAttribute('data-zdf-piece')) pieceField.value = b.getAttribute('data-zdf-piece');
@@ -405,7 +403,11 @@
     setTimeout(refreshNav, 120);
   }
 
-  function open(){ overlay.classList.add('is-open'); document.body.style.overflow='hidden'; retotal(); setTimeout(refreshNav, 80); }
+  function open(){
+    overlay.classList.add('is-open'); document.body.style.overflow='hidden';
+    if (!designVariant) readAsked();                  // nothing chosen yet: the box is theirs
+    applyLength(); retotal(); setTimeout(refreshNav, 80);
+  }
   function close(){ overlay.classList.remove('is-open'); document.body.style.overflow=''; }
   openers.forEach(function(b){ b.addEventListener('click', open); });
   overlay.querySelectorAll('[data-zdf-close]').forEach(function(b){ b.addEventListener('click', close); });
@@ -417,6 +419,7 @@
   if (pageForm) pageForm.addEventListener('click', function (e) {
     if (e.target.closest('[data-qstep]')) setTimeout(retotal, 0);
   });
+  readAsked();
   retotal();
 
   // The designers' board keeps its measurements under short keys; the cart keeps them under
