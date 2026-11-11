@@ -65,7 +65,6 @@
   .zdf-pick img{display:block;width:100%;aspect-ratio:3 / 4;height:auto;object-fit:cover;object-position:50% 12%}
   .zdf-pick span{display:block;font-size:11px;line-height:1.35;letter-spacing:.02em;color:#6a6a6a;padding:7px 6px 0}
   .zdf-pick .zdf-pick-p{font-size:11.5px;color:#161616;letter-spacing:.04em;padding-top:3px}
-  .zdf-pick--none{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 10px;gap:4px}
   /* Arrows: one page at a time, and they step aside at either end. */
   .zdf-nav{position:absolute;top:44%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;
     border:1px solid #e0dbd3;background:rgba(255,255,255,.97);color:#161616;display:flex;align-items:center;
@@ -88,14 +87,14 @@
   .zdf-pick:hover .zdf-zoom,.zdf-pick:focus-within .zdf-zoom{opacity:1}
   .zdf-zoom svg{width:14px;height:14px}
   @media (hover:none){.zdf-zoom{opacity:1}}
-  .zdf-pick--none span{padding:0;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#161616}
-  .zdf-pick--none .zdf-pick-p{letter-spacing:.02em;text-transform:none;color:#8d867d;font-size:10.5px}
   /* What it comes to: the cloth by the metre on one line, the making on the next. */
   .zdf-sum{border:1px solid #ece8e2;background:#fbfaf8;padding:12px 14px;margin:2px 0 18px;font-size:13px}
   .zdf-sum div{display:flex;justify-content:space-between;gap:16px;padding:3px 0;color:#6a6a6a}
   .zdf-sum div span:last-child{color:#161616;white-space:nowrap}
   .zdf-sum .zdf-sum__t{border-top:1px solid #ece8e2;margin-top:6px;padding-top:8px;color:#161616;letter-spacing:.02em}
   .zdf-sum .zdf-sum__t span:last-child{font-size:15px}
+  .zdf-warn{font-size:12.5px;color:var(--wine,#7a1f34);margin:-6px 0 14px}
+  .zdf-warn[hidden]{display:none}
   .zdf-field label{display:block;font-size:var(--zf-label-size);letter-spacing:var(--zf-label-track);text-transform:uppercase;color:var(--zf-label);margin:0 0 var(--zf-label-gap);line-height:1.4}
   .zdf-modal input,.zdf-modal select,.zdf-modal textarea{width:100%;box-sizing:border-box;font-family:inherit;
     font-size:var(--zf-size);letter-spacing:.01em;color:var(--zf-ink);background:var(--zf-bg);
@@ -155,22 +154,18 @@
         The designs offered are the Ramadan 2027 ten and nothing else (client, 2026-11-12):
         these are the pieces the atelier cuts to order, and each one's price is what the making
         of it costs - the cloth is charged beside it by the metre. Three tiles show at a time
-        and the arrows move a page. A customer who wants something of their own still has
-        "From scratch", which adds the cloth alone and leaves the making to be quoted.
+        and the arrows move a page. One of them has to be chosen: a brief with no design has
+        no making to price, so there is no way past it (client, 2026-11-12).
       {%- endcomment -%}
       {%- if zdf_designs.size > 0 -%}
       <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="zdf-zoomic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"/></symbol></svg>
       <div class="zdf-field">
-        <label>Choose your design <span>Ramadan 2027</span></label>
+        <label>Choose your design <span class="zdf-req">*</span> <span>Ramadan 2027</span></label>
         <div class="zdf-carousel">
           <button type="button" class="zdf-nav zdf-nav--prev" data-zdf-prev aria-label="Previous designs" disabled>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"/></svg>
           </button>
           <div class="zdf-picks" data-zdf-picks>
-            <button type="button" class="zdf-pick zdf-pick--none is-on" data-zdf-pick="" data-zdf-handle="" data-zdf-variant="" data-zdf-price="0">
-              <span>From scratch</span>
-              <span class="zdf-pick-p">Making quoted after your consultation</span>
-            </button>
             {%- for zp in zdf_designs -%}
               {%- if zp.featured_image != blank -%}
                 {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 6 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
@@ -194,6 +189,7 @@
         <input type="hidden" name="properties[Our design]" value="" data-zdf-pickval>
         <input type="hidden" name="properties[_design_handle]" value="" data-zdf-pickhandle>
       </div>
+      <p class="zdf-warn" data-zdf-warn hidden>Please choose the design you would like made in this fabric.</p>
       {%- endif -%}
 
       <div class="zdf-sum" data-zdf-sum>
@@ -230,6 +226,7 @@
   if(!overlay || !openers.length) return;
   var form = overlay.querySelector('[data-zdf-form]');
   var picks = overlay.querySelector('[data-zdf-picks]');
+  var warn = overlay.querySelector('[data-zdf-warn]');
   var MIN = parseInt(form.getAttribute('data-zdf-min'), 10) || 3;
   var FABRIC_PRICE = parseInt(form.getAttribute('data-zdf-fabric-price'), 10) || 0;
 
@@ -270,8 +267,10 @@
     if (qtyField) qtyField.value = m;
     if (sumFL) sumFL.innerHTML = 'Fabric &middot; ' + m + ' m';
     if (sumFV) sumFV.textContent = money(FABRIC_PRICE * m);
-    if (sumDV) sumDV.textContent = designPrice ? money(designPrice) : 'Quoted after consultation';
-    if (sumTV) sumTV.textContent = money(FABRIC_PRICE * m + designPrice);
+    if (sumDV) sumDV.textContent = designVariant ? money(designPrice) : 'Not chosen yet';
+    if (sumTV) sumTV.textContent = designVariant
+      ? money(FABRIC_PRICE * m + designPrice)
+      : money(FABRIC_PRICE * m) + ' + design';
   }
 
   var refreshNav = function () {};
@@ -291,6 +290,7 @@
       if (pickVal) pickVal.value = designTitle;
       if (pickHandle) pickHandle.value = b.getAttribute('data-zdf-handle') || '';
       if (pieceField && b.getAttribute('data-zdf-piece')) pieceField.value = b.getAttribute('data-zdf-piece');
+      if (warn) warn.hidden = true;
       retotal();
     });
 
@@ -395,6 +395,11 @@
   if(form){
     form.addEventListener('submit', function(e){
       e.preventDefault();
+      // The making is what the second line prices, so the brief cannot leave without a design.
+      if (picks && !designVariant) {
+        if (warn) { warn.hidden = false; warn.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+        return;
+      }
       if (!form.reportValidity()) return;
       var btn = form.querySelector('[data-zdf-submit]');
       if(btn){ btn.disabled=true; btn.textContent='Adding…'; }
@@ -409,20 +414,14 @@
       // Two lines: the cloth by the metre, and - when one of our designs was chosen - the
       // making of that design. The brief itself rides on whichever line it describes.
       var m = metres();
-      var items;
-      if (designVariant) {
-        var cloth = { Request: 'Design your look', Design: designTitle, _fabric_handle: props._fabric_handle };
-        var made = {};
-        Object.keys(props).forEach(function (k) { made[k] = props[k]; });
-        made['Fabric'] = form.getAttribute('data-zdf-fabric') || '';
-        made['Fabric cut'] = m + ' m';
-        items = [
-          { id: form.getAttribute('data-zdf-fabric-id'), quantity: m, properties: cloth },
-          { id: designVariant, quantity: 1, properties: made }
-        ];
-      } else {
-        items = [{ id: form.getAttribute('data-zdf-fabric-id'), quantity: m, properties: props }];
-      }
+      var cloth = { Request: 'Design your look', Design: designTitle, _fabric_handle: props._fabric_handle };
+      var made = {};
+      Object.keys(props).forEach(function (k) { made[k] = props[k]; });
+      made['Fabric'] = form.getAttribute('data-zdf-fabric') || '';
+      made['Fabric cut'] = m + ' m';
+      var items = [{ id: form.getAttribute('data-zdf-fabric-id'), quantity: m, properties: designVariant ? cloth : props }];
+      // Only if the collection itself were empty would there be no second line to add.
+      if (designVariant) items.push({ id: designVariant, quantity: 1, properties: made });
 
       fetch('{{ routes.cart_add_url }}.js', {
         method:'POST',
