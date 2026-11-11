@@ -24,11 +24,12 @@
     endif
 
     comment
-      Zaria: fabric is cut by the metre and the atelier will not cut a length under three,
-      so the selector floors there and steps a metre at a time. Shopify's own quantity rules
-      are a B2B catalogue feature on this plan, so the floor lives here instead, where the
-      cart, the drawer and the product page all read it. A line can still be taken out of the
-      cart with its Remove link.
+      Zaria: fabric is cut by the metre and any length can be bought (client, 2026-11-12),
+      so the selector floors at one metre and steps a metre at a time. The three-metre floor
+      is Design your look's alone and lives in that brief. Shopify's own quantity rules are a
+      B2B catalogue feature on this plan, so what floor there is lives here, where the cart,
+      the drawer and the product page all read it. A line can still be taken out of the cart
+      with its Remove link.
     endcomment
     assign zar_qty_product = line_item.product | default: variant.product
     assign zar_qty_min = variant.quantity_rule.min | default: 1
@@ -36,7 +37,7 @@
     assign zar_is_fabric = false
     if zar_qty_product.tags contains 'Fabric'
       assign zar_is_fabric = true
-      assign zar_qty_min = 3
+      assign zar_qty_min = 1
       assign zar_qty_step = 1
     endif
 

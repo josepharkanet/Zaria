@@ -66,15 +66,15 @@
   endif
 
   comment
-    Zaria: fabric is cut by the metre and three metres is the shortest length the atelier
-    will cut, so the quantity box opens at three and steps a metre at a time. Everything
-    else keeps the ordinary single-unit box.
+    Zaria: fabric is cut by the metre and any length can be bought (client, 2026-11-12), so
+    the box opens at one metre and steps a metre at a time. The three-metre floor belongs to
+    Design your look alone: a piece cut from this cloth needs at least that, and the brief
+    raises a shorter length itself. Everything else keeps the ordinary single-unit box.
   endcomment
   assign is_fabric = false
   assign qty_min = 1
   if product.tags contains 'Fabric'
     assign is_fabric = true
-    assign qty_min = 3
   endif
 
   comment
@@ -525,7 +525,7 @@
             <a class="zpdp__buynow" data-zpdp-buynow data-variant="{{ fv.id }}" href="/checkout?variant={{ fv.id }}&quantity={{ qty_min }}">Buy it Now</a>
           {%- endif -%}
         </div>
-        {%- if is_fabric -%}<p class="zpdp__qhint">Sold by the metre. Three metres is the shortest length we cut.</p>{%- endif -%}
+        {%- if is_fabric -%}<p class="zpdp__qhint">Sold by the metre, in any length. A piece designed from this cloth takes three metres or more.</p>{%- endif -%}
       {%- endform -%}
       {%- endif -%}
 
