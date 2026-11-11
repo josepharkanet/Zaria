@@ -93,6 +93,11 @@
   .zdf-sum div span:last-child{color:#161616;white-space:nowrap}
   .zdf-sum .zdf-sum__t{border-top:1px solid #ece8e2;margin-top:6px;padding-top:8px;color:#161616;letter-spacing:.02em}
   .zdf-sum .zdf-sum__t span:last-child{font-size:15px}
+  .zdf-sum__note{display:flex;align-items:flex-start;gap:8px;margin:-2px 0 9px;padding:0 0 9px;
+    border-bottom:1px solid #ece8e2;font-size:12.5px;line-height:1.55;color:var(--wine,#7a1f34)}
+  .zdf-sum__note[hidden]{display:none}
+  .zdf-sum__note svg{flex:none;width:14px;height:14px;margin-top:2px}
+  .zdf-sum__note b{font-weight:500}
   .zdf-warn{font-size:12.5px;color:var(--wine,#7a1f34);margin:-6px 0 14px}
   .zdf-warn[hidden]{display:none}
   .zdf-field label{display:block;font-size:var(--zf-label-size);letter-spacing:var(--zf-label-track);text-transform:uppercase;color:var(--zf-label);margin:0 0 var(--zf-label-gap);line-height:1.4}
@@ -192,7 +197,14 @@
       <p class="zdf-warn" data-zdf-warn hidden>Please choose the design you would like made in this fabric.</p>
       {%- endif -%}
 
+      {%- comment -%}A length shorter than a piece can be cut from is raised when the brief
+         opens, and the summary says so rather than quietly charging for metres the customer
+         did not ask for.{%- endcomment -%}
       <div class="zdf-sum" data-zdf-sum>
+        <p class="zdf-sum__note" data-zdf-lift hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.5"/></svg>
+          <span data-zdf-lift-t></span>
+        </p>
         <div><span data-zdf-sum-fl>Fabric &middot; {{ zdf_min }} m</span><span data-zdf-sum-fv></span></div>
         <div><span>Design &amp; tailoring</span><span data-zdf-sum-dv></span></div>
         <div class="zdf-sum__t"><span>Total</span><span data-zdf-sum-tv></span></div>
@@ -248,11 +260,17 @@
     if (!n || n < MIN) n = MIN;
     return n;
   }
+  // What the customer had asked for before the brief raised it, so the summary can say so.
+  var lifted = 0;
   function liftPageQty() {
     if (!pageQty) return;
-    if ((parseInt(pageQty.value, 10) || 0) < MIN) {
+    var had = parseInt(pageQty.value, 10) || 0;
+    if (had > 0 && had < MIN) {
+      lifted = had;
       pageQty.value = MIN;
       pageQty.dispatchEvent(new Event('change', { bubbles: true }));
+    } else {
+      lifted = 0;
     }
   }
 
@@ -262,9 +280,18 @@
   var sumDV = overlay.querySelector('[data-zdf-sum-dv]');
   var sumTV = overlay.querySelector('[data-zdf-sum-tv]');
   var qtyField = overlay.querySelector('[data-zdf-qty]');
+  var lift = overlay.querySelector('[data-zdf-lift]');
+  var liftT = overlay.querySelector('[data-zdf-lift-t]');
   function retotal() {
     var m = metres();
     if (qtyField) qtyField.value = m;
+    if (lift) {
+      lift.hidden = !(lifted > 0 && m === MIN);
+      if (!lift.hidden && liftT) {
+        liftT.innerHTML = 'A piece is cut from <b>' + MIN + ' metres</b>, so your ' + lifted +
+          ' m has been raised to ' + MIN + ' m. The cost below is for ' + MIN + ' metres.';
+      }
+    }
     if (sumFL) sumFL.innerHTML = 'Fabric &middot; ' + m + ' m &times; ' + money(FABRIC_PRICE);
     if (sumFV) sumFV.textContent = money(FABRIC_PRICE * m);
     if (sumDV) sumDV.textContent = designVariant ? money(designPrice) : 'Not chosen yet';
