@@ -71,9 +71,11 @@
   <p class="zfc__empty" data-zfc-empty hidden>No cloth matches that. Try another word.</p>
   <button type="button" class="zfc__more" data-zfc-more hidden>Show more</button>
 
+  {%- comment -%}The cloth is read first and the making second, the order the customer
+     chooses them in and the order the client asked the cost to be set out in.{%- endcomment -%}
   <div class="zfc__sum">
-    <div><span>Design &amp; tailoring</span><span data-zfc-sum-d></span></div>
     <div><span data-zfc-sum-fl>Fabric</span><span data-zfc-sum-f>Not chosen yet</span></div>
+    <div><span>Design &amp; tailoring</span><span data-zfc-sum-d></span></div>
     <div class="zfc__tot"><span>Total</span><span data-zfc-sum-t></span></div>
   </div>
   <p class="zfc__warn" data-zfc-warn hidden>Please choose the fabric this piece is cut from.</p>
