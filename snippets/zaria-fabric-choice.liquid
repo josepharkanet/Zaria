@@ -100,7 +100,7 @@
   var PAGE = 24;
 
   var MT = root.getAttribute('data-zfc-money') || '1,234,567.89';
-  var mn = /[\d.,]+/.exec(MT) || { index: 0, 0: '' };
+  var mn = /\d[\d.,]*/.exec(MT) || { index: MT.length, 0: '' };
   var mPre = MT.slice(0, mn.index), mPost = MT.slice(mn.index + mn[0].length);
   function money(c) {
     var p = (Math.round(c) / 100).toFixed(2).split('.');
@@ -117,7 +117,8 @@
   function retotal() {
     var m = MIN * pieces();
     root.querySelector('[data-zfc-sum-d]').textContent = money(DESIGN * pieces());
-    root.querySelector('[data-zfc-sum-fl]').innerHTML = chosen ? ('Fabric &middot; ' + m + ' m') : 'Fabric';
+    root.querySelector('[data-zfc-sum-fl]').innerHTML =
+      chosen ? ('Fabric &middot; ' + m + ' m &times; ' + money(chosen.p)) : 'Fabric';
     root.querySelector('[data-zfc-sum-f]').textContent = chosen ? money(chosen.p * m) : 'Not chosen yet';
     root.querySelector('[data-zfc-sum-t]').textContent =
       chosen ? money(DESIGN * pieces() + chosen.p * m) : money(DESIGN * pieces()) + ' + fabric';

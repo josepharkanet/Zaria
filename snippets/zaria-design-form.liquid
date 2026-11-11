@@ -233,7 +233,7 @@
   // The shop's own money format, read off a sentinel Liquid rendered, so the totals below
   // read exactly like every other price on the page without guessing the currency.
   var MT = form.getAttribute('data-zdf-money') || '1,234,567.89';
-  var mnum = /[\d.,]+/.exec(MT) || { index: 0, 0: '' };
+  var mnum = /\d[\d.,]*/.exec(MT) || { index: MT.length, 0: '' };
   var mPre = MT.slice(0, mnum.index), mPost = MT.slice(mnum.index + mnum[0].length);
   function money(cents) {
     var p = (Math.round(cents) / 100).toFixed(2).split('.');
@@ -265,7 +265,7 @@
   function retotal() {
     var m = metres();
     if (qtyField) qtyField.value = m;
-    if (sumFL) sumFL.innerHTML = 'Fabric &middot; ' + m + ' m';
+    if (sumFL) sumFL.innerHTML = 'Fabric &middot; ' + m + ' m &times; ' + money(FABRIC_PRICE);
     if (sumFV) sumFV.textContent = money(FABRIC_PRICE * m);
     if (sumDV) sumDV.textContent = designVariant ? money(designPrice) : 'Not chosen yet';
     if (sumTV) sumTV.textContent = designVariant
