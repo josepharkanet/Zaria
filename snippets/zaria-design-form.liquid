@@ -6,8 +6,8 @@
   charge for cutting and finishing it. A brief without one of our designs still adds the cloth
   alone and a designer quotes the making afterwards.
 
-  A bolt that holds less than the least hungry design needs cannot be designed from at all,
-  so the button is not drawn.
+  Three metres is the shortest length the atelier will cut, so a bolt with less than that left
+  cannot be designed from at all and the button is not drawn.
 
   Usage: {% render 'zaria-design-form', product: product, variant: fv %}
 {%- endcomment -%}
@@ -16,23 +16,22 @@
 {%- comment -%}
   Cloth is sold in any length. What sets the length here is the design: each one is cut from
   its own number of metres, kept on the product as custom.fabric_required and defaulting to
-  three. Cloth is cut in half metres and the sold unit is half a metre, so a design that takes
-  three and a quarter metres cuts three and a half, and the cart counts seven units.
+  three. Cart quantities are whole numbers, so a design that takes three and a half metres
+  cuts four.
 
   Stock: a counted bolt is only hidden from the brief when it holds less than the least
   hungry design needs - a bolt that cannot make anything. A bolt that has never been counted
   (inventory_management blank) is not assumed to be empty: most of the cloth has no count
-  against it yet, and hiding all of it would close the studio. Counted stock is in half-metre
-  units too, which is why the figures below are compared in units and only read out in metres.
+  against it yet, and hiding all of it would close the studio.
 {%- endcomment -%}
-{%- assign zdf_need_units = 0 -%}
+{%- assign zdf_need_min = 0 -%}
 {%- for zp in zdf_designs -%}
-  {%- assign zpn = zp.metafields.custom.fabric_required.value | default: 3 | times: 2 | ceil -%}
-  {%- if zdf_need_units == 0 or zpn < zdf_need_units -%}{%- assign zdf_need_units = zpn -%}{%- endif -%}
+  {%- assign zpn = zp.metafields.custom.fabric_required.value | default: 3 | ceil -%}
+  {%- if zdf_need_min == 0 or zpn < zdf_need_min -%}{%- assign zdf_need_min = zpn -%}{%- endif -%}
 {%- endfor -%}
-{%- if zdf_need_units == 0 -%}{%- assign zdf_need_units = 6 -%}{%- endif -%}
+{%- if zdf_need_min == 0 -%}{%- assign zdf_need_min = 3 -%}{%- endif -%}
 {%- assign zdf_stock_ok = true -%}
-{%- if zdf_variant.inventory_management != blank and zdf_variant.inventory_quantity < zdf_need_units -%}
+{%- if zdf_variant.inventory_management != blank and zdf_variant.inventory_quantity < zdf_need_min -%}
   {%- assign zdf_stock_ok = false -%}
 {%- endif -%}
 {%- assign zdf_stock = -1 -%}
@@ -157,11 +156,11 @@
           data-zdf-fabric="{{ product.title | escape }}"
           data-zdf-fabric-handle="{{ product.handle }}"
           data-zdf-fabric-id="{{ zdf_variant.id }}"
-          data-zdf-fabric-price="{{ zdf_variant.price | times: 2 }}"
+          data-zdf-fabric-price="{{ zdf_variant.price }}"
           data-zdf-stock="{{ zdf_stock }}"
           data-zdf-money="{{ 123456789 | money }}">
       <input type="hidden" name="id" value="{{ zdf_variant.id }}">
-      <input type="hidden" name="quantity" value="{{ zdf_need_units }}" data-zdf-qty>
+      <input type="hidden" name="quantity" value="{{ zdf_need_min }}" data-zdf-qty>
       <input type="hidden" name="properties[Request]" value="Design your look">
       <input type="hidden" name="properties[_fabric_handle]" value="{{ product.handle }}">
 
@@ -278,23 +277,20 @@
   // it is the chosen design that asks for a particular one, so nothing is raised until a
   // design is picked - and never below what the customer asked for.
   var pageQty = document.querySelector('.zpdp__qty');
-  var NEED = 0, CUT = 0;                              // what the design takes, and in half metres
-  var STEP = 0.5;                                     // cloth is cut in half metres
-  function up(m) { return Math.ceil(m / STEP) * STEP; }
-  function units(m) { return Math.round(m / STEP); }   // what the cart counts
+  var NEED = 0, CUT = 0;                              // what the design takes, and in whole metres
   // The length the customer themself asked for is remembered apart from the box, because the
   // box is rewritten every time a design is chosen. Comparing a new design against the box
   // would have compared it against the last design's answer, and the brief would have said
   // nothing had changed when it had.
   var asked = 1, lifted = 0;
-  function readAsked() { if (pageQty) asked = Math.max(STEP, up(parseFloat(pageQty.value) || STEP)); }
-  function metres() { return Math.max(asked, CUT || 0) || STEP; }
+  function readAsked() { if (pageQty) asked = Math.max(1, parseInt(pageQty.value, 10) || 1); }
+  function metres() { return Math.max(asked, CUT || 0) || 1; }
   function applyLength() {
     lifted = (CUT && CUT > asked) ? asked : 0;
     if (!pageQty) return;
     var want = metres();
-    if ((parseFloat(pageQty.value) || 0) !== want) {
-      pageQty.value = String(want);
+    if ((parseInt(pageQty.value, 10) || 0) !== want) {
+      pageQty.value = want;
       pageQty.dispatchEvent(new Event('change', { bubbles: true }));
     }
   }
@@ -310,16 +306,16 @@
   var liftT = overlay.querySelector('[data-zdf-lift-t]');
   function retotal() {
     var m = metres();
-    if (qtyField) qtyField.value = units(m);
+    if (qtyField) qtyField.value = m;
     if (lift) {
       lift.hidden = !(lifted > 0 && CUT > 0);
       if (!lift.hidden && liftT) {
         liftT.innerHTML = 'The ' + designTitle + ' is cut from <b>' + tidy(NEED) + ' m</b> of cloth' +
-          (CUT !== NEED ? ', and cloth is cut in half metres' : '') +
-          ', so your ' + tidy(lifted) + ' m is now ' + tidy(CUT) + ' m.';
+          (CUT !== NEED ? ', and cloth is cut in whole metres' : '') +
+          ', so your ' + lifted + ' m is now ' + CUT + ' m.';
       }
     }
-    if (sumFL) sumFL.innerHTML = 'Fabric &middot; ' + tidy(m) + ' m &times; ' + money(FABRIC_PRICE);
+    if (sumFL) sumFL.innerHTML = 'Fabric &middot; ' + m + ' m &times; ' + money(FABRIC_PRICE);
     if (sumFV) sumFV.textContent = money(FABRIC_PRICE * m);
     if (sumDV) sumDV.textContent = designVariant ? money(designPrice) : 'Not chosen yet';
     if (sumTV) sumTV.textContent = designVariant
@@ -343,7 +339,7 @@
       designVariant = b.getAttribute('data-zdf-variant') || '';
       designPrice = parseInt(b.getAttribute('data-zdf-price'), 10) || 0;
       NEED = parseFloat(b.getAttribute('data-zdf-need')) || 3;
-      CUT = up(NEED);
+      CUT = Math.ceil(NEED);
       applyLength();
       if (pickVal) pickVal.value = designTitle;
       if (pickHandle) pickHandle.value = b.getAttribute('data-zdf-handle') || '';
@@ -355,7 +351,7 @@
     // A counted bolt that is shorter than a design needs cannot make it.
     if (STOCK >= 0) {
       picks.querySelectorAll('[data-zdf-need]').forEach(function (b) {
-        if (units(up(parseFloat(b.getAttribute('data-zdf-need')) || 3)) > STOCK) b.disabled = true;
+        if (Math.ceil(parseFloat(b.getAttribute('data-zdf-need')) || 3) > STOCK) b.disabled = true;
       });
     }
 
@@ -483,15 +479,13 @@
 
       // Two lines: the cloth by the metre, and - when one of our designs was chosen - the
       // making of that design. The brief itself rides on whichever line it describes.
-      // The cloth line is counted in half-metre units, and says its length in words so the
-      // order reads as a length rather than a count.
       var m = metres();
-      var cloth = { Request: 'Design your look', Design: designTitle, Length: tidy(m) + ' m', _fabric_handle: props._fabric_handle };
+      var cloth = { Request: 'Design your look', Design: designTitle, _fabric_handle: props._fabric_handle };
       var made = {};
       Object.keys(props).forEach(function (k) { made[k] = props[k]; });
       made['Fabric'] = form.getAttribute('data-zdf-fabric') || '';
-      made['Fabric cut'] = tidy(m) + ' m';
-      var items = [{ id: form.getAttribute('data-zdf-fabric-id'), quantity: units(m), properties: designVariant ? cloth : props }];
+      made['Fabric cut'] = m + ' m';
+      var items = [{ id: form.getAttribute('data-zdf-fabric-id'), quantity: m, properties: designVariant ? cloth : props }];
       // Only if the collection itself were empty would there be no second line to add.
       if (designVariant) items.push({ id: designVariant, quantity: 1, properties: made });
 

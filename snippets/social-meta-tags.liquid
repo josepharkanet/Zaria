@@ -8,9 +8,7 @@
 {%- elsif request.page_type == 'product' -%}
   <meta property="og:type" content="product">
   <meta property="og:title" content="{{ product.title | strip_html | escape }}">
-  {%- assign og_price = product.selected_or_first_available_variant.price -%}
-  {%- if product.tags contains 'Fabric' -%}{%- assign og_price = og_price | times: 2 -%}{%- endif -%}
-  <meta property="product:price:amount" content="{{ og_price | money_without_currency | strip_html | escape }}">
+  <meta property="product:price:amount" content="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html | escape }}">
   <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
   <meta property="product:availability" content="{% if product.available %}in stock{% else %}out of stock{% endif %}">
 {%- elsif request.page_type == 'article' -%}

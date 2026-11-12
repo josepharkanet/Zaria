@@ -248,10 +248,7 @@
                   {%- comment -%} image_url on nil throws before default can catch it {%- endcomment -%}
                   "image": {% if product.featured_image %}{{ product.featured_image | image_url: width: 400 | json }}{% else %}""{% endif %},
                   "name": {%- capture _t -%}{%- render 'zar-product-title', product: product -%}{%- endcapture -%}{{ _t | strip | json }},
-                  {%- comment -%}Cloth is priced per half metre (the sold unit), shown per metre.{%- endcomment -%}
-                  {%- assign v_shown = v.price -%}
-                  {%- if product.tags contains 'Fabric' -%}{%- assign v_shown = v_shown | times: 2 -%}{%- endif -%}
-                  "price": {{ v_shown | money | json }},
+                  "price": {{ v.price | money | json }},
                   "available": {{ v.available | json }},
                   "href": {{ product.url | json }},
                   "variantId": {{ v.id | json }}

@@ -89,7 +89,7 @@
                   {%- endif -%}
                 </div>
                 <p class="ep-name-{{ section.id }}">{%- render 'zar-product-title', product: product -%}</p>
-                <p class="ep-price-{{ section.id }}">{% render 'zaria-price', product: product %}</p>
+                <p class="ep-price-{{ section.id }}">{{ product.price | money }}</p>
               </a>
             {%- endfor -%}
           </div>

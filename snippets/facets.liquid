@@ -289,21 +289,8 @@
         {%- endcase -%}
       {%- endfor -%}
 
-      {%- comment -%}
-        Price range - rendered at the very bottom of the filter.
-
-        Cloth is sold in half-metre units, so a fabric's price in Shopify is the price of half
-        a metre while every price on the page is shown by the metre. Shopify's own price facet
-        can only work in the stored figure, so on a cloth listing it would ask for half of what
-        the cards read. It is left off there rather than made to lie; material, colour and the
-        rest of the facets do the filtering on those pages.
-      {%- endcomment -%}
-      {%- assign zfacet_cloth = false -%}
-      {%- if results.handle contains 'fabric' or results.products.first.tags contains 'Fabric' -%}
-        {%- assign zfacet_cloth = true -%}
-      {%- endif -%}
+      {%- comment -%}Price range — rendered at the very bottom of the filter{%- endcomment -%}
       {%- for filter in results.filters -%}
-        {%- if zfacet_cloth -%}{%- continue -%}{%- endif -%}
         {%- if filter.type == 'price_range' -%}
           <div class="zar-facet zar-facet--price">
             <div class="zar-facet__title">{{ filter.label }}</div>
