@@ -380,15 +380,27 @@
         <div class="zpdp__price zpdp__price--por">Price on request</div>
         <p class="zpdp__tax">Ask us and we will come back to you with the price for this piece.</p>
       {%- else -%}
+        {%- comment -%}
+          Cloth is cut in half metres, so a fabric variant is priced per 0.5 m (cart
+          quantities cannot be fractions) and the price is read back by the metre here.
+        {%- endcomment -%}
+        {%- liquid
+          assign zpdp_shown = product.price
+          assign zpdp_shown_cut = product.compare_at_price
+          if is_fabric
+            assign zpdp_shown = zpdp_shown | times: 2
+            assign zpdp_shown_cut = zpdp_shown_cut | times: 2
+          endif
+        -%}
         <div class="zpdp__price">
           {%- if product.compare_at_price > product.price -%}
-            <span class="zpdp__cut">{{ product.compare_at_price | money }}</span>
+            <span class="zpdp__cut">{{ zpdp_shown_cut | money }}</span>
           {%- endif -%}
-          {{ product.price | money }}
+          {{ zpdp_shown | money }}
         </div>
         {%- comment -%}Zaria is not VAT registered, so this line names the unit and makes no tax claim.{%- endcomment -%}
         {%- unless is_fragrance -%}
-          <p class="zpdp__tax">{% if product.tags contains 'Fabric' %}Price per metre{% elsif is_madetoorder %}Design &amp; tailoring &middot; fabric chosen below and charged by the metre{% else %}Price per unit{% endif %}</p>
+          <p class="zpdp__tax">{% if product.tags contains 'Fabric' %}Price per metre, cut in half-metre lengths{% elsif is_madetoorder %}Design &amp; tailoring &middot; fabric chosen below and charged by the metre{% else %}Price per unit{% endif %}</p>
         {%- endunless -%}
       {%- endif -%}
 
@@ -512,20 +524,30 @@
         {%- if is_garment -%}{% render 'zaria-measure-form', product: product %}{%- endif -%}
 
         <div class="zpdp__buy-row">
+          {%- comment -%}
+            Cloth is asked for in metres and half metres. The box is the length; the quantity
+            the form posts is that length in half-metre units, which is what the cart counts.
+            Everything else is counted one piece at a time, where the box is the quantity.
+          {%- endcomment -%}
           <div class="zpdp__qty-wrap">
-            <button type="button" class="zpdp__qbtn" data-qstep="-1" aria-label="Decrease quantity">&minus;</button>
-            <input type="number" name="quantity" class="zpdp__qty" value="{{ qty_min }}" min="{{ qty_min }}" step="1" data-qmin="{{ qty_min }}" inputmode="numeric" aria-label="Quantity{% if is_fabric %} in metres{% endif %}">
-            <button type="button" class="zpdp__qbtn" data-qstep="1" aria-label="Increase quantity">+</button>
+            <button type="button" class="zpdp__qbtn" data-qstep="-1" aria-label="Decrease {% if is_fabric %}length{% else %}quantity{% endif %}">&minus;</button>
+            {%- if is_fabric -%}
+              <input type="number" class="zpdp__qty" value="1" min="0.5" step="0.5" data-qmin="0.5" data-qstep-by="0.5" data-qunits inputmode="decimal" aria-label="Length in metres">
+              <input type="hidden" name="quantity" value="2" data-qposted>
+            {%- else -%}
+              <input type="number" name="quantity" class="zpdp__qty" value="{{ qty_min }}" min="{{ qty_min }}" step="1" data-qmin="{{ qty_min }}" data-qstep-by="1" inputmode="numeric" aria-label="Quantity">
+            {%- endif -%}
+            <button type="button" class="zpdp__qbtn" data-qstep="1" aria-label="Increase {% if is_fabric %}length{% else %}quantity{% endif %}">+</button>
             {%- if is_fabric -%}<span class="zpdp__quom">m</span>{%- endif -%}
           </div>
           <button type="submit" name="add" class="zpdp__atc" {% unless product.available %}disabled{% endunless %}>
             {%- if product.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}
           </button>
           {%- if product.available and is_garment == false -%}
-            <a class="zpdp__buynow" data-zpdp-buynow data-variant="{{ fv.id }}" href="/checkout?variant={{ fv.id }}&quantity={{ qty_min }}">Buy it Now</a>
+            <a class="zpdp__buynow" data-zpdp-buynow data-variant="{{ fv.id }}" href="/checkout?variant={{ fv.id }}&quantity={% if is_fabric %}2{% else %}{{ qty_min }}{% endif %}">Buy it Now</a>
           {%- endif -%}
         </div>
-        {%- if is_fabric -%}<p class="zpdp__qhint">Sold by the metre, in any length. Design a piece from it and the length it needs is set for you.</p>{%- endif -%}
+        {%- if is_fabric -%}<p class="zpdp__qhint">Sold by the metre and cut in half metres, so 1.5 m or 2.5 m is no trouble. Design a piece from it and the length it needs is set for you.</p>{%- endif -%}
       {%- endform -%}
       {%- endif -%}
 
@@ -627,11 +649,32 @@
 })();
 (function(){
   var f=document.getElementById('zpdp-form');
-  if(f){f.querySelectorAll('[data-qstep]').forEach(function(b){b.addEventListener('click',function(){var i=f.querySelector('.zpdp__qty');var lo=parseInt(i.getAttribute('data-qmin')||'1',10);var v=parseInt(i.value||lo,10)+parseInt(b.getAttribute('data-qstep'),10);i.value=v<lo?lo:v;});});
-     var qin=f.querySelector('.zpdp__qty');
-     if(qin){qin.addEventListener('change',function(){var lo=parseInt(qin.getAttribute('data-qmin')||'1',10);var v=parseInt(qin.value||lo,10);if(isNaN(v)||v<lo)qin.value=lo;});}}
+  // The box is a length for cloth (steps of half a metre) and a count for everything else.
+  // The hidden quantity is always what the cart takes: half-metre units for cloth.
+  var qin=f?f.querySelector('.zpdp__qty'):null;
+  var qposted=f?f.querySelector('[data-qposted]'):null;
+  var qhalf=qin?qin.hasAttribute('data-qunits'):false;
+  var qstep=qin?(parseFloat(qin.getAttribute('data-qstep-by'))||1):1;
+  var qlo=qin?(parseFloat(qin.getAttribute('data-qmin'))||qstep):1;
+  function qround(v){return Math.round(v/qstep)*qstep;}
+  function qshow(v){return String(Math.round(v*100)/100);}
+  function qsync(){
+    if(!qin)return qlo;
+    var v=qround(parseFloat(qin.value));
+    if(isNaN(v)||v<qlo)v=qlo;
+    qin.value=qshow(v);
+    if(qposted)qposted.value=qhalf?Math.round(v*2):Math.round(v);
+    if(qhalf)qin.dispatchEvent(new CustomEvent('zpdp:length',{bubbles:true,detail:{metres:v}}));
+    return v;
+  }
+  if(f){f.querySelectorAll('[data-qstep]').forEach(function(b){b.addEventListener('click',function(){
+       if(!qin)return;
+       var v=(parseFloat(qin.value)||qlo)+qstep*parseFloat(b.getAttribute('data-qstep'));
+       qin.value=qshow(v); qsync();
+     });});
+     if(qin){qin.addEventListener('change',function(){qsync();});qsync();}}
   var bn=document.querySelector('[data-zpdp-buynow]');
-  if(bn){bn.addEventListener('click',function(){var q=1,vid=bn.getAttribute('data-variant');if(f){var qi=f.querySelector('.zpdp__qty');if(qi){var lo=parseInt(qi.getAttribute('data-qmin')||'1',10);q=Math.max(lo,parseInt(qi.value||lo,10));}var vs=f.querySelector('select.zpdp__variant');if(vs&&vs.value)vid=vs.value;}bn.setAttribute('href','/checkout?variant='+vid+'&quantity='+q);});}
+  if(bn){bn.addEventListener('click',function(){var q=1,vid=bn.getAttribute('data-variant');if(f){var v=qsync();q=qhalf?Math.round(v*2):Math.round(v);var vs=f.querySelector('select.zpdp__variant');if(vs&&vs.value)vid=vs.value;}bn.setAttribute('href','/checkout?variant='+vid+'&quantity='+q);});}
 })();
 (function(){
   var root=document.getElementById('zpdp-gal-{{ section.id }}');

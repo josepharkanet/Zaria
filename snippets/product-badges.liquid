@@ -54,7 +54,9 @@
             {%- if settings.discount_mode == 'percentage' -%}
               {%- assign savings = discount_percent | append: '%' -%}
             {%- else -%}
-              {%- capture savings -%}{{ variant.compare_at_price | minus: variant.price | money }}{%- endcapture -%}
+              {%- assign saved = variant.compare_at_price | minus: variant.price -%}
+              {%- if product.tags contains 'Fabric' -%}{%- assign saved = saved | times: 2 -%}{%- endif -%}
+              {%- capture savings -%}{{ saved | money }}{%- endcapture -%}
             {%- endif -%}
 
             {%- comment -%} Suppress a meaningless "Save 0%" badge when the rounded discount is zero {%- endcomment -%}

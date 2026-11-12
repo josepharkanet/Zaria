@@ -11,12 +11,22 @@
 {%- capture inventory_for_variant -%}
   {%- if variant -%}
     {%- liquid
+      comment
+        Zaria: cloth is stocked in half-metre units (the sold unit), so a count of twelve is
+        six metres. What is left of a bolt is read out in metres, as the rest of the shop
+        talks about it.
+      endcomment
+      assign inv_count = variant.inventory_quantity
+      if variant.product.tags contains 'Fabric'
+        assign inv_count = inv_count | divided_by: 2.0 | round: 1
+      endif
+
       if variant.available
         if variant.inventory_management and variant.inventory_policy == 'deny' and variant.inventory_quantity <= low_threshold and low_threshold > 0
           assign inventory_status = 'warning'
 
           if show_in_stock_quantity
-            assign inventory_text = 'product.inventory.low_stock_with_quantity_count' | t: count: variant.inventory_quantity
+            assign inventory_text = 'product.inventory.low_stock_with_quantity_count' | t: count: inv_count
           else 
             assign inventory_text = 'product.inventory.low_stock' | t
           endif
@@ -34,7 +44,7 @@
             assign inventory_status = 'success'
 
             if show_in_stock_quantity
-              assign inventory_text = 'product.inventory.in_stock_with_quantity_count' | t: count: variant.inventory_quantity
+              assign inventory_text = 'product.inventory.in_stock_with_quantity_count' | t: count: inv_count
             else
               assign inventory_text = 'product.inventory.in_stock' | t
             endif
@@ -55,7 +65,7 @@
       endif
 
       if variant.inventory_management
-        assign inventory_quantity = variant.inventory_quantity | at_least: 0
+        assign inventory_quantity = inv_count | at_least: 0
       else
         assign inventory_quantity = progress_bar_max_value
       endif

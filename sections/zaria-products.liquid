@@ -112,8 +112,8 @@
             {%- if product.tags contains 'Price on Request' -%}
               Price on request
             {%- else -%}
-              {%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}
-              {{ product.price | money }}
+              {%- if product.compare_at_price > product.price -%}<s>{% render 'zaria-price', product: product, price: product.compare_at_price, unit: false %}</s>{%- endif -%}
+              {% render 'zaria-price', product: product %}
             {%- endif -%}
           </span>
         </a>

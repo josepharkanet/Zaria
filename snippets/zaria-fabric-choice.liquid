@@ -119,9 +119,13 @@
   }
   function sized(url, w) { return String(url).replace(/(\.[a-z]+)(\?|$)/i, '_' + w + 'x$1$2'); }
 
-  // What this piece is cut from, in whole metres: cart quantities cannot be fractions.
+  // What this piece is cut from. Cloth is cut in half metres and sold in half-metre units,
+  // so a requirement of 3.2 m cuts 3.5 m and the cart counts 7 units.
+  var STEP = 0.5;
   var NEED = parseFloat(root.getAttribute('data-zfc-need')) || 3;
-  var MIN = Math.ceil(NEED);
+  var MIN = Math.ceil(NEED / STEP) * STEP;
+  function units(m) { return Math.round(m / STEP); }
+  function tidy(n) { return String(Math.round(n * 100) / 100); }
   var ALL = [], BASE = '', shown = 0, view = [], chosen = null;
 
   // How many pieces are being made, and therefore how much cloth is cut.
@@ -132,7 +136,7 @@
     var m = MIN * pieces();
     root.querySelector('[data-zfc-sum-d]').textContent = money(DESIGN * pieces());
     root.querySelector('[data-zfc-sum-fl]').innerHTML =
-      chosen ? ('Fabric &middot; ' + m + ' m &times; ' + money(chosen.p)) : 'Fabric';
+      chosen ? ('Fabric &middot; ' + tidy(m) + ' m &times; ' + money(chosen.p)) : 'Fabric';
     root.querySelector('[data-zfc-sum-f]').textContent = chosen ? money(chosen.p * m) : 'Not chosen yet';
     root.querySelector('[data-zfc-sum-t]').textContent =
       chosen ? money(DESIGN * pieces() + chosen.p * m) : money(DESIGN * pieces()) + ' + fabric';
@@ -246,11 +250,11 @@
         if (m && String(v).trim() !== '') props[m[1]] = v;
       });
       var n = pieces(), metres = MIN * n;
-      props['Fabric cut'] = metres + ' m';
+      props['Fabric cut'] = tidy(metres) + ' m';
       var id = form.querySelector('[name="id"]');
       var items = [
         { id: id ? id.value : '', quantity: n, properties: props },
-        { id: String(chosen.v), quantity: metres, properties: { 'For': root.getAttribute('data-zfc-title') || '', 'Request': 'Cut for a made-to-order piece' } }
+        { id: String(chosen.v), quantity: units(metres), properties: { 'For': root.getAttribute('data-zfc-title') || '', 'Length': tidy(metres) + ' m', 'Request': 'Cut for a made-to-order piece' } }
       ];
       fetch('/cart/add.js', {
         method: 'POST',

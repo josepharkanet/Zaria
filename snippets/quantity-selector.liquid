@@ -24,12 +24,15 @@
     endif
 
     comment
-      Zaria: fabric is cut by the metre and any length can be bought (client, 2026-11-12),
-      so the selector floors at one metre and steps a metre at a time. The three-metre floor
-      is Design your look's alone and lives in that brief. Shopify's own quantity rules are a
-      B2B catalogue feature on this plan, so what floor there is lives here, where the cart,
-      the drawer and the product page all read it. A line can still be taken out of the cart
-      with its Remove link.
+      Zaria: cloth is cut in half metres and any length can be bought (client, 2026-11-12),
+      so the sold unit for a fabric is half a metre and the cart quantity counts those units:
+      a quantity of 3 is a metre and a half. Shopify quantities cannot be fractions and its
+      own quantity rules are a B2B catalogue feature on this plan, so the unit does the work.
+      On a cart line the number box is replaced by the length itself, with the plus and minus
+      links stepping half a metre at a time, and the real quantity rides along hidden so the
+      cart form's positional updates[] stay in step. The minimum length a design needs is
+      Design your look's own affair and lives in that brief. A line can still be taken out of
+      the cart with its Remove link.
     endcomment
     assign zar_qty_product = line_item.product | default: variant.product
     assign zar_qty_min = variant.quantity_rule.min | default: 1
@@ -83,6 +86,12 @@
   {%- endif -%}
 
   <quantity-input class="quantity-selector__input-wrapper">
+    {%- if zar_is_fabric and line_item != blank -%}
+      <input type="hidden" name="updates[]" value="{{ quantity_value }}" data-line-key="{{ line_item.key }}">
+      <span class="quantity-selector__input {% if size == 'sm' %}text-sm{% endif %}" style="display:grid;place-items:center;white-space:nowrap" aria-label="{{ 'product.quantity.change_quantity' | t | escape }}">
+        {%- render 'zaria-metres', units: quantity_value -%}
+      </span>
+    {%- else -%}
     <input
       class="quantity-selector__input {% if size == 'sm' %}text-sm{% endif %}"
       type="number"
@@ -102,6 +111,7 @@
       {% endif %}
       aria-label="{{ 'product.quantity.change_quantity' | t | escape }}"
     >
+    {%- endif -%}
 
     {%- if show_spinner -%}
       <svg class="quantity-selector__spinner" width="14" height="14" fill="none" viewBox="0 0 14 14">

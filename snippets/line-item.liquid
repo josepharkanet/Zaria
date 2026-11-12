@@ -83,7 +83,12 @@
           </a>
         </line-item-quantity>
       {%- else -%}
-        <p class="text-subdued text-sm sm:hidden">{{ 'customer.order.quantity' | t }}: {{ line_item.quantity }}</p>
+        {%- comment -%}Cloth is counted in half-metre units, so it is read back as a length.{%- endcomment -%}
+        {%- if line_item.product.tags contains 'Fabric' -%}
+          <p class="text-subdued text-sm sm:hidden">Length: {% render 'zaria-metres', units: line_item.quantity %}</p>
+        {%- else -%}
+          <p class="text-subdued text-sm sm:hidden">{{ 'customer.order.quantity' | t }}: {{ line_item.quantity }}</p>
+        {%- endif -%}
       {%- endif -%}
 
       {%- comment -%}
