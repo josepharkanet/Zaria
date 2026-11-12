@@ -88,7 +88,11 @@
   <quantity-input class="quantity-selector__input-wrapper">
     {%- if zar_is_fabric and line_item != blank -%}
       <input type="hidden" name="updates[]" value="{{ quantity_value }}" data-line-key="{{ line_item.key }}">
-      <span class="quantity-selector__input {% if size == 'sm' %}text-sm{% endif %}" style="display:grid;place-items:center;white-space:nowrap" aria-label="{{ 'product.quantity.change_quantity' | t | escape }}">
+      {%- comment -%}
+        Not .quantity-selector__input: that class is sized from the character count the
+        quantity-input element sets off its first child, which here is the hidden quantity.
+      {%- endcomment -%}
+      <span class="zar-qty-length {% if size == 'sm' %}text-sm{% endif %}" style="display:grid;place-items:center;white-space:nowrap;padding:0 .4rem;min-width:4.5ch;text-align:center">
         {%- render 'zaria-metres', units: quantity_value -%}
       </span>
     {%- else -%}
