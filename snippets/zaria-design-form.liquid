@@ -115,13 +115,12 @@
   .zdf-sum div span:last-child{color:#161616;white-space:nowrap}
   .zdf-sum .zdf-sum__t{border-top:1px solid #ece8e2;margin-top:6px;padding-top:8px;color:#161616;letter-spacing:.02em}
   .zdf-sum .zdf-sum__t span:last-child{font-size:15px}
-  .zdf-sum__note{display:flex;align-items:flex-start;gap:8px;margin:-2px 0 9px;padding:0 0 9px;
-    border-bottom:1px solid #ece8e2;font-size:12.5px;line-height:1.55;color:var(--wine,#7a1f34)}
+  .zdf-sum__note{display:flex;align-items:flex-start;gap:8px;margin:8px 0 0;padding:9px 0 0;
+    border-top:1px solid #ece8e2;font-size:12.5px;line-height:1.55;color:#8a8279}
   .zdf-sum__note[hidden]{display:none}
-  .zdf-sum__note svg{flex:none;width:14px;height:14px;margin-top:2px}
-  .zdf-sum__note b{font-weight:500}
-  .zdf-sum__pieces{display:flex;align-items:center;justify-content:space-between;gap:16px;
-    padding:1px 0 8px;margin:0 0 5px;border-bottom:1px solid #ece8e2;color:#6a6a6a}
+  .zdf-sum__note svg{flex:none;width:14px;height:14px;margin-top:2px;color:#b4aba0}
+  .zdf-sum__note b{font-weight:500;color:#161616}
+  .zdf-sum__pieces{align-items:center;padding:1px 0 2px}
   .zdf-step{display:inline-flex;align-items:center;border:1px solid #e3ded7;background:#fff}
   .zdf-step button{width:30px;height:28px;border:0;background:none;padding:0;cursor:pointer;
     font-family:inherit;font-size:15px;line-height:1;color:#161616}
@@ -246,28 +245,30 @@
             {%- assign zb_m = zbp[1] -%}
             {%- assign zb_to_cm = zb_to | times: 2.54 | round: 0 -%}
             {%- if forloop.first -%}
-              <option value="{{ zb_to }}" data-zdf-m="{{ zb_m }}">Up to {{ zb_to }} in ({{ zb_to_cm }} cm) &middot; {{ zb_m }} m of cloth</option>
+              <option value="{{ zb_to }}" data-zdf-m="{{ zb_m }}" data-zdf-short="Up to {{ zb_to }} in">Up to {{ zb_to }} in ({{ zb_to_cm }} cm) &middot; {{ zb_m }} m</option>
             {%- else -%}
               {%- assign zb_prev_i = forloop.index0 | minus: 1 -%}
               {%- assign zb_prev = zdf_bands[zb_prev_i] | split: ':' -%}
               {%- assign zb_from = zb_prev[0] | plus: 0 -%}
               {%- assign zb_from_cm = zb_from | times: 2.54 | round: 0 -%}
-              <option value="{{ zb_to }}" data-zdf-m="{{ zb_m }}">{{ zb_from }} to {{ zb_to }} in ({{ zb_from_cm }} to {{ zb_to_cm }} cm) &middot; {{ zb_m }} m of cloth</option>
+              <option value="{{ zb_to }}" data-zdf-m="{{ zb_m }}" data-zdf-short="{{ zb_from }} to {{ zb_to }} in">{{ zb_from }} to {{ zb_to }} in ({{ zb_from_cm }} to {{ zb_to_cm }} cm) &middot; {{ zb_m }} m</option>
             {%- endif -%}
           {%- endfor -%}
         </select>
-        <p class="zdf-hint" data-zdf-band-hint>Measured from the shoulder down. Set your exact length in the measurements below and this follows it.</p>
+        <p class="zdf-hint">Measured from the shoulder down. Your exact length in the measurements below keeps this in step.</p>
       </div>
 
       {%- comment -%}A length shorter than a piece can be cut from is raised when the brief
          opens, and the summary says so rather than quietly charging for metres the customer
          did not ask for.{%- endcomment -%}
+      {%- comment -%}
+        One column: what is being made on the left, what it comes to on the right. The length
+        and the cloth are a row like any other rather than a sentence repeating the dropdown,
+        and the note at the foot speaks only when there is something the rows do not say.
+      {%- endcomment -%}
       <div class="zdf-sum" data-zdf-sum>
-        <p class="zdf-sum__note" data-zdf-lift hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.5"/></svg>
-          <span data-zdf-lift-t></span>
-        </p>
-        <div class="zdf-sum__pieces"><span>How many pieces</span>
+        <div><span>Length</span><span data-zdf-sum-ln>Not chosen yet</span></div>
+        <div class="zdf-sum__pieces"><span>Pieces</span>
           <span class="zdf-step">
             <button type="button" data-zdf-pc="-1" aria-label="One piece fewer">&minus;</button>
             <b data-zdf-pc-n>1</b>
@@ -277,6 +278,10 @@
         <div><span data-zdf-sum-fl>Fabric</span><span data-zdf-sum-fv></span></div>
         <div><span data-zdf-sum-dl>Design &amp; tailoring</span><span data-zdf-sum-dv></span></div>
         <div class="zdf-sum__t"><span>Total</span><span data-zdf-sum-tv></span></div>
+        <p class="zdf-sum__note" data-zdf-lift hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.5"/></svg>
+          <span data-zdf-lift-t></span>
+        </p>
       </div>
 
       <div class="zdf-field"><label>Describe the design</label>
@@ -331,10 +336,8 @@
   function tidy(n) { return String(Math.round(n * 100) / 100); }
   function wanted() { return PER ? PER * PIECES : 0; }       // the metres the pieces take
   function cut() { return wanted() ? Math.ceil(wanted()) : 0; }  // cloth is cut in whole metres
-  function bandLabel() {
-    var o = bandSel && bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null;
-    return o ? o.textContent.split('\u00b7')[0].trim() : '';
-  }
+  function bandOpt() { return bandSel && bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null; }
+  function bandLabel() { var o = bandOpt(); return o ? (o.getAttribute('data-zdf-short') || '') : ''; }
 
   // The same length is one of the ten measurements below. Whichever one the customer touches,
   // the other follows: the inches are the truth and the band is a way of reading them.
@@ -371,6 +374,7 @@
   var sumDV = overlay.querySelector('[data-zdf-sum-dv]');
   var sumTV = overlay.querySelector('[data-zdf-sum-tv]');
   var sumDL = overlay.querySelector('[data-zdf-sum-dl]');
+  var sumLN = overlay.querySelector('[data-zdf-sum-ln]');
   var qtyField = overlay.querySelector('[data-zdf-qty]');
   var pcWrap = overlay.querySelector('.zdf-sum__pieces');
   var pcN = overlay.querySelector('[data-zdf-pc-n]');
@@ -385,18 +389,23 @@
     if (pcDown) pcDown.disabled = PIECES <= 1;
     if (pcUp) pcUp.disabled = !!(PER && STOCK >= 0 && Math.ceil(PER * (PIECES + 1)) > STOCK);
 
-    // Why the cloth is what it is: the band, the pieces, and the whole metres it is cut in.
-    if (lift) {
-      lift.hidden = !PER;
-      if (PER && liftT) {
-        var line = (bandLabel() || 'This length') + ' is cut from <b>' + tidy(PER) + ' m</b> of cloth';
-        if (PIECES > 1) line += ', so ' + PIECES + ' pieces take ' + tidy(wanted()) + ' m';
-        line += (m !== wanted())
-          ? ', and cloth is cut in whole metres, so we cut <b>' + m + ' m</b>.'
-          : '.';
-        if (STOCK >= 0) line += ' This bolt holds ' + STOCK + ' m.';
-        liftT.innerHTML = line;
+    // The length and what it is cut from, on one line with the rest.
+    if (sumLN) sumLN.textContent = PER
+      ? bandLabel() + ' \u00b7 ' + tidy(PER) + ' m' + (PIECES > 1 ? ' each' : '')
+      : 'Not chosen yet';
+
+    // The note speaks only when the rows above do not already say it: cloth cut longer than
+    // the pieces take, or a bolt that will not stretch to another piece.
+    if (lift && liftT) {
+      var says = [];
+      if (PER && m !== wanted()) {
+        says.push('Cloth is cut in whole metres, so ' + tidy(wanted()) + ' m is cut as <b>' + m + ' m</b>.');
       }
+      if (PER && STOCK >= 0 && Math.ceil(PER * (PIECES + 1)) > STOCK) {
+        says.push('This bolt holds ' + STOCK + ' m, enough for ' + PIECES + (PIECES > 1 ? ' pieces.' : ' piece.'));
+      }
+      lift.hidden = says.length === 0;
+      liftT.innerHTML = says.join(' ');
     }
 
     if (sumFL) sumFL.innerHTML = m
