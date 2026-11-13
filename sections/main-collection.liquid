@@ -211,6 +211,34 @@
                   </facets-sort-popover>
                 </div>
               {%- endif -%}
+
+              {%- comment -%}
+                Zaria: the grid / list switch sits with Sort by at the right-hand end of the
+                bar, not out on its own at the left (client, 2026-11-13). The toolbar and this
+                list are both `flex-direction: row-reverse` above 700px, so the first child is
+                drawn furthest right: putting the switch after Sort by here lands it just to
+                Sort by's left, and leaves Filter alone at the other end.
+              {%- endcomment -%}
+              {%- if section.settings.show_grid_mode_selector -%}
+                <collection-layout-switch device="desktop" class="collection-toolbar__layout-switch-list sm-max:hidden" aria-controls="product-list-{{ section.id }}">
+                  <button
+                    type="button"
+                    value="medium"
+                    class="collection-toolbar__button {% if products_desktop_grid_mode == 'medium' %}is-active{% endif %}"
+                    aria-label="Switch to smaller product images"
+                  >
+                    {%- render 'icon' with 'collection-layout-3' -%}
+                  </button>
+                  <button
+                    type="button"
+                    value="compact"
+                    class="collection-toolbar__button {% if products_desktop_grid_mode == 'compact' %}is-active{% endif %}"
+                    aria-label="Switch to compact product images"
+                  >
+                    {%- render 'icon' with 'collection-layout-4' -%}
+                  </button>
+                </collection-layout-switch>
+              {%- endif -%}
             </div>
 
             {%- if section.settings.show_results_count -%}
@@ -252,24 +280,6 @@
                 </div>
               {%- endif -%}
 
-              <collection-layout-switch device="desktop" class="collection-toolbar__layout-switch-list sm-max:hidden" aria-controls="product-list-{{ section.id }}">
-                <button
-                  type="button"
-                  value="medium"
-                  class="collection-toolbar__button {% if products_desktop_grid_mode == 'medium' %}is-active{% endif %}"
-                  aria-label="Switch to smaller product images"
-                >
-                  {%- render 'icon' with 'collection-layout-3' -%}
-                </button>
-                <button
-                  type="button"
-                  value="compact"
-                  class="collection-toolbar__button {% if products_desktop_grid_mode == 'compact' %}is-active{% endif %}"
-                  aria-label="Switch to compact product images"
-                >
-                  {%- render 'icon' with 'collection-layout-4' -%}
-                </button>
-              </collection-layout-switch>
             {%- endif -%}
           </height-observer>
         {%- endif -%}
