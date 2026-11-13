@@ -187,6 +187,7 @@
           data-zdf-fabric-id="{{ zdf_variant.id }}"
           data-zdf-fabric-price="{{ zdf_variant.price | times: 2 }}"
           data-zdf-stock="{{ zdf_stock }}"
+          data-zdf-bands="{{ zdf_bands | join: ',' }}"
           data-zdf-money="{{ 123456789 | money }}">
       <input type="hidden" name="id" value="{{ zdf_variant.id }}">
       <input type="hidden" name="quantity" value="{{ zdf_need_min | times: 2 }}" data-zdf-qty>
@@ -246,40 +247,6 @@
       <p class="zdf-warn" data-zdf-warn hidden>Please choose the design you would like made in this fabric.</p>
       {%- endif -%}
 
-      {%- comment -%}
-        The length is asked here, where the money is, and the cloth follows from it. The same
-        length is one of the ten measurements further down, so the two keep each other in step:
-        pick a band here and the measurement below is set to the top of it, set an exact
-        length below and the band here follows. Inches, as the rest of the shop reads.
-      {%- endcomment -%}
-      <div class="zdf-field">
-        <label for="zdf-band">Length of the piece <span class="zdf-req">*</span> <span>this sets the cloth</span></label>
-        <select id="zdf-band" data-zdf-band required>
-          <option value="">Choose the length</option>
-          {%- for zb in zdf_bands -%}
-            {%- assign zbp = zb | split: ':' -%}
-            {%- assign zb_to = zbp[0] | plus: 0 -%}
-            {%- assign zb_m = zbp[1] -%}
-            {%- assign zb_to_cm = zb_to | times: 2.54 | round: 0 -%}
-            {%- if forloop.first -%}
-              <option value="{{ zb_to }}" data-zdf-m="{{ zb_m }}" data-zdf-short="Up to {{ zb_to }} in">Up to {{ zb_to }} in ({{ zb_to_cm }} cm) &middot; {{ zb_m }} m</option>
-            {%- else -%}
-              {%- assign zb_prev_i = forloop.index0 | minus: 1 -%}
-              {%- assign zb_prev = zdf_bands[zb_prev_i] | split: ':' -%}
-              {%- assign zb_from = zb_prev[0] | plus: 0 -%}
-              {%- assign zb_from_cm = zb_from | times: 2.54 | round: 0 -%}
-              <option value="{{ zb_to }}" data-zdf-m="{{ zb_m }}" data-zdf-short="{{ zb_from }} to {{ zb_to }} in">{{ zb_from }} to {{ zb_to }} in ({{ zb_from_cm }} to {{ zb_to_cm }} cm) &middot; {{ zb_m }} m</option>
-            {%- endif -%}
-          {%- endfor -%}
-        </select>
-        {%- comment -%}Two lines, broken where the thought breaks, rather than wherever the
-           box happens to run out (client, 2026-11-13).{%- endcomment -%}
-        <p class="zdf-hint">Measured from the shoulder down.<br>Your exact length in the measurements below keeps this in step.</p>
-      </div>
-
-      {%- comment -%}A length shorter than a piece can be cut from is raised when the brief
-         opens, and the summary says so rather than quietly charging for metres the customer
-         did not ask for.{%- endcomment -%}
       {%- comment -%}
         One column: what is being made on the left, what it comes to on the right. The length
         and the cloth are a row like any other rather than a sentence repeating the dropdown,
@@ -350,7 +317,12 @@
   // The cloth follows the length of the piece, and the pieces multiply it. The quantity box
   // on the page behind is the cloth being cut, so it is written from here rather than read.
   var pageQty = document.querySelector('.zpdp__qty');
-  var bandSel = overlay.querySelector('[data-zdf-band]');
+  // The length is one of the ten measurements below, and that is the only place it is asked
+  // (client, 2026-11-13). The cloth follows it through the atelier's table, so the figures
+  // settle as the measurements are filled in rather than before them.
+  var BANDS = (form.getAttribute('data-zdf-bands') || '53:3,56:3.5,63:4').split(',').map(function (b) {
+    var p = b.split(':'); return { to: parseFloat(p[0]), m: parseFloat(p[1]) };
+  });
   var PER = 0;                      // metres one piece is cut from, from the length table
   var PIECES = 1;
   function tidy(n) { return String(Math.round(n * 100) / 100); }
@@ -358,29 +330,14 @@
   function wanted() { return PER ? PER * PIECES : 0; }       // the metres the pieces take
   function cut() { return wanted() ? Math.ceil(wanted() / STEP) * STEP : 0; }
   function units(m) { return Math.round(m / STEP); }         // what the cart counts
-  function bandOpt() { return bandSel && bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null; }
-  function bandLabel() { var o = bandOpt(); return o ? (o.getAttribute('data-zdf-short') || '') : ''; }
-
-  // The same length is one of the ten measurements below. Whichever one the customer touches,
-  // the other follows: the inches are the truth and the band is a way of reading them.
-  function lengthField() { return overlay.querySelector('select[name="properties[Length]"][data-zmm-in="custom"]'); }
+  function lengthField() { return overlay.querySelector('select[name="properties[Length]"]:not([disabled])'); }
   function inchesOf(sel) { var m = sel && /([\d.]+)\s*in/.exec(sel.value || ''); return m ? parseFloat(m[1]) : 0; }
   function clothFor(inch) {
-    if (!bandSel) return 0;
-    for (var i = 1; i < bandSel.options.length; i++) {
-      var to = parseFloat(bandSel.options[i].value);
-      if (inch <= to) return parseFloat(bandSel.options[i].getAttribute('data-zdf-m')) || 0;
-    }
-    // Longer than the table goes: half a metre on from its last step, so the cutter is never short.
-    var last = bandSel.options[bandSel.options.length - 1];
-    return (parseFloat(last.getAttribute('data-zdf-m')) || 4) + 0.5;
+    for (var i = 0; i < BANDS.length; i++) if (inch <= BANDS[i].to) return BANDS[i].m;
+    return BANDS[BANDS.length - 1].m + 0.5;   // longer than the table goes
   }
-  function bandIndexFor(inch) {
-    for (var i = 1; i < bandSel.options.length; i++) {
-      if (inch <= parseFloat(bandSel.options[i].value)) return i;
-    }
-    return 0;
-  }
+  function lengthSaid() { var f = lengthField(); return f ? (f.value || '') : ''; }
+
   function applyLength() {
     if (!pageQty) return;
     var want = cut();
@@ -414,13 +371,16 @@
 
     // The length and what it is cut from, on one line with the rest.
     if (sumLN) sumLN.textContent = PER
-      ? bandLabel() + ' \u00b7 ' + tidy(PER) + ' m' + (PIECES > 1 ? ' each' : '')
-      : 'Not chosen yet';
+      ? lengthSaid() + ' \u00b7 ' + tidy(PER) + ' m' + (PIECES > 1 ? ' each' : '')
+      : 'In the measurements below';
 
     // The note speaks only when the rows above do not already say it: cloth cut longer than
     // the pieces take, or a bolt that will not stretch to another piece.
     if (lift && liftT) {
       var says = [];
+      if (!PER) {
+        says.push('The cloth is cut to the length of the piece, so it is priced once you set the length in the measurements below.');
+      }
       if (PER && m !== wanted()) {
         says.push('Cloth is cut in half metres, so ' + tidy(wanted()) + ' m is cut as <b>' + tidy(m) + ' m</b>.');
       }
@@ -431,6 +391,7 @@
         says.push('We hold <b>' + STOCK + ' m</b> of this cloth on the shelf. The rest is cut from the next roll, and your designer confirms the timing when they call.');
       }
       lift.hidden = says.length === 0;
+      if (!says.length) liftT.innerHTML = '';
       liftT.innerHTML = says.join(' ');
     }
 
@@ -448,35 +409,12 @@
         : (m ? money(FABRIC_PRICE * m) + ' + design' : 'Length and design to choose'));
   }
 
-  // The length and the pieces are the two things that move the cloth.
-  if (bandSel) bandSel.addEventListener('change', function () {
-    var o = bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null;
-    PER = o ? parseFloat(o.getAttribute('data-zdf-m')) || 0 : 0;
-    // Set the measurement below to the top of the band, unless it already sits inside it.
-    var lf = lengthField();
-    if (lf && o) {
-      var now = inchesOf(lf);
-      if (!now || bandIndexFor(now) !== bandSel.selectedIndex) {
-        var to = parseFloat(o.value);
-        for (var i = 0; i < lf.options.length; i++) {
-          if (Math.abs(inchesOf({ value: lf.options[i].value }) - to) < 0.01) { lf.selectedIndex = i; break; }
-        }
-        lf.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    }
-    applyLength();
-    retotal();
-  });
-
-  // An exact length set in the measurements wins, and the band here is moved to match.
+  // The length among the measurements below is what moves the cloth, with the pieces.
   overlay.addEventListener('change', function (e) {
     var t = e.target;
-    if (!t || t.getAttribute('name') !== 'properties[Length]' || t.getAttribute('data-zmm-in') !== 'custom') return;
+    if (!t || t.getAttribute('name') !== 'properties[Length]') return;
     var inch = inchesOf(t);
-    if (!inch || !bandSel) return;
-    var want = bandIndexFor(inch);
-    PER = clothFor(inch);
-    if (bandSel.selectedIndex !== want) bandSel.selectedIndex = want;
+    PER = inch ? clothFor(inch) : 0;
     applyLength();
     retotal();
   });
@@ -587,12 +525,10 @@
     overlay.classList.add('is-open'); document.body.style.overflow='hidden';
     readLength(); applyLength(); retotal(); setTimeout(refreshNav, 80);
   }
-  // A length already set in the measurements, or a band already chosen, prices itself.
+  // A length already set in the measurements prices itself the moment the brief opens.
   function readLength() {
     var inch = inchesOf(lengthField());
-    if (inch && bandSel) { PER = clothFor(inch); bandSel.selectedIndex = bandIndexFor(inch); return; }
-    var o = bandSel && bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null;
-    PER = o ? parseFloat(o.getAttribute('data-zdf-m')) || 0 : 0;
+    PER = inch ? clothFor(inch) : 0;
   }
   function close(){ overlay.classList.remove('is-open'); document.body.style.overflow=''; }
   openers.forEach(function(b){ b.addEventListener('click', open); });
