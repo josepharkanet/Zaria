@@ -1,0 +1,25 @@
+{%- doc -%}
+  Print a product price in the unit the shop talks in.
+
+  Cloth is cut in half metres and Shopify cart quantities are whole numbers, so the sold
+  unit for anything tagged "Fabric" is half a metre: the variant price is the price of
+  0.5 m. Customers think in metres, so every price shown for a fabric is doubled back to
+  the metre here, in one place, rather than in each card and section.
+
+  @param {object} product - the product the price belongs to (decides the unit)
+  @param {number} [price] - the figure to print, in cents; defaults to product.price
+  @param {boolean} [unit] - pass false to leave off the "/ m" suffix (struck prices, totals)
+{%- enddoc -%}
+{%- liquid
+  assign zp_money = price
+  if zp_money == blank
+    assign zp_money = product.price
+  endif
+  assign zp_fabric = false
+  if product.tags contains 'Fabric'
+    assign zp_fabric = true
+    assign zp_money = zp_money | times: 2
+  endif
+-%}
+{{- zp_money | money -}}
+{%- if zp_fabric and unit != false %} <span class="zp-uom" style="letter-spacing:.02em;white-space:nowrap">/ m</span>{% endif -%}

@@ -48,8 +48,8 @@
           {%- if brand != blank -%}<span class="h2np__brand">{{ brand }}</span>{%- endif -%}
           <h3 class="h2np__name">{%- render 'zar-product-title', product: product -%}</h3>
           <span class="h2np__price">
-            {%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}
-            {{ product.price | money }}
+            {%- if product.compare_at_price > product.price -%}<s>{% render 'zaria-price', product: product, price: product.compare_at_price, unit: false %}</s>{%- endif -%}
+            {% render 'zaria-price', product: product %}
           </span>
         </a>
       {%- endfor -%}

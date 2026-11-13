@@ -49,14 +49,28 @@
     assign uom_product = line_item.product
   endif
   assign show_uom = false
+  assign fabric_unit = false
   if uom_product.tags contains 'Fabric'
-    if context == 'product' or context == 'card'
-      assign show_uom = true
-    endif
+    comment
+      Zaria: cloth is cut in half metres, so the sold unit is 0.5 m and the variant price is
+      the price of half a metre (cart quantities cannot be fractions). Customers think in
+      metres, so a fabric price is doubled back to the metre wherever it is shown. Line items
+      are left alone: they print the money actually charged.
+    endcomment
+    assign fabric_unit = true
+    assign show_uom = true
   endif
 -%}
 
 <price-list class="price-list {% if context == 'product' %}price-list--product{% endif %}">
+  {%- liquid
+    assign shown_price = variant.price
+    assign shown_compare = variant.compare_at_price
+    if fabric_unit
+      assign shown_price = shown_price | times: 2
+      assign shown_compare = shown_compare | times: 2
+    endif
+  -%}
   {%- if variant != blank -%}
     {%- comment -%}
       --------------------------------------------------------------------------------------------------------------------
@@ -68,9 +82,9 @@
         <span class="sr-only">{{ 'product.price.regular_price' | t }}</span>
 
         {%- if settings.currency_code_enabled -%}
-          {{- variant.compare_at_price | money_with_currency -}}
+          {{- shown_compare | money_with_currency -}}
         {%- else -%}
-          {{- variant.compare_at_price | money -}}
+          {{- shown_compare | money -}}
         {%- endif -%}
       </compare-at-price>
     {%- endif -%}
@@ -79,9 +93,9 @@
       <span class="sr-only">{{ 'product.price.sale_price' | t }}</span>
 
       {%- if settings.currency_code_enabled -%}
-        {{- variant.price | money_with_currency -}}
+        {{- shown_price | money_with_currency -}}
       {%- else -%}
-        {{- variant.price | money -}}
+        {{- shown_price | money -}}
       {%- endif -%}
     </sale-price>
   {%- elsif line_item != blank -%}
@@ -90,14 +104,22 @@
       LINE ITEM CASE (used on cart, order page...)
       --------------------------------------------------------------------------------------------------------------------
     {%- endcomment -%}
+    {%- liquid
+      assign li_price = line_item.final_price
+      assign li_original = line_item.original_price
+      if fabric_unit
+        assign li_price = li_price | times: 2
+        assign li_original = li_original | times: 2
+      endif
+    -%}
     {%- if line_item.original_price > line_item.final_price -%}
       <compare-at-price class="{{ compare_at_price_classes }}">
         <span class="sr-only">{{ 'product.price.regular_price' | t }}</span>
 
         {%- if settings.currency_code_enabled -%}
-          {{- line_item.original_price | money_with_currency -}}
+          {{- li_original | money_with_currency -}}
         {%- else -%}
-          {{- line_item.original_price | money -}}
+          {{- li_original | money -}}
         {%- endif -%}
       </compare-at-price>
     {%- endif -%}
@@ -106,9 +128,9 @@
       <span class="sr-only">{{ 'product.price.sale_price' | t }}</span>
 
       {%- if settings.currency_code_enabled -%}
-        {{- line_item.final_price | money_with_currency -}}
+        {{- li_price | money_with_currency -}}
       {%- else -%}
-        {{- line_item.final_price | money -}}
+        {{- li_price | money -}}
       {%- endif -%}
     </sale-price>
   {%- elsif product != blank -%}
@@ -124,12 +146,19 @@
         assign variant = product.variants | sort: 'price' | first | default: product.selected_or_first_available_variant
       endif
 
+      assign card_price = variant.price
+      assign card_compare_at_price = variant.compare_at_price
+      if fabric_unit
+        assign card_price = card_price | times: 2
+        assign card_compare_at_price = card_compare_at_price | times: 2
+      endif
+
       if settings.currency_code_enabled
-        assign variant_price = variant.price | money_with_currency
-        assign variant_compare_at_price = variant.compare_at_price | money_with_currency
+        assign variant_price = card_price | money_with_currency
+        assign variant_compare_at_price = card_compare_at_price | money_with_currency
       else
-        assign variant_price = variant.price | money
-        assign variant_compare_at_price = variant.compare_at_price | money
+        assign variant_price = card_price | money
+        assign variant_compare_at_price = card_compare_at_price | money
       endif
     -%}
 

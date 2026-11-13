@@ -268,7 +268,7 @@
                     {%- endif -%}
                   </div>
                   <h3 class="zar-prod__name">{%- render 'zar-product-title', product: product -%}</h3>
-                  <div class="zar-prod__price">{{ product.price | money }}</div>
+                  <div class="zar-prod__price">{% render 'zaria-price', product: product %}</div>
                 </a>
               {%- endfor -%}
             </div>

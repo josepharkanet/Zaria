@@ -182,11 +182,11 @@
           data-zdf-fabric="{{ product.title | escape }}"
           data-zdf-fabric-handle="{{ product.handle }}"
           data-zdf-fabric-id="{{ zdf_variant.id }}"
-          data-zdf-fabric-price="{{ zdf_variant.price }}"
+          data-zdf-fabric-price="{{ zdf_variant.price | times: 2 }}"
           data-zdf-stock="{{ zdf_stock }}"
           data-zdf-money="{{ 123456789 | money }}">
       <input type="hidden" name="id" value="{{ zdf_variant.id }}">
-      <input type="hidden" name="quantity" value="{{ zdf_need_min }}" data-zdf-qty>
+      <input type="hidden" name="quantity" value="{{ zdf_need_min | times: 2 }}" data-zdf-qty>
       <input type="hidden" name="properties[Request]" value="Design your look">
       <input type="hidden" name="properties[_fabric_handle]" value="{{ product.handle }}">
 
@@ -327,8 +327,9 @@
   var form = overlay.querySelector('[data-zdf-form]');
   var picks = overlay.querySelector('[data-zdf-picks]');
   var warn = overlay.querySelector('[data-zdf-warn]');
+  // Stock is held in half-metre units, the unit cloth is sold in, and read out in metres.
   var STOCK = parseInt(form.getAttribute('data-zdf-stock'), 10);
-  if (isNaN(STOCK)) STOCK = -1;                       // -1: this bolt has never been counted
+  if (isNaN(STOCK) || STOCK < 0) STOCK = -1; else STOCK = STOCK / 2;   // -1: never counted
   var FABRIC_PRICE = parseInt(form.getAttribute('data-zdf-fabric-price'), 10) || 0;
 
   // The shop's own money format, read off a sentinel Liquid rendered, so the totals below
@@ -348,8 +349,10 @@
   var PER = 0;                      // metres one piece is cut from, from the length table
   var PIECES = 1;
   function tidy(n) { return String(Math.round(n * 100) / 100); }
+  var STEP = 0.5;                                           // cloth is cut in half metres
   function wanted() { return PER ? PER * PIECES : 0; }       // the metres the pieces take
-  function cut() { return wanted() ? Math.ceil(wanted()) : 0; }  // cloth is cut in whole metres
+  function cut() { return wanted() ? Math.ceil(wanted() / STEP) * STEP : 0; }
+  function units(m) { return Math.round(m / STEP); }         // what the cart counts
   function bandOpt() { return bandSel && bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null; }
   function bandLabel() { var o = bandOpt(); return o ? (o.getAttribute('data-zdf-short') || '') : ''; }
 
@@ -399,7 +402,7 @@
   var liftT = overlay.querySelector('[data-zdf-lift-t]');
   function retotal() {
     var m = cut();
-    if (qtyField) qtyField.value = m || 1;
+    if (qtyField) qtyField.value = units(m) || 1;
     if (pcN && pcN.value !== String(PIECES)) pcN.value = PIECES;
     if (pcDown) pcDown.disabled = PIECES <= 1;
     if (pcUp) pcUp.disabled = PIECES >= PC_MAX;
@@ -414,7 +417,7 @@
     if (lift && liftT) {
       var says = [];
       if (PER && m !== wanted()) {
-        says.push('Cloth is cut in whole metres, so ' + tidy(wanted()) + ' m is cut as <b>' + m + ' m</b>.');
+        says.push('Cloth is cut in half metres, so ' + tidy(wanted()) + ' m is cut as <b>' + tidy(m) + ' m</b>.');
       }
       if (PIECES >= PC_MAX) {
         says.push('Ten pieces is as many as the brief takes. For a larger order, ask for the atelier and they will quote it with you.');
@@ -427,7 +430,7 @@
     }
 
     if (sumFL) sumFL.innerHTML = m
-      ? 'Fabric &middot; ' + m + ' m &times; ' + money(FABRIC_PRICE)
+      ? 'Fabric &middot; ' + tidy(m) + ' m &times; ' + money(FABRIC_PRICE)
       : 'Fabric';
     if (sumFV) sumFV.textContent = m ? money(FABRIC_PRICE * m) : 'Choose the length';
     if (sumDL) sumDL.innerHTML = (designVariant && PIECES > 1)
@@ -653,13 +656,14 @@
       // it describes.
       var m = cut();
       var cloth = { Request: 'Design your look', Design: designTitle,
+                    Length: tidy(m) + ' m',
                     'Cut for': PIECES > 1 ? (PIECES + ' pieces') : 'one piece',
                     _fabric_handle: props._fabric_handle };
       var made = {};
       Object.keys(props).forEach(function (k) { made[k] = props[k]; });
       made['Fabric'] = form.getAttribute('data-zdf-fabric') || '';
-      made['Fabric cut'] = m + ' m';
-      var items = [{ id: form.getAttribute('data-zdf-fabric-id'), quantity: m, properties: designVariant ? cloth : props }];
+      made['Fabric cut'] = tidy(m) + ' m';
+      var items = [{ id: form.getAttribute('data-zdf-fabric-id'), quantity: units(m), properties: designVariant ? cloth : props }];
       // Only if the collection itself were empty would there be no second line to add.
       if (designVariant) items.push({ id: designVariant, quantity: PIECES, properties: made });
 

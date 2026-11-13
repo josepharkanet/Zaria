@@ -134,12 +134,14 @@
   // design brief uses; the product's own fabric_required is the fallback for a piece whose
   // length the size form does not say. Cart quantities cannot be fractions, so the cloth is
   // cut in whole metres.
+  var STEP = 0.5;                                     // cloth is cut in half metres
+  function units(m) { return Math.round(m / STEP); }  // what the cart counts
   var BANDS = (root.getAttribute('data-zfc-bands') || '53:3,56:3.5,63:4').split(',').map(function (b) {
     var p = b.split(':'); return { to: parseFloat(p[0]), m: parseFloat(p[1]) };
   });
   var FALLBACK = parseFloat(root.getAttribute('data-zfc-need')) || 3;
   var NEED = FALLBACK;                                  // metres one piece is cut from
-  var MIN = Math.ceil(NEED);
+  var MIN = Math.ceil(NEED / 0.5) * 0.5;
   var needSay = root.querySelector('[data-zfc-need-say]');
 
   function tidy(n) { return String(Math.round(n * 100) / 100); }
@@ -160,7 +162,7 @@
     var inch = lengthInches();
     var per = inch ? clothFor(inch) : FALLBACK;
     if (per === NEED) return false;
-    NEED = per; MIN = Math.ceil(NEED);
+    NEED = per; MIN = Math.ceil(NEED / STEP) * STEP;
     return true;
   }
   var ALL = [], ROWS = [], BASE = '', shown = 0, view = [], chosen = null;
@@ -332,11 +334,11 @@
         if (m && String(v).trim() !== '') props[m[1]] = v;
       });
       var n = pieces(), metres = MIN * n;
-      props['Fabric cut'] = metres + ' m';
+      props['Fabric cut'] = tidy(metres) + ' m';
       var id = form.querySelector('[name="id"]');
       var items = [
         { id: id ? id.value : '', quantity: n, properties: props },
-        { id: String(chosen.v), quantity: metres, properties: { 'For': root.getAttribute('data-zfc-title') || '', 'Request': 'Cut for a made-to-order piece' } }
+        { id: String(chosen.v), quantity: units(metres), properties: { 'For': root.getAttribute('data-zfc-title') || '', 'Length': tidy(metres) + ' m', 'Request': 'Cut for a made-to-order piece' } }
       ];
       fetch('/cart/add.js', {
         method: 'POST',
