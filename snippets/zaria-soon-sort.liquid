@@ -1,0 +1,49 @@
+{%- comment -%}
+  Zaria - a product between rolls goes to the end of the row it is in.
+
+  The CSS order property does that on its own wherever the grid is a flex or grid container,
+  but the shop lays products out in more than one way (the collection grid, the list view, the
+  home rows, a carousel of related pieces), and in a container that is neither, order counts
+  for nothing. This moves the cards themselves, so the rule holds everywhere.
+
+  Each card is moved once and marked, so the pages the load-more brings in are moved as they
+  arrive and nothing is moved twice, which would set the observer off against itself.
+{%- endcomment -%}
+<script>
+(function () {
+  var MARK = 'data-soon-sorted';
+  var queued = false;
+
+  function settle() {
+    queued = false;
+    var loose = document.querySelectorAll('.product-card--restock:not([' + MARK + '])');
+    if (!loose.length) return;
+    var parents = [];
+    for (var i = 0; i < loose.length; i++) {
+      var p = loose[i].parentElement;
+      if (p && parents.indexOf(p) === -1) parents.push(p);
+    }
+    parents.forEach(function (p) {
+      var soon = [];
+      for (var i = 0; i < p.children.length; i++) {
+        var el = p.children[i];
+        if (el.classList && el.classList.contains('product-card--restock')) soon.push(el);
+      }
+      soon.forEach(function (el) { el.setAttribute(MARK, ''); p.appendChild(el); });
+    });
+  }
+
+  function queue() { if (!queued) { queued = true; requestAnimationFrame(settle); } }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', queue);
+  else queue();
+
+  if (window.MutationObserver) {
+    new MutationObserver(function (records) {
+      for (var i = 0; i < records.length; i++) {
+        if (records[i].addedNodes && records[i].addedNodes.length) { queue(); return; }
+      }
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+})();
+</script>
