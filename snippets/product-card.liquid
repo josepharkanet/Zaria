@@ -40,15 +40,18 @@
 -%}
 
 {%- comment -%}
-  A product the shop has run out of is not taken off the grid, it falls to the end of it
-  with a "Coming soon" badge (client, 2026-11-13). The order is set in CSS rather than in
-  the loop so it survives the load-more, which appends into the same grid.
+  A product the shop has run out of is not taken off the grid: it falls to the end of it and
+  says "Available soon" down the side of its picture, and nothing on it can be bought
+  (client, 2026-11-13). Counted stock is what decides, so a piece the shop has never counted
+  is not called empty. The order is set in CSS rather than in the loop so it survives the
+  load-more, which appends the next page into the same grid.
 {%- endcomment -%}
 {%- assign pc_variant = product.selected_or_first_available_variant -%}
 {%- assign pc_restock = false -%}
 {%- if pc_variant.inventory_management != blank and pc_variant.inventory_quantity <= 0 -%}
   {%- assign pc_restock = true -%}
 {%- endif -%}
+{%- if product.available == false -%}{%- assign pc_restock = true -%}{%- endif -%}
 <product-card
   class="product-card{% if pc_restock %} product-card--restock{% endif %}"
   {% if reveal %}
@@ -93,6 +96,7 @@
 
   {%- if product.media.size > 0 -%}
     <div class="product-card__figure">
+      {%- if pc_restock -%}<span class="zar-soon" aria-hidden="true">Available soon</span>{%- endif -%}
      {%- if show_badges -%}
   {%- render 'product-badges', product: product, vertical: true, context: 'card' -%}
 {%- elsif settings.show_discount and product.compare_at_price > product.price -%}
@@ -159,7 +163,7 @@
         </button>
       {%- endif -%}
 
-      {%- if show_quick_buy and product.available -%}
+      {%- if show_quick_buy and product.available and pc_restock == false -%}
         {%- if product.variants.size == 1 and product.selling_plan_groups.size == 0 -%}
           <product-form>
             {%- form 'product', product -%}

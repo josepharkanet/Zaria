@@ -27,17 +27,17 @@
 
       {%- when 'sold_out' -%}
         {%- comment -%}
-          Zaria: nothing is sold out, it is between rolls. Cloth and made-to-order pieces are
-          reordered rather than discontinued and every fabric is set to keep selling, so a
-          count at or below zero reads "Coming soon" (client, 2026-11-13). A piece that really
-          cannot be bought keeps the theme's own wording.
+          Zaria: nothing is sold out, it is between rolls. Cloth is reordered rather than
+          discontinued, so a counted item at or below zero reads "Available soon" and cannot
+          be bought until it lands (client, 2026-11-13). On a card the words run down the side
+          of the picture instead; this badge is the product page's.
         {%- endcomment -%}
         {%- assign zb_restock = false -%}
         {%- if variant.inventory_management != blank and variant.inventory_quantity <= 0 -%}
           {%- assign zb_restock = true -%}
         {%- endif -%}
         {%- if zb_restock -%}
-          <sold-out-badge class="badge badge--sold-out badge--coming-soon">Coming soon</sold-out-badge>
+          <sold-out-badge class="badge badge--sold-out badge--coming-soon">Available soon</sold-out-badge>
         {%- elsif settings.show_sold_out_badge and variant.available == false -%}
           <sold-out-badge class="badge badge--sold-out">
             {{- 'product.general.sold_out_badge' | t -}}

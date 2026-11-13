@@ -46,8 +46,17 @@
   }
 
   /* A product between rolls sits at the end of the grid it is in, wherever that grid is
-     (collection, search, a related row), and keeps its place as more pages load in. */
+     (collection, search, a related row), and keeps its place as more pages load in. It says
+     so down the left of its picture, in the shop's own lettering rather than a loud tag, and
+     its picture is quieted so the ones that can be bought carry the eye first. */
   .product-card--restock{order:1}
+  .product-card--restock .product-card__figure{position:relative}
+  .product-card--restock .product-card__media{opacity:.72;transition:opacity .25s ease}
+  .product-card--restock:hover .product-card__media{opacity:.85}
+  .zar-soon{position:absolute;top:50%;left:8px;z-index:2;transform:translateY(-50%) rotate(180deg);
+    writing-mode:vertical-rl;font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+    color:#8d867d;pointer-events:none;white-space:nowrap}
+  @media (max-width:749px){ .zar-soon{font-size:9px;letter-spacing:.22em;left:5px} }
 
   /* Generic classes, for markup written after this snippet. */
   .zfields{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--zf-gap)}
