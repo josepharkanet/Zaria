@@ -538,8 +538,14 @@
           <input type="hidden" name="id" value="{{ fv.id }}">
         {%- endunless -%}
 
-        {%- if is_madetoorder and is_restock == false -%}{% render 'zaria-fabric-choice', product: product %}{%- endif -%}
+        {%- comment -%}
+          The size comes first, because it is the size that says how much cloth the piece
+          takes: the fabric room reads the length off it, and the cost cannot settle until
+          it is set. That puts the cost at the foot of the fabric room, right above Add to
+          Cart, which is where a customer looks for it (client, 2026-11-13).
+        {%- endcomment -%}
         {%- if is_garment -%}{% render 'zaria-measure-form', product: product %}{%- endif -%}
+        {%- if is_madetoorder and is_restock == false -%}{% render 'zaria-fabric-choice', product: product %}{%- endif -%}
 
         <div class="zpdp__buy-row">
           {%- comment -%}
