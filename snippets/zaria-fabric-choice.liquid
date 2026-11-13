@@ -194,19 +194,20 @@
   var taxP = document.querySelector('[data-zpdp-tax]');
   var taxMade = taxP ? taxP.textContent : '';
 
-  // The headline price above. It opens on the making plus the least costly bolt that can
-  // supply the piece, and settles on the exact figure once a cloth is picked (client,
-  // 2026-11-13). One piece is what it quotes, as a headline price always does; the summary
-  // at the foot of this room carries the figure for the whole order.
+  // The headline price above. It opens at what the piece costs in the cloth it is
+  // photographed in, and when another cloth is picked that cloth's cost takes the included
+  // one's place, the making staying where it is (client, 2026-11-13). One piece is what it
+  // quotes, as a headline price does; the summary at the foot of this room carries the
+  // figure for the whole order.
   var amountEl = document.querySelector('[data-zpdp-amount]');
   var priceBox = document.querySelector('[data-zpdp-price]');
-  var FROM = priceBox ? (parseInt(priceBox.getAttribute('data-zpdp-from'), 10) || 0) : 0;
+  var TOTAL = priceBox ? (parseInt(priceBox.getAttribute('data-zpdp-total'), 10) || 0) : 0;
   function sayPrice() {
     var on = fabricOn();
     if (amountEl) {
-      if (!on || !FROM) amountEl.textContent = money(DESIGN);
+      if (!on || !TOTAL) amountEl.textContent = money(DESIGN);
       else if (chosen) amountEl.textContent = money(DESIGN + chosen.p * MIN);
-      else amountEl.textContent = 'From ' + money(FROM);
+      else amountEl.textContent = money(TOTAL);
     }
     if (!taxP) return;
     if (!on) taxP.textContent = 'Ready made in a standard size \u00b7 price per piece';

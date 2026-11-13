@@ -432,30 +432,30 @@
           endif
         -%}
         {%- comment -%}
-          Zaria: a made-to-order piece is priced as the making, with the cloth charged beside
-          it by the metre, so the headline opens on the making plus the least costly bolt that
-          can supply it (custom.price_from, written by zaria-ops/madetoorder-from-price.mjs)
-          and settles on the exact figure the moment a cloth is picked. The fabric room does
-          the arithmetic and writes it into [data-zpdp-amount]; this is only the opening word.
+          Zaria: a Ramadan piece is listed at what it costs in the cloth it is photographed in
+          - custom.price_total, the cloth plus the making from the client's cost sheet. Pick a
+          different cloth in the room below and that cloth's cost replaces the one included,
+          leaving the making untouched (client, 2026-11-13). The fabric room does the
+          arithmetic and writes it into [data-zpdp-amount]; this is only the opening figure.
         {%- endcomment -%}
         {%- liquid
-          assign zpdp_from = 0
+          assign zpdp_total = 0
           if is_madetoorder and is_restock == false
-            assign zpdp_from = product.metafields.custom.price_from.value | plus: 0
+            assign zpdp_total = product.metafields.custom.price_total.value | plus: 0
           endif
         -%}
-        <div class="zpdp__price" data-zpdp-price data-zpdp-making="{{ zpdp_shown }}" data-zpdp-from="{{ zpdp_from }}">
+        <div class="zpdp__price" data-zpdp-price data-zpdp-making="{{ zpdp_shown }}" data-zpdp-total="{{ zpdp_total }}">
           {%- if product.compare_at_price > product.price -%}
             <span class="zpdp__cut">{{ zpdp_shown_cut | money }}</span>
           {%- endif -%}
-          <span data-zpdp-amount>{% if zpdp_from > 0 %}From {{ zpdp_from | money }}{% else %}{{ zpdp_shown | money }}{% endif %}</span>
+          <span data-zpdp-amount>{% if zpdp_total > 0 %}{{ zpdp_total | money }}{% else %}{{ zpdp_shown | money }}{% endif %}</span>
         </div>
         {%- if is_restock -%}
           <p class="zpdp__soon">Available soon. This one is between rolls, so it cannot be ordered yet. Ask us and we will tell you when it lands.</p>
         {%- endif -%}
         {%- comment -%}Zaria is not VAT registered, so this line names the unit and makes no tax claim.{%- endcomment -%}
         {%- unless is_fragrance -%}
-          <p class="zpdp__tax" data-zpdp-tax>{% if product.tags contains 'Fabric' %}Price per metre, cut in half metres{% elsif is_madetoorder %}The making and the cloth it is cut from &middot; pick your cloth below and the price settles{% else %}Price per unit{% endif %}</p>
+          <p class="zpdp__tax" data-zpdp-tax>{% if product.tags contains 'Fabric' %}Price per metre, cut in half metres{% elsif is_madetoorder %}The cloth it is made in and the making, together &middot; change the cloth below and the price follows{% else %}Price per unit{% endif %}</p>
         {%- endunless -%}
       {%- endif -%}
 

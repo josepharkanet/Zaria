@@ -49,22 +49,17 @@
     assign uom_product = line_item.product
   endif
   comment
-    Zaria: a Ramadan piece is priced as the making alone, with the cloth charged beside it by
-    the metre, so a card reading the variant price told half the story (client, 2026-11-13).
-    Each of those products carries custom.price_from - the making plus the least expensive
-    bolt that can still cut it, written by zaria-ops/madetoorder-from-price.mjs - and the
-    card and the strips show that as a "from" figure instead. A cart line is left alone: it
-    prints the money actually charged, and by then the cloth is its own line anyway. The
-    cloth's own pricing is untouched.
+    Zaria: a Ramadan piece carries the making as its variant price, because the cart adds the
+    cloth as its own line, so a card reading that price showed half of what the piece costs
+    (client, 2026-11-13). custom.price_total is the listed figure - the cloth it is made in
+    plus the making, both from the client's cost sheet, written by
+    zaria-ops/madetoorder-price.mjs - and that is what a card and the strips show. A cart
+    line is left alone: it prints the money actually charged, and by then the cloth is its
+    own line anyway. The cloth's own pricing is untouched.
   endcomment
-  assign mto_from = 0
+  assign mto_total = 0
   if uom_product.tags contains 'Ramadan 2027' and line_item == blank
-    assign mto_from = uom_product.metafields.custom.price_from.value | plus: 0
-  endif
-  if settings.currency_code_enabled
-    assign mto_money = mto_from | money_with_currency
-  else
-    assign mto_money = mto_from | money
+    assign mto_total = uom_product.metafields.custom.price_total.value | plus: 0
   endif
 
   assign show_uom = false
@@ -90,15 +85,19 @@
       assign shown_compare = shown_compare | times: 2
     endif
   -%}
-  {%- if mto_from > 0 -%}
+  {%- if mto_total > 0 -%}
     {%- comment -%}
       --------------------------------------------------------------------------------------------------------------------
-      MADE TO ORDER CASE - the making plus the cheapest cloth that can cut it
+      MADE TO ORDER CASE - the cloth it is made in, plus the making
       --------------------------------------------------------------------------------------------------------------------
     {%- endcomment -%}
     <sale-price class="{{ regular_price_classes }}">
       <span class="sr-only">{{ 'product.price.sale_price' | t }}</span>
-      {{- 'product.price.from_price_html' | t: price_min: mto_money -}}
+      {%- if settings.currency_code_enabled -%}
+        {{- mto_total | money_with_currency -}}
+      {%- else -%}
+        {{- mto_total | money -}}
+      {%- endif -%}
     </sale-price>
   {%- elsif variant != blank -%}
     {%- comment -%}
