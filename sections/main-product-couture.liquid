@@ -579,6 +579,12 @@
         {%- if is_garment -%}{% render 'zaria-measure-form', product: product %}{%- endif -%}
         {%- if is_madetoorder and is_restock == false -%}{% render 'zaria-fabric-choice', product: product %}{%- endif -%}
 
+        {%- comment -%}
+          Nothing sits between the attributes and this row on a cloth page: a bolt bought on
+          its own is one figure times a length, and the box, the price by the metre and the
+          line beneath it already say it (client, 2026-11-13). The running summary lives on
+          the made-to-order page and in the design brief, where there are two things to add.
+        {%- endcomment -%}
         <div class="zpdp__buy-row">
           {%- comment -%}
             Cloth is asked for in metres and half metres. The box is the length; the quantity
