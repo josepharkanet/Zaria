@@ -207,15 +207,19 @@
   var INCLUDED = TOTAL > DESIGN ? TOTAL - DESIGN : 0;
   function sayPrice() {
     var on = fabricOn();
+    // Readymade is the piece as photographed, so it keeps the listed figure, cloth and all.
+    // Only a cloth actually picked in the room changes it, and then only the cloth half: the
+    // one the piece is photographed in drops out and the chosen one takes its place.
     if (amountEl) {
-      if (!on || !TOTAL) amountEl.textContent = money(DESIGN);
-      else if (chosen) amountEl.textContent = money(DESIGN + chosen.p * MIN);
-      else amountEl.textContent = money(TOTAL);
+      if (on && chosen) amountEl.textContent = money(DESIGN + chosen.p * MIN);
+      else if (TOTAL) amountEl.textContent = money(TOTAL);
+      else amountEl.textContent = money(DESIGN);
     }
     if (!taxP) return;
-    if (!on) taxP.textContent = 'Ready made in a standard size \u00b7 price per piece';
-    else if (chosen) taxP.textContent = 'Making ' + money(DESIGN) + ' plus ' + tidy(MIN) +
+    if (on && chosen) taxP.textContent = 'Making ' + money(DESIGN) + ' plus ' + tidy(MIN) +
       ' m of cloth ' + money(chosen.p * MIN);
+    else if (!on && TOTAL) taxP.textContent = 'A standard size, in the cloth photographed \u00b7 price per piece';
+    else if (!on) taxP.textContent = 'Ready made in a standard size \u00b7 price per piece';
     else taxP.textContent = taxMade;
   }
   function syncMode() {
