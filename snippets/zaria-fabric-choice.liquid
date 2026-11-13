@@ -89,7 +89,8 @@
     from 4 m. The figure below is written from whichever length the size form is showing,
     so choosing a longer piece moves it.
   {%- endcomment -%}
-  <p class="zfc__sub">The price above is the making of this piece. Pick the cloth it is cut from and we add it to your order by the metre. This one is cut from <b data-zfc-need-say>{{ zfc_need_say }} m</b>.</p>
+  <p class="zfc__sub">The price above is the making of this piece. Pick the cloth it is cut from and we add it to your order by the metre. This one is cut from <b data-zfc-need-say>{{ zfc_need_say }} m</b>,
+    and the cloth below is what the atelier holds that much of.</p>
 
   <div class="zfc__tools">
     <div class="zfc__search"><input type="search" placeholder="Search the cloth&hellip;" data-zfc-q aria-label="Search fabrics"></div>
@@ -188,7 +189,8 @@
     root.querySelector('[data-zfc-sum-d]').textContent = money(DESIGN * pieces());
     if (needSay) {
       needSay.textContent = tidy(NEED) + ' m' +
-        (MIN !== NEED ? ', cut as ' + MIN + ' m' : '');
+        (MIN !== NEED ? ', cut as ' + tidy(MIN) + ' m' : '') +
+        (pieces() > 1 ? ' each, ' + tidy(needed()) + ' m in all' : '');
     }
     root.querySelector('[data-zfc-sum-fl]').innerHTML =
       chosen ? ('Fabric &middot; ' + m + ' m &times; ' + money(chosen.p)) : 'Fabric';
