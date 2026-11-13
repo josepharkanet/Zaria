@@ -42,8 +42,26 @@
     {%- endif -%}
 
     {%- if show_filters -%}
+      {%- comment -%}
+        A cloth listing filters by three things and no others (client, 2026-11-13):
+        Product type, Pattern, Colour. Pattern and Colour are the product metafields
+        custom.pattern and custom.colour, both opened to the storefront on 2026-11-13;
+        they only reach this loop once they are switched on as filters in the
+        Search & Discovery app, which no API can do. Everything else Shopify offers on
+        those pages (availability, country of origin, price) is dropped here.
+      {%- endcomment -%}
+      {%- assign zfacet_cloth = false -%}
+      {%- if results.handle contains 'fabric' or results.products.first.tags contains 'Fabric' -%}
+        {%- assign zfacet_cloth = true -%}
+      {%- endif -%}
+      {%- assign zfacet_cloth_keep = 'product type,pattern,colour,color' | split: ',' -%}
+
       {%- for filter in results.filters -%}
         {%- assign dl = filter.label | downcase -%}
+        {%- if zfacet_cloth -%}
+          {%- assign zf_dl = dl | strip -%}
+          {%- unless zfacet_cloth_keep contains zf_dl -%}{%- continue -%}{%- endunless -%}
+        {%- endif -%}
 
         {%- comment -%}Display "Family" / "Scent Group" as "Scent"{%- endcomment -%}
         {%- assign filter_label = filter.label -%}
@@ -298,10 +316,6 @@
         the cards read. It is left off there rather than made to lie; material, colour and the
         rest of the facets do the filtering on those pages.
       {%- endcomment -%}
-      {%- assign zfacet_cloth = false -%}
-      {%- if results.handle contains 'fabric' or results.products.first.tags contains 'Fabric' -%}
-        {%- assign zfacet_cloth = true -%}
-      {%- endif -%}
       {%- for filter in results.filters -%}
         {%- if zfacet_cloth -%}{%- continue -%}{%- endif -%}
         {%- if filter.type == 'price_range' -%}

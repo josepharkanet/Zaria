@@ -383,11 +383,30 @@
 
     <!-- INFO -->
     <div class="zpdp__info">
-      {%- comment -%}Zaria: Freya is the cloth label, so it signs a bolt above its name the way
-         a house label would. Only the cloth carries it; the ready-to-wear lines are named by
-         their own collections.{%- endcomment -%}
-      {%- if product.tags contains 'Fabric' -%}
-        <p class="zpdp__brand"><a href="{{ routes.root_url }}collections/all-fabrics">Freya</a></p>
+      {%- comment -%}
+      Zaria — who signs the piece, written above the name (client, 2026-11-13).
+      Cloth has carried the Freya mark for a while; the ready-to-wear pieces now carry theirs
+      the same way. Every garment is tagged Zaria and the Freya line is tagged Freya on top of
+      it, so Freya is read first and Zaria is what is left: the house's own 63 against Freya's
+      101. The words are the two entries under Designers in the menu and lead to the same
+      collections.
+      {%- endcomment -%}
+      {%- liquid
+        assign zpdp_sign = ''
+        assign zpdp_sign_url = ''
+        if product.tags contains 'Fabric'
+          assign zpdp_sign = 'Freya'
+          assign zpdp_sign_url = routes.root_url | append: 'collections/all-fabrics'
+        elsif product.tags contains 'Freya'
+          assign zpdp_sign = 'Freya'
+          assign zpdp_sign_url = routes.root_url | append: 'collections/freya'
+        elsif product.tags contains 'Zaria'
+          assign zpdp_sign = 'Zaria'
+          assign zpdp_sign_url = routes.root_url | append: 'collections/zaria'
+        endif
+      -%}
+      {%- if zpdp_sign != blank -%}
+        <p class="zpdp__brand"><a href="{{ zpdp_sign_url }}">{{ zpdp_sign }}</a></p>
       {%- endif -%}
       <h1 class="zpdp__title">{{ product.title }}</h1>
 

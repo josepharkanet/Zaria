@@ -207,15 +207,32 @@
     {%- comment -%} Section 1 content: brand, vendor and the product name (sits with the image in list view) {%- endcomment -%}
     {%- if show_title or show_vendor and product.vendor != blank -%}
       <div class="product-card__main v-stack justify-items-center gap-2">
-        {%- comment -%} Zaria: the ready-to-wear line signs its pieces above the name, the way
-          a house label would. Taken from the Freya tag rather than the brand metaobject below,
-          which no product carries. {%- endcomment -%}
         {%- comment -%}Its own class, not the theme's: a Zaria rule in theme.css hides
-          .product-card__brand outright to strip the stock commerce clutter.
-          Freya is the cloth label: every fabric the house sells is Freya, and only the cloth
-          carries it. The ready-to-wear lines are named by their own collections.{%- endcomment -%}
-        {%- if product.tags contains 'Fabric' -%}
-          <a href="{{ routes.root_url }}collections/all-fabrics" class="zar-cardbrand">Freya</a>
+          .product-card__brand outright to strip the stock commerce clutter.{%- endcomment -%}
+        {%- comment -%}
+        Zaria — who signs the piece, written above the name (client, 2026-11-13).
+        Cloth has carried the Freya mark for a while; the ready-to-wear pieces now carry theirs
+        the same way. Every garment is tagged Zaria and the Freya line is tagged Freya on top of
+        it, so Freya is read first and Zaria is what is left: the house's own 63 against Freya's
+        101. The words are the two entries under Designers in the menu and lead to the same
+        collections.
+        {%- endcomment -%}
+        {%- liquid
+          assign zcard_sign = ''
+          assign zcard_sign_url = ''
+          if product.tags contains 'Fabric'
+            assign zcard_sign = 'Freya'
+            assign zcard_sign_url = routes.root_url | append: 'collections/all-fabrics'
+          elsif product.tags contains 'Freya'
+            assign zcard_sign = 'Freya'
+            assign zcard_sign_url = routes.root_url | append: 'collections/freya'
+          elsif product.tags contains 'Zaria'
+            assign zcard_sign = 'Zaria'
+            assign zcard_sign_url = routes.root_url | append: 'collections/zaria'
+          endif
+        -%}
+        {%- if zcard_sign != blank -%}
+          <a href="{{ zcard_sign_url }}" class="zar-cardbrand">{{ zcard_sign }}</a>
         {%- endif -%}
 
         {%- comment -%} Brand: name + underline in the grid card; logo only in the list view {%- endcomment -%}
