@@ -55,13 +55,8 @@
   .zfc__tile s{position:absolute;top:6px;left:6px;text-decoration:none;font-size:9.5px;letter-spacing:.1em;
     text-transform:uppercase;padding:4px 7px;background:rgba(22,22,22,.86);color:#fff;line-height:1}
   .zfc__tile s.is-low{background:rgba(255,255,255,.94);color:#7a1f34;box-shadow:inset 0 0 0 1px rgba(122,31,52,.3)}
-  .zfc__tile u{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.92);
-    color:#161616;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;transition:opacity .2s ease}
-  .zfc__tile:hover u,.zfc__tile:focus-within u{opacity:1}
-  @media (hover:none){.zfc__tile u{opacity:1}}
-  .zfc__tile u svg{width:12px;height:12px}
   {%- comment -%}The same magnifier the design tiles carry, on the shop's own lightbox.{%- endcomment -%}
-  .zfc__zoom{position:absolute;bottom:calc(2.7em + 36px);right:6px;width:24px;height:24px;border-radius:50%;
+  .zfc__zoom{position:absolute;bottom:calc(2.7em + 34px);right:6px;width:26px;height:26px;border-radius:50%;
     background:rgba(255,255,255,.92);color:#161616;display:flex;align-items:center;justify-content:center;
     cursor:zoom-in;opacity:0;transition:opacity .2s ease}
   .zfc__tile:hover .zfc__zoom,.zfc__tile:focus-within .zfc__zoom{opacity:1}
@@ -71,6 +66,16 @@
     font-family:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a6a;cursor:pointer}
   .zfc__more:hover{border-color:#161616;color:#161616}
   .zfc__empty{font-size:13px;color:var(--zf-hint);padding:10px 2px}
+  .zfc__len{margin:0 0 14px}
+  .zfc__len label{display:block;margin:0 0 var(--zf-label-gap);font-size:var(--zf-label-size);
+    letter-spacing:var(--zf-label-track);text-transform:uppercase;color:var(--zf-label);line-height:1.4}
+  .zfc__len label .req{color:var(--wine,#7a1f34)}
+  .zfc__len .zfc__lenh{letter-spacing:.08em;text-transform:none;color:#a8a097}
+  .zfc__len select{width:100%;box-sizing:border-box;height:var(--zf-h);padding:0 var(--zf-pr) 0 var(--zf-px);
+    font-family:inherit;font-size:var(--zf-size);color:var(--zf-ink);background:var(--zf-bg) var(--zf-arrow) no-repeat var(--zf-arrow-pos);
+    background-size:var(--zf-arrow-size);border:1px solid var(--zf-line);border-radius:var(--zf-radius);
+    -webkit-appearance:none;-moz-appearance:none;appearance:none;cursor:pointer}
+  .zfc__len select:focus{outline:none;border-color:var(--zf-line-focus);box-shadow:var(--zf-ring)}
   .zfc__sum{border:1px solid #ece8e2;background:#fbfaf8;padding:12px 14px;margin:14px 0 0;font-size:13px}
   .zfc__sum div{display:flex;justify-content:space-between;gap:16px;padding:3px 0;color:#6a6a6a}
   .zfc__sum div span:last-child{color:#161616;white-space:nowrap}
@@ -96,6 +101,35 @@
     so choosing a longer piece moves it.
   {%- endcomment -%}
   <p class="zfc__sub">The price above is the making of this piece. Pick the cloth it is cut from and we add it to your order by the metre. This one is cut from <b data-zfc-need-say>{{ zfc_need_say }} m</b>.</p>
+
+  {%- comment -%}
+    The length is asked here as well as in the measurements below, because this is where the
+    cloth is being chosen and the metres follow from it. The two keep each other in step: a
+    band chosen here sets the measurement below to the top of it, and an exact length set
+    below moves the band here.
+  {%- endcomment -%}
+  {%- assign zfc_bands = '53:3,56:3.5,63:4' | split: ',' -%}
+  <div class="zfc__len">
+    <label for="zfc-band">Length of the piece <span class="req">*</span> <span class="zfc__lenh">this sets the cloth</span></label>
+    <select id="zfc-band" data-zfc-band>
+      <option value="">Choose the length</option>
+      {%- for zb in zfc_bands -%}
+        {%- assign zbp = zb | split: ':' -%}
+        {%- assign zb_to = zbp[0] | plus: 0 -%}
+        {%- assign zb_m = zbp[1] -%}
+        {%- assign zb_to_cm = zb_to | times: 2.54 | round: 0 -%}
+        {%- if forloop.first -%}
+          <option value="{{ zb_to }}" data-zfc-m="{{ zb_m }}">Up to {{ zb_to }} in ({{ zb_to_cm }} cm) &middot; {{ zb_m }} m</option>
+        {%- else -%}
+          {%- assign zb_prev_i = forloop.index0 | minus: 1 -%}
+          {%- assign zb_prev = zfc_bands[zb_prev_i] | split: ':' -%}
+          {%- assign zb_from = zb_prev[0] | plus: 0 -%}
+          {%- assign zb_from_cm = zb_from | times: 2.54 | round: 0 -%}
+          <option value="{{ zb_to }}" data-zfc-m="{{ zb_m }}">{{ zb_from }} to {{ zb_to }} in ({{ zb_from_cm }} to {{ zb_to_cm }} cm) &middot; {{ zb_m }} m</option>
+        {%- endif -%}
+      {%- endfor -%}
+    </select>
+  </div>
 
   <div class="zfc__tools">
     <div class="zfc__search"><input type="search" placeholder="Search the cloth&hellip;" data-zfc-q aria-label="Search fabrics"></div>
@@ -173,13 +207,49 @@
     for (var i = 0; i < BANDS.length; i++) if (inch <= BANDS[i].to) return BANDS[i].m;
     return BANDS[BANDS.length - 1].m + 0.5;             // longer than the table goes
   }
-  function readLength() {
-    var inch = lengthInches();
-    var per = inch ? clothFor(inch) : FALLBACK;
+  var bandSel = root.querySelector('[data-zfc-band]');
+  function bandIndexFor(inch) {
+    if (!bandSel) return 0;
+    for (var i = 1; i < bandSel.options.length; i++) {
+      if (inch <= parseFloat(bandSel.options[i].value)) return i;
+    }
+    return 0;
+  }
+  function setPer(per) {
     if (per === NEED) return false;
     NEED = per; MIN = Math.ceil(NEED / STEP) * STEP;
     return true;
   }
+  // The exact length in the measurements wins; the band here is a way of reading it, and is
+  // moved to match. With no measurement set yet, the band is what there is to go on.
+  function readLength() {
+    var inch = lengthInches();
+    if (inch) {
+      if (bandSel) bandSel.selectedIndex = bandIndexFor(inch);
+      return setPer(clothFor(inch));
+    }
+    var o = bandSel && bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null;
+    return setPer(o ? parseFloat(o.getAttribute('data-zfc-m')) || FALLBACK : FALLBACK);
+  }
+
+  if (bandSel) bandSel.addEventListener('change', function () {
+    var o = bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null;
+    var moved = setPer(o ? parseFloat(o.getAttribute('data-zfc-m')) || FALLBACK : FALLBACK);
+    // Set the measurement below to the top of the band, unless it already sits inside it.
+    var lf = document.querySelector('select[name="properties[Length]"]:not([disabled])');
+    if (lf && o) {
+      var now = lengthInches();
+      if (!now || bandIndexFor(now) !== bandSel.selectedIndex) {
+        var to = parseFloat(o.value);
+        for (var i = 0; i < lf.options.length; i++) {
+          var mm = /([\d.]+)\s*in/.exec(lf.options[i].value || '');
+          if (mm && Math.abs(parseFloat(mm[1]) - to) < 0.01) { lf.selectedIndex = i; break; }
+        }
+      }
+    }
+    if (moved) { ALL = inStock(); filter(); }
+    retotal();
+  });
   var ALL = [], ROWS = [], BASE = '', shown = 0, view = [], chosen = null;
 
   // How many pieces are being made, and therefore how much cloth is cut.
@@ -240,11 +310,7 @@
       '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"/></svg>';
     b.appendChild(z);
 
-    var a = document.createElement('u');
-    a.innerHTML = '<a href="' + ROOT + 'products/' + f.h + '" target="_blank" rel="noopener" aria-label="Open ' +
-      f.t.replace(/"/g, '&quot;') + ' in a new tab" style="display:flex;color:inherit">' +
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 16 16 8M9 8h7v7"/></svg></a>';
-    b.appendChild(img); b.appendChild(t); b.appendChild(p); b.appendChild(a);
+    b.appendChild(img); b.appendChild(t); b.appendChild(p);
     return b;
   }
 
