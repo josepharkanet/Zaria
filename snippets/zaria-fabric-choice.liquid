@@ -44,7 +44,22 @@
     padding:0 0 9px;cursor:pointer;font-family:inherit;text-align:center;
     transition:border-color .2s ease,box-shadow .2s ease}
   .zfc__tile:hover{border-color:#b9b2a7}
-  .zfc__tile.is-on{border-color:#161616;box-shadow:inset 0 0 0 1px #161616}
+  {%- comment -%}
+    The chosen one is marked in the house colour, not in black: a hairline frame the same
+    weight as the others so nothing jumps, a small tick set on the image, and the name and
+    the price brought up to full strength. The white ring round the tick keeps it legible
+    on a dark cloth (client, 2026-11-13).
+  {%- endcomment -%}
+  .zfc__tile.is-on{border-color:var(--wine,#7a1f34);box-shadow:inset 0 0 0 1px var(--wine,#7a1f34)}
+  .zfc__tile.is-on b{color:#161616}
+  .zfc__tile.is-on i{color:var(--wine,#7a1f34)}
+  .zfc__tile.is-on::after{content:"";position:absolute;top:8px;right:8px;
+    width:22px;height:22px;border-radius:50%;z-index:3;pointer-events:none;
+    background:var(--wine,#7a1f34) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12.6l5.4 5.4L20 7'/%3E%3C/svg%3E") center / 11px 11px no-repeat;
+    box-shadow:0 0 0 2px #fff;
+    animation:zar-pick-in .22s cubic-bezier(.2,.9,.3,1.2) both}
+  @keyframes zar-pick-in{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+  @media (prefers-reduced-motion:reduce){.zfc__tile.is-on::after{animation:none}}
   .zfc__tile img{display:block;width:100%;aspect-ratio:1/1;height:auto;object-fit:cover;background:#f6f4f1}
   .zfc__tile b{font-weight:400;font-size:11px;line-height:1.35;color:#6a6a6a;padding:8px 8px 0;
     min-height:calc(2.7em + 8px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;
