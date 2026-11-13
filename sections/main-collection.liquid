@@ -274,7 +274,13 @@
                     <span class="text-with-icon justify-center">
                       {{- 'collection.faceting.filter_button' | t | default: 'Filter' -}}
                       {% if active_values_count > 0 %}({{ active_values_count }}){% endif %}
-                      {%- render 'icon' with 'chevron-down' -%}
+                      {%- comment -%}
+                        Zaria: the panel opens beside the grid, not below it, so the mark points
+                        across rather than down (client, 2026-11-13): right while it is shut,
+                        left once it is open. direction_aware flips it with the writing
+                        direction, as the drawer's own chevrons do.
+                      {%- endcomment -%}
+                      {%- render 'icon' with 'chevron-right', direction_aware: true -%}
                     </span>
                   </button>
                 </div>

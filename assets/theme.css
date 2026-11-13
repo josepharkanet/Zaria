@@ -9748,6 +9748,8 @@ facets-drawer .button:hover {
 .collection.is-filters-collapsed { --collection-grid-template: minmax(0, 1fr) !important; }
 .collection.is-filters-collapsed .facets-sidebar { display: none !important; }
 .zar-filter-toggle svg { transition: transform .25s ease; }
+/* The mark is a chevron pointing across, not down: right while the panel is shut, left once
+   it is open. The theme's own [aria-expanded="true"] rule turns it the same half-circle. */
 .zar-filter-toggle.is-open svg { transform: rotate(180deg); }
 
 /* ── Grid view (medium) columns follow the filter state: 4 default, 3 when filter open ── */
