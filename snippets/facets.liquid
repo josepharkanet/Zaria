@@ -43,24 +43,37 @@
 
     {%- if show_filters -%}
       {%- comment -%}
-        A cloth listing filters by three things and no others (client, 2026-11-13):
-        Product type, Pattern, Colour. Pattern and Colour are the product metafields
-        custom.pattern and custom.colour, both opened to the storefront on 2026-11-13;
-        they only reach this loop once they are switched on as filters in the
-        Search & Discovery app, which no API can do. Everything else Shopify offers on
-        those pages (availability, country of origin, price) is dropped here.
+        Cloth and the ready-to-wear rail filter by three things and no others (client,
+        2026-11-13): Product type, Pattern, Colour. Pattern and Colour are the product
+        metafields custom.pattern and custom.colour, both opened to the storefront that day;
+        they only reach this loop once they are switched on as filters in the Search &
+        Discovery app, which no API can do. Everything else Shopify offers on those pages
+        (availability, supplier, country of origin) is dropped here.
+
+        The two listings part company on price alone. A bolt's stored price is half a metre
+        while the page reads by the metre, so the price facet would ask for half of what the
+        cards say and is left off cloth; a garment is priced by the piece, so it keeps it,
+        at the foot of the list where the price block already renders.
       {%- endcomment -%}
       {%- assign zfacet_cloth = false -%}
       {%- if results.handle contains 'fabric' or results.products.first.tags contains 'Fabric' -%}
         {%- assign zfacet_cloth = true -%}
       {%- endif -%}
-      {%- assign zfacet_cloth_keep = 'product type,pattern,colour,color' | split: ',' -%}
+      {%- assign zfacet_wear = false -%}
+      {%- if results.products.first.tags contains 'Ready-to-Wear' -%}
+        {%- assign zfacet_wear = true -%}
+      {%- endif -%}
+      {%- assign zfacet_short = false -%}
+      {%- if zfacet_cloth or zfacet_wear -%}
+        {%- assign zfacet_short = true -%}
+      {%- endif -%}
+      {%- assign zfacet_short_keep = 'product type,pattern,colour,color' | split: ',' -%}
 
       {%- for filter in results.filters -%}
         {%- assign dl = filter.label | downcase -%}
-        {%- if zfacet_cloth -%}
+        {%- if zfacet_short -%}
           {%- assign zf_dl = dl | strip -%}
-          {%- unless zfacet_cloth_keep contains zf_dl -%}{%- continue -%}{%- endunless -%}
+          {%- unless zfacet_short_keep contains zf_dl -%}{%- continue -%}{%- endunless -%}
         {%- endif -%}
 
         {%- comment -%}Display "Family" / "Scent Group" as "Scent"{%- endcomment -%}
@@ -308,13 +321,8 @@
       {%- endfor -%}
 
       {%- comment -%}
-        Price range - rendered at the very bottom of the filter.
-
-        Cloth is sold in half-metre units, so a fabric's price in Shopify is the price of half
-        a metre while every price on the page is shown by the metre. Shopify's own price facet
-        can only work in the stored figure, so on a cloth listing it would ask for half of what
-        the cards read. It is left off there rather than made to lie; material, colour and the
-        rest of the facets do the filtering on those pages.
+        Price range - rendered at the very bottom of the filter, and left off cloth for the
+        reason given above the loop.
       {%- endcomment -%}
       {%- for filter in results.filters -%}
         {%- if zfacet_cloth -%}{%- continue -%}{%- endif -%}
