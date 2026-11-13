@@ -45,7 +45,6 @@
     transition:border-color .2s ease,box-shadow .2s ease}
   .zfc__tile:hover{border-color:#b9b2a7}
   .zfc__tile.is-on{border-color:#161616;box-shadow:inset 0 0 0 1px #161616}
-  .zfc__tile.is-soon{cursor:default}
   .zfc__tile img{display:block;width:100%;aspect-ratio:1/1;height:auto;object-fit:cover;background:#f6f4f1}
   .zfc__tile b{font-weight:400;font-size:11px;line-height:1.35;color:#6a6a6a;padding:8px 8px 0;
     min-height:calc(2.7em + 8px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;
@@ -197,10 +196,29 @@
     root.querySelector('[data-zfc-sum-t]').textContent =
       chosen ? money(DESIGN * pieces() + chosen.p * m) : money(DESIGN * pieces()) + ' + fabric';
   }
-  if (qty) qty.addEventListener('change', retotal);
+  // Changing how many pieces changes how much cloth is needed, so the room is sifted again
+  // and a bolt that can no longer supply it lets go rather than quietly going short.
+  function restock() {
+    ALL = inStock();
+    if (chosen && chosen.q !== null && chosen.q < needed()) {
+      var gone = chosen;
+      chosen = null;
+      if (nameF) nameF.value = '';
+      if (handleF) handleF.value = '';
+      grid.querySelectorAll('.is-on').forEach(function (x) { x.classList.remove('is-on'); });
+      if (warn) {
+        warn.hidden = false;
+        warn.textContent = gone.t + ' holds ' + tidy(gone.q) + ' m, not the ' +
+          tidy(needed()) + ' m these pieces take. Please choose another cloth.';
+      }
+    }
+    filter();
+    retotal();
+  }
+  if (qty) qty.addEventListener('change', restock);
   // The quantity steppers set the box without firing change, so watch the buttons as well.
   if (form) form.addEventListener('click', function (e) {
-    if (e.target.closest('[data-qstep]')) setTimeout(retotal, 0);
+    if (e.target.closest('[data-qstep]')) setTimeout(restock, 0);
   });
 
   function tile(f) {
@@ -215,15 +233,11 @@
     var p = document.createElement('i'); p.textContent = money(f.p) + ' / m';
     // What is on the shelf: nothing is hidden, it is said on the tile. Cloth keeps selling
     // when a bolt runs out, so an empty one is cloth that is coming rather than cloth that is gone.
-    if (f.q !== null && f.q < MIN) {
+    // Enough for this order but not much more: worth saying, since it is the last of it.
+    if (f.q !== null && f.q < needed() + MIN) {
       var badge = document.createElement('s');
-      if (f.q > 0) { badge.className = 'is-low'; badge.textContent = 'Only ' + tidy(f.q) + ' m left'; }
-      else {
-        // Between rolls: shown, so the customer knows the cloth exists, but not orderable.
-        badge.textContent = 'Available soon';
-        b.disabled = true;
-        b.className += ' is-soon';
-      }
+      badge.className = 'is-low';
+      badge.textContent = 'Only ' + tidy(f.q) + ' m left';
       b.appendChild(badge);
     }
     // A closer look at the cloth, through the same lightbox the design tiles open. A span
@@ -254,16 +268,14 @@
     empty.hidden = view.length > 0;
   }
 
-  // Every bolt is offered. A counted bolt that is shorter than the piece takes, or empty,
-  // falls to the end of the list with a word on it rather than being taken away: the cloth is
-  // reordered rather than discontinued (client, 2026-11-13). A bolt that has never been
-  // counted sits with the ready ones, since most of the cloth carries no count yet.
-  function rank(f) { return (f.q === null || f.q >= MIN) ? 0 : (f.q > 0 ? 1 : 2); }
+  // Only cloth that can make what is being ordered (client, 2026-11-13). What is needed is
+  // the length of the piece times how many are being made, so raising the count narrows the
+  // room: a bolt that could cut one cannot always cut three. A bolt that has never been
+  // counted is offered, since most of the cloth carries no count yet.
+  function needed() { return MIN * pieces(); }
   function inStock() {
-    var i = 0;
-    return ROWS.map(function (f) { return { f: f, r: rank(f), i: i++ }; })
-      .sort(function (a, b) { return a.r - b.r || a.i - b.i; })
-      .map(function (x) { return x.f; });
+    var want = needed();
+    return ROWS.filter(function (f) { return f.q === null || f.q >= want; });
   }
 
   // The length of the piece decides the cloth, so a change to it re-reads the bolt list: a
@@ -272,10 +284,8 @@
     var t = e.target;
     if (!t || !t.name || t.name.indexOf('properties[') !== 0) return;
     if (t.name !== 'properties[Length]' && t.name !== 'properties[Size Type]') return;
-    if (!readLength()) { retotal(); return; }
-    ALL = inStock();
-    filter();
-    retotal();
+    readLength();
+    restock();
   });
 
   function filter() {
