@@ -9382,17 +9382,13 @@ footer .gold-divider,
 }
 
 /* The grid / list switch sits with Sort by at the right-hand end of the bar now, not out on
-   its own at the left. Filter is alone at the other end, so the border it used to draw
-   against the switch would land on the very edge of the bar; the one divider the toolbar
-   has moves to between the switch and Sort by. */
+   its own at the left, and the bar carries no dividers at all: the rule above clears the
+   switch's own, and this clears the one Filter would otherwise draw against the edge. */
 @media screen and (min-width: 700px) {
-  .collection-toolbar .zar-filter-toggle-container {
-    border-inline-start-width: 0;
-  }
+  .collection-toolbar .zar-filter-toggle-container,
+  .collection-toolbar__button-list .collection-toolbar__button-container,
   .collection-toolbar__button-list .collection-toolbar__layout-switch-list {
-    border-inline-end-width: 1px !important;
-    border-inline-end-style: solid;
-    border-color: rgb(var(--border-color));
+    border-inline-width: 0 !important;
   }
 }
 
