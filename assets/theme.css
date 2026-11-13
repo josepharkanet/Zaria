@@ -9390,6 +9390,18 @@ footer .gold-divider,
   .collection-toolbar__button-list .collection-toolbar__layout-switch-list {
     border-inline-width: 0 !important;
   }
+  /* The two used to be held apart by the switch's own padding (30px) plus Sort by's
+     (46px), which with the divider gone read as a hole. The side they face each other
+     on is trimmed; the outer sides keep their room so Sort by still clears the edge. */
+  .collection-toolbar__button-list .collection-toolbar__layout-switch-list {
+    padding-inline-end: 0;
+  }
+  .collection-toolbar__button-list .collection-toolbar__button-container {
+    width: auto;
+  }
+  .collection-toolbar__button-list .collection-toolbar__button-container > .collection-toolbar__button {
+    padding-inline-start: 1.25rem;
+  }
 }
 
 /* ═══════════════════════════════════════════════
