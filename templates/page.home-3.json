@@ -71,7 +71,7 @@
     "banner1": {
       "type": "h3-banner",
       "settings": {
-        "collection": "promotion",
+        "collection": "sale",
         "overlay": 40,
         "eyebrow": "Limited Season",
         "heading": "Luxury Fragrances, Now on Sale",
