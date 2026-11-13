@@ -47,15 +47,16 @@
 
   /* A product between rolls sits at the end of the grid it is in, wherever that grid is
      (collection, search, a related row), and keeps its place as more pages load in. It says so
-     on a small dark chip in the corner of its picture: the lettering alone was lost against a
+     on a small chip at the foot of its picture, clear of the zoom button on the other side: the lettering alone was lost against a
      printed cloth, which is most of what this shop sells. The picture itself stays at full
      strength, since the cloth should look as good as it is (client, 2026-11-13). */
   .product-card--restock{order:1}
   .product-card--restock .product-card__figure{position:relative}
-  .zar-soon{position:absolute;top:10px;left:10px;z-index:2;padding:5px 9px;
-    background:rgba(22,22,22,.88);color:#fff;font-size:9.5px;letter-spacing:.16em;
-    text-transform:uppercase;line-height:1;white-space:nowrap;pointer-events:none}
-  @media (max-width:749px){ .zar-soon{top:7px;left:7px;padding:4px 7px;font-size:8.5px;letter-spacing:.12em} }
+  .zar-soon{position:absolute;bottom:10px;left:10px;z-index:2;padding:5px 9px;
+    background:rgba(22,22,22,.58);color:#fff;font-size:9.5px;letter-spacing:.16em;
+    text-transform:uppercase;line-height:1;white-space:nowrap;pointer-events:none;
+    -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+  @media (max-width:749px){ .zar-soon{bottom:7px;left:7px;padding:4px 7px;font-size:8.5px;letter-spacing:.12em} }
 
   /* Generic classes, for markup written after this snippet. */
   .zfields{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--zf-gap)}
