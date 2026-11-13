@@ -135,7 +135,7 @@
   .zdf-zoom svg{width:14px;height:14px}
   @media (hover:none){.zdf-zoom{opacity:1}}
   /* What it comes to: the cloth by the metre on one line, the making on the next. */
-  .zdf-sum{border:1px solid #ece8e2;background:#fbfaf8;padding:12px 14px;margin:2px 0 18px;font-size:13px}
+  .zdf-sum{border:1px solid #ece8e2;background:#fbfaf8;padding:12px 14px;margin:18px 0 12px;font-size:13px}
   .zdf-sum div{display:flex;align-items:center;justify-content:space-between;gap:16px;
     min-height:30px;padding:2px 0;color:#6a6a6a}
   .zdf-sum div span:last-child{color:#161616;white-space:nowrap}
@@ -262,7 +262,26 @@
       <p class="zdf-warn" data-zdf-warn hidden>Please choose the design you would like made in this fabric.</p>
       {%- endif -%}
 
+      <div class="zdf-field"><label>Describe the design</label>
+        <textarea name="properties[Design notes]" placeholder="Silhouette, sleeves, neckline, embroidery, inspiration&hellip;"></textarea>
+      </div>
       {%- comment -%}
+        The size is taken here, not typed. This is the product page's own form, rendered
+        without a product and with no Readymade side: every piece a brief describes is cut to
+        order, so the sketch and its ten measurements open straight away. Its own comment box
+        is off, the brief has one above.
+      {%- endcomment -%}
+      <div class="zdf-field zdf-field--size">
+        {% render 'zaria-measure-form', show_comment: false, custom_only: true %}
+      </div>
+      <div class="zdf-field"><label>Your name <span class="zdf-req">*</span></label><input name="properties[Name]" required autocomplete="name" placeholder="Who the designer should ask for"></div>
+      <div class="zdf-field"><label>Best contact / WhatsApp <span class="zdf-req">*</span></label><input name="properties[Contact]" required autocomplete="tel" placeholder="Phone or WhatsApp for your consultation"></div>
+
+      {%- comment -%}
+        What the order comes to, last thing before the button, where a customer looks for it
+        (client, 2026-11-13). It reads better here than it did halfway up the brief: the
+        length it quotes is taken from the measurements just above.
+
         One column: what is being made on the left, what it comes to on the right. The length
         and the cloth are a row like any other rather than a sentence repeating the dropdown,
         and the note at the foot speaks only when there is something the rows do not say.
@@ -284,21 +303,6 @@
           <span data-zdf-lift-t></span>
         </p>
       </div>
-
-      <div class="zdf-field"><label>Describe the design</label>
-        <textarea name="properties[Design notes]" placeholder="Silhouette, sleeves, neckline, embroidery, inspiration&hellip;"></textarea>
-      </div>
-      {%- comment -%}
-        The size is taken here, not typed. This is the product page's own form, rendered
-        without a product and with no Readymade side: every piece a brief describes is cut to
-        order, so the sketch and its ten measurements open straight away. Its own comment box
-        is off, the brief has one above.
-      {%- endcomment -%}
-      <div class="zdf-field zdf-field--size">
-        {% render 'zaria-measure-form', show_comment: false, custom_only: true %}
-      </div>
-      <div class="zdf-field"><label>Your name <span class="zdf-req">*</span></label><input name="properties[Name]" required autocomplete="name" placeholder="Who the designer should ask for"></div>
-      <div class="zdf-field"><label>Best contact / WhatsApp <span class="zdf-req">*</span></label><input name="properties[Contact]" required autocomplete="tel" placeholder="Phone or WhatsApp for your consultation"></div>
 
       <button type="submit" class="zdf-submit" data-zdf-submit>Add to order &amp; continue</button>
       <p class="zdf-note">The cloth and the making are added as two lines on your order. Confirm details at checkout.<br>Our atelier then reaches out.</p>
