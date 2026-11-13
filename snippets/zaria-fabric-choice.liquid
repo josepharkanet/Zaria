@@ -184,6 +184,24 @@
   var qty = form ? form.querySelector('.zpdp__qty') : null;
   function pieces() { var n = qty ? parseInt(qty.value, 10) : 1; return n > 0 ? n : 1; }
 
+  // Ready made is a piece the atelier has already cut and finished, so its cloth is settled
+  // and there is nothing to choose: the fabric room belongs to the Customized side alone
+  // (client, 2026-11-13). Hidden, it also stops posting a fabric with the order, and the
+  // submit below steps aside so the piece is added the ordinary way. With no size form on
+  // the page there is no mode to read and the room simply stays open.
+  var modeRadio = document.querySelector('input[data-zmm-mode="custom"]');
+  function fabricOn() { return modeRadio ? modeRadio.checked : true; }
+  var taxP = document.querySelector('[data-zpdp-tax]');
+  var taxMade = taxP ? taxP.textContent : '';
+  function syncMode() {
+    var on = fabricOn();
+    root.hidden = !on;
+    if (nameF) nameF.disabled = !on;
+    if (handleF) handleF.disabled = !on;
+    if (!on && warn) warn.hidden = true;
+    if (taxP) taxP.textContent = on ? taxMade : 'Ready made in a standard size \u00b7 price per piece';
+  }
+
   function retotal() {
     var m = MIN * pieces();
     root.querySelector('[data-zfc-sum-d]').textContent = money(DESIGN * pieces());
@@ -286,6 +304,7 @@
     var t = e.target;
     if (!t || !t.name || t.name.indexOf('properties[') !== 0) return;
     if (t.name !== 'properties[Length]' && t.name !== 'properties[Size Type]') return;
+    syncMode();
     readLength();
     restock();
   });
@@ -344,12 +363,14 @@
 
   // The size form may already be showing a length (a readymade piece has one from the start),
   // so the cloth is read from it before the bolt list arrives.
+  syncMode();
   readLength();
   retotal();
 
   // Two lines on the order: this piece, and the cloth it is cut from.
   if (form) {
     form.addEventListener('submit', function (e) {
+      if (!fabricOn()) return;        /* ready made: one line, added the ordinary way */
       if (!chosen) {
         e.preventDefault();
         warn.hidden = false;

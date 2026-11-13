@@ -418,7 +418,7 @@
         {%- endif -%}
         {%- comment -%}Zaria is not VAT registered, so this line names the unit and makes no tax claim.{%- endcomment -%}
         {%- unless is_fragrance -%}
-          <p class="zpdp__tax">{% if product.tags contains 'Fabric' %}Price per metre, cut in half metres{% elsif is_madetoorder %}Design &amp; tailoring &middot; fabric chosen below and charged by the metre{% else %}Price per unit{% endif %}</p>
+          <p class="zpdp__tax" data-zpdp-tax>{% if product.tags contains 'Fabric' %}Price per metre, cut in half metres{% elsif is_madetoorder %}Design &amp; tailoring &middot; fabric chosen below and charged by the metre{% else %}Price per unit{% endif %}</p>
         {%- endunless -%}
       {%- endif -%}
 
