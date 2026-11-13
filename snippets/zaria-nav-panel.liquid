@@ -18,38 +18,12 @@
     </ul>
 
   {%- when 'categories' -%}
-    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
-      <div class="zaria-mega__col">
-        <a href="{{ routes.root_url }}collections/all-fabrics" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'silk' %}Fabrics</a>
-        <a href="{{ routes.root_url }}collections/all-fabrics">All Fabrics</a>
-        <a href="{{ routes.root_url }}collections/luxe-silks">Luxe Silks</a>
-        <a href="{{ routes.root_url }}collections/fine-cottons">Fine Cottons</a>
-        <a href="{{ routes.root_url }}collections/silk-blends">Silk Blends</a>
-        <a href="{{ routes.root_url }}collections/linen-blends">Linen Blends</a>
-      </div>
-      <div class="zaria-mega__col">
-        <a href="{{ routes.root_url }}collections/embellished" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'occasion' %}Embellished &amp; Occasion</a>
-        <a href="{{ routes.root_url }}collections/chiffons-organza">Chiffons &amp; Organza</a>
-        <a href="{{ routes.root_url }}collections/velvets">Velvets</a>
-        <a href="{{ routes.root_url }}collections/tulle-3d-work">Tulle &amp; 3D Work</a>
-        <a href="{{ routes.root_url }}collections/sequins-embroidery">Sequins &amp; Embroidery</a>
-        <a href="{{ routes.root_url }}collections/hand-painted">Hand-Painted</a>
-      </div>
-      <div class="zaria-mega__col">
-        <a href="{{ routes.root_url }}collections/abayas" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'abaya' %}Abaya</a>
-        <a href="{{ routes.root_url }}collections/ready-to-wear-abaya">Ready-to-wear</a>
-        {%- if zp_mto_abaya > 0 -%}<a href="{{ routes.root_url }}collections/made-to-order-abaya">Made to Order</a>{%- endif -%}
-      </div>
-      <div class="zaria-mega__col">
-        <a href="{{ routes.root_url }}collections/jalabiya" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'jalabiya' %}Jalabiya</a>
-        <a href="{{ routes.root_url }}collections/ready-to-wear-jalabiya">Ready-to-wear</a>
-        <a href="{{ routes.root_url }}collections/made-to-order-jalabiya">Made to Order</a>
-      </div>
-      <div class="zaria-mega__col">
-        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'veil' %}Sheila</a>
-        <a href="{{ routes.root_url }}collections/accessories">Sheila &amp; Accessories</a>
-      </div>
-    </div></div>
+    <ul class="header__dropdown-menu unstyled-list" role="list">
+      <li><a href="{{ routes.root_url }}collections/all-fabrics" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'silk' %}Fabrics</a></li>
+      <li><a href="{{ routes.root_url }}collections/abayas" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'abaya' %}Abaya</a></li>
+      <li><a href="{{ routes.root_url }}collections/jalabiya" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'jalabiya' %}Jalabiya</a></li>
+      <li><a href="{{ routes.root_url }}collections/accessories" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'veil' %}Sheila</a></li>
+    </ul>
 
   {%- when 'ready-to-wear' -%}
     <ul class="header__dropdown-menu unstyled-list" role="list">
