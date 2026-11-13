@@ -272,7 +272,9 @@
             {%- endif -%}
           {%- endfor -%}
         </select>
-        <p class="zdf-hint">Measured from the shoulder down. Your exact length in the measurements below keeps this in step.</p>
+        {%- comment -%}Two lines, broken where the thought breaks, rather than wherever the
+           box happens to run out (client, 2026-11-13).{%- endcomment -%}
+        <p class="zdf-hint">Measured from the shoulder down.<br>Your exact length in the measurements below keeps this in step.</p>
       </div>
 
       {%- comment -%}A length shorter than a piece can be cut from is raised when the brief
