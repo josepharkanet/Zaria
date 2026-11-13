@@ -280,11 +280,6 @@
     background-size:var(--zf-arrow-size);transition:border-color .18s ease,box-shadow .18s ease}
   #shopify-section-{{ section.id }} .zpdp__variant:hover{border-color:var(--zf-line-hover)}
   #shopify-section-{{ section.id }} .zpdp__variant:focus{outline:none;border-color:var(--zf-line-focus);box-shadow:var(--zf-ring)}
-  #shopify-section-{{ section.id }} .zpdp__sum{border:1px solid #ece8e2;background:#fbfaf8;padding:12px 14px;margin:0 0 14px;font-size:13px}
-  #shopify-section-{{ section.id }} .zpdp__sum div{display:flex;justify-content:space-between;gap:16px;padding:3px 0;color:#6a6a6a}
-  #shopify-section-{{ section.id }} .zpdp__sum div span:last-child{color:#161616;white-space:nowrap}
-  #shopify-section-{{ section.id }} .zpdp__sum .zpdp__tot{border-top:1px solid #ece8e2;margin-top:6px;padding-top:8px;color:#161616}
-  #shopify-section-{{ section.id }} .zpdp__sum .zpdp__tot span:last-child{font-size:15px}
   #shopify-section-{{ section.id }} .zpdp__qty-wrap{display:flex;align-items:center;border:1px solid var(--zf-line);background:var(--zf-bg);height:var(--zf-h);flex:none}
   #shopify-section-{{ section.id }} .zpdp__qbtn{width:42px;height:100%;border:0;background:none;cursor:pointer;font-size:17px;line-height:1;color:#161616;display:flex;align-items:center;justify-content:center;padding:0;transition:color .2s}
   #shopify-section-{{ section.id }} .zpdp__qbtn:hover{color:var(--wine)}
@@ -584,21 +579,6 @@
         {%- if is_garment -%}{% render 'zaria-measure-form', product: product %}{%- endif -%}
         {%- if is_madetoorder and is_restock == false -%}{% render 'zaria-fabric-choice', product: product %}{%- endif -%}
 
-        {%- comment -%}
-          Zaria: cloth gets the same running total a made-to-order piece has, sitting just
-          above Add to Cart (client, 2026-11-13). There is one line to it - the length against
-          the price by the metre - and it follows the box as it is typed or stepped.
-        {%- endcomment -%}
-        {%- if is_fabric and is_restock == false -%}
-          <div class="zpdp__sum" data-zpdp-sum data-zpdp-rate="{{ zpdp_shown }}" data-zpdp-money="{{ 123456789 | money }}">
-            <div>
-              <span data-zpdp-sum-l>Cloth &middot; 1 m &times; {{ zpdp_shown | money }}</span>
-              <span data-zpdp-sum-v>{{ zpdp_shown | money }}</span>
-            </div>
-            <div class="zpdp__tot"><span>Total</span><span data-zpdp-sum-t>{{ zpdp_shown | money }}</span></div>
-          </div>
-        {%- endif -%}
-
         <div class="zpdp__buy-row">
           {%- comment -%}
             Cloth is asked for in metres and half metres. The box is the length; the quantity
@@ -734,32 +714,12 @@
   var qlo=qin?(parseFloat(qin.getAttribute('data-qmin'))||qstep):1;
   function qround(v){return Math.round(v/qstep)*qstep;}
   function qshow(v){return String(Math.round(v*100)/100);}
-  // The cloth total above the button: one line, the length against the price by the metre.
-  var qsum=f?f.querySelector('[data-zpdp-sum]'):null;
-  var qrate=qsum?(parseInt(qsum.getAttribute('data-zpdp-rate'),10)||0):0;
-  var qMT=qsum?(qsum.getAttribute('data-zpdp-money')||'1,234,567.89'):'';
-  var qmn=/\d[\d.,]*/.exec(qMT)||{index:qMT.length,0:''};
-  var qPre=qMT.slice(0,qmn.index), qPost=qMT.slice(qmn.index+qmn[0].length);
-  function qmoney(c){
-    var p=(Math.round(c)/100).toFixed(2).split('.');
-    return qPre+p[0].replace(/\B(?=(\d{3})+(?!\d))/g,',')+'.'+p[1]+qPost;
-  }
-  function qtotal(v){
-    if(!qsum)return;
-    var line=qsum.querySelector('[data-zpdp-sum-l]');
-    var val=qsum.querySelector('[data-zpdp-sum-v]');
-    var tot=qsum.querySelector('[data-zpdp-sum-t]');
-    if(line)line.innerHTML='Cloth \u00b7 '+qshow(v)+' m \u00d7 '+qmoney(qrate);
-    if(val)val.textContent=qmoney(qrate*v);
-    if(tot)tot.textContent=qmoney(qrate*v);
-  }
   function qsync(){
     if(!qin)return qlo;
     var v=qround(parseFloat(qin.value));
     if(isNaN(v)||v<qlo)v=qlo;
     qin.value=qshow(v);
     if(qposted)qposted.value=qhalf?Math.round(v*2):Math.round(v);
-    qtotal(v);
     return v;
   }
   if(f){f.querySelectorAll('[data-qstep]').forEach(function(b){b.addEventListener('click',function(){
