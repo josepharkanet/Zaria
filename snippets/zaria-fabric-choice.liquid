@@ -60,6 +60,13 @@
   .zfc__tile:hover u,.zfc__tile:focus-within u{opacity:1}
   @media (hover:none){.zfc__tile u{opacity:1}}
   .zfc__tile u svg{width:12px;height:12px}
+  {%- comment -%}The same magnifier the design tiles carry, on the shop's own lightbox.{%- endcomment -%}
+  .zfc__zoom{position:absolute;bottom:calc(2.7em + 36px);right:6px;width:24px;height:24px;border-radius:50%;
+    background:rgba(255,255,255,.92);color:#161616;display:flex;align-items:center;justify-content:center;
+    cursor:zoom-in;opacity:0;transition:opacity .2s ease}
+  .zfc__tile:hover .zfc__zoom,.zfc__tile:focus-within .zfc__zoom{opacity:1}
+  @media (hover:none){.zfc__zoom{opacity:1}}
+  .zfc__zoom svg{width:13px;height:13px}
   .zfc__more{display:block;width:100%;margin-top:12px;padding:12px;background:transparent;border:1px solid var(--zf-line);
     font-family:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a6a;cursor:pointer}
   .zfc__more:hover{border-color:#161616;color:#161616}
@@ -221,6 +228,18 @@
       }
       b.appendChild(badge);
     }
+    // A closer look at the cloth, through the same lightbox the design tiles open. A span
+    // rather than a button, because the tile itself is one and a button cannot hold another.
+    var z = document.createElement('span');
+    z.className = 'zfc__zoom';
+    z.setAttribute('role', 'button');
+    z.setAttribute('tabindex', '0');
+    z.setAttribute('aria-label', 'Look closer at ' + f.t);
+    z.setAttribute('data-zoom-src', sized(BASE + f.i, 1600));
+    z.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' +
+      '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"/></svg>';
+    b.appendChild(z);
+
     var a = document.createElement('u');
     a.innerHTML = '<a href="' + ROOT + 'products/' + f.h + '" target="_blank" rel="noopener" aria-label="Open ' +
       f.t.replace(/"/g, '&quot;') + ' in a new tab" style="display:flex;color:inherit">' +
@@ -278,6 +297,7 @@
 
   grid.addEventListener('click', function (e) {
     if (e.target.closest('a')) return;
+    if (e.target.closest('[data-zoom-src]')) return;   /* the lightbox handles that one */
     var b = e.target.closest('.zfc__tile');
     if (!b) return;
     var v = Number(b.getAttribute('data-v'));
