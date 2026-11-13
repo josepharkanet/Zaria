@@ -1,3 +1,15 @@
 .DS_Store
 temp/
 node_modules/
+
+# This folder is the Shopify theme and nothing else: everything Shopify's GitHub sync
+# reads lives in assets/ blocks/ config/ layout/ locales/ sections/ snippets/ templates/.
+# The working folders that were moved in beside it keep their own git history and must
+# never be committed here, or the theme push carries hundreds of megabytes with it.
+/zaria-ops/
+/zaria-design-studio/
+/Zaria-Fabric-Images/
+/zaria photos /
+/exports/
+/shots/
+/*.jpeg

@@ -1,0 +1,25 @@
+{%- comment -%}
+  Zaria — the one definition of the main rail, read by both the desktop header and the mobile
+  drawer. Shopify's navigation sits behind a scope this store's custom app does not hold, so
+  the menu cannot be edited in the admin by anything but a person; rather than leave the rail
+  hostage to that, it is written here and the admin's Main menu is no longer read.
+
+  Structure asked for by the client, 2026-11-13:
+      New In · Designers · Categories · Ready-to-wear · Made to Order · Sales
+
+  One row per item, fields separated by ~ and rows by ||
+      key ~ label ~ href ~ kind
+  kind is one of
+      link  a plain word in the rail
+      drop  a short dropdown list        (snippets/zaria-nav-panel, zaria-nav-sub)
+      mega  a full-width panel of columns
+      sale  a plain word in the house colour
+  The children of every drop/mega live in zaria-nav-panel (desktop) and zaria-nav-sub (mobile);
+  adding a designer or a category means editing those two and this list, nothing else.
+{%- endcomment -%}
+new-in        ~ New In        ~ {{ routes.root_url }}collections/new                ~ link ||
+designers     ~ Designers     ~ {{ routes.root_url }}collections/ready-to-wear      ~ drop ||
+categories    ~ Categories    ~ {{ routes.root_url }}collections/all-fabrics        ~ mega ||
+ready-to-wear ~ Ready-to-wear ~ {{ routes.root_url }}collections/ready-to-wear      ~ drop ||
+made-to-order ~ Made to Order ~ {{ routes.root_url }}pages/design-your-look         ~ drop ||
+sales         ~ Sales         ~ {{ routes.root_url }}collections/sale               ~ sale

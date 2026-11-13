@@ -1,26 +1,34 @@
-{%- comment -%}Zaria — mobile drawer sub-links for the hardcoded mega categories (menu has no children). Usage: {% render 'zaria-nav-sub', title: link.title %}{%- endcomment -%}
-{%- assign t = title | strip | downcase -%}
-{%- case t -%}
-  {%- when 'fabrics' -%}
-    <a href="{{ routes.root_url }}collections/luxe-silks">Luxe Silks</a>
-    <a href="{{ routes.root_url }}collections/fine-cottons">Fine Cottons</a>
-    <a href="{{ routes.root_url }}collections/chiffons-organza">Chiffons &amp; Organza</a>
-    <a href="{{ routes.root_url }}collections/linen-blends">Linen Blends</a>
-    <a href="{{ routes.root_url }}collections/velvets">Velvets</a>
-    <a href="{{ routes.root_url }}collections/tulle-3d-work">Tulle &amp; 3D Work</a>
-    <a href="{{ routes.root_url }}collections/silk-blends">Silk Blends</a>
-    <a href="{{ routes.root_url }}collections/sequins-embroidery">Sequins &amp; Embroidery</a>
-    <a href="{{ routes.root_url }}collections/hand-painted">Hand-Painted</a>
-    <a href="{{ routes.root_url }}collections/all-fabrics">All Fabrics</a>
-  {%- when 'fragrance' -%}
-    <a href="{{ routes.root_url }}collections/perfumes">Perfumes</a>
-    <a href="{{ routes.root_url }}collections/home-fragrance">Home Fragrance</a>
-    <a href="{{ routes.root_url }}collections/gift-sets">Gift Sets</a>
-    <a href="{{ routes.root_url }}collections/fragrance-accessories">Accessories</a>
-  {%- when 'ready to wear','ready-to-wear' -%}
-    <a href="{{ routes.root_url }}collections/abayas">Abayas</a>
+{%- comment -%}
+  Zaria — the mobile drawer's sub-links, the same destinations the desktop panel shows.
+  Usage: {% render 'zaria-nav-sub', key: key %}   (keys come from snippets/zaria-nav-rail)
+  Edited together with snippets/zaria-nav-panel.
+{%- endcomment -%}
+{%- assign zs_mto_abaya = collections['made-to-order-abaya'].all_products_count | default: 0 -%}
+{%- case key -%}
+  {%- when 'designers' -%}
+    <a href="{{ routes.root_url }}collections/zaria">Zaria</a>
+    <a href="{{ routes.root_url }}collections/freya">Freya</a>
+  {%- when 'categories' -%}
+    <a href="{{ routes.root_url }}collections/all-fabrics">Fabrics</a>
+    <a href="{{ routes.root_url }}collections/luxe-silks" class="zar-subsub">Luxe Silks</a>
+    <a href="{{ routes.root_url }}collections/fine-cottons" class="zar-subsub">Fine Cottons</a>
+    <a href="{{ routes.root_url }}collections/silk-blends" class="zar-subsub">Silk Blends</a>
+    <a href="{{ routes.root_url }}collections/linen-blends" class="zar-subsub">Linen Blends</a>
+    <a href="{{ routes.root_url }}collections/chiffons-organza" class="zar-subsub">Chiffons &amp; Organza</a>
+    <a href="{{ routes.root_url }}collections/velvets" class="zar-subsub">Velvets</a>
+    <a href="{{ routes.root_url }}collections/tulle-3d-work" class="zar-subsub">Tulle &amp; 3D Work</a>
+    <a href="{{ routes.root_url }}collections/sequins-embroidery" class="zar-subsub">Sequins &amp; Embroidery</a>
+    <a href="{{ routes.root_url }}collections/hand-painted" class="zar-subsub">Hand-Painted</a>
+    <a href="{{ routes.root_url }}collections/embellished" class="zar-subsub">Embellished &amp; Occasion</a>
+    <a href="{{ routes.root_url }}collections/abayas">Abaya</a>
     <a href="{{ routes.root_url }}collections/jalabiya">Jalabiya</a>
-    <a href="{{ routes.root_url }}collections/ramadan-2027" class="zar-subsub">Ramadan 2027</a>
-    <a href="{{ routes.root_url }}collections/freya" class="zar-subsub">Freya Collections</a>
+    <a href="{{ routes.root_url }}collections/accessories">Sheila</a>
+  {%- when 'ready-to-wear' -%}
+    <a href="{{ routes.root_url }}collections/ready-to-wear-jalabiya">Jalabiya</a>
+    <a href="{{ routes.root_url }}collections/ready-to-wear-abaya">Abaya</a>
     <a href="{{ routes.root_url }}collections/accessories">Sheila &amp; Accessories</a>
+  {%- when 'made-to-order' -%}
+    <a href="{{ routes.root_url }}collections/made-to-order-jalabiya">Jalabiya</a>
+    {%- if zs_mto_abaya > 0 -%}<a href="{{ routes.root_url }}collections/made-to-order-abaya">Abaya</a>{%- endif -%}
+    <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>
 {%- endcase -%}

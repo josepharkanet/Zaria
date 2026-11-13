@@ -1,0 +1,70 @@
+{%- comment -%}
+  Zaria — the desktop panel behind a rail item. Usage: {% render 'zaria-nav-panel', key: key %}
+  The rail (snippets/zaria-nav-rail) says which items have one and whether it is a short
+  dropdown or a full-width panel; this writes the markup for both. The mobile drawer shows the
+  same destinations through snippets/zaria-nav-sub, so the two are edited together.
+
+  Made to Order holds no abayas yet, only jalabiyas. The line is written against the live
+  collection count so it appears by itself the day an abaya is tagged for it, rather than
+  sending anyone to an empty page in the meantime.
+{%- endcomment -%}
+{%- assign zp_mto_abaya = collections['made-to-order-abaya'].all_products_count | default: 0 -%}
+{%- case key -%}
+
+  {%- when 'designers' -%}
+    <ul class="header__dropdown-menu unstyled-list" role="list">
+      <li><a href="{{ routes.root_url }}collections/zaria" class="link-faded-reverse zar-ddlink">Zaria</a></li>
+      <li><a href="{{ routes.root_url }}collections/freya" class="link-faded-reverse zar-ddlink">Freya</a></li>
+    </ul>
+
+  {%- when 'categories' -%}
+    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
+      <div class="zaria-mega__col">
+        <a href="{{ routes.root_url }}collections/all-fabrics" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'silk' %}Fabrics</a>
+        <a href="{{ routes.root_url }}collections/all-fabrics">All Fabrics</a>
+        <a href="{{ routes.root_url }}collections/luxe-silks">Luxe Silks</a>
+        <a href="{{ routes.root_url }}collections/fine-cottons">Fine Cottons</a>
+        <a href="{{ routes.root_url }}collections/silk-blends">Silk Blends</a>
+        <a href="{{ routes.root_url }}collections/linen-blends">Linen Blends</a>
+      </div>
+      <div class="zaria-mega__col">
+        <a href="{{ routes.root_url }}collections/embellished" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'occasion' %}Embellished &amp; Occasion</a>
+        <a href="{{ routes.root_url }}collections/chiffons-organza">Chiffons &amp; Organza</a>
+        <a href="{{ routes.root_url }}collections/velvets">Velvets</a>
+        <a href="{{ routes.root_url }}collections/tulle-3d-work">Tulle &amp; 3D Work</a>
+        <a href="{{ routes.root_url }}collections/sequins-embroidery">Sequins &amp; Embroidery</a>
+        <a href="{{ routes.root_url }}collections/hand-painted">Hand-Painted</a>
+      </div>
+      <div class="zaria-mega__col">
+        <a href="{{ routes.root_url }}collections/abayas" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'abaya' %}Abaya</a>
+        <a href="{{ routes.root_url }}collections/ready-to-wear-abaya">Ready-to-wear</a>
+        {%- if zp_mto_abaya > 0 -%}<a href="{{ routes.root_url }}collections/made-to-order-abaya">Made to Order</a>{%- endif -%}
+      </div>
+      <div class="zaria-mega__col">
+        <a href="{{ routes.root_url }}collections/jalabiya" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'jalabiya' %}Jalabiya</a>
+        <a href="{{ routes.root_url }}collections/ready-to-wear-jalabiya">Ready-to-wear</a>
+        <a href="{{ routes.root_url }}collections/made-to-order-jalabiya">Made to Order</a>
+      </div>
+      <div class="zaria-mega__col">
+        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'veil' %}Sheila</a>
+        <a href="{{ routes.root_url }}collections/accessories">Sheila &amp; Accessories</a>
+      </div>
+    </div></div>
+
+  {%- when 'ready-to-wear' -%}
+    <ul class="header__dropdown-menu unstyled-list" role="list">
+      <li><a href="{{ routes.root_url }}collections/ready-to-wear-jalabiya" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'jalabiya' %}Jalabiya</a></li>
+      <li><a href="{{ routes.root_url }}collections/ready-to-wear-abaya" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'abaya' %}Abaya</a></li>
+      <li><a href="{{ routes.root_url }}collections/accessories" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'veil' %}Sheila &amp; Accessories</a></li>
+    </ul>
+
+  {%- when 'made-to-order' -%}
+    <ul class="header__dropdown-menu unstyled-list" role="list">
+      <li><a href="{{ routes.root_url }}collections/made-to-order-jalabiya" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'jalabiya' %}Jalabiya</a></li>
+      {%- if zp_mto_abaya > 0 -%}
+        <li><a href="{{ routes.root_url }}collections/made-to-order-abaya" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'abaya' %}Abaya</a></li>
+      {%- endif -%}
+      <li><a href="{{ routes.root_url }}pages/design-your-look" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'brush' %}Design Your Look</a></li>
+    </ul>
+
+{%- endcase -%}

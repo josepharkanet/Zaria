@@ -347,209 +347,63 @@
           {%- render 'icon' with 'hamburger', class: 'header__nav-icon' -%}
         </button>
 
-        {%- if menu.links.size > 0 and section.settings.layout != 'drawer' -%}
+        {%- comment -%}
+          Zaria — the rail is written in the theme, not read from the admin's Main menu.
+          Shopify's navigation sits behind a scope this store's custom app does not hold, and
+          the structure the client asked for on 2026-11-13 has to be exact, so one definition
+          lives in snippets/zaria-nav-rail and the panels behind it in snippets/zaria-nav-panel.
+          The drawer reads the same two files, which is why both ends always agree.
+        {%- endcomment -%}
+        {%- if section.settings.layout != 'drawer' -%}
           {%- assign nav_left_buf = '' -%}
           {%- assign nav_right_buf = '' -%}
-          {%- assign nav_half = menu.links.size | plus: 1 | divided_by: 2 -%}
-            {%- for link in menu.links -%}
-              {% liquid
-                assign link_title_downcase = link.title | strip | downcase
-                assign link_href = link.url
-                if link_title_downcase == 'catalog'
-                  assign link_href = routes.root_url | append: 'collections/all-fabrics'
-                endif
-
-                # Zaria: the promotion. Shopify's navigation sits behind a scope this store's
-                # app does not hold, so the item is renamed here: the menu entry named in
-                # "Promotion replaces" is published under the promotion label and link, and an
-                # item actually named Promotion is picked up too, for the day the menu itself
-                # is edited. Clear the setting to switch it off.
-                assign zar_promo_src = section.settings.promo_menu_item | strip | downcase
-                assign zar_promo_label = section.settings.promo_label | default: 'Promotion'
-                assign zar_promo_url = section.settings.promo_url | default: '/collections/promotion'
-                assign zar_is_promo = false
-                if link_title_downcase == 'promotion'
-                  assign zar_is_promo = true
-                elsif zar_promo_src != blank and link_title_downcase == zar_promo_src
-                  assign zar_is_promo = true
-                endif
-                assign zar_link_label = link.title
-                # Shop opens the whole catalogue, so it says so. The menu item itself is still
-                # named "Shop" in Shopify, which this store's app cannot rename.
-                if link_title_downcase == 'shop'
-                  assign zar_link_label = 'Shop All'
-                endif
-                if zar_is_promo
-                  assign zar_link_label = zar_promo_label
-                  assign link_href = zar_promo_url
-                endif
-                assign mega_menu_block = ''
-                for block in section.blocks
-                  assign menu_item_downcase = block.settings.menu_item | strip | downcase
-
-                  if menu_item_downcase == link_title_downcase
-                    assign mega_menu_block = block
-                    break
-                  endif
-                endfor
-              %}
-
-              {%- comment -%} Zaria: hardcoded category mega-menus (no menu nesting needed) {%- endcomment -%}
-              {%- capture zaria_mega_links -%}
-                {%- case link_title_downcase -%}
-                  {%- comment -%}Shop carries no panel: it is the whole catalogue, and the
-                    panel only repeated items that are already in the rail (client, 2026-11-09).{%- endcomment -%}
-                  {%- when 'fabrics' -%}
-                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/luxe-silks" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'silk' %}Luxe Silks</a>
-                        <a href="{{ routes.root_url }}collections/fine-cottons" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'cotton' %}Fine Cottons</a>
-                        <a href="{{ routes.root_url }}collections/chiffons-organza" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'chiffon' %}Chiffons &amp; Organza</a>
-                      </div>
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/linen-blends" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'linen' %}Linen Blends</a>
-                        <a href="{{ routes.root_url }}collections/velvets" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'velvet' %}Velvets</a>
-                        <a href="{{ routes.root_url }}collections/tulle-3d-work" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'tulle' %}Tulle &amp; 3D Work</a>
-                      </div>
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/silk-blends" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'silk' %}Silk Blends</a>
-                        <a href="{{ routes.root_url }}collections/sequins-embroidery" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'sequins' %}Sequins &amp; Embroidery</a>
-                        <a href="{{ routes.root_url }}collections/hand-painted" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'brush' %}Hand-Painted</a>
-                      </div>
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/all-fabrics" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'tag' %}All Fabrics</a>
-                      </div>
-                    </div></div>
-                  {%- when 'fragrance' -%}
-                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/perfumes" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'perfume' %}Perfumes</a>
-                        <a href="{{ routes.root_url }}collections/perfumes">Signature</a>
-                        <a href="{{ routes.root_url }}collections/perfumes">Oud</a>
-                        <a href="{{ routes.root_url }}collections/perfumes">Attar</a>
-                      </div>
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/home-fragrance" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'home' %}Home Fragrance</a>
-                        <a href="{{ routes.root_url }}collections/home-fragrance">Bakhoor &amp; Oud</a>
-                        <a href="{{ routes.root_url }}collections/home-fragrance">Home Mist</a>
-                        <a href="{{ routes.root_url }}collections/home-fragrance">Diffusers</a>
-                      </div>
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/gift-sets" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'gift' %}Gift Sets</a>
-                        <a href="{{ routes.root_url }}collections/gift-sets">Discovery Set</a>
-                        <a href="{{ routes.root_url }}collections/gift-sets">Signature Set</a>
-                      </div>
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/fragrance-accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'diffuser' %}Accessories</a>
-                        <a href="{{ routes.root_url }}collections/fragrance-accessories">Incense Burner</a>
-                        <a href="{{ routes.root_url }}collections/fragrance-accessories">Diffuser Refill</a>
-                      </div>
-                    </div></div>
-                  {%- when 'accessories' -%}
-                    <div class="mega-menu zaria-mega"><div class="zaria-mega__grid">
-                      <div class="zaria-mega__col">
-                        <a href="{{ routes.root_url }}collections/accessories" class="zaria-mega__head">{% render 'zaria-mega-icon', name: 'veil' %}Sheila &amp; Accessories</a>
-                      </div>
-                    </div></div>
-                {%- endcase -%}
-              {%- endcapture -%}
-
-              {%- comment -%}
-                Ready to Wear reads as an ordinary dropdown, not a full-width panel: it has five
-                destinations and a mega menu made three columns of them, two holding a single
-                link (client, 2026-11-09). Captured separately from zaria_mega_links so the
-                wrapper below picks dropdown-menu-disclosure rather than the mega one.
-              {%- endcomment -%}
-              {%- capture zaria_sub_links -%}
-                {%- case link_title_downcase -%}
-                  {%- when 'ready-to-wear' -%}
-                    <ul class="header__dropdown-menu unstyled-list" role="list">
-                      <li><a href="{{ routes.root_url }}collections/abayas" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'abaya' %}Abayas</a></li>
-                      <li><a href="{{ routes.root_url }}collections/jalabiya" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'jalabiya' %}Jalabiya</a>
-                        <ul class="zar-submenu unstyled-list" role="list">
-                          <li><a href="{{ routes.root_url }}collections/ramadan-2027" class="link-faded-reverse">Ramadan 2027</a></li>
-                          <li><a href="{{ routes.root_url }}collections/freya" class="link-faded-reverse">Freya Collections</a></li>
-                        </ul>
-                      </li>
-                      <li><a href="{{ routes.root_url }}collections/accessories" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'veil' %}Sheila &amp; Accessories</a></li>
-                    </ul>
-                {%- endcase -%}
-              {%- endcapture -%}
+          {%- capture zar_rail_src -%}{%- render 'zaria-nav-rail' -%}{%- endcapture -%}
+          {%- assign zar_rail = zar_rail_src | split: '||' -%}
+          {%- assign nav_half = zar_rail.size | plus: 1 | divided_by: 2 -%}
+            {%- for zar_row in zar_rail -%}
+              {%- assign zar_cell = zar_row | split: '~' -%}
+              {%- assign zar_key = zar_cell[0] | strip -%}
+              {%- if zar_key == blank -%}{%- continue -%}{%- endif -%}
+              {%- assign zar_link_label = zar_cell[1] | strip -%}
+              {%- assign link_href = zar_cell[2] | strip -%}
+              {%- assign zar_kind = zar_cell[3] | strip -%}
+              {%- capture zar_panel -%}{%- render 'zaria-nav-panel', key: zar_key -%}{%- endcapture -%}
+              {%- assign zar_panel = zar_panel | strip -%}
+              {%- assign zar_current = false -%}
+              {%- if request.path == link_href -%}{%- assign zar_current = true -%}{%- endif -%}
 
               {%- capture nav_li -%}
               <li class="header__primary-nav-item">
-           {%- if zar_is_promo or link.levels == 0 and mega_menu_block == '' and zaria_mega_links == blank and zaria_sub_links == blank -%}
+                {%- if zar_panel == blank -%}
                   <a
                     href="{{ link_href }}"
                     data-title="{{ zar_link_label | escape }}"
-                    class="block {% if section.settings.menu_text_font == 'heading' %}h6{% endif %}{% if zar_is_promo %} zar-navpromo{% endif %}"
-                    {% if link.current %}
+                    class="block {% if section.settings.menu_text_font == 'heading' %}h6{% endif %}{% if zar_kind == 'sale' %} zar-navpromo{% endif %}"
+                    {% if zar_current %}
                       aria-current="page"
                     {% endif %}
                   >
-                    {{- zar_link_label | replace: '-', ' ' -}}
+                    {{- zar_link_label -}}
                   </a>
                 {%- else -%}
                   {%- capture disclosure_content -%}
                     <details class="header__menu-disclosure">
-                      <summary data-follow-link="{{ link.url }}" {% if section.settings.menu_text_font == 'heading' %}class="h6"{% endif %} data-title="{{ link.title | escape }}">
-                        {{- link.title | replace: '-', ' ' -}}<svg class="zaria-nav-caret" aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                      <summary data-follow-link="{{ link_href }}" {% if section.settings.menu_text_font == 'heading' %}class="h6"{% endif %} data-title="{{ zar_link_label | escape }}">
+                        {{- zar_link_label -}}<svg class="zaria-nav-caret" aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
                       </summary>
-
-                      {%- if zaria_mega_links != blank -%}
-  {{- zaria_mega_links -}}
-{%- elsif zaria_sub_links != blank -%}
-  {{- zaria_sub_links -}}
-{%- elsif link_title_downcase == 'brands' -%}
-
-  {%- render 'mega-menu-brands' -%}
-{%- elsif mega_menu_block != '' -%}
-  {%- render 'mega-menu', link: link, block: mega_menu_block -%}
-{%- else -%}
-
-                        <ul class="header__dropdown-menu {% if link.levels <= 1 %}header__dropdown-menu--restrictable{% endif %} unstyled-list" role="list">
-                          {%- for sub_link in link.links -%}
-                            <li>
-                              {%- if sub_link.levels == 0 -%}
-                                <a href="{{ sub_link.url }}" class="link-faded-reverse" {% if sub_link.current %}aria-current="page"{% endif %}>{{ sub_link.title }}</a>
-                              {%- else -%}
-                                <dropdown-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}" class="contents">
-                                  <details class="header__menu-disclosure">
-                                    <summary data-follow-link="{{ sub_link.url }}" class="link-faded-reverse">
-                                      <div class="h-stack gap-4 justify-between">
-                                        {{- sub_link.title -}}
-                                        {%- render 'icon' with 'arrow-right', width: 8, direction_aware: true -%}
-                                      </div>
-                                    </summary>
-
-                                    <ul class="header__dropdown-menu unstyled-list" role="list">
-                                      {%- for sub_sub_link in sub_link.links -%}
-                                        <li>
-                                          <a href="{{ sub_sub_link.url }}" class="link-faded-reverse" {% if sub_sub_link.current %}aria-current="page"{% endif %}>{{ sub_sub_link.title }}</a>
-                                        </li>
-                                      {%- endfor -%}
-                                    </ul>
-                                  </details>
-                                </dropdown-menu-disclosure>
-                              {%- endif -%}
-                            </li>
-                          {%- endfor -%}
-                        </ul>
-                      {%- endif -%}
+                      {{- zar_panel -}}
                     </details>
                   {%- endcapture -%}
 
-                 {%- if zaria_mega_links != blank or link_title_downcase == 'brands' or mega_menu_block != blank -%}
-
-            <mega-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}" class="contents">
-    {{- disclosure_content -}}
-  </mega-menu-disclosure>
-{%- else -%}
-  <dropdown-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}">
-    {{- disclosure_content -}}
-  </dropdown-menu-disclosure>
-{%- endif -%}
-
+                  {%- if zar_kind == 'mega' -%}
+                    <mega-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}" class="contents">
+                      {{- disclosure_content -}}
+                    </mega-menu-disclosure>
+                  {%- else -%}
+                    <dropdown-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}">
+                      {{- disclosure_content -}}
+                    </dropdown-menu-disclosure>
+                  {%- endif -%}
                 {%- endif -%}
               </li>
               {%- endcapture -%}
@@ -753,18 +607,18 @@
 
     {%- assign sidebar_menu = section.settings.sidebar_menu | default: section.settings.menu -%}
 
-    {%- if sidebar_menu.links.size > 0 -%}
-      {%- render 'header-sidebar',
-        menu: sidebar_menu,
-        color_scheme: section.settings.sidebar_color_scheme,
-        show_dividers: section.settings.sidebar_show_dividers,
-        open_second_level_menus: section.settings.sidebar_open_second_level_menus,
-        promo_color: section.settings.promo_color,
-        promo_menu_item: section.settings.promo_menu_item,
-        promo_label: section.settings.promo_label,
-        promo_url: section.settings.promo_url
-      -%}
-    {%- endif -%}
+    {%- comment -%}
+      The drawer no longer needs a menu to exist: it walks the same theme-side rail the
+      header does. The menu is still handed over for the second-level panel a nested Shopify
+      menu would fill.
+    {%- endcomment -%}
+    {%- render 'header-sidebar',
+      menu: sidebar_menu,
+      color_scheme: section.settings.sidebar_color_scheme,
+      show_dividers: section.settings.sidebar_show_dividers,
+      open_second_level_menus: section.settings.sidebar_open_second_level_menus,
+      promo_color: section.settings.promo_color
+    -%}
   </x-header>
 </height-observer>
 
@@ -976,29 +830,10 @@
       "default": true
     },
     {
-      "type": "text",
-      "id": "promo_menu_item",
-      "label": "Promotion replaces",
-      "info": "The menu item to publish as the promotion button. Leave empty to turn the button off.",
-      "default": "Gifts"
-    },
-    {
-      "type": "text",
-      "id": "promo_label",
-      "label": "Promotion menu text",
-      "default": "Promotion"
-    },
-    {
-      "type": "text",
-      "id": "promo_url",
-      "label": "Promotion menu link",
-      "default": "/collections/promotion"
-    },
-    {
       "type": "color",
       "id": "promo_color",
-      "label": "Promotion highlight colour",
-      "info": "Colours the promotion item in the menu.",
+      "label": "Sales highlight colour",
+      "info": "Colours the Sales item in the menu.",
       "default": "#7a1f34"
     },
     {
