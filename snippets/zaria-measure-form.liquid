@@ -200,7 +200,7 @@
       <div class="zmm__field zmm__field--full">
         <div class="zmm__fhead"><span class="zmm__fname">Size <span class="req">*</span> <span class="u">french (intl)</span></span></div>
         <select name="properties[Size]" data-zmm-req data-zmm-in="ready" disabled>
-          <option value="">-- Select --</option>
+          <option value="">Select</option>
           {%- for s in zmm_sizes -%}
             {%- assign sp = s | split: ':' -%}
             <option value="{{ sp[0] }} ({{ sp[1] }})">{{ sp[0] }} ({{ sp[1] }})</option>
@@ -297,7 +297,7 @@
                 <span class="zmm__fname">{{ flabel }}</span>
               </div>
               <select name="properties[{{ flabel }}]" data-zmm-req data-zmm-in="custom" data-zmm-field-select="{{ forloop.index }}" disabled>
-                <option value="">-- Select --</option>
+                <option value="">Select</option>
                 {%- for h in (hmin..hmax) -%}
                   {%- assign whole = h | divided_by: 2 -%}
                   {%- assign rem = h | modulo: 2 -%}

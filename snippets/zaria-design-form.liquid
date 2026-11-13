@@ -239,7 +239,7 @@
       <div class="zdf-field">
         <label for="zdf-band">Length of the piece <span class="zdf-req">*</span> <span>this sets the cloth</span></label>
         <select id="zdf-band" data-zdf-band required>
-          <option value="">&mdash; choose the length &mdash;</option>
+          <option value="">Choose the length</option>
           {%- for zb in zdf_bands -%}
             {%- assign zbp = zb | split: ':' -%}
             {%- assign zb_to = zbp[0] | plus: 0 -%}
