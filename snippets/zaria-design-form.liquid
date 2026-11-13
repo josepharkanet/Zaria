@@ -14,22 +14,27 @@
 {%- assign zdf_variant = variant | default: product.selected_or_first_available_variant -%}
 {%- assign zdf_designs = collections['ramadan-2027'].products -%}
 {%- comment -%}
-  Cloth is sold in any length. What sets the length here is the design: each one is cut from
-  its own number of metres, kept on the product as custom.fabric_required and defaulting to
-  three. Cart quantities are whole numbers, so a design that takes three and a half metres
-  cuts four.
+  What sets the cloth is the length of the piece, not the design (client, 2026-11-13). The
+  atelier cuts to these bands, and the figures are the finished length in inches:
 
-  Stock: a counted bolt is only hidden from the brief when it holds less than the least
-  hungry design needs - a bolt that cannot make anything. A bolt that has never been counted
+      up to 53 in      3 m     (anything shorter is covered by the same 3 m)
+      53 to 56 in      3.5 m
+      56 to 63 in      4 m     (60 to 63 in is covered by the same 4 m)
+
+  Each band is "<inches at the top of the band>:<metres>". A longer piece than the table goes
+  is cut from 4.5 m, half a metre on for the next step of the same ladder, so the cutter is
+  never short; the client has not set a figure above 63 in.
+
+  Cart quantities are whole numbers, so the 3.5 m band cuts 4 m for one piece and 7 m for two.
+
+  Stock: a counted bolt is only hidden from the brief when it holds less than the shortest
+  band - a bolt that cannot make anything. A bolt that has never been counted
   (inventory_management blank) is not assumed to be empty: most of the cloth has no count
   against it yet, and hiding all of it would close the studio.
 {%- endcomment -%}
-{%- assign zdf_need_min = 0 -%}
-{%- for zp in zdf_designs -%}
-  {%- assign zpn = zp.metafields.custom.fabric_required.value | default: 3 | ceil -%}
-  {%- if zdf_need_min == 0 or zpn < zdf_need_min -%}{%- assign zdf_need_min = zpn -%}{%- endif -%}
-{%- endfor -%}
-{%- if zdf_need_min == 0 -%}{%- assign zdf_need_min = 3 -%}{%- endif -%}
+{%- assign zdf_bands = '53:3,56:3.5,63:4' | split: ',' -%}
+{%- assign zdf_band_first = zdf_bands | first | split: ':' -%}
+{%- assign zdf_need_min = zdf_band_first[1] | plus: 0 | ceil -%}
 {%- assign zdf_stock_ok = true -%}
 {%- if zdf_variant.inventory_management != blank and zdf_variant.inventory_quantity < zdf_need_min -%}
   {%- assign zdf_stock_ok = false -%}
@@ -115,6 +120,14 @@
   .zdf-sum__note[hidden]{display:none}
   .zdf-sum__note svg{flex:none;width:14px;height:14px;margin-top:2px}
   .zdf-sum__note b{font-weight:500}
+  .zdf-sum__pieces{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:1px 0 8px;margin:0 0 5px;border-bottom:1px solid #ece8e2;color:#6a6a6a}
+  .zdf-step{display:inline-flex;align-items:center;border:1px solid #e3ded7;background:#fff}
+  .zdf-step button{width:30px;height:28px;border:0;background:none;padding:0;cursor:pointer;
+    font-family:inherit;font-size:15px;line-height:1;color:#161616}
+  .zdf-step button:disabled{color:#cdc6bc;cursor:default}
+  .zdf-step b{min-width:30px;text-align:center;font-weight:500;font-size:13px;color:#161616}
+  .zdf-hint{margin:var(--zf-label-gap) 0 0;font-size:var(--zf-hint-size);line-height:1.6;color:var(--zf-hint)}
   .zdf-warn{font-size:12.5px;color:var(--wine,#7a1f34);margin:-6px 0 14px}
   .zdf-warn[hidden]{display:none}
   .zdf-field label{display:block;font-size:var(--zf-label-size);letter-spacing:var(--zf-label-track);text-transform:uppercase;color:var(--zf-label);margin:0 0 var(--zf-label-gap);line-height:1.4}
@@ -217,6 +230,35 @@
       <p class="zdf-warn" data-zdf-warn hidden>Please choose the design you would like made in this fabric.</p>
       {%- endif -%}
 
+      {%- comment -%}
+        The length is asked here, where the money is, and the cloth follows from it. The same
+        length is one of the ten measurements further down, so the two keep each other in step:
+        pick a band here and the measurement below is set to the top of it, set an exact
+        length below and the band here follows. Inches, as the rest of the shop reads.
+      {%- endcomment -%}
+      <div class="zdf-field">
+        <label for="zdf-band">Length of the piece <span class="zdf-req">*</span> <span>this sets the cloth</span></label>
+        <select id="zdf-band" data-zdf-band required>
+          <option value="">&mdash; choose the length &mdash;</option>
+          {%- for zb in zdf_bands -%}
+            {%- assign zbp = zb | split: ':' -%}
+            {%- assign zb_to = zbp[0] | plus: 0 -%}
+            {%- assign zb_m = zbp[1] -%}
+            {%- assign zb_to_cm = zb_to | times: 2.54 | round: 0 -%}
+            {%- if forloop.first -%}
+              <option value="{{ zb_to }}" data-zdf-m="{{ zb_m }}">Up to {{ zb_to }} in ({{ zb_to_cm }} cm) &middot; {{ zb_m }} m of cloth</option>
+            {%- else -%}
+              {%- assign zb_prev_i = forloop.index0 | minus: 1 -%}
+              {%- assign zb_prev = zdf_bands[zb_prev_i] | split: ':' -%}
+              {%- assign zb_from = zb_prev[0] | plus: 0 -%}
+              {%- assign zb_from_cm = zb_from | times: 2.54 | round: 0 -%}
+              <option value="{{ zb_to }}" data-zdf-m="{{ zb_m }}">{{ zb_from }} to {{ zb_to }} in ({{ zb_from_cm }} to {{ zb_to_cm }} cm) &middot; {{ zb_m }} m of cloth</option>
+            {%- endif -%}
+          {%- endfor -%}
+        </select>
+        <p class="zdf-hint" data-zdf-band-hint>Measured from the shoulder down. Set your exact length in the measurements below and this follows it.</p>
+      </div>
+
       {%- comment -%}A length shorter than a piece can be cut from is raised when the brief
          opens, and the summary says so rather than quietly charging for metres the customer
          did not ask for.{%- endcomment -%}
@@ -225,8 +267,15 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.5"/></svg>
           <span data-zdf-lift-t></span>
         </p>
+        <div class="zdf-sum__pieces"><span>How many pieces</span>
+          <span class="zdf-step">
+            <button type="button" data-zdf-pc="-1" aria-label="One piece fewer">&minus;</button>
+            <b data-zdf-pc-n>1</b>
+            <button type="button" data-zdf-pc="1" aria-label="One piece more">+</button>
+          </span>
+        </div>
         <div><span data-zdf-sum-fl>Fabric</span><span data-zdf-sum-fv></span></div>
-        <div><span>Design &amp; tailoring</span><span data-zdf-sum-dv></span></div>
+        <div><span data-zdf-sum-dl>Design &amp; tailoring</span><span data-zdf-sum-dv></span></div>
         <div class="zdf-sum__t"><span>Total</span><span data-zdf-sum-tv></span></div>
       </div>
 
@@ -273,55 +322,155 @@
     return mPre + p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '.' + p[1] + mPost;
   }
 
-  // The quantity box on the page behind is the length being cut. Cloth is sold in any length;
-  // it is the chosen design that asks for a particular one, so nothing is raised until a
-  // design is picked - and never below what the customer asked for.
+  // The cloth follows the length of the piece, and the pieces multiply it. The quantity box
+  // on the page behind is the cloth being cut, so it is written from here rather than read.
   var pageQty = document.querySelector('.zpdp__qty');
-  var NEED = 0, CUT = 0;                              // what the design takes, and in whole metres
-  // The length the customer themself asked for is remembered apart from the box, because the
-  // box is rewritten every time a design is chosen. Comparing a new design against the box
-  // would have compared it against the last design's answer, and the brief would have said
-  // nothing had changed when it had.
-  var asked = 1, lifted = 0;
-  function readAsked() { if (pageQty) asked = Math.max(1, parseInt(pageQty.value, 10) || 1); }
-  function metres() { return Math.max(asked, CUT || 0) || 1; }
+  var bandSel = overlay.querySelector('[data-zdf-band]');
+  var PER = 0;                      // metres one piece is cut from, from the length table
+  var PIECES = 1;
+  function tidy(n) { return String(Math.round(n * 100) / 100); }
+  function wanted() { return PER ? PER * PIECES : 0; }       // the metres the pieces take
+  function cut() { return wanted() ? Math.ceil(wanted()) : 0; }  // cloth is cut in whole metres
+  function bandLabel() {
+    var o = bandSel && bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null;
+    return o ? o.textContent.split('\u00b7')[0].trim() : '';
+  }
+
+  // The same length is one of the ten measurements below. Whichever one the customer touches,
+  // the other follows: the inches are the truth and the band is a way of reading them.
+  function lengthField() { return overlay.querySelector('select[name="properties[Length]"][data-zmm-in="custom"]'); }
+  function inchesOf(sel) { var m = sel && /([\d.]+)\s*in/.exec(sel.value || ''); return m ? parseFloat(m[1]) : 0; }
+  function clothFor(inch) {
+    if (!bandSel) return 0;
+    for (var i = 1; i < bandSel.options.length; i++) {
+      var to = parseFloat(bandSel.options[i].value);
+      if (inch <= to) return parseFloat(bandSel.options[i].getAttribute('data-zdf-m')) || 0;
+    }
+    // Longer than the table goes: half a metre on from its last step, so the cutter is never short.
+    var last = bandSel.options[bandSel.options.length - 1];
+    return (parseFloat(last.getAttribute('data-zdf-m')) || 4) + 0.5;
+  }
+  function bandIndexFor(inch) {
+    for (var i = 1; i < bandSel.options.length; i++) {
+      if (inch <= parseFloat(bandSel.options[i].value)) return i;
+    }
+    return 0;
+  }
   function applyLength() {
-    lifted = (CUT && CUT > asked) ? asked : 0;
     if (!pageQty) return;
-    var want = metres();
-    if ((parseInt(pageQty.value, 10) || 0) !== want) {
-      pageQty.value = want;
+    var want = cut();
+    if (want && (parseFloat(pageQty.value) || 0) !== want) {
+      pageQty.value = String(want);
       pageQty.dispatchEvent(new Event('change', { bubbles: true }));
     }
   }
-  function tidy(n) { return String(Math.round(n * 100) / 100); }
 
   var designPrice = 0, designVariant = '', designTitle = '';
   var sumFL = overlay.querySelector('[data-zdf-sum-fl]');
   var sumFV = overlay.querySelector('[data-zdf-sum-fv]');
   var sumDV = overlay.querySelector('[data-zdf-sum-dv]');
   var sumTV = overlay.querySelector('[data-zdf-sum-tv]');
+  var sumDL = overlay.querySelector('[data-zdf-sum-dl]');
   var qtyField = overlay.querySelector('[data-zdf-qty]');
+  var pcWrap = overlay.querySelector('.zdf-sum__pieces');
+  var pcN = overlay.querySelector('[data-zdf-pc-n]');
+  var pcUp = overlay.querySelector('[data-zdf-pc="1"]');
+  var pcDown = overlay.querySelector('[data-zdf-pc="-1"]');
   var lift = overlay.querySelector('[data-zdf-lift]');
   var liftT = overlay.querySelector('[data-zdf-lift-t]');
   function retotal() {
-    var m = metres();
-    if (qtyField) qtyField.value = m;
+    var m = cut();
+    if (qtyField) qtyField.value = m || 1;
+    if (pcN) pcN.textContent = PIECES;
+    if (pcDown) pcDown.disabled = PIECES <= 1;
+    if (pcUp) pcUp.disabled = !!(PER && STOCK >= 0 && Math.ceil(PER * (PIECES + 1)) > STOCK);
+
+    // Why the cloth is what it is: the band, the pieces, and the whole metres it is cut in.
     if (lift) {
-      lift.hidden = !(lifted > 0 && CUT > 0);
-      if (!lift.hidden && liftT) {
-        liftT.innerHTML = 'The ' + designTitle + ' is cut from <b>' + tidy(NEED) + ' m</b> of cloth' +
-          (CUT !== NEED ? ', and cloth is cut in whole metres' : '') +
-          ', so your ' + lifted + ' m is now ' + CUT + ' m.';
+      lift.hidden = !PER;
+      if (PER && liftT) {
+        var line = (bandLabel() || 'This length') + ' is cut from <b>' + tidy(PER) + ' m</b> of cloth';
+        if (PIECES > 1) line += ', so ' + PIECES + ' pieces take ' + tidy(wanted()) + ' m';
+        line += (m !== wanted())
+          ? ', and cloth is cut in whole metres, so we cut <b>' + m + ' m</b>.'
+          : '.';
+        if (STOCK >= 0) line += ' This bolt holds ' + STOCK + ' m.';
+        liftT.innerHTML = line;
       }
     }
-    if (sumFL) sumFL.innerHTML = 'Fabric &middot; ' + m + ' m &times; ' + money(FABRIC_PRICE);
-    if (sumFV) sumFV.textContent = money(FABRIC_PRICE * m);
-    if (sumDV) sumDV.textContent = designVariant ? money(designPrice) : 'Not chosen yet';
-    if (sumTV) sumTV.textContent = designVariant
-      ? money(FABRIC_PRICE * m + designPrice)
-      : money(FABRIC_PRICE * m) + ' + design';
+
+    if (sumFL) sumFL.innerHTML = m
+      ? 'Fabric &middot; ' + m + ' m &times; ' + money(FABRIC_PRICE)
+      : 'Fabric';
+    if (sumFV) sumFV.textContent = m ? money(FABRIC_PRICE * m) : 'Choose the length';
+    if (sumDL) sumDL.innerHTML = PIECES > 1
+      ? 'Design &amp; tailoring &middot; ' + PIECES + ' &times; ' + money(designPrice)
+      : 'Design &amp; tailoring';
+    if (sumDV) sumDV.textContent = designVariant ? money(designPrice * PIECES) : 'Not chosen yet';
+    if (sumTV) sumTV.textContent = (m && designVariant)
+      ? money(FABRIC_PRICE * m + designPrice * PIECES)
+      : (designVariant ? money(designPrice * PIECES) + ' + fabric' : money(FABRIC_PRICE * m) + ' + design');
   }
+
+  // The length and the pieces are the two things that move the cloth.
+  if (bandSel) bandSel.addEventListener('change', function () {
+    var o = bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null;
+    PER = o ? parseFloat(o.getAttribute('data-zdf-m')) || 0 : 0;
+    if (PER && STOCK >= 0) {
+      var fits = Math.max(1, Math.floor(STOCK / PER));
+      if (PIECES > fits) PIECES = fits;
+    }
+    // Set the measurement below to the top of the band, unless it already sits inside it.
+    var lf = lengthField();
+    if (lf && o) {
+      var now = inchesOf(lf);
+      if (!now || bandIndexFor(now) !== bandSel.selectedIndex) {
+        var to = parseFloat(o.value);
+        for (var i = 0; i < lf.options.length; i++) {
+          if (Math.abs(inchesOf({ value: lf.options[i].value }) - to) < 0.01) { lf.selectedIndex = i; break; }
+        }
+        lf.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+    applyLength();
+    retotal();
+  });
+
+  // An exact length set in the measurements wins, and the band here is moved to match.
+  overlay.addEventListener('change', function (e) {
+    var t = e.target;
+    if (!t || t.getAttribute('name') !== 'properties[Length]' || t.getAttribute('data-zmm-in') !== 'custom') return;
+    var inch = inchesOf(t);
+    if (!inch || !bandSel) return;
+    var want = bandIndexFor(inch);
+    PER = clothFor(inch);
+    if (bandSel.selectedIndex !== want) bandSel.selectedIndex = want;
+    applyLength();
+    retotal();
+  });
+
+  if (pcWrap) pcWrap.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-zdf-pc]');
+    if (!b || b.disabled) return;
+    PIECES = Math.max(1, PIECES + (parseInt(b.getAttribute('data-zdf-pc'), 10) || 0));
+    if (PER && STOCK >= 0) PIECES = Math.max(1, Math.min(PIECES, Math.floor(STOCK / PER) || 1));
+    applyLength();
+    retotal();
+  });
+
+  // The plus and minus on the page behind count pieces too, once a length is set: a 4 m piece
+  // steps to 8 m for two, which is what the customer is actually buying.
+  var pdpForm = pageQty ? pageQty.closest('form') : null;
+  if (pdpForm) pdpForm.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-qstep]');
+    if (!b || !PER) return;
+    e.stopPropagation();
+    e.preventDefault();
+    PIECES = Math.max(1, PIECES + (parseInt(b.getAttribute('data-qstep'), 10) || 0));
+    if (STOCK >= 0) PIECES = Math.max(1, Math.min(PIECES, Math.floor(STOCK / PER) || 1));
+    applyLength();
+    retotal();
+  }, true);
 
   var refreshNav = function () {};
   if (picks) {
@@ -338,8 +487,6 @@
       designTitle = b.getAttribute('data-zdf-pick') || '';
       designVariant = b.getAttribute('data-zdf-variant') || '';
       designPrice = parseInt(b.getAttribute('data-zdf-price'), 10) || 0;
-      NEED = parseFloat(b.getAttribute('data-zdf-need')) || 3;
-      CUT = Math.ceil(NEED);
       applyLength();
       if (pickVal) pickVal.value = designTitle;
       if (pickHandle) pickHandle.value = b.getAttribute('data-zdf-handle') || '';
@@ -348,11 +495,17 @@
       retotal();
     });
 
-    // A counted bolt that is shorter than a design needs cannot make it.
-    if (STOCK >= 0) {
-      picks.querySelectorAll('[data-zdf-need]').forEach(function (b) {
-        if (Math.ceil(parseFloat(b.getAttribute('data-zdf-need')) || 3) > STOCK) b.disabled = true;
-      });
+    // Every design in the collection is cut from whatever the length asks for, so what a
+    // counted bolt rules out is a length, not a design: a band longer than the bolt is
+    // closed off rather than offered and refused later.
+    if (STOCK >= 0 && bandSel) {
+      for (var bi = 1; bi < bandSel.options.length; bi++) {
+        var bm = parseFloat(bandSel.options[bi].getAttribute('data-zdf-m')) || 0;
+        if (Math.ceil(bm) > STOCK) {
+          bandSel.options[bi].disabled = true;
+          bandSel.options[bi].textContent += '  (not enough cloth left)';
+        }
+      }
     }
 
     var navPrev = overlay.querySelector('[data-zdf-prev]');
@@ -405,21 +558,21 @@
 
   function open(){
     overlay.classList.add('is-open'); document.body.style.overflow='hidden';
-    if (!designVariant) readAsked();                  // nothing chosen yet: the box is theirs
-    applyLength(); retotal(); setTimeout(refreshNav, 80);
+    readLength(); applyLength(); retotal(); setTimeout(refreshNav, 80);
+  }
+  // A length already set in the measurements, or a band already chosen, prices itself.
+  function readLength() {
+    var inch = inchesOf(lengthField());
+    if (inch && bandSel) { PER = clothFor(inch); bandSel.selectedIndex = bandIndexFor(inch); return; }
+    var o = bandSel && bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null;
+    PER = o ? parseFloat(o.getAttribute('data-zdf-m')) || 0 : 0;
   }
   function close(){ overlay.classList.remove('is-open'); document.body.style.overflow=''; }
   openers.forEach(function(b){ b.addEventListener('click', open); });
   overlay.querySelectorAll('[data-zdf-close]').forEach(function(b){ b.addEventListener('click', close); });
   overlay.addEventListener('click', function(e){ if(e.target===overlay) close(); });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
-  if (pageQty) pageQty.addEventListener('change', retotal);
-  // The quantity steppers set the box without firing change, so watch the buttons as well.
-  var pageForm = pageQty ? pageQty.closest('form') : null;
-  if (pageForm) pageForm.addEventListener('click', function (e) {
-    if (e.target.closest('[data-qstep]')) setTimeout(retotal, 0);
-  });
-  readAsked();
+  readLength();
   retotal();
 
   // The designers' board keeps its measurements under short keys; the cart keeps them under
@@ -478,16 +631,19 @@
       });
 
       // Two lines: the cloth by the metre, and - when one of our designs was chosen - the
-      // making of that design. The brief itself rides on whichever line it describes.
-      var m = metres();
-      var cloth = { Request: 'Design your look', Design: designTitle, _fabric_handle: props._fabric_handle };
+      // making of that design, one for each piece. The brief itself rides on whichever line
+      // it describes.
+      var m = cut();
+      var cloth = { Request: 'Design your look', Design: designTitle,
+                    'Cut for': PIECES > 1 ? (PIECES + ' pieces') : 'one piece',
+                    _fabric_handle: props._fabric_handle };
       var made = {};
       Object.keys(props).forEach(function (k) { made[k] = props[k]; });
       made['Fabric'] = form.getAttribute('data-zdf-fabric') || '';
       made['Fabric cut'] = m + ' m';
       var items = [{ id: form.getAttribute('data-zdf-fabric-id'), quantity: m, properties: designVariant ? cloth : props }];
       // Only if the collection itself were empty would there be no second line to add.
-      if (designVariant) items.push({ id: designVariant, quantity: 1, properties: made });
+      if (designVariant) items.push({ id: designVariant, quantity: PIECES, properties: made });
 
       fetch('{{ routes.cart_add_url }}.js', {
         method:'POST',

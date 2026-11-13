@@ -65,11 +65,18 @@
      data-zfc-src="{{ 'zaria-fabrics.json' | asset_url }}"
      data-zfc-design="{{ product.price }}"
      data-zfc-title="{{ product.title | escape }}"
+     data-zfc-bands="53:3,56:3.5,63:4"
      data-zfc-need="{{ product.metafields.custom.fabric_required.value | default: 3 }}"
      data-zfc-money="{{ 123456789 | money }}"
      data-zfc-root="{{ routes.root_url }}">
   <p class="zfc__head">Choose your fabric <span class="req">*</span></p>
-  <p class="zfc__sub">The price above is the making of this piece. Pick the cloth it is cut from and we add it to your order by the metre &mdash; this one is cut from {{ zfc_need_say }} m.</p>
+  {%- comment -%}
+    The cloth follows the length of the piece, by the same table the design brief uses
+    (client, 2026-11-13): up to 53 in is cut from 3 m, 53 to 56 in from 3.5 m, 56 to 63 in
+    from 4 m. The figure below is written from whichever length the size form is showing,
+    so choosing a longer piece moves it.
+  {%- endcomment -%}
+  <p class="zfc__sub">The price above is the making of this piece. Pick the cloth it is cut from and we add it to your order by the metre &mdash; this one is cut from <b data-zfc-need-say>{{ zfc_need_say }} m</b>.</p>
 
   <div class="zfc__tools">
     <div class="zfc__search"><input type="search" placeholder="Search the cloth&hellip;" data-zfc-q aria-label="Search fabrics"></div>
@@ -119,10 +126,40 @@
   }
   function sized(url, w) { return String(url).replace(/(\.[a-z]+)(\?|$)/i, '_' + w + 'x$1$2'); }
 
-  // What this piece is cut from, in whole metres: cart quantities cannot be fractions.
-  var NEED = parseFloat(root.getAttribute('data-zfc-need')) || 3;
+  // What this piece is cut from. The length of the garment sets it, by the same table the
+  // design brief uses; the product's own fabric_required is the fallback for a piece whose
+  // length the size form does not say. Cart quantities cannot be fractions, so the cloth is
+  // cut in whole metres.
+  var BANDS = (root.getAttribute('data-zfc-bands') || '53:3,56:3.5,63:4').split(',').map(function (b) {
+    var p = b.split(':'); return { to: parseFloat(p[0]), m: parseFloat(p[1]) };
+  });
+  var FALLBACK = parseFloat(root.getAttribute('data-zfc-need')) || 3;
+  var NEED = FALLBACK;                                  // metres one piece is cut from
   var MIN = Math.ceil(NEED);
-  var ALL = [], BASE = '', shown = 0, view = [], chosen = null;
+  var needSay = root.querySelector('[data-zfc-need-say]');
+
+  function tidy(n) { return String(Math.round(n * 100) / 100); }
+  function lengthInches() {
+    var sels = document.querySelectorAll('select[name="properties[Length]"]');
+    for (var i = 0; i < sels.length; i++) {
+      if (sels[i].disabled || sels[i].closest('[hidden]')) continue;
+      var m = /([\d.]+)\s*in/.exec(sels[i].value || '');
+      if (m) return parseFloat(m[1]);
+    }
+    return 0;
+  }
+  function clothFor(inch) {
+    for (var i = 0; i < BANDS.length; i++) if (inch <= BANDS[i].to) return BANDS[i].m;
+    return BANDS[BANDS.length - 1].m + 0.5;             // longer than the table goes
+  }
+  function readLength() {
+    var inch = lengthInches();
+    var per = inch ? clothFor(inch) : FALLBACK;
+    if (per === NEED) return false;
+    NEED = per; MIN = Math.ceil(NEED);
+    return true;
+  }
+  var ALL = [], ROWS = [], BASE = '', shown = 0, view = [], chosen = null;
 
   // How many pieces are being made, and therefore how much cloth is cut.
   var qty = form ? form.querySelector('.zpdp__qty') : null;
@@ -131,6 +168,10 @@
   function retotal() {
     var m = MIN * pieces();
     root.querySelector('[data-zfc-sum-d]').textContent = money(DESIGN * pieces());
+    if (needSay) {
+      needSay.textContent = tidy(NEED) + ' m' +
+        (MIN !== NEED ? ', cut as ' + MIN + ' m' : '');
+    }
     root.querySelector('[data-zfc-sum-fl]').innerHTML =
       chosen ? ('Fabric &middot; ' + m + ' m &times; ' + money(chosen.p)) : 'Fabric';
     root.querySelector('[data-zfc-sum-f]').textContent = chosen ? money(chosen.p * m) : 'Not chosen yet';
@@ -173,6 +214,28 @@
     empty.hidden = view.length > 0;
   }
 
+  // A bolt counted at less than this piece takes cannot make it. One that has never been
+  // counted is offered: most of the cloth carries no count yet.
+  function inStock() { return ROWS.filter(function (f) { return f.q === null || f.q >= MIN; }); }
+
+  // The length of the piece decides the cloth, so a change to it re-reads the bolt list: a
+  // longer piece puts the shortest bolts out of reach, and a shorter one brings them back.
+  document.addEventListener('change', function (e) {
+    var t = e.target;
+    if (!t || !t.name || t.name.indexOf('properties[') !== 0) return;
+    if (t.name !== 'properties[Length]' && t.name !== 'properties[Size Type]') return;
+    if (!readLength()) { retotal(); return; }
+    ALL = inStock();
+    if (chosen && chosen.q !== null && chosen.q < MIN) {
+      chosen = null;
+      grid.querySelectorAll('.is-on').forEach(function (x) { x.classList.remove('is-on'); });
+      if (nameF) nameF.value = '';
+      if (handleF) handleF.value = '';
+    }
+    filter();
+    retotal();
+  });
+
   function filter() {
     var q = (qBox.value || '').trim().toLowerCase();
     var k = kind.value;
@@ -209,7 +272,8 @@
       BASE = j.base;
       // A bolt counted at less than the shortest cut cannot make this piece. One that has
       // never been counted is offered: most of the cloth carries no count yet.
-      ALL = j.rows.filter(function (f) { return f.q === null || f.q >= MIN; });
+      ROWS = j.rows;
+      ALL = inStock();
       var kinds = {};
       ALL.forEach(function (f) { if (f.k) kinds[f.k] = (kinds[f.k] || 0) + 1; });
       Object.keys(kinds).sort(function (a, b) { return kinds[b] - kinds[a] || a.localeCompare(b); })
@@ -223,6 +287,9 @@
     })
     .catch(function () { empty.hidden = false; empty.textContent = 'The fabric list could not be loaded. Please call the atelier.'; });
 
+  // The size form may already be showing a length (a readymade piece has one from the start),
+  // so the cloth is read from it before the bolt list arrives.
+  readLength();
   retotal();
 
   // Two lines on the order: this piece, and the cloth it is cut from.
