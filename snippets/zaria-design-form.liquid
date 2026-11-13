@@ -50,10 +50,13 @@
 {%- assign zdf_stock = -1 -%}
 {%- if zdf_variant.inventory_management != blank -%}{%- assign zdf_stock = zdf_variant.inventory_quantity -%}{%- endif -%}
 <style>
-  .zdf-trigger{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:14px;padding:15px;
-    background:transparent;border:1px solid var(--wine,#7a1f34);color:var(--wine,#7a1f34);font-family:'Jost',sans-serif;
-    font-size:12px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:background .2s ease,color .2s ease}
-  .zdf-trigger:hover{background:var(--wine,#7a1f34);color:#fff}
+  /* The same button the rest of the page buys with, in the house black rather than wine:
+     designing a piece is an ordinary thing to do here, not a side door. */
+  .zdf-trigger{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:14px;
+    height:var(--zf-h);padding:0 15px;background:#161616;border:1px solid #161616;color:#fff;
+    font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    cursor:pointer;border-radius:0;transition:background .2s ease,color .2s ease}
+  .zdf-trigger:hover{background:#2e2e2e;color:#fff}
   .zdf-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:flex-start;justify-content:center;
     background:rgba(20,12,14,.55);overflow-y:auto;padding:4vh 16px}
   .zdf-overlay.is-open{display:flex}
