@@ -84,6 +84,16 @@
     assign is_restock = true
   endunless
 
+  comment
+    A piece cut to order is never between rolls: it is made when it is
+    ordered, so a count running out says nothing and it keeps its buying. Ready-to-wear is
+    counted one of one now (zaria-ops/stock-readytowear.mjs), so without this a Ramadan piece
+    would go quiet the moment the first one sold.
+  endcomment
+  if is_madetoorder
+    assign is_restock = false
+  endif
+
   assign is_fabric = false
   assign qty_min = 1
   if product.tags contains 'Fabric'

@@ -47,11 +47,18 @@
   load-more, which appends the next page into the same grid.
 {%- endcomment -%}
 {%- assign pc_variant = product.selected_or_first_available_variant -%}
+{%- comment -%}Zaria: A piece cut to order is never between rolls: it is made when it is
+  ordered, so a count running out says nothing and it keeps its buying. Ready-to-wear is
+  counted one of one now (zaria-ops/stock-readytowear.mjs), so without this a Ramadan piece
+  would go quiet the moment the first one sold.{%- endcomment -%}
+{%- assign pc_madetoorder = false -%}
+{%- if product.tags contains 'Ramadan 2027' -%}{%- assign pc_madetoorder = true -%}{%- endif -%}
 {%- assign pc_restock = false -%}
 {%- if pc_variant.inventory_management != blank and pc_variant.inventory_quantity <= 0 -%}
   {%- assign pc_restock = true -%}
 {%- endif -%}
 {%- if product.available == false -%}{%- assign pc_restock = true -%}{%- endif -%}
+{%- if pc_madetoorder -%}{%- assign pc_restock = false -%}{%- endif -%}
 <product-card
   class="product-card{% if pc_restock %} product-card--restock{% endif %}"
   {% if reveal %}
