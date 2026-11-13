@@ -45,6 +45,10 @@
     :root{ --zf-h:50px; --zf-px:14px; --zf-pr:42px; --zf-size:16px; }
   }
 
+  /* A product between rolls sits at the end of the grid it is in, wherever that grid is
+     (collection, search, a related row), and keeps its place as more pages load in. */
+  .product-card--restock{order:1}
+
   /* Generic classes, for markup written after this snippet. */
   .zfields{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--zf-gap)}
   .zfield{display:flex;flex-direction:column;min-width:0}

@@ -35,13 +35,14 @@
 {%- assign zdf_bands = '53:3,56:3.5,63:4' | split: ',' -%}
 {%- assign zdf_band_first = zdf_bands | first | split: ':' -%}
 {%- assign zdf_need_min = zdf_band_first[1] | plus: 0 | ceil -%}
-{%- assign zdf_stock_ok = true -%}
-{%- if zdf_variant.inventory_management != blank and zdf_variant.inventory_quantity < zdf_need_min -%}
-  {%- assign zdf_stock_ok = false -%}
-{%- endif -%}
+{%- comment -%}
+  The brief is offered on every bolt. Fabric is set to keep selling when the count runs out,
+  because cloth is reordered rather than discontinued, so a short bolt is something to tell
+  the customer about and not a reason to take the brief away (client, 2026-11-13). The count
+  travels into the form and the summary says what is on the shelf.
+{%- endcomment -%}
 {%- assign zdf_stock = -1 -%}
 {%- if zdf_variant.inventory_management != blank -%}{%- assign zdf_stock = zdf_variant.inventory_quantity -%}{%- endif -%}
-{%- if zdf_stock_ok -%}
 <style>
   .zdf-trigger{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:14px;padding:15px;
     background:transparent;border:1px solid var(--wine,#7a1f34);color:var(--wine,#7a1f34);font-family:'Jost',sans-serif;
@@ -387,7 +388,7 @@
     if (qtyField) qtyField.value = m || 1;
     if (pcN) pcN.textContent = PIECES;
     if (pcDown) pcDown.disabled = PIECES <= 1;
-    if (pcUp) pcUp.disabled = !!(PER && STOCK >= 0 && Math.ceil(PER * (PIECES + 1)) > STOCK);
+    if (pcUp) pcUp.disabled = false;   // cloth keeps selling past the bolt; see the note below
 
     // The length and what it is cut from, on one line with the rest.
     if (sumLN) sumLN.textContent = PER
@@ -401,8 +402,8 @@
       if (PER && m !== wanted()) {
         says.push('Cloth is cut in whole metres, so ' + tidy(wanted()) + ' m is cut as <b>' + m + ' m</b>.');
       }
-      if (PER && STOCK >= 0 && Math.ceil(PER * (PIECES + 1)) > STOCK) {
-        says.push('This bolt holds ' + STOCK + ' m, enough for ' + PIECES + (PIECES > 1 ? ' pieces.' : ' piece.'));
+      if (PER && STOCK >= 0 && m > STOCK) {
+        says.push('We hold <b>' + STOCK + ' m</b> of this cloth on the shelf. The rest is cut from the next roll, and your designer confirms the timing when they call.');
       }
       lift.hidden = says.length === 0;
       liftT.innerHTML = says.join(' ');
@@ -425,10 +426,6 @@
   if (bandSel) bandSel.addEventListener('change', function () {
     var o = bandSel.selectedIndex > 0 ? bandSel.options[bandSel.selectedIndex] : null;
     PER = o ? parseFloat(o.getAttribute('data-zdf-m')) || 0 : 0;
-    if (PER && STOCK >= 0) {
-      var fits = Math.max(1, Math.floor(STOCK / PER));
-      if (PIECES > fits) PIECES = fits;
-    }
     // Set the measurement below to the top of the band, unless it already sits inside it.
     var lf = lengthField();
     if (lf && o) {
@@ -462,7 +459,6 @@
     var b = e.target.closest('[data-zdf-pc]');
     if (!b || b.disabled) return;
     PIECES = Math.max(1, PIECES + (parseInt(b.getAttribute('data-zdf-pc'), 10) || 0));
-    if (PER && STOCK >= 0) PIECES = Math.max(1, Math.min(PIECES, Math.floor(STOCK / PER) || 1));
     applyLength();
     retotal();
   });
@@ -476,7 +472,6 @@
     e.stopPropagation();
     e.preventDefault();
     PIECES = Math.max(1, PIECES + (parseInt(b.getAttribute('data-qstep'), 10) || 0));
-    if (STOCK >= 0) PIECES = Math.max(1, Math.min(PIECES, Math.floor(STOCK / PER) || 1));
     applyLength();
     retotal();
   }, true);
@@ -504,18 +499,9 @@
       retotal();
     });
 
-    // Every design in the collection is cut from whatever the length asks for, so what a
-    // counted bolt rules out is a length, not a design: a band longer than the bolt is
-    // closed off rather than offered and refused later.
-    if (STOCK >= 0 && bandSel) {
-      for (var bi = 1; bi < bandSel.options.length; bi++) {
-        var bm = parseFloat(bandSel.options[bi].getAttribute('data-zdf-m')) || 0;
-        if (Math.ceil(bm) > STOCK) {
-          bandSel.options[bi].disabled = true;
-          bandSel.options[bi].textContent += '  (not enough cloth left)';
-        }
-      }
-    }
+    // Nothing here is closed off by what is on the shelf: every fabric is set to keep selling
+    // when the bolt runs out, because the cloth is reordered rather than discontinued. What
+    // the count does is tell the customer, in the note under the summary, how much is here now.
 
     var navPrev = overlay.querySelector('[data-zdf-prev]');
     var navNext = overlay.querySelector('[data-zdf-next]');
@@ -667,4 +653,3 @@
   }
 })();
 </script>
-{%- endif -%}

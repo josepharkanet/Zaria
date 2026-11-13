@@ -39,8 +39,18 @@
   endif
 -%}
 
+{%- comment -%}
+  A product the shop has run out of is not taken off the grid, it falls to the end of it
+  with a "Coming soon" badge (client, 2026-11-13). The order is set in CSS rather than in
+  the loop so it survives the load-more, which appends into the same grid.
+{%- endcomment -%}
+{%- assign pc_variant = product.selected_or_first_available_variant -%}
+{%- assign pc_restock = false -%}
+{%- if pc_variant.inventory_management != blank and pc_variant.inventory_quantity <= 0 -%}
+  {%- assign pc_restock = true -%}
+{%- endif -%}
 <product-card
-  class="product-card"
+  class="product-card{% if pc_restock %} product-card--restock{% endif %}"
   {% if reveal %}
     reveal-on-scroll="true"
   {% endif %}
