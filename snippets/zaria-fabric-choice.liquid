@@ -193,13 +193,34 @@
   function fabricOn() { return modeRadio ? modeRadio.checked : true; }
   var taxP = document.querySelector('[data-zpdp-tax]');
   var taxMade = taxP ? taxP.textContent : '';
+
+  // The headline price above. It opens on the making plus the least costly bolt that can
+  // supply the piece, and settles on the exact figure once a cloth is picked (client,
+  // 2026-11-13). One piece is what it quotes, as a headline price always does; the summary
+  // at the foot of this room carries the figure for the whole order.
+  var amountEl = document.querySelector('[data-zpdp-amount]');
+  var priceBox = document.querySelector('[data-zpdp-price]');
+  var FROM = priceBox ? (parseInt(priceBox.getAttribute('data-zpdp-from'), 10) || 0) : 0;
+  function sayPrice() {
+    var on = fabricOn();
+    if (amountEl) {
+      if (!on || !FROM) amountEl.textContent = money(DESIGN);
+      else if (chosen) amountEl.textContent = money(DESIGN + chosen.p * MIN);
+      else amountEl.textContent = 'From ' + money(FROM);
+    }
+    if (!taxP) return;
+    if (!on) taxP.textContent = 'Ready made in a standard size \u00b7 price per piece';
+    else if (chosen) taxP.textContent = 'Making ' + money(DESIGN) + ' plus ' + tidy(MIN) +
+      ' m of cloth ' + money(chosen.p * MIN);
+    else taxP.textContent = taxMade;
+  }
   function syncMode() {
     var on = fabricOn();
     root.hidden = !on;
     if (nameF) nameF.disabled = !on;
     if (handleF) handleF.disabled = !on;
     if (!on && warn) warn.hidden = true;
-    if (taxP) taxP.textContent = on ? taxMade : 'Ready made in a standard size \u00b7 price per piece';
+    sayPrice();
   }
 
   function retotal() {
@@ -215,6 +236,7 @@
     root.querySelector('[data-zfc-sum-f]').textContent = chosen ? money(chosen.p * m) : 'Not chosen yet';
     root.querySelector('[data-zfc-sum-t]').textContent =
       chosen ? money(DESIGN * pieces() + chosen.p * m) : money(DESIGN * pieces()) + ' + fabric';
+    sayPrice();
   }
   // Changing how many pieces changes how much cloth is needed, so the room is sifted again
   // and a bolt that can no longer supply it lets go rather than quietly going short.

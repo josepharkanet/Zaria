@@ -426,18 +426,31 @@
             assign zpdp_shown_cut = zpdp_shown_cut | times: 2
           endif
         -%}
-        <div class="zpdp__price">
+        {%- comment -%}
+          Zaria: a made-to-order piece is priced as the making, with the cloth charged beside
+          it by the metre, so the headline opens on the making plus the least costly bolt that
+          can supply it (custom.price_from, written by zaria-ops/madetoorder-from-price.mjs)
+          and settles on the exact figure the moment a cloth is picked. The fabric room does
+          the arithmetic and writes it into [data-zpdp-amount]; this is only the opening word.
+        {%- endcomment -%}
+        {%- liquid
+          assign zpdp_from = 0
+          if is_madetoorder and is_restock == false
+            assign zpdp_from = product.metafields.custom.price_from.value | plus: 0
+          endif
+        -%}
+        <div class="zpdp__price" data-zpdp-price data-zpdp-making="{{ zpdp_shown }}" data-zpdp-from="{{ zpdp_from }}">
           {%- if product.compare_at_price > product.price -%}
             <span class="zpdp__cut">{{ zpdp_shown_cut | money }}</span>
           {%- endif -%}
-          {{ zpdp_shown | money }}
+          <span data-zpdp-amount>{% if zpdp_from > 0 %}From {{ zpdp_from | money }}{% else %}{{ zpdp_shown | money }}{% endif %}</span>
         </div>
         {%- if is_restock -%}
           <p class="zpdp__soon">Available soon. This one is between rolls, so it cannot be ordered yet. Ask us and we will tell you when it lands.</p>
         {%- endif -%}
         {%- comment -%}Zaria is not VAT registered, so this line names the unit and makes no tax claim.{%- endcomment -%}
         {%- unless is_fragrance -%}
-          <p class="zpdp__tax" data-zpdp-tax>{% if product.tags contains 'Fabric' %}Price per metre, cut in half metres{% elsif is_madetoorder %}Design &amp; tailoring &middot; fabric chosen below and charged by the metre{% else %}Price per unit{% endif %}</p>
+          <p class="zpdp__tax" data-zpdp-tax>{% if product.tags contains 'Fabric' %}Price per metre, cut in half metres{% elsif is_madetoorder %}The making and the cloth it is cut from &middot; pick your cloth below and the price settles{% else %}Price per unit{% endif %}</p>
         {%- endunless -%}
       {%- endif -%}
 
