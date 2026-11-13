@@ -68,6 +68,9 @@
         {%- assign zfacet_short = true -%}
       {%- endif -%}
       {%- assign zfacet_short_keep = 'product type,pattern,colour,color' | split: ',' -%}
+      {%- assign zf_slot_type = '' -%}
+      {%- assign zf_slot_pattern = '' -%}
+      {%- assign zf_slot_colour = '' -%}
 
       {%- for filter in results.filters -%}
         {%- assign dl = filter.label | downcase -%}
@@ -95,6 +98,7 @@
           {%- continue -%}
         {%- endif -%}
 
+        {%- capture zf_one -%}
         {%- case filter.type -%}
 
           {%- when 'boolean' -%}
@@ -318,7 +322,31 @@
             </div>
 
         {%- endcase -%}
+        {%- endcapture -%}
+
+        {%- comment -%}
+          Shopify hands the facets over in whatever order the Search & Discovery app lists
+          them, which nothing in the theme can set. On the short listings the order is the
+          client's (2026-11-13) and fixed: Product type, then Pattern, then Colour. Each one
+          is held back as it is drawn and the three are written out below in that order;
+          every other listing prints its facets as they arrive.
+        {%- endcomment -%}
+        {%- if zfacet_short -%}
+          {%- if zf_dl == 'product type' -%}
+            {%- assign zf_slot_type = zf_one -%}
+          {%- elsif zf_dl == 'pattern' -%}
+            {%- assign zf_slot_pattern = zf_one -%}
+          {%- else -%}
+            {%- assign zf_slot_colour = zf_one -%}
+          {%- endif -%}
+        {%- else -%}
+          {{- zf_one -}}
+        {%- endif -%}
       {%- endfor -%}
+
+      {%- if zfacet_short -%}
+        {{- zf_slot_type -}}{{- zf_slot_pattern -}}{{- zf_slot_colour -}}
+      {%- endif -%}
 
       {%- comment -%}
         Price range - rendered at the very bottom of the filter, and left off cloth for the
