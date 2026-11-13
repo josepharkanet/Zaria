@@ -32,6 +32,12 @@
   (inventory_management blank) is not assumed to be empty: most of the cloth has no count
   against it yet, and hiding all of it would close the studio.
 {%- endcomment -%}
+{%- comment -%}
+  Ten pieces is as far as the brief goes on its own. A larger order is a conversation with
+  the atelier rather than a number typed into a form, and without a ceiling a slip of the
+  finger on the plus builds a cart of tens of thousands of dirhams.
+{%- endcomment -%}
+{%- assign zdf_pc_max = 10 -%}
 {%- assign zdf_bands = '53:3,56:3.5,63:4' | split: ',' -%}
 {%- assign zdf_band_first = zdf_bands | first | split: ':' -%}
 {%- assign zdf_need_min = zdf_band_first[1] | plus: 0 | ceil -%}
@@ -126,7 +132,11 @@
   .zdf-step button{width:30px;height:28px;border:0;background:none;padding:0;cursor:pointer;
     font-family:inherit;font-size:15px;line-height:1;color:#161616}
   .zdf-step button:disabled{color:#cdc6bc;cursor:default}
-  .zdf-step b{min-width:30px;text-align:center;font-weight:500;font-size:13px;color:#161616}
+  .zdf-step input{width:42px;height:28px;border:0;background:none;padding:0;text-align:center;
+    font-family:inherit;font-size:13px;color:#161616;-moz-appearance:textfield}
+  .zdf-step input::-webkit-outer-spin-button,
+  .zdf-step input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .zdf-step input:focus{outline:none;box-shadow:var(--zf-ring)}
   .zdf-hint{margin:var(--zf-label-gap) 0 0;font-size:var(--zf-hint-size);line-height:1.6;color:var(--zf-hint)}
   .zdf-warn{font-size:12.5px;color:var(--wine,#7a1f34);margin:-6px 0 14px}
   .zdf-warn[hidden]{display:none}
@@ -272,7 +282,7 @@
         <div class="zdf-sum__pieces"><span>Pieces</span>
           <span class="zdf-step">
             <button type="button" data-zdf-pc="-1" aria-label="One piece fewer">&minus;</button>
-            <b data-zdf-pc-n>1</b>
+            <input type="number" data-zdf-pc-n value="1" min="1" max="{{ zdf_pc_max }}" step="1" inputmode="numeric" aria-label="How many pieces">
             <button type="button" data-zdf-pc="1" aria-label="One piece more">+</button>
           </span>
         </div>
@@ -377,6 +387,7 @@
   var sumDL = overlay.querySelector('[data-zdf-sum-dl]');
   var sumLN = overlay.querySelector('[data-zdf-sum-ln]');
   var qtyField = overlay.querySelector('[data-zdf-qty]');
+  var PC_MAX = {{ zdf_pc_max }};
   var pcWrap = overlay.querySelector('.zdf-sum__pieces');
   var pcN = overlay.querySelector('[data-zdf-pc-n]');
   var pcUp = overlay.querySelector('[data-zdf-pc="1"]');
@@ -386,9 +397,9 @@
   function retotal() {
     var m = cut();
     if (qtyField) qtyField.value = m || 1;
-    if (pcN) pcN.textContent = PIECES;
+    if (pcN && pcN.value !== String(PIECES)) pcN.value = PIECES;
     if (pcDown) pcDown.disabled = PIECES <= 1;
-    if (pcUp) pcUp.disabled = false;   // cloth keeps selling past the bolt; see the note below
+    if (pcUp) pcUp.disabled = PIECES >= PC_MAX;
 
     // The length and what it is cut from, on one line with the rest.
     if (sumLN) sumLN.textContent = PER
@@ -402,6 +413,9 @@
       if (PER && m !== wanted()) {
         says.push('Cloth is cut in whole metres, so ' + tidy(wanted()) + ' m is cut as <b>' + m + ' m</b>.');
       }
+      if (PIECES >= PC_MAX) {
+        says.push('Ten pieces is as many as the brief takes. For a larger order, ask for the atelier and they will quote it with you.');
+      }
       if (PER && STOCK >= 0 && m > STOCK) {
         says.push('We hold <b>' + STOCK + ' m</b> of this cloth on the shelf. The rest is cut from the next roll, and your designer confirms the timing when they call.');
       }
@@ -413,7 +427,7 @@
       ? 'Fabric &middot; ' + m + ' m &times; ' + money(FABRIC_PRICE)
       : 'Fabric';
     if (sumFV) sumFV.textContent = m ? money(FABRIC_PRICE * m) : 'Choose the length';
-    if (sumDL) sumDL.innerHTML = PIECES > 1
+    if (sumDL) sumDL.innerHTML = (designVariant && PIECES > 1)
       ? 'Design &amp; tailoring &middot; ' + PIECES + ' &times; ' + money(designPrice)
       : 'Design &amp; tailoring';
     if (sumDV) sumDV.textContent = designVariant ? money(designPrice * PIECES) : 'Not chosen yet';
@@ -455,13 +469,21 @@
     retotal();
   });
 
+  function setPieces(n) {
+    PIECES = Math.min(PC_MAX, Math.max(1, Math.round(n) || 1));
+    applyLength();
+    retotal();
+  }
   if (pcWrap) pcWrap.addEventListener('click', function (e) {
     var b = e.target.closest('[data-zdf-pc]');
     if (!b || b.disabled) return;
-    PIECES = Math.max(1, PIECES + (parseInt(b.getAttribute('data-zdf-pc'), 10) || 0));
-    applyLength();
-    retotal();
+    setPieces(PIECES + (parseInt(b.getAttribute('data-zdf-pc'), 10) || 0));
   });
+  // Typed in rather than stepped to: any number up to the ceiling, and nothing past it.
+  if (pcN) {
+    pcN.addEventListener('change', function () { setPieces(parseInt(pcN.value, 10)); });
+    pcN.addEventListener('blur', function () { setPieces(parseInt(pcN.value, 10)); });
+  }
 
   // The plus and minus on the page behind count pieces too, once a length is set: a 4 m piece
   // steps to 8 m for two, which is what the customer is actually buying.
@@ -471,9 +493,7 @@
     if (!b || !PER) return;
     e.stopPropagation();
     e.preventDefault();
-    PIECES = Math.max(1, PIECES + (parseInt(b.getAttribute('data-qstep'), 10) || 0));
-    applyLength();
-    retotal();
+    setPieces(PIECES + (parseInt(b.getAttribute('data-qstep'), 10) || 0));
   }, true);
 
   var refreshNav = function () {};
