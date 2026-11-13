@@ -696,11 +696,19 @@
             {%- else -%}
               <span class="md:hidden">{%- render 'icon' with 'cart', class: 'header__nav-icon' -%}</span>
               <span class="{% if section.settings.menu_text_font == 'heading' %}h6{% endif %} link-faded md-max:hidden">
-                {{- 'header.general.cart' | t }} (<cart-count>{{ cart.item_count }}</cart-count>)</span
+                {{- 'header.general.cart' | t -}}</span
               >
             {%- endif -%}
 
-            <cart-dot class="header__cart-dot {% unless cart.empty? %}is-visible{% endunless %} {% unless section.settings.show_icons %}md:hidden{% endunless %}"><cart-count>{{ cart.item_count }}</cart-count></cart-dot>
+            {%- comment -%}
+              A tick, not a number. Cloth is counted in half-metre units, so a metre and a
+              half of it reads as three and the figure said something the customer never
+              asked for (client, 2026-11-13). The mark only has to say the bag is not empty,
+              and cart-dot shows and hides itself on its own.
+            {%- endcomment -%}
+            <cart-dot class="header__cart-dot {% unless cart.empty? %}is-visible{% endunless %} {% unless section.settings.show_icons %}md:hidden{% endunless %}" aria-hidden="true">
+              <svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5 4.6 9 10 3.2"/></svg>
+            </cart-dot>
           </a>
         </li>
 
