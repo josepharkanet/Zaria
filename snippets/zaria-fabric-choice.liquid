@@ -202,6 +202,9 @@
   var amountEl = document.querySelector('[data-zpdp-amount]');
   var priceBox = document.querySelector('[data-zpdp-price]');
   var TOTAL = priceBox ? (parseInt(priceBox.getAttribute('data-zpdp-total'), 10) || 0) : 0;
+  // What the cloth in the photographs costs: the listed figure less the making. The summary
+  // below opens on it so the foot of the page and the headline say the same thing.
+  var INCLUDED = TOTAL > DESIGN ? TOTAL - DESIGN : 0;
   function sayPrice() {
     var on = fabricOn();
     if (amountEl) {
@@ -233,10 +236,13 @@
         (pieces() > 1 ? ' each, ' + tidy(needed()) + ' m in all' : '');
     }
     root.querySelector('[data-zfc-sum-fl]').innerHTML =
-      chosen ? ('Fabric &middot; ' + m + ' m &times; ' + money(chosen.p)) : 'Fabric';
-    root.querySelector('[data-zfc-sum-f]').textContent = chosen ? money(chosen.p * m) : 'Not chosen yet';
+      chosen ? ('Fabric &middot; ' + m + ' m &times; ' + money(chosen.p))
+             : (INCLUDED ? 'Fabric &middot; as photographed' : 'Fabric');
+    root.querySelector('[data-zfc-sum-f]').textContent =
+      chosen ? money(chosen.p * m) : (INCLUDED ? money(INCLUDED * pieces()) : 'Not chosen yet');
     root.querySelector('[data-zfc-sum-t]').textContent =
-      chosen ? money(DESIGN * pieces() + chosen.p * m) : money(DESIGN * pieces()) + ' + fabric';
+      chosen ? money(DESIGN * pieces() + chosen.p * m)
+             : (INCLUDED ? money((DESIGN + INCLUDED) * pieces()) : money(DESIGN * pieces()) + ' + fabric');
     sayPrice();
   }
   // Changing how many pieces changes how much cloth is needed, so the room is sifted again
