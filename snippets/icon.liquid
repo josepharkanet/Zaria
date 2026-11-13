@@ -33,6 +33,16 @@
       <path d="m3 9 4-4-4-4" stroke="currentColor" stroke-linecap="square"/>
     </svg>
 
+  {%- comment -%}
+    Zaria: the mark beside the word Filter on the collection bar. Three rules narrowing as
+    they fall, the usual shorthand for a sieve, drawn as hairlines so it sits at the same
+    weight as the chevrons rather than as a blob at 12px.
+  {%- endcomment -%}
+  {%- when 'filter-lines' -%}
+    <svg aria-hidden="true" focusable="false" fill="none" width="{{ width | default: 12 }}" class="{{ class | strip }}" viewBox="0 0 14 14">
+      <path d="M1 3.5h12M3 7h8M5 10.5h4" stroke="currentColor" stroke-linecap="square"/>
+    </svg>
+
   {%- when 'arrow-down' -%}
     <svg aria-hidden="true" focusable="false" fill="none" width="{{ width | default: 18 }}" class="{{ class | strip }}" viewBox="0 0 18 16">
       <path d="m1 4 8 8 8-8" stroke="currentColor" stroke-linecap="square"/>

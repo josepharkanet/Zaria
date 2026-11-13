@@ -9751,6 +9751,12 @@ facets-drawer .button:hover {
 /* The mark is a chevron pointing across, not down: right while the panel is shut, left once
    it is open. The theme's own [aria-expanded="true"] rule turns it the same half-circle. */
 .zar-filter-toggle.is-open svg { transform: rotate(180deg); }
+/* Both of those turn every svg in the button, and the sieve beside the word is one of them:
+   upside down it reads as a funnel the wrong way up. It stays still. */
+.zar-filter-toggle .icon-filter-lines,
+.collection-toolbar__button[aria-expanded="true"] .icon-filter-lines {
+  transform: none !important;
+}
 
 /* ── Grid view (medium) columns follow the filter state: 4 default, 3 when filter open ── */
 @media (min-width: 1000px) {

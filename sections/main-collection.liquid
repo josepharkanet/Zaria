@@ -272,6 +272,7 @@
                 <div class="collection-toolbar__button-container zar-filter-toggle-container md-max:hidden">
                   <button type="button" class="collection-toolbar__button zar-filter-toggle heading text-xxs w-full" aria-expanded="false">
                     <span class="text-with-icon justify-center">
+                      {%- render 'icon' with 'filter-lines' -%}
                       {{- 'collection.faceting.filter_button' | t | default: 'Filter' -}}
                       {% if active_values_count > 0 %}({{ active_values_count }}){% endif %}
                       {%- comment -%}
