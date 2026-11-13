@@ -121,7 +121,8 @@
   @media (hover:none){.zdf-zoom{opacity:1}}
   /* What it comes to: the cloth by the metre on one line, the making on the next. */
   .zdf-sum{border:1px solid #ece8e2;background:#fbfaf8;padding:12px 14px;margin:2px 0 18px;font-size:13px}
-  .zdf-sum div{display:flex;justify-content:space-between;gap:16px;padding:3px 0;color:#6a6a6a}
+  .zdf-sum div{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    min-height:30px;padding:2px 0;color:#6a6a6a}
   .zdf-sum div span:last-child{color:#161616;white-space:nowrap}
   .zdf-sum .zdf-sum__t{border-top:1px solid #ece8e2;margin-top:6px;padding-top:8px;color:#161616;letter-spacing:.02em}
   .zdf-sum .zdf-sum__t span:last-child{font-size:15px}
@@ -130,16 +131,18 @@
   .zdf-sum__note[hidden]{display:none}
   .zdf-sum__note svg{flex:none;width:14px;height:14px;margin-top:2px;color:#b4aba0}
   .zdf-sum__note b{font-weight:500;color:#161616}
-  .zdf-sum__pieces{align-items:center;padding:1px 0 2px}
+  .zdf-sum__pieces{padding:0}
   .zdf-step{display:inline-flex;align-items:center;border:1px solid #e3ded7;background:#fff}
-  .zdf-step button{width:30px;height:28px;border:0;background:none;padding:0;cursor:pointer;
+  .zdf-step{line-height:0}
+  .zdf-step button{width:28px;height:28px;border:0;background:none;padding:0;cursor:pointer;
     font-family:inherit;font-size:15px;line-height:1;color:#161616}
   .zdf-step button:disabled{color:#cdc6bc;cursor:default}
-  .zdf-step input{width:42px;height:28px;border:0;background:none;padding:0;text-align:center;
-    font-family:inherit;font-size:13px;color:#161616;-moz-appearance:textfield}
-  .zdf-step input::-webkit-outer-spin-button,
-  .zdf-step input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-  .zdf-step input:focus{outline:none;box-shadow:var(--zf-ring)}
+  .zdf-modal .zdf-step input{width:40px;height:28px;min-height:0;border:0;background:none;padding:0;
+    text-align:center;font-family:inherit;font-size:13px;line-height:28px;color:#161616;
+    -moz-appearance:textfield;border-radius:0;box-shadow:none}
+  .zdf-modal .zdf-step input::-webkit-outer-spin-button,
+  .zdf-modal .zdf-step input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .zdf-modal .zdf-step input:focus{outline:none;background:#f4f1ec}
   .zdf-hint{margin:var(--zf-label-gap) 0 0;font-size:var(--zf-hint-size);line-height:1.6;color:var(--zf-hint)}
   .zdf-warn{font-size:12.5px;color:var(--wine,#7a1f34);margin:-6px 0 14px}
   .zdf-warn[hidden]{display:none}
@@ -439,7 +442,8 @@
     if (sumDV) sumDV.textContent = designVariant ? money(designPrice * PIECES) : 'Not chosen yet';
     if (sumTV) sumTV.textContent = (m && designVariant)
       ? money(FABRIC_PRICE * m + designPrice * PIECES)
-      : (designVariant ? money(designPrice * PIECES) + ' + fabric' : money(FABRIC_PRICE * m) + ' + design');
+      : (designVariant ? money(designPrice * PIECES) + ' + fabric'
+        : (m ? money(FABRIC_PRICE * m) + ' + design' : 'Length and design to choose'));
   }
 
   // The length and the pieces are the two things that move the cloth.
