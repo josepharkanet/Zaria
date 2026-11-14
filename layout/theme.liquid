@@ -5,6 +5,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, maximum-scale=5.0">
 
+    {%- comment -%}
+      Zaria: the shop is not open yet, so it asks not to be indexed, not to be followed and not
+      to be kept in a cache. One switch does it, Theme settings > Search engines > "Let search
+      engines index the site", and templates/robots.txt.liquid reads the same switch so the
+      refusal is made in both places. Tick it on the day of launch.
+    {%- endcomment -%}
+    {%- unless settings.seo_allow_indexing -%}
+      <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+      <meta name="googlebot" content="noindex, nofollow">
+    {%- endunless -%}
+
     <title>
       {%- if request.page_type == 'index' -%}
         Zaria | Fine Fabrics &amp; Ready-to-Wear, UAE Fabric House

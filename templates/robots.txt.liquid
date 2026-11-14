@@ -1,0 +1,23 @@
+{%- comment -%}
+  Zaria - robots.txt.
+
+  While Theme settings > Search engines > "Let search engines index the site" is off, the whole
+  site is refused to every crawler. The shop is not open and a half-built catalogue indexed now
+  would have to be unpicked later. Tick that switch at launch and this file falls back to
+  Shopify's own rules, sitemap line and all, with nothing else to change.
+
+  The meta robots tag in layout/theme.liquid reads the same switch. Both are needed: this file
+  stops the crawl, the tag covers anything that arrives by a link rather than by the crawl.
+{%- endcomment -%}
+{%- if settings.seo_allow_indexing -%}
+{% for group in robots.default_groups %}
+{{- group.user_agent }}
+{% for rule in group.rules %}{{ rule }}
+{% endfor %}{%- if group.sitemap != blank %}{{ group.sitemap }}
+{% endif %}
+{% endfor %}
+{%- else -%}
+# The shop is not open yet. Please do not index it.
+User-agent: *
+Disallow: /
+{%- endif -%}

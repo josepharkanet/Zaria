@@ -896,5 +896,20 @@
         "default": ""
       }
     ]
+  },
+  {
+    "name": "Search engines",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Until the shop opens, keep this off: every page tells Google and the rest not to index it, not to follow its links, and robots.txt refuses the whole site. Tick it on the day you go live, save, and the site becomes findable within a day or two."
+      },
+      {
+        "type": "checkbox",
+        "id": "seo_allow_indexing",
+        "label": "Let search engines index the site",
+        "default": false
+      }
+    ]
   }
 ]
