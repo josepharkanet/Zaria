@@ -70,7 +70,8 @@
         .zaria-msub__panel a.zar-subsub{position:relative;padding-left:22px;font-size:13px;color:#9a938a}
         .zaria-msub__panel a.zar-subsub::before{content:"";position:absolute;left:2px;top:50%;width:10px;height:1px;background:#d9d2c8}
         /* Fragrances reads like the links beside it; being a span, the tap goes nowhere. */
-        .zaria-msub__panel .zar-subsoon{display:block;padding:9px 0;color:#6a6a6a;font-size:14px;letter-spacing:.02em;cursor:default}
+        .zaria-msub__panel .zar-subsoon{display:flex;align-items:center;padding:9px 0;color:#6a6a6a;font-size:14px;letter-spacing:.02em;cursor:default}
+        .zaria-msub__panel .zar-subsoon em{font-style:normal;margin-left:auto;padding:1px 5px;border:1px solid #e8e2d9;font-size:9px;line-height:1.5;letter-spacing:.08em;text-transform:uppercase;color:#a9a29a;white-space:nowrap}
         /* The promotion takes the house colour here too, the word only. */
         .header-sidebar__linklist-button.zar-sidepromo{color:{{ promo_color | default: '#7a1f34' }}}
       </style>

@@ -280,6 +280,20 @@
     height: 17px;
     display: block;
   }
+  /* The badge is a footnote, not a second heading: two thirds the size of the word it follows,
+     a hairline round it, and it never takes the hover. */
+  #shopify-section-{{ section.id }} .header__dropdown-menu .zar-ddsoon em {
+    font-style: normal;
+    margin-left: auto;
+    padding: 1px 5px;
+    border: 1px solid #e8e2d9;
+    font-size: 8px;
+    line-height: 1.5;
+    letter-spacing: .1em;
+    color: #a9a29a;
+    white-space: nowrap;
+  }
+  #shopify-section-{{ section.id }} .header__dropdown-menu .zar-ddsoon:hover em { color: #a9a29a; }
   #shopify-section-{{ section.id }} .zar-submenu { margin: 2px 0 4px; }
   #shopify-section-{{ section.id }} .zar-submenu a {
     position: relative;
