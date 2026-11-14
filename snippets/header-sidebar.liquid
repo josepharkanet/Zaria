@@ -69,9 +69,8 @@
         /* The two jalabiya lines belong to Jalabiya, so the drawer steps them in as well. */
         .zaria-msub__panel a.zar-subsub{position:relative;padding-left:22px;font-size:13px;color:#9a938a}
         .zaria-msub__panel a.zar-subsub::before{content:"";position:absolute;left:2px;top:50%;width:10px;height:1px;background:#d9d2c8}
-        /* Fragrances is announced, not linked: no pointer, lighter ink, label at the margin. */
-        .zaria-msub__panel .zar-subsoon{display:flex;align-items:center;gap:10px;padding:9px 0;font-size:14px;letter-spacing:.02em;color:#b3aca3}
-        .zaria-msub__panel .zar-subsoon em{font-style:normal;margin-left:auto;padding:2px 6px;border:1px solid #e4ded5;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9a938a;white-space:nowrap}
+        /* Fragrances reads like the links beside it; being a span, the tap goes nowhere. */
+        .zaria-msub__panel .zar-subsoon{display:block;padding:9px 0;color:#6a6a6a;font-size:14px;letter-spacing:.02em;cursor:default}
         /* The promotion takes the house colour here too, the word only. */
         .header-sidebar__linklist-button.zar-sidepromo{color:{{ promo_color | default: '#7a1f34' }}}
       </style>

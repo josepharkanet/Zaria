@@ -4,9 +4,10 @@
   dropdown or a full-width panel; this writes the markup for both. The mobile drawer shows the
   same destinations through snippets/zaria-nav-sub, so the two are edited together.
 
-  Fragrances is announced rather than linked: the collection holds nothing yet, and an empty
-  collection page reads as a fault rather than as a promise. It is a span with "Coming soon"
-  beside it, so there is nothing to click until there is something to sell.
+  Fragrances reads exactly like the lines around it but goes nowhere: the collection holds
+  nothing yet, and an empty collection page reads as a fault rather than as a promise. It is a
+  span rather than an anchor, so the click simply does not travel (client, 2026-11-14: "show as
+  normal and just avoid clicking passing"). Make it an <a> the day something is tagged Fragrance.
 
   Made to Order holds no abayas yet, only jalabiyas. The line is written against the live
   collection count so it appears by itself the day an abaya is tagged for it, rather than
@@ -27,7 +28,7 @@
       <li><a href="{{ routes.root_url }}collections/abayas" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'abaya' %}Abaya</a></li>
       <li><a href="{{ routes.root_url }}collections/jalabiya" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'jalabiya' %}Jalabiya</a></li>
       <li><a href="{{ routes.root_url }}collections/accessories" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'veil' %}Sheila</a></li>
-      <li><span class="zar-ddlink zar-ddsoon">{% render 'zaria-mega-icon', name: 'perfume' %}Fragrances<em>Coming soon</em></span></li>
+      <li><span class="zar-ddlink zar-ddsoon">{% render 'zaria-mega-icon', name: 'perfume' %}Fragrances</span></li>
     </ul>
 
   {%- when 'ready-to-wear' -%}

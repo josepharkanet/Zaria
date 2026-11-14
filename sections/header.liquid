@@ -253,27 +253,32 @@
     height: 17px;
     display: block;
   }
-  /* Fragrances is a promise, not a destination: the same line as its neighbours, in a lighter
-     ink, with no pointer and nothing to click. The label sits out at the right margin. */
+  /* Fragrances reads exactly like the lines around it, mark, ink, spacing and hover alike; it
+     is a span rather than an anchor, so the click goes nowhere. The rules are written out
+     because the neighbours' are element-qualified (a.zar-ddlink) and skip a span. */
   #shopify-section-{{ section.id }} .header__dropdown-menu .zar-ddsoon {
+    display: flex;
+    align-items: center;
+    gap: 11px;
     font-family: 'Jost', sans-serif;
     font-size: 12px;
     letter-spacing: .11em;
     text-transform: uppercase;
-    color: #b3aca3;
+    color: #6a6a6a;
     padding: 10px 26px;
     cursor: default;
+    transition: color .2s ease;
   }
-  #shopify-section-{{ section.id }} .header__dropdown-menu .zar-ddsoon .zaria-mega__ico { color: #c6bdb1; }
-  #shopify-section-{{ section.id }} .header__dropdown-menu .zar-ddsoon em {
-    font-style: normal;
-    margin-left: auto;
-    padding: 2px 6px;
-    border: 1px solid #e4ded5;
-    font-size: 9px;
-    letter-spacing: .13em;
-    color: #9a938a;
-    white-space: nowrap;
+  #shopify-section-{{ section.id }} .header__dropdown-menu .zar-ddsoon:hover { color: #7a1f34; }
+  #shopify-section-{{ section.id }} .header__dropdown-menu .zar-ddsoon .zaria-mega__ico {
+    display: inline-flex;
+    flex: none;
+    color: #7a1f34;
+  }
+  #shopify-section-{{ section.id }} .header__dropdown-menu .zar-ddsoon .zaria-mega__ico svg {
+    width: 17px;
+    height: 17px;
+    display: block;
   }
   #shopify-section-{{ section.id }} .zar-submenu { margin: 2px 0 4px; }
   #shopify-section-{{ section.id }} .zar-submenu a {
