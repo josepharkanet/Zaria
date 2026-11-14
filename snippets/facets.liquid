@@ -305,6 +305,45 @@
                   {%- endfor -%}
                 </div>
 
+              {%- elsif dl contains 'product type' -%}
+                {%- comment -%}
+                  Product type reads Jalabiya, Abaya, Sheila on the garment listings (client,
+                  2026-11-14), not Shopify's alphabetical Abaya, Jalabiya, Sheila. Nothing in
+                  the Search & Discovery app sets the order of the values inside a facet, so
+                  the named ones are drawn first and everything else follows in the order it
+                  arrived. A cloth listing holds none of these three names, so its own long
+                  list of weaves is untouched.
+                {%- endcomment -%}
+                {%- assign zf_order = 'jalabiya,abaya,sheila' | split: ',' -%}
+                <div class="zar-facet__values {% if filter.values.size > 8 %}zar-facet__values--scroll{% endif %}">
+                  {%- for zf_want in zf_order -%}
+                    {%- for filter_value in filter.values -%}
+                      {%- assign zf_lbl = filter_value.label | downcase | strip -%}
+                      {%- unless zf_lbl == zf_want -%}{%- continue -%}{%- endunless -%}
+                      <label class="zar-check">
+                        <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>
+                        <span class="zar-check__box"></span>
+                        <span class="zar-check__label">
+                          {{- filter_value.label -}}
+                          {%- if section.settings.show_filter_values_count %} <span class="zar-check__count">{{ filter_value.count }}</span>{% endif -%}
+                        </span>
+                      </label>
+                    {%- endfor -%}
+                  {%- endfor -%}
+                  {%- for filter_value in filter.values -%}
+                    {%- assign zf_lbl = filter_value.label | downcase | strip -%}
+                    {%- if zf_order contains zf_lbl -%}{%- continue -%}{%- endif -%}
+                    <label class="zar-check">
+                      <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>
+                      <span class="zar-check__box"></span>
+                      <span class="zar-check__label">
+                        {{- filter_value.label -}}
+                        {%- if section.settings.show_filter_values_count %} <span class="zar-check__count">{{ filter_value.count }}</span>{% endif -%}
+                      </span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+
               {%- else -%}
                 <div class="zar-facet__values {% if filter.values.size > 8 %}zar-facet__values--scroll{% endif %}">
                   {%- for filter_value in filter.values -%}
