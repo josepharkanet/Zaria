@@ -290,14 +290,16 @@
   /* attribute list */
   #shopify-section-{{ section.id }} .zpdp__attrs{background:#fff;border:1px solid #ece8e2;margin:6px 0 30px;overflow:hidden}
   /* The facts sit side by side and drop to the next line only when they will not fit
-     (client, 2026-11-16: "may arrange on one line, if more items bring down"). auto-fit
-     collapses the tracks it does not need, so two facts take half the width each and one
-     takes all of it, with no empty cell left over. The hairlines between them are the 1px
-     gap showing the container through, which is the only way to rule a grid that wraps:
-     a border on the cell would draw down the left of every new line. */
-  #shopify-section-{{ section.id }} .zpdp__attrrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:#ece8e2}
+     (client, 2026-11-16: "may arrange on one line, if more items bring down"). Flex rather
+     than grid, because a wrapped grid leaves the unused tracks of its last row standing
+     empty and they showed as a grey block beside the final fact ("no colour change here
+     pls"). Flex items grow into the line they land on, so one fact alone on the second row
+     fills it. The hairlines are the 1px gap letting the container through, which is the only
+     way to rule a run that wraps: a border on the cell would draw down the left of every new
+     line as well as between neighbours. */
+  #shopify-section-{{ section.id }} .zpdp__attrrow{display:flex;flex-wrap:wrap;gap:1px;background:#ece8e2}
   {%- comment -%}Label and value on one line: the strip was three lines tall for two words.{%- endcomment -%}
-  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:center;gap:9px;padding:11px 14px;min-width:0;background:#fff}
+  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:center;gap:9px;padding:11px 14px;min-width:0;background:#fff;flex:1 1 180px}
   #shopify-section-{{ section.id }} .zpdp__attr>span:last-child{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;min-width:0}
   #shopify-section-{{ section.id }} .zpdp__attr>div{min-width:0}
   @media (max-width:600px){
