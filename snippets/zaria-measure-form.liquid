@@ -28,7 +28,14 @@
   half of this form would promise something the atelier is not offering on them. Carrying the tag
   "No Customisation" leaves the size and the size chart and drops the Made to Order mode.
 {%- endcomment -%}
-{%- assign zmm_fields = "Neck Open:26:35,Shoulder to Shoulder:26:37,Sleeve Length:52:68,Bust:76:117,Waist:76:124,Hip:86:136,Length:100:130" | split: ',' -%}
+{%- comment -%}
+  Shoulder to Shoulder sits last on purpose (client, 2026-11-16: "if swap this can get two line
+  heading below in one line"). It is the only label long enough to wrap in half a column, and
+  the seventh field is alone on its row, so down there it has the full width and reads on one
+  line. Length took its place at number two. The numbered points on the sketch are matched to
+  these by position, so those two circles swapped numbers with them.
+{%- endcomment -%}
+{%- assign zmm_fields = "Neck Open:26:35,Length:100:130,Sleeve Length:52:68,Bust:76:117,Waist:76:124,Hip:86:136,Shoulder to Shoulder:26:37" | split: ',' -%}
 {%- assign zmm_nocust = false -%}
 {%- if product.tags contains 'No Customisation' -%}{%- assign zmm_nocust = true -%}{%- endif -%}
 {%- comment -%}
@@ -288,12 +295,12 @@
           </g>
           <g class="zmm__marks">
             <g class="zmm__mark" data-zmm-mark="1"><circle cx="150" cy="80" r="10"/><text x="150" y="84" text-anchor="middle">1</text></g>
-            <g class="zmm__mark" data-zmm-mark="2"><circle cx="127" cy="71" r="10"/><text x="127" y="75" text-anchor="middle">2</text></g>
+            <g class="zmm__mark" data-zmm-mark="7"><circle cx="127" cy="71" r="10"/><text x="127" y="75" text-anchor="middle">7</text></g>
             <g class="zmm__mark" data-zmm-mark="3"><circle cx="81" cy="209" r="10"/><text x="81" y="213" text-anchor="middle">3</text></g>
             <g class="zmm__mark" data-zmm-mark="4"><circle cx="196" cy="154" r="10"/><text x="196" y="158" text-anchor="middle">4</text></g>
             <g class="zmm__mark" data-zmm-mark="5"><circle cx="206" cy="216" r="10"/><text x="206" y="220" text-anchor="middle">5</text></g>
             <g class="zmm__mark" data-zmm-mark="6"><circle cx="226" cy="302" r="10"/><text x="226" y="306" text-anchor="middle">6</text></g>
-            <g class="zmm__mark" data-zmm-mark="7"><circle cx="22" cy="272" r="10"/><text x="22" y="276" text-anchor="middle">7</text></g>
+            <g class="zmm__mark" data-zmm-mark="2"><circle cx="22" cy="272" r="10"/><text x="22" y="276" text-anchor="middle">2</text></g>
           </g>
         </svg>
         <p class="zmm__figcap">Where we measure</p>
@@ -307,7 +314,11 @@
             {%- assign flabel = fp[0] -%}
             {%- assign hmin = fp[1] | plus: 0 -%}
             {%- assign hmax = fp[2] | plus: 0 -%}
-            <div class="zmm__field" data-zmm-field="{{ forloop.index }}">
+            {%- comment -%}An odd number of fields leaves the last one alone on its row; give it the width.{%- endcomment -%}
+            {%- assign zf_full = '' -%}
+            {%- assign zf_odd = zmm_fields.size | modulo: 2 -%}
+            {%- if forloop.last and zf_odd == 1 -%}{%- assign zf_full = ' zmm__field--full' -%}{%- endif -%}
+            <div class="zmm__field{{ zf_full }}" data-zmm-field="{{ forloop.index }}">
               <div class="zmm__fhead">
                 <span class="zmm__num">{{ forloop.index }}</span>
                 <span class="zmm__fname">{{ flabel }}</span>
