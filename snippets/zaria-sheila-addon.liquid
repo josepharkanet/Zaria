@@ -10,6 +10,10 @@
   picks one or leaves it and the garment goes into the bag alone.
 
   Usage: {% render 'zaria-sheila-addon', product: product %}
+         {% render 'zaria-sheila-addon', product: fabric, passive: true %}
+
+  passive leaves the submit alone. The design brief has its own handler and its own running
+  total, so there it only wants the tiles and the hidden field; anything else would race it.
 {%- endcomment -%}
 
 {%- comment -%}
@@ -59,7 +63,7 @@
   .zsa__clear[hidden]{display:none}
 </style>
 
-<div class="zsa" data-zsa>
+<div class="zsa" data-zsa{% if passive %} data-zsa-passive{% endif %}>
   <p class="zsa__head">Add a matching sheila <span>optional</span></p>
   <p class="zsa__sub">Two shades chosen to go with this piece. Pick one and it joins your order as its own line; leave it and the piece comes on its own.</p>
 
@@ -68,7 +72,7 @@
       {%- assign zsa_v = zsa_s.selected_or_first_available_variant -%}
       {%- if zsa_v == blank -%}{%- continue -%}{%- endif -%}
       <button type="button" class="zsa__tile" data-zsa-tile data-zsa-v="{{ zsa_v.id }}" data-zsa-title="{{ zsa_s.title | escape }}"
-        aria-pressed="false">
+        data-zsa-price="{{ zsa_v.price }}" aria-pressed="false">
         {%- comment -%}
           The rolled-scarf mockups out of the client's own PDF, shipped with the theme as
           assets/zsheila-<handle>.jpg (client, 2026-11-16: "extract images from pdf and use
@@ -130,13 +134,18 @@
       t.addEventListener('click', function () {
         var v = t.getAttribute('data-zsa-v');
         pick(field.value === v ? '' : v);   // a second click takes it back off
+        root.dispatchEvent(new CustomEvent('zsa:change', { bubbles: true }));
       });
     });
-    if (clear) clear.addEventListener('click', function () { pick(''); });
+    if (clear) clear.addEventListener('click', function () {
+      pick('');
+      root.dispatchEvent(new CustomEvent('zsa:change', { bubbles: true }));
+    });
 
     // Two lines on the order: the piece, and the sheila beside it. The fabric room has its own
     // handler on this form and runs first; when it has taken the submit over it adds the sheila
     // line itself, so this one stands down on anything already prevented.
+    if (root.hasAttribute('data-zsa-passive')) return;
     var form = root.closest('form');
     if (!form) return;
     form.addEventListener('submit', function (e) {

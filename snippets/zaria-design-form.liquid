@@ -286,6 +286,14 @@
         and the cloth are a row like any other rather than a sentence repeating the dropdown,
         and the note at the foot speaks only when there is something the rows do not say.
       {%- endcomment -%}
+      {%- comment -%}
+        The matching sheila, offered here and nowhere else on a cloth page: a bolt bought by the
+        metre needs no scarf, a piece being made does (client, 2026-11-16: "only on customization,
+        if just fabric buying no need sheila option"). The suggestions are the bolt's own, matched
+        by colour in zaria-ops/fabric-sheila.mjs, and passive so this form keeps its own submit.
+      {%- endcomment -%}
+      {%- render 'zaria-sheila-addon', product: product, passive: true -%}
+
       <div class="zdf-sum" data-zdf-sum>
         <div><span>Length</span><span data-zdf-sum-ln>Not chosen yet</span></div>
         <div class="zdf-sum__pieces"><span>Pieces</span>
@@ -297,6 +305,7 @@
         </div>
         <div><span data-zdf-sum-fl>Fabric</span><span data-zdf-sum-fv></span></div>
         <div><span data-zdf-sum-dl>Design &amp; tailoring</span><span data-zdf-sum-dv></span></div>
+        <div data-zsa-sumrow hidden><span>Matching sheila</span><span data-zsa-sumv></span></div>
         <div class="zdf-sum__t"><span>Total</span><span data-zdf-sum-tv></span></div>
         <p class="zdf-sum__note" data-zdf-lift hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.5"/></svg>
@@ -374,6 +383,15 @@
   var sumDL = overlay.querySelector('[data-zdf-sum-dl]');
   var sumLN = overlay.querySelector('[data-zdf-sum-ln]');
   var qtyField = overlay.querySelector('[data-zdf-qty]');
+  // The matching sheila, chosen in the passive tiles above the summary. One per piece.
+  var zsaField = overlay.querySelector('[data-zsa-variant]');
+  var zsaRow = overlay.querySelector('[data-zsa-sumrow]');
+  var zsaVal = overlay.querySelector('[data-zsa-sumv]');
+  function sheilaPrice() {
+    if (!zsaField || !zsaField.value) return 0;
+    var t = overlay.querySelector('[data-zsa-tile][data-zsa-v="' + zsaField.value + '"]');
+    return t ? (parseInt(t.getAttribute('data-zsa-price'), 10) || 0) : 0;
+  }
   var PC_MAX = {{ zdf_pc_max }};
   var pcWrap = overlay.querySelector('.zdf-sum__pieces');
   var pcN = overlay.querySelector('[data-zdf-pc-n]');
@@ -422,11 +440,17 @@
       ? 'Design &amp; tailoring &middot; ' + PIECES + ' &times; ' + money(designPrice)
       : 'Design &amp; tailoring';
     if (sumDV) sumDV.textContent = designVariant ? money(designPrice * PIECES) : 'Not chosen yet';
+    var sp = sheilaPrice() * PIECES;
+    if (zsaRow) zsaRow.hidden = !sp;
+    if (zsaVal) zsaVal.textContent = sp ? money(sp) : '';
     if (sumTV) sumTV.textContent = (m && designVariant)
-      ? money(FABRIC_PRICE * m + designPrice * PIECES)
-      : (designVariant ? money(designPrice * PIECES) + ' + fabric'
-        : (m ? money(FABRIC_PRICE * m) + ' + design' : 'Length and design to choose'));
+      ? money(FABRIC_PRICE * m + designPrice * PIECES + sp)
+      : (designVariant ? money(designPrice * PIECES + sp) + ' + fabric'
+        : (m ? money(FABRIC_PRICE * m + sp) + ' + design' : 'Length and design to choose'));
   }
+
+  // Picking a sheila, or taking it back off, moves the total with everything else.
+  overlay.addEventListener('zsa:change', retotal);
 
   // The length among the measurements below is what moves the cloth, with the pieces.
   overlay.addEventListener('change', function (e) {
@@ -627,6 +651,11 @@
       var items = [{ id: form.getAttribute('data-zdf-fabric-id'), quantity: units(m), properties: designVariant ? cloth : props }];
       // Only if the collection itself were empty would there be no second line to add.
       if (designVariant) items.push({ id: designVariant, quantity: PIECES, properties: made });
+      // And a third, when a sheila was chosen to go with it.
+      if (zsaField && zsaField.value) {
+        items.push({ id: zsaField.value, quantity: PIECES,
+                     properties: { 'For': (form.getAttribute('data-zdf-fabric') || '') + (designTitle ? ' \u00b7 ' + designTitle : '') } });
+      }
 
       fetch('{{ routes.cart_add_url }}.js', {
         method:'POST',
