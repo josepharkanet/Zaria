@@ -149,6 +149,17 @@
     if z_make != blank
       assign attr_count = attr_count | plus: 1
     endif
+    comment
+      ftype is guessed from the tags against a short list of weaves, and on a garment it finds
+      the same word the Fabric row already carries: a piece tagged "Crepe Silk" showed Fabric
+      Crepe Silk and then Fabric Silk, one under the other (client, 2026-11-16: "it's
+      repeated"). The guess stays for cloth, where it sits beside Make and names the weave
+      rather than the mill. On a garment the metafield wins, since it is the exact words of
+      the description rather than a match on a list.
+    endcomment
+    if is_fabric == false
+      assign ftype = ''
+    endif
     if ftype != blank
       assign attr_count = attr_count | plus: 1
     endif
@@ -656,7 +667,13 @@
             {%- if is_fragrance -%}
               {% if fr_family != blank %}{{ fr_family }} composition.{% endif %} {% if fr_conc != blank %}{{ fr_conc }}{% endif %}{% if fr_size != blank %} &middot; {{ fr_size }}{% endif %}. A Zaria signature scent; contact us for gifting and bespoke sets.
             {%- else -%}
-              {% if ftype != blank %}A {{ ftype | downcase }} fabric{% else %}A premium fabric{% endif %}{% if origin != blank %}, woven in {{ origin }}{% endif %}.
+              {%- liquid
+                assign z_cloth_word = ftype
+                if is_fabric == false and z_make != blank
+                  assign z_cloth_word = z_make
+                endif
+              -%}
+              {% if z_cloth_word != blank %}A {{ z_cloth_word | downcase }} fabric{% else %}A premium fabric{% endif %}{% if origin != blank %}, woven in {{ origin }}{% endif %}.
               {% if colours != blank %} Available in {{ colours | join: ', ' | downcase }}.{% endif %}
               {% if patterns != blank %} {{ patterns | join: ', ' }} pattern.{% endif %}
               Sold by the piece; contact us for bulk lengths and bespoke orders.
