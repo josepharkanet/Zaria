@@ -579,7 +579,7 @@
       fabric: form.getAttribute('data-zdf-fabric') || '',
       product_ref: form.getAttribute('data-zdf-fabric-handle') || '',
       notes: notes,
-      size_type: get('Size Type') || 'Customized',
+      size_type: get('Size Type') || 'Made to Order',
       reference_url: handle ? (location.origin + '/products/' + handle) : ''
     };
     Object.keys(ZDF_MEASURE).forEach(function (label) {

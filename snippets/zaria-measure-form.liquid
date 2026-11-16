@@ -2,7 +2,7 @@
   Zaria - Made to Measure form for ready-to-wear garments (Abaya / Jalabiya / Sheila).
   Renders INSIDE the product form ({% form 'product' %}), so every choice is captured as a
   line-item property and shows on the Shopify order + emails.
-  Ready to Wear -> the house standard size + the Size Chart. Customized -> a visual couture sketch with
+  Ready to Wear -> the house standard size + the Size Chart. Made to Order -> cut at the fitting, with
   numbered measurement points that light up as each cm dropdown is completed. Usage:
   {% render 'zaria-measure-form', product: product %}
 {%- endcomment -%}
@@ -26,7 +26,7 @@
   Ready to Wear only. The older ready-to-wear jalabiyas and abayas are cut and finished before they
   reach the shop, so there is nothing to measure: they take a standard size and the made-to-measure
   half of this form would promise something the atelier is not offering on them. Carrying the tag
-  "No Customisation" leaves the size and the size chart and drops the Customized mode.
+  "No Customisation" leaves the size and the size chart and drops the Made to Order mode.
 {%- endcomment -%}
 {%- assign zmm_nocust = false -%}
 {%- if product.tags contains 'No Customisation' -%}{%- assign zmm_nocust = true -%}{%- endif -%}
@@ -44,7 +44,6 @@
   diagram numbers. The figures are inches, matching the size chart; they used to be written into
   the order as centimetres, which was simply wrong. Each option now carries both units.
 {%- endcomment -%}
-{%- assign zmm_fields = "Neck Open:26:35,Shoulder to Shoulder:26:37,Sleeve Loose:12:25,Sleeve Length:52:68,Sleeve Open:18:25,Bust:76:117,Waist:76:124,Hip:86:136,Length:100:130,Bottom Open:30:48" | split: ',' -%}
 
 <style>
   .zmm{margin:2px 0 18px;padding:4px 0}
@@ -94,7 +93,7 @@
     .zmm__ready-grid .zmm__chart{margin-left:0;padding-left:0;border-left:0;flex:0 1 auto}
   }
 
-  /* Customized - visual layout */
+  /* Made to Order */
   .zmm__visual{display:grid;grid-template-columns:210px 1fr;gap:clamp(18px,3vw,34px);align-items:start}
   .zmm__figure{position:sticky;top:14px}
   .zmm__figure svg{width:100%;height:auto;display:block}
@@ -135,8 +134,8 @@
 <div class="zmm" data-zmm{% if zmm_nocust %} data-zmm-readyonly{% endif %}{% if zmm_customonly %} data-zmm-customonly{% endif %}>
   <div class="zmm__top">
     <div>
-      <p class="zmm__head">{% if zmm_customonly %}Your measurements{% elsif zmm_nocust %}Size{% else %}Choose your size{% endif %} <span class="req">*</span></p>
-      <p class="zmm__sub" data-zmm-sub>{% if zmm_customonly %}Cut to your own measurements, all ten of them, in inches with the centimetre in brackets. Our designer confirms them with you at the fitting.{% elsif zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}Select Ready to Wear for our standard size, or Customized to have it cut to your measurements.{% endif %}</p>
+      <p class="zmm__head">{% if zmm_customonly %}Made to order{% elsif zmm_nocust %}Size{% else %}Choose your size{% endif %} <span class="req">*</span></p>
+      <p class="zmm__sub" data-zmm-sub>{% if zmm_customonly %}Cut to your own measurements. Our designer takes them with you at the fitting, so there is nothing to fill in here.{% elsif zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}Select Ready to Wear for our standard size, or Made to Order to have it cut to your measurements.{% endif %}</p>
     </div>
   </div>
 
@@ -149,8 +148,8 @@
     {%- endunless -%}
     {%- unless zmm_nocust -%}
     <label class="zmm__mode" data-zmm-modelabel>
-      <input type="radio" name="properties[Size Type]" value="Customized" data-zmm-mode="custom"{% if zmm_customonly %} checked{% endif %}>
-      Customized
+      <input type="radio" name="properties[Size Type]" value="Made to Order" data-zmm-mode="custom"{% if zmm_customonly %} checked{% endif %}>
+      Made to Order
     </label>
     {%- endunless -%}
   </div>
@@ -165,7 +164,7 @@
     length metafield, or one carrying "No Customisation". The other is cut to order in a standard
     size — the Ramadan 2027 jalabiyas — and for those "One Size" said nothing. They ask instead for
     the three figures the cutter needs: the size, the length and the sleeve. The full ten
-    measurements stay with Customized.
+    measurements are taken at the fitting.
   {%- endcomment -%}
   {%- assign zmm_fixed = false -%}
   {%- if zmm_len != blank -%}{%- assign zmm_fixed = true -%}{%- endif -%}
@@ -198,14 +197,14 @@
     <input type="hidden" name="properties[Size]" value="One Size" data-zmm-in="ready" disabled>
     {%- assign zmm_len_cm = zmm_len | times: 2.54 | round: 0 -%}
     {%- assign zmm_slv_cm = zmm_slv | times: 2.54 | round: 0 -%}
-    <p class="zmm__hint">This piece is available in <b>{% if zmm_len != blank %}{{ zmm_len }} in ({{ zmm_len_cm }} cm){% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }} in ({{ zmm_slv_cm }} cm) sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements{% unless zmm_nocust %}, or choose <b>Customized</b> to have it cut to your own measurements{% endunless %}.{% if zmm_nocust %} For another length, we cut to your own measurements in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% endif %}</p>
+    <p class="zmm__hint">This piece is available in <b>{% if zmm_len != blank %}{{ zmm_len }} in ({{ zmm_len_cm }} cm){% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }} in ({{ zmm_slv_cm }} cm) sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements{% unless zmm_nocust %}, or choose <b>Made to Order</b> to have it cut to your own measurements{% endunless %}.{% if zmm_nocust %} For another length, we cut to your own measurements in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% endif %}</p>
     {%- else -%}
     <div class="zmm__fields zmm__fields--ready">
       {%- comment -%}
         No size to pick on this side (client, 2026-11-16: "if it's ready made then there
         shouldn't be size options, only length adjustment options"). Ready to Wear is the house
         standard size, so the only two things left to settle are the length and the sleeve. The
-        French ladder still belongs to the Customized side, where the piece is cut to the
+        French ladder is gone with it; a Made to Order piece is cut to the
         customer's own ten measurements. The size still travels with the order, as a word.
       {%- endcomment -%}
       <input type="hidden" name="properties[Size]" value="Standard" data-zmm-in="ready" disabled>
@@ -246,73 +245,15 @@
 
   {%- comment -%} ===== CUSTOMIZED (visual) ===== {%- endcomment -%}
   {%- unless zmm_nocust -%}
+  {%- comment -%}
+    Made to Order asks for nothing here (client, 2026-11-16: "all this measurement requirements
+    arnt needed"). It used to hold the couture sketch and ten half-inch dropdowns, neck open to
+    bottom open, with a counter and the numbered points lighting up as they were filled. The
+    atelier takes the measurements at the fitting instead, so the form does not. The script that
+    drove the sketch is all null-guarded, so it simply finds nothing now and does nothing.
+  {%- endcomment -%}
   <div class="zmm__panel" data-zmm-panel="custom" hidden>
-    <div class="zmm__visual">
-      <div class="zmm__figure" aria-hidden="true">
-        <svg viewBox="0 0 300 500" fill="none" stroke="#151515" stroke-width="1.4" stroke-linejoin="round">
-          <!-- body A-line -->
-          <path d="M124 66 L176 66 L268 470 Q150 486 32 470 Z" fill="#faf7f2"/>
-          <!-- open front reveal -->
-          <path d="M148 92 L141 470 L159 470 L152 92 Z" fill="#efe7db"/>
-          <!-- sleeves -->
-          <path d="M124 66 L52 238 L80 252 L140 122 Z" fill="#faf7f2"/>
-          <path d="M176 66 L248 238 L220 252 L160 122 Z" fill="#faf7f2"/>
-          <!-- neckline + front edges -->
-          <path d="M138 64 L150 92 L162 64"/>
-          <path d="M148 92 L141 470M152 92 L159 470" stroke-width="1.1"/>
-          <!-- guide lines: bust / waist / hip / bottom -->
-          <g stroke="#d9c9a4" stroke-dasharray="4 4" stroke-width="1">
-            <path d="M114 154 H188"/><path d="M102 216 H202"/><path d="M80 302 H222"/><path d="M40 468 H260"/>
-          </g>
-          <!-- length arrow -->
-          <g stroke="#c9c1b4" stroke-width="1">
-            <path d="M22 74 L22 470" stroke-dasharray="3 5"/>
-            <path d="M18 80 L22 72 L26 80M18 464 L22 472 L26 464"/>
-          </g>
-          <g class="zmm__marks">
-            <g class="zmm__mark" data-zmm-mark="1"><circle cx="150" cy="80" r="10"/><text x="150" y="84" text-anchor="middle">1</text></g>
-            <g class="zmm__mark" data-zmm-mark="2"><circle cx="127" cy="71" r="10"/><text x="127" y="75" text-anchor="middle">2</text></g>
-            <g class="zmm__mark" data-zmm-mark="3"><circle cx="101" cy="167" r="10"/><text x="101" y="171" text-anchor="middle">3</text></g>
-            <g class="zmm__mark" data-zmm-mark="4"><circle cx="81" cy="209" r="10"/><text x="81" y="213" text-anchor="middle">4</text></g>
-            <g class="zmm__mark" data-zmm-mark="5"><circle cx="63" cy="245" r="10"/><text x="63" y="249" text-anchor="middle">5</text></g>
-            <g class="zmm__mark" data-zmm-mark="6"><circle cx="196" cy="154" r="10"/><text x="196" y="158" text-anchor="middle">6</text></g>
-            <g class="zmm__mark" data-zmm-mark="7"><circle cx="206" cy="216" r="10"/><text x="206" y="220" text-anchor="middle">7</text></g>
-            <g class="zmm__mark" data-zmm-mark="8"><circle cx="226" cy="302" r="10"/><text x="226" y="306" text-anchor="middle">8</text></g>
-            <g class="zmm__mark" data-zmm-mark="9"><circle cx="22" cy="272" r="10"/><text x="22" y="276" text-anchor="middle">9</text></g>
-            <g class="zmm__mark" data-zmm-mark="10"><circle cx="96" cy="468" r="11.5"/><text x="96" y="472" text-anchor="middle">10</text></g>
-          </g>
-        </svg>
-        <p class="zmm__figcap">Where we measure</p>
-      </div>
-
-      <div>
-        <p class="zmm__prog"><b data-zmm-count>0</b> of {{ zmm_fields.size }} measurements added <span class="zmm__fname" style="letter-spacing:.06em">&mdash; inches, with the centimetre in brackets</span></p>
-        <div class="zmm__fields">
-          {%- for f in zmm_fields -%}
-            {%- assign fp = f | split: ':' -%}
-            {%- assign flabel = fp[0] -%}
-            {%- assign hmin = fp[1] | plus: 0 -%}
-            {%- assign hmax = fp[2] | plus: 0 -%}
-            <div class="zmm__field" data-zmm-field="{{ forloop.index }}">
-              <div class="zmm__fhead">
-                <span class="zmm__num">{{ forloop.index }}</span>
-                <span class="zmm__fname">{{ flabel }}</span>
-              </div>
-              <select name="properties[{{ flabel }}]" data-zmm-req data-zmm-in="custom" data-zmm-field-select="{{ forloop.index }}" disabled>
-                <option value="">Select</option>
-                {%- for h in (hmin..hmax) -%}
-                  {%- assign whole = h | divided_by: 2 -%}
-                  {%- assign rem = h | modulo: 2 -%}
-                  {%- if rem == 0 -%}{%- capture lab -%}{{ whole }}{%- endcapture -%}{%- else -%}{%- capture lab -%}{{ whole }}.5{%- endcapture -%}{%- endif -%}
-                  {%- assign labcm = h | times: 1.27 | round: 0 -%}
-                  <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in ({{ labcm }} cm)</option>
-                {%- endfor -%}
-              </select>
-            </div>
-          {%- endfor -%}
-        </div>
-      </div>
-    </div>
+    <p class="zmm__hint">Cut to order for you. Our designer takes your measurements with you at the fitting, so there is nothing to fill in here.</p>
   </div>
   {%- endunless -%}
 
@@ -339,12 +280,12 @@
   </div>
   {%- endif -%}
   {%- comment -%}
-    Only true of the Customized side, so it is shown only there. It sits outside the panel
+    Only true of the Made to Order side, so it is shown only there. It sits outside the panel
     above because that panel is not always rendered: the design brief asks for this form with
     show_comment false, and on a piece that is not an abaya there would be nothing left to
     hold the note. The script finds it from the form root, not from the panel.
   {%- endcomment -%}
-  {%- unless zmm_nocust -%}<p class="zmm__hint" data-zmm-customnote hidden>Made to order. Customized pieces are cut to your measurements and cannot be exchanged for fit.</p>{%- endunless -%}
+  {%- unless zmm_nocust -%}<p class="zmm__hint" data-zmm-customnote hidden>A piece cut to your own measurements cannot be exchanged for fit.</p>{%- endunless -%}
 </div>
 
 <script>
@@ -403,7 +344,7 @@
     if(form){
       form.addEventListener('submit', function(e){
         var chosen = root.querySelector('input[data-zmm-mode]:checked');
-        if(!chosen){ e.preventDefault(); e.stopImmediatePropagation(); alert('Please choose Ready to Wear or Customized before adding to bag.'); return; }
+        if(!chosen){ e.preventDefault(); e.stopImmediatePropagation(); alert('Please choose Ready to Wear or Made to Order before adding to bag.'); return; }
         var missing = null;
         root.querySelectorAll('[data-zmm-req]').forEach(function(el){
           if(!el.disabled && !el.value && !missing) missing = el;

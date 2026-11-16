@@ -198,10 +198,10 @@
       <input id="zds-ref-{{ section.id }}" name="reference_url" placeholder="Pinterest / Instagram / image URLs"></div>
 
     <p class="zds__h">Choose your size <span class="req">*</span></p>
-    <p class="zds__hint">Select <b>Ready to Wear</b> for our standard size, or <b>Customized</b> to have it cut to your measurements. Unsure of the numbers? Pick Customized and leave them blank, our designer will measure you precisely at the fitting.</p>
+    <p class="zds__hint">Select <b>Ready to Wear</b> for our standard size, or <b>Made to Order</b> to have it cut to your measurements. Unsure of the numbers? Pick Made to Order and leave them blank, our designer will measure you precisely at the fitting.</p>
     <div class="zds__modes">
       <label class="zds__mode" data-zds-modelabel><input type="radio" name="size_type" value="Ready to Wear" data-zds-mode="ready"> Ready to Wear</label>
-      <label class="zds__mode" data-zds-modelabel><input type="radio" name="size_type" value="Customized" data-zds-mode="custom"> Customized</label>
+      <label class="zds__mode" data-zds-modelabel><input type="radio" name="size_type" value="Made to Order" data-zds-mode="custom"> Made to Order</label>
     </div>
 
     <div class="zds__panel" data-zds-panel="ready" hidden>
@@ -221,7 +221,7 @@
         </div>
         <div class="zds__chart">{% render 'zaria-size-chart' %}</div>
       </div>
-      <p class="zds__hint" style="margin-top:14px">{%- assign zds_rl = sc.rtw_length | times: 2.54 | round: 0 -%}{%- assign zds_rs = sc.rtw_sleeve | times: 2.54 | round: 0 -%}This piece is available in <b>{{ sc.rtw_length }} in ({{ zds_rl }} cm) length</b> only, with a <b>{{ sc.rtw_sleeve }} in ({{ zds_rs }} cm) sleeve</b>. Open the <b>Size Chart</b> for full measurements, or choose <b>Customized</b> to have it cut to your own measurements.</p>
+      <p class="zds__hint" style="margin-top:14px">{%- assign zds_rl = sc.rtw_length | times: 2.54 | round: 0 -%}{%- assign zds_rs = sc.rtw_sleeve | times: 2.54 | round: 0 -%}This piece is available in <b>{{ sc.rtw_length }} in ({{ zds_rl }} cm) length</b> only, with a <b>{{ sc.rtw_sleeve }} in ({{ zds_rs }} cm) sleeve</b>. Open the <b>Size Chart</b> for full measurements, or choose <b>Made to Order</b> to have it cut to your own measurements.</p>
     </div>
 
     <div class="zds__panel" data-zds-panel="custom" hidden>
@@ -350,7 +350,7 @@
     if(ff)ff.remove();
   }
 
-  /* ---- Ready to Wear / Customized ---- */
+  /* ---- Ready to Wear / Made to Order ---- */
   var modes=form.querySelectorAll('input[data-zds-mode]');
   var labels=form.querySelectorAll('[data-zds-modelabel]');
   var countEl=form.querySelector('[data-zds-count]');
@@ -394,7 +394,7 @@
     err.hidden=true;
     if(!form.checkValidity()){form.reportValidity();return;}
     if(!form.querySelector('input[name="size_type"]:checked')){
-      fail('Please choose Ready to Wear or Customized.');return;
+      fail('Please choose Ready to Wear or Made to Order.');return;
     }
     btn.dataset.label=btn.dataset.label||btn.textContent;
     btn.disabled=true;btn.textContent='Sending…';
