@@ -129,15 +129,14 @@
       Make leads the strip and Origin follows it: the two say who wove the cloth and where,
       and they used to be split between a line of body copy and the far end of the strip.
 
-      Cloth only. Every garment carries custom.supplier = "Zaria" from the import, which on a
-      Freya piece put "Make Zaria" in the strip under a FREYA mark and read as a contradiction
-      (client, 2026-11-16: "how both?"). A garment already says who made it, in the mark above
-      its title, so the row has nothing to add there; on a bolt it names the mill, which
-      nothing else says. The metafield is left alone, so the item master still asks for it.
+      On a garment the row names the house that signs it, which the client asked to see said
+      twice rather than once ("this both freya make also", and "ramadan collections both
+      zaria", 2026-11-16). It used to read "Zaria" on every piece, Freya's included, because
+      that is what the import wrote; custom.supplier now follows the mark, written by
+      zaria-ops/garment-make.mjs. Re-run that after tagging a piece to a different house, or
+      the strip will disagree with the mark above the title again.
     endcomment
-    if is_fabric
-      assign z_make = product.metafields.custom.supplier
-    endif
+    assign z_make = product.metafields.custom.supplier
     if z_make != blank
       assign attr_count = attr_count | plus: 1
     endif
