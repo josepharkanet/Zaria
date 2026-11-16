@@ -199,7 +199,7 @@
   var qty = form ? form.querySelector('.zpdp__qty') : null;
   function pieces() { var n = qty ? parseInt(qty.value, 10) : 1; return n > 0 ? n : 1; }
 
-  // Ready made is a piece the atelier has already cut and finished, so its cloth is settled
+  // Ready to wear is a piece the atelier has already cut and finished, so its cloth is settled
   // and there is nothing to choose: the fabric room belongs to the Customized side alone
   // (client, 2026-11-13). Hidden, it also stops posting a fabric with the order, and the
   // submit below steps aside so the piece is added the ordinary way. With no size form on
@@ -222,7 +222,7 @@
   var INCLUDED = TOTAL > DESIGN ? TOTAL - DESIGN : 0;
   function sayPrice() {
     var on = fabricOn();
-    // Readymade is the piece as photographed, so it keeps the listed figure, cloth and all.
+    // Ready to wear is the piece as photographed, so it keeps the listed figure, cloth and all.
     // Only a cloth actually picked in the room changes it, and then only the cloth half: the
     // one the piece is photographed in drops out and the chosen one takes its place.
     if (amountEl) {
@@ -234,7 +234,7 @@
     if (on && chosen) taxP.textContent = 'Making ' + money(DESIGN) + ' plus ' + tidy(MIN) +
       ' m of cloth ' + money(chosen.p * MIN);
     else if (!on && TOTAL) taxP.textContent = 'A standard size, in the cloth photographed \u00b7 price per piece';
-    else if (!on) taxP.textContent = 'Ready made in a standard size \u00b7 price per piece';
+    else if (!on) taxP.textContent = 'Ready to wear in our standard size \u00b7 price per piece';
     else taxP.textContent = taxMade;
   }
   function syncMode() {
@@ -409,7 +409,7 @@
     })
     .catch(function () { empty.hidden = false; empty.textContent = 'The fabric list could not be loaded. Please call the atelier.'; });
 
-  // The size form may already be showing a length (a readymade piece has one from the start),
+  // The size form may already be showing a length (a ready-to-wear piece has one from the start),
   // so the cloth is read from it before the bolt list arrives.
   syncMode();
   readLength();
@@ -418,7 +418,7 @@
   // Two lines on the order: this piece, and the cloth it is cut from.
   if (form) {
     form.addEventListener('submit', function (e) {
-      if (!fabricOn()) return;        /* ready made: one line, added the ordinary way */
+      if (!fabricOn()) return;        /* ready to wear: one line, added the ordinary way */
       if (!chosen) {
         e.preventDefault();
         warn.hidden = false;

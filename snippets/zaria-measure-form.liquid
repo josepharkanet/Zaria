@@ -2,7 +2,7 @@
   Zaria - Made to Measure form for ready-to-wear garments (Abaya / Jalabiya / Sheila).
   Renders INSIDE the product form ({% form 'product' %}), so every choice is captured as a
   line-item property and shows on the Shopify order + emails.
-  Readymade -> a standard size + the Size Chart. Customized -> a visual couture sketch with
+  Ready to Wear -> the house standard size + the Size Chart. Customized -> a visual couture sketch with
   numbered measurement points that light up as each cm dropdown is completed. Usage:
   {% render 'zaria-measure-form', product: product %}
 {%- endcomment -%}
@@ -11,7 +11,7 @@
   Optional parameters, for the design brief which renders this form without a product:
     show_comment: false  - the brief has its own description box, so drop this one
     custom_only: true    - every piece a brief describes is cut to order, so there is no
-                           Readymade to choose: the measurements open straight away
+                           Ready to Wear to choose: the measurements open straight away
   With no product at all the form falls to its cut-to-order side, which is what a brief is.
 {%- endcomment -%}
 {%- assign zmm_show_comment = true -%}
@@ -23,7 +23,7 @@
 {%- if product.type == 'Abaya' or product.tags contains 'Abaya' -%}{%- assign zmm_is_abaya = true -%}{%- endif -%}
 
 {%- comment -%}
-  Readymade only. The older ready-to-wear jalabiyas and abayas are cut and finished before they
+  Ready to Wear only. The older ready-to-wear jalabiyas and abayas are cut and finished before they
   reach the shop, so there is nothing to measure: they take a standard size and the made-to-measure
   half of this form would promise something the atelier is not offering on them. Carrying the tag
   "No Customisation" leaves the size and the size chart and drops the Customized mode.
@@ -81,7 +81,7 @@
   .zmm__label .req{color:var(--wine,#7a1f34)}
   .zmm__hint{font-size:var(--zf-hint-size);color:var(--zf-hint);margin:12px 0 0;line-height:1.65}
 
-  /* Readymade */
+  /* Ready to Wear */
   .zmm__ready-grid{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:2px}
   .zmm__ready-grid .zmm__label{margin:0;white-space:nowrap}
   .zmm__ready-grid select{width:auto;min-width:188px}
@@ -136,15 +136,15 @@
   <div class="zmm__top">
     <div>
       <p class="zmm__head">{% if zmm_customonly %}Your measurements{% elsif zmm_nocust %}Size{% else %}Choose your size{% endif %} <span class="req">*</span></p>
-      <p class="zmm__sub" data-zmm-sub>{% if zmm_customonly %}Cut to your own measurements, all ten of them, in inches with the centimetre in brackets. Our designer confirms them with you at the fitting.{% elsif zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}Select Readymade for a standard size, or Customized to have it cut to your measurements.{% endif %}</p>
+      <p class="zmm__sub" data-zmm-sub>{% if zmm_customonly %}Cut to your own measurements, all ten of them, in inches with the centimetre in brackets. Our designer confirms them with you at the fitting.{% elsif zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}Select Ready to Wear for our standard size, or Customized to have it cut to your measurements.{% endif %}</p>
     </div>
   </div>
 
   <div class="zmm__modes"{% if zmm_nocust or zmm_customonly %} hidden{% endif %}>
     {%- unless zmm_customonly -%}
     <label class="zmm__mode" data-zmm-modelabel>
-      <input type="radio" name="properties[Size Type]" value="Readymade" data-zmm-mode="ready" required{% if zmm_nocust %} checked{% endif %}>
-      Readymade
+      <input type="radio" name="properties[Size Type]" value="Ready to Wear" data-zmm-mode="ready" required{% if zmm_nocust %} checked{% endif %}>
+      Ready to Wear
     </label>
     {%- endunless -%}
     {%- unless zmm_nocust -%}
@@ -155,7 +155,7 @@
     {%- endunless -%}
   </div>
 
-  {%- comment -%} ===== READYMADE ===== {%- endcomment -%}
+  {%- comment -%} ===== READY TO WEAR ===== {%- endcomment -%}
   {%- assign zmm_len = product.metafields.custom.length.value -%}
   {%- assign zmm_slv = product.metafields.custom.sleeve_length.value -%}
 
@@ -170,8 +170,6 @@
   {%- assign zmm_fixed = false -%}
   {%- if zmm_len != blank -%}{%- assign zmm_fixed = true -%}{%- endif -%}
   {%- if zmm_nocust -%}{%- assign zmm_fixed = true -%}{%- endif -%}
-  {%- comment -%} French size : international equivalent, as printed in the size chart. {%- endcomment -%}
-  {%- assign zmm_sizes = '36:XS,38:S,40:M,42:L,44:XL,46:XXL,48:3XL,50:4XL,52:5XL,54:6XL' | split: ',' -%}
 
   {%- unless zmm_customonly -%}
   <div class="zmm__panel" data-zmm-panel="ready" hidden>
@@ -203,16 +201,14 @@
     <p class="zmm__hint">This piece is available in <b>{% if zmm_len != blank %}{{ zmm_len }} in ({{ zmm_len_cm }} cm){% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }} in ({{ zmm_slv_cm }} cm) sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements{% unless zmm_nocust %}, or choose <b>Customized</b> to have it cut to your own measurements{% endunless %}.{% if zmm_nocust %} For another length, we cut to your own measurements in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% endif %}</p>
     {%- else -%}
     <div class="zmm__fields zmm__fields--ready">
-      <div class="zmm__field zmm__field--full">
-        <div class="zmm__fhead"><span class="zmm__fname">Size <span class="req">*</span> <span class="u">french (intl)</span></span></div>
-        <select name="properties[Size]" data-zmm-req data-zmm-in="ready" disabled>
-          <option value="">Select</option>
-          {%- for s in zmm_sizes -%}
-            {%- assign sp = s | split: ':' -%}
-            <option value="{{ sp[0] }} ({{ sp[1] }})">{{ sp[0] }} ({{ sp[1] }})</option>
-          {%- endfor -%}
-        </select>
-      </div>
+      {%- comment -%}
+        No size to pick on this side (client, 2026-11-16: "if it's ready made then there
+        shouldn't be size options, only length adjustment options"). Ready to Wear is the house
+        standard size, so the only two things left to settle are the length and the sleeve. The
+        French ladder still belongs to the Customized side, where the piece is cut to the
+        customer's own ten measurements. The size still travels with the order, as a word.
+      {%- endcomment -%}
+      <input type="hidden" name="properties[Size]" value="Standard" data-zmm-in="ready" disabled>
       <div class="zmm__field">
         <div class="zmm__fhead"><span class="zmm__fname">Length</span></div>
         <select name="properties[Length]" data-zmm-in="ready" disabled>
@@ -241,7 +237,7 @@
       </div>
     </div>
     <div class="zmm__readyfoot">
-      <p class="zmm__hint">Cut to order in the size you choose; bust, waist and hip follow the chart. The length and the sleeve are yours to set, and left as they are they come at the standard for your size.</p>
+      <p class="zmm__hint">Cut to order in our standard size; bust, waist and hip follow the <b>Size Chart</b>. The length and the sleeve are yours to set, and left as they are they come at the standard.</p>
       <div class="zmm__chart">{% render 'zaria-size-chart' %}</div>
     </div>
     {%- endif -%}
@@ -407,7 +403,7 @@
     if(form){
       form.addEventListener('submit', function(e){
         var chosen = root.querySelector('input[data-zmm-mode]:checked');
-        if(!chosen){ e.preventDefault(); e.stopImmediatePropagation(); alert('Please choose Readymade or Customized before adding to bag.'); return; }
+        if(!chosen){ e.preventDefault(); e.stopImmediatePropagation(); alert('Please choose Ready to Wear or Customized before adding to bag.'); return; }
         var missing = null;
         root.querySelectorAll('[data-zmm-req]').forEach(function(el){
           if(!el.disabled && !el.value && !missing) missing = el;
