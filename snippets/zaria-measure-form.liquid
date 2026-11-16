@@ -149,7 +149,6 @@
 
   {%- comment -%} ===== READYMADE ===== {%- endcomment -%}
   {%- assign zmm_len = product.metafields.custom.length.value -%}
-  {%- assign zmm_all_len = '53,54,55,56,57,58,59,60,61' | split: ',' -%}
   {%- assign zmm_slv = product.metafields.custom.sleeve_length.value -%}
 
   {%- comment -%}
@@ -171,20 +170,19 @@
     {%- if zmm_fixed -%}
     <div class="zmm__ready-grid">
       <div class="zmm__label">Length <span class="req">*</span></div>
+      {%- comment -%}
+        One length, and only that one listed. This used to print the whole 53 to 61 in ladder
+        with eight of the nine struck through as "not available", which read as a piece that is
+        sold in nine lengths and out of stock in eight of them, and was asked about as exactly
+        that (client, 2026-11-16: "why isn't length adjustment available to sizes smaller than
+        56?"). A finished piece has one length because it is already cut; the hint below says
+        where to go for another. The ladder still belongs to the cut-to-order branch further
+        down, where every rung can really be had.
+      {%- endcomment -%}
       <select name="properties[Length]" data-zmm-in="ready" disabled>
         {%- if zmm_len != blank -%}
-          {%- for L in zmm_all_len -%}
-            {%- assign zmm_lcm = L | times: 2.54 | round: 0 -%}
-            {%- if L == zmm_len -%}
-              <option value="{{ L }} in ({{ zmm_lcm }} cm)" selected>{{ L }} in ({{ zmm_lcm }} cm)</option>
-            {%- else -%}
-              <option value="" disabled>{{ L }} in ({{ zmm_lcm }} cm) &mdash; not available</option>
-            {%- endif -%}
-          {%- endfor -%}
-          {%- unless zmm_all_len contains zmm_len -%}
-            {%- assign zmm_lcm = zmm_len | times: 2.54 | round: 0 -%}
-            <option value="{{ zmm_len }} in ({{ zmm_lcm }} cm)" selected>{{ zmm_len }} in ({{ zmm_lcm }} cm)</option>
-          {%- endunless -%}
+          {%- assign zmm_lcm = zmm_len | times: 2.54 | round: 0 -%}
+          <option value="{{ zmm_len }} in ({{ zmm_lcm }} cm)" selected>{{ zmm_len }} in ({{ zmm_lcm }} cm)</option>
         {%- else -%}
           <option value="One Size" selected>One Size</option>
         {%- endif -%}
@@ -194,7 +192,7 @@
     <input type="hidden" name="properties[Size]" value="One Size" data-zmm-in="ready" disabled>
     {%- assign zmm_len_cm = zmm_len | times: 2.54 | round: 0 -%}
     {%- assign zmm_slv_cm = zmm_slv | times: 2.54 | round: 0 -%}
-    <p class="zmm__hint">This piece is available in <b>{% if zmm_len != blank %}{{ zmm_len }} in ({{ zmm_len_cm }} cm){% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }} in ({{ zmm_slv_cm }} cm) sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements{% unless zmm_nocust %}, or choose <b>Customized</b> to have it cut to your own measurements{% endunless %}.</p>
+    <p class="zmm__hint">This piece is available in <b>{% if zmm_len != blank %}{{ zmm_len }} in ({{ zmm_len_cm }} cm){% else %}one standard{% endif %} length</b> only{% if zmm_slv != blank %}, with a {{ zmm_slv }} in ({{ zmm_slv_cm }} cm) sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements{% unless zmm_nocust %}, or choose <b>Customized</b> to have it cut to your own measurements{% endunless %}.{% if zmm_nocust %} For another length, we cut to your own measurements in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% endif %}</p>
     {%- else -%}
     <div class="zmm__fields zmm__fields--ready">
       <div class="zmm__field zmm__field--full">
