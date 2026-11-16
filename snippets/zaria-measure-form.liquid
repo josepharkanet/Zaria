@@ -28,6 +28,7 @@
   half of this form would promise something the atelier is not offering on them. Carrying the tag
   "No Customisation" leaves the size and the size chart and drops the Made to Order mode.
 {%- endcomment -%}
+{%- assign zmm_fields = "Neck Open:26:35,Shoulder to Shoulder:26:37,Sleeve Length:52:68,Bust:76:117,Waist:76:124,Hip:86:136,Length:100:130" | split: ',' -%}
 {%- assign zmm_nocust = false -%}
 {%- if product.tags contains 'No Customisation' -%}{%- assign zmm_nocust = true -%}{%- endif -%}
 {%- comment -%}
@@ -135,7 +136,7 @@
   <div class="zmm__top">
     <div>
       <p class="zmm__head">{% if zmm_customonly %}Made to order{% elsif zmm_nocust %}Size{% else %}Choose your size{% endif %} <span class="req">*</span></p>
-      <p class="zmm__sub" data-zmm-sub>{% if zmm_customonly %}Cut to your own measurements. Our designer takes them with you at the fitting, so there is nothing to fill in here.{% elsif zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}Select Ready to Wear for our standard size, or Made to Order to have it cut to your measurements.{% endif %}</p>
+      <p class="zmm__sub" data-zmm-sub>{% if zmm_customonly %}Cut to your own measurements, in inches with the centimetre in brackets. Our designer confirms them with you at the fitting.{% elsif zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}Select Ready to Wear for our standard size, or Made to Order to have it cut to your measurements.{% endif %}</p>
     </div>
   </div>
 
@@ -246,14 +247,75 @@
   {%- comment -%} ===== CUSTOMIZED (visual) ===== {%- endcomment -%}
   {%- unless zmm_nocust -%}
   {%- comment -%}
-    Made to Order asks for nothing here (client, 2026-11-16: "all this measurement requirements
-    arnt needed"). It used to hold the couture sketch and ten half-inch dropdowns, neck open to
-    bottom open, with a counter and the numbered points lighting up as they were filled. The
-    atelier takes the measurements at the fitting instead, so the form does not. The script that
-    drove the sketch is all null-guarded, so it simply finds nothing now and does nothing.
+    Seven measurements, not ten (client, 2026-11-16: "the stricked sizes only remove not all").
+    Sleeve Loose, Sleeve Open and Bottom Open were struck off the screenshot: the three a
+    customer cannot take on themselves. The sketch lost their three points with them and the
+    rest are renumbered 1 to 7, so the circles still answer the fields beside them.
   {%- endcomment -%}
   <div class="zmm__panel" data-zmm-panel="custom" hidden>
-    <p class="zmm__hint">Cut to order for you. Our designer takes your measurements with you at the fitting, so there is nothing to fill in here.</p>
+    <div class="zmm__visual">
+      <div class="zmm__figure" aria-hidden="true">
+        <svg viewBox="0 0 300 500" fill="none" stroke="#151515" stroke-width="1.4" stroke-linejoin="round">
+          <!-- body A-line -->
+          <path d="M124 66 L176 66 L268 470 Q150 486 32 470 Z" fill="#faf7f2"/>
+          <!-- open front reveal -->
+          <path d="M148 92 L141 470 L159 470 L152 92 Z" fill="#efe7db"/>
+          <!-- sleeves -->
+          <path d="M124 66 L52 238 L80 252 L140 122 Z" fill="#faf7f2"/>
+          <path d="M176 66 L248 238 L220 252 L160 122 Z" fill="#faf7f2"/>
+          <!-- neckline + front edges -->
+          <path d="M138 64 L150 92 L162 64"/>
+          <path d="M148 92 L141 470M152 92 L159 470" stroke-width="1.1"/>
+          <!-- guide lines: bust / waist / hip / bottom -->
+          <g stroke="#d9c9a4" stroke-dasharray="4 4" stroke-width="1">
+            <path d="M114 154 H188"/><path d="M102 216 H202"/><path d="M80 302 H222"/><path d="M40 468 H260"/>
+          </g>
+          <!-- length arrow -->
+          <g stroke="#c9c1b4" stroke-width="1">
+            <path d="M22 74 L22 470" stroke-dasharray="3 5"/>
+            <path d="M18 80 L22 72 L26 80M18 464 L22 472 L26 464"/>
+          </g>
+          <g class="zmm__marks">
+            <g class="zmm__mark" data-zmm-mark="1"><circle cx="150" cy="80" r="10"/><text x="150" y="84" text-anchor="middle">1</text></g>
+            <g class="zmm__mark" data-zmm-mark="2"><circle cx="127" cy="71" r="10"/><text x="127" y="75" text-anchor="middle">2</text></g>
+            <g class="zmm__mark" data-zmm-mark="3"><circle cx="81" cy="209" r="10"/><text x="81" y="213" text-anchor="middle">3</text></g>
+            <g class="zmm__mark" data-zmm-mark="4"><circle cx="196" cy="154" r="10"/><text x="196" y="158" text-anchor="middle">4</text></g>
+            <g class="zmm__mark" data-zmm-mark="5"><circle cx="206" cy="216" r="10"/><text x="206" y="220" text-anchor="middle">5</text></g>
+            <g class="zmm__mark" data-zmm-mark="6"><circle cx="226" cy="302" r="10"/><text x="226" y="306" text-anchor="middle">6</text></g>
+            <g class="zmm__mark" data-zmm-mark="7"><circle cx="22" cy="272" r="10"/><text x="22" y="276" text-anchor="middle">7</text></g>
+          </g>
+        </svg>
+        <p class="zmm__figcap">Where we measure</p>
+      </div>
+
+      <div>
+        <p class="zmm__prog"><b data-zmm-count>0</b> of {{ zmm_fields.size }} measurements added <span class="zmm__fname" style="letter-spacing:.06em">&mdash; inches, with the centimetre in brackets</span></p>
+        <div class="zmm__fields">
+          {%- for f in zmm_fields -%}
+            {%- assign fp = f | split: ':' -%}
+            {%- assign flabel = fp[0] -%}
+            {%- assign hmin = fp[1] | plus: 0 -%}
+            {%- assign hmax = fp[2] | plus: 0 -%}
+            <div class="zmm__field" data-zmm-field="{{ forloop.index }}">
+              <div class="zmm__fhead">
+                <span class="zmm__num">{{ forloop.index }}</span>
+                <span class="zmm__fname">{{ flabel }}</span>
+              </div>
+              <select name="properties[{{ flabel }}]" data-zmm-req data-zmm-in="custom" data-zmm-field-select="{{ forloop.index }}" disabled>
+                <option value="">Select</option>
+                {%- for h in (hmin..hmax) -%}
+                  {%- assign whole = h | divided_by: 2 -%}
+                  {%- assign rem = h | modulo: 2 -%}
+                  {%- if rem == 0 -%}{%- capture lab -%}{{ whole }}{%- endcapture -%}{%- else -%}{%- capture lab -%}{{ whole }}.5{%- endcapture -%}{%- endif -%}
+                  {%- assign labcm = h | times: 1.27 | round: 0 -%}
+                  <option value="{{ lab }} in ({{ labcm }} cm)">{{ lab }} in ({{ labcm }} cm)</option>
+                {%- endfor -%}
+              </select>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
   </div>
   {%- endunless -%}
 
