@@ -1,0 +1,144 @@
+{%- comment -%}
+  Zaria — the matching sheila offered beside a jalabiya.
+
+  The client's own pairing (Zaria_Jalabiya_Sheila_Options.pdf, 111 pieces with two suggestions
+  each) is stored on the garment as custom.sheila_options, a list of product references, by
+  zaria-ops/sheila-options.mjs. Abayas are not in that list, and nothing is shown without it, so
+  this snippet is self-silencing: render it anywhere and it appears only where a pairing exists.
+
+  Nothing is pre-selected. A sheila is an extra thing to buy, not a default, so the customer
+  picks one or leaves it and the garment goes into the bag alone.
+
+  Usage: {% render 'zaria-sheila-addon', product: product %}
+{%- endcomment -%}
+
+{%- assign zsa_list = product.metafields.custom.sheila_options.value -%}
+{%- if zsa_list == blank or zsa_list.size == 0 -%}
+  {%- comment -%}No pairing for this piece. Nothing to offer.{%- endcomment -%}
+{%- else -%}
+
+<style>
+  .zsa{margin:22px 0 4px}
+  .zsa__head{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:#161616;margin:0 0 4px}
+  .zsa__head span{color:#a89f94;letter-spacing:.1em}
+  .zsa__sub{font-size:12.5px;line-height:1.55;color:#6a6a6a;margin:0 0 12px;max-width:62ch}
+  .zsa__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  @media(max-width:479px){.zsa__grid{grid-template-columns:1fr}}
+  .zsa__tile{position:relative;display:flex;align-items:center;gap:12px;text-align:left;
+    border:1px solid #e6e2db;background:#fff;padding:0;cursor:pointer;font-family:inherit;
+    transition:border-color .2s ease,box-shadow .2s ease}
+  .zsa__tile:hover{border-color:#b9b2a7}
+  .zsa__tile.is-on{border-color:var(--wine,#7a1f34);box-shadow:inset 0 0 0 1px var(--wine,#7a1f34)}
+  .zsa__tile img{display:block;width:78px;height:98px;object-fit:cover;background:#f6f4f1;flex:none}
+  .zsa__txt{display:flex;flex-direction:column;gap:3px;padding:10px 12px 10px 0;min-width:0}
+  .zsa__opt{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#a89f94}
+  .zsa__name{font-size:12.5px;line-height:1.35;color:#2a2a2a;overflow-wrap:anywhere}
+  .zsa__price{font-size:12.5px;color:#161616;letter-spacing:.03em}
+  {%- comment -%}The same white-ringed tick the fabric room uses, so a choice reads the same everywhere.{%- endcomment -%}
+  .zsa__tile.is-on::after{content:"";position:absolute;top:8px;right:8px;width:17px;height:17px;border-radius:50%;
+    background:var(--wine,#7a1f34) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 6.5 4.6 9 10 3.2'/%3E%3C/svg%3E") center/11px 11px no-repeat;
+    box-shadow:0 0 0 2px #fff}
+  .zsa__clear{display:inline-block;margin-top:10px;background:none;border:0;padding:0;font-family:inherit;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a89f94;cursor:pointer;text-decoration:underline;
+    text-underline-offset:3px}
+  .zsa__clear:hover{color:#161616}
+  .zsa__clear[hidden]{display:none}
+</style>
+
+<div class="zsa" data-zsa>
+  <p class="zsa__head">Add a matching sheila <span>optional</span></p>
+  <p class="zsa__sub">Two shades chosen to go with this piece. Pick one and it joins your order as its own line; leave it and the piece comes on its own.</p>
+
+  <div class="zsa__grid">
+    {%- for zsa_s in zsa_list -%}
+      {%- assign zsa_v = zsa_s.selected_or_first_available_variant -%}
+      {%- if zsa_v == blank -%}{%- continue -%}{%- endif -%}
+      <button type="button" class="zsa__tile" data-zsa-tile data-zsa-v="{{ zsa_v.id }}" data-zsa-title="{{ zsa_s.title | escape }}"
+        aria-pressed="false">
+        {%- if zsa_s.featured_image -%}
+          <img src="{{ zsa_s.featured_image | image_url: width: 240 }}" alt="{{ zsa_s.title | escape }}" loading="lazy" width="78" height="98">
+        {%- else -%}
+          <span class="zsa__noimg" style="width:78px;height:98px;background:#f1ece6;flex:none"></span>
+        {%- endif -%}
+        <span class="zsa__txt">
+          <span class="zsa__opt">Option {{ forloop.index }}</span>
+          <span class="zsa__name">{{ zsa_s.title | remove: 'Elegant ' | remove: ' Sheila' }}</span>
+          <span class="zsa__price">{{ zsa_v.price | money }}</span>
+        </span>
+      </button>
+    {%- endfor -%}
+  </div>
+
+  <button type="button" class="zsa__clear" data-zsa-clear hidden>No sheila, thank you</button>
+  {%- comment -%}
+    What the cart is told. The fabric room reads this input when it posts its own two lines,
+    and the script below posts it when the fabric room is not involved.
+  {%- endcomment -%}
+  <input type="hidden" data-zsa-variant value="">
+  <input type="hidden" data-zsa-for value="{{ product.title | escape }}">
+</div>
+
+<script>
+  (function () {
+    var root = document.currentScript && document.currentScript.previousElementSibling;
+    if (!root || !root.matches('[data-zsa]')) { root = document.querySelector('[data-zsa]'); }
+    if (!root) return;
+    var tiles = root.querySelectorAll('[data-zsa-tile]');
+    var field = root.querySelector('[data-zsa-variant]');
+    var clear = root.querySelector('[data-zsa-clear]');
+
+    function pick(v) {
+      field.value = v || '';
+      tiles.forEach(function (t) {
+        var on = !!v && t.getAttribute('data-zsa-v') === v;
+        t.classList.toggle('is-on', on);
+        t.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      if (clear) clear.hidden = !v;
+    }
+    tiles.forEach(function (t) {
+      t.addEventListener('click', function () {
+        var v = t.getAttribute('data-zsa-v');
+        pick(field.value === v ? '' : v);   // a second click takes it back off
+      });
+    });
+    if (clear) clear.addEventListener('click', function () { pick(''); });
+
+    // Two lines on the order: the piece, and the sheila beside it. The fabric room has its own
+    // handler on this form and runs first; when it has taken the submit over it adds the sheila
+    // line itself, so this one stands down on anything already prevented.
+    var form = root.closest('form');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      if (e.defaultPrevented) return;
+      if (!field.value) return;
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      var btn = form.querySelector('.zpdp__atc');
+      var label = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
+
+      var props = {};
+      new FormData(form).forEach(function (v, k) {
+        var m = /^properties\[(.+)\]$/.exec(k);
+        if (m && String(v).trim() !== '') props[m[1]] = v;
+      });
+      var id = form.querySelector('[name="id"]');
+      var qty = form.querySelector('[name="quantity"]');
+      var items = [
+        { id: id ? id.value : '', quantity: qty ? (parseInt(qty.value, 10) || 1) : 1, properties: props },
+        { id: field.value, quantity: 1, properties: { 'For': root.querySelector('[data-zsa-for]').value } }
+      ];
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ items: items })
+      })
+        .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
+        .then(function () { window.location.href = '/cart'; })
+        .catch(function () { if (btn) { btn.disabled = false; btn.textContent = label; } });
+    }, true);
+  })();
+</script>
+
+{%- endif -%}

@@ -625,6 +625,14 @@
         {%- endcomment -%}
         {%- if is_garment -%}{% render 'zaria-measure-form', product: product %}{%- endif -%}
         {%- if is_madetoorder and is_restock == false -%}{% render 'zaria-fabric-choice', product: product %}{%- endif -%}
+        {%- comment -%}
+          The matching sheila. It renders itself only where the client's pairing exists, which
+          is the 111 jalabiyas and no abaya, so there is no condition to keep in step here.
+          After the fabric room on purpose: the cloth decides what the piece is, the sheila is
+          the thing you add to it, and its script leans on the fabric room's handler running
+          first on the same form.
+        {%- endcomment -%}
+        {%- if is_garment and is_restock == false -%}{% render 'zaria-sheila-addon', product: product %}{%- endif -%}
 
         {%- comment -%}
           Nothing sits between the attributes and this row on a cloth page: a bolt bought on

@@ -486,6 +486,14 @@
         { id: id ? id.value : '', quantity: n, properties: props },
         { id: String(chosen.v), quantity: units(metres), properties: { 'For': root.getAttribute('data-zfc-title') || '', 'Length': tidy(metres) + ' m', 'Request': 'Cut for a made-to-order piece' } }
       ];
+      // A matching sheila, if one was picked. It lives in its own snippet with its own submit
+      // handler, which stands down once this one has taken the submit over, so the line has to
+      // be added here instead or it would be lost.
+      var sheila = document.querySelector('[data-zsa-variant]');
+      if (sheila && sheila.value) {
+        var sfor = document.querySelector('[data-zsa-for]');
+        items.push({ id: sheila.value, quantity: n, properties: { 'For': sfor ? sfor.value : '' } });
+      }
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
