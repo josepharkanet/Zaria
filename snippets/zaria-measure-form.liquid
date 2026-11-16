@@ -30,6 +30,14 @@
 {%- endcomment -%}
 {%- assign zmm_nocust = false -%}
 {%- if product.tags contains 'No Customisation' -%}{%- assign zmm_nocust = true -%}{%- endif -%}
+{%- comment -%}
+  No comment box on a finished piece (client, 2026-11-16). It is cut, sewn and sitting on the
+  rail, so there is nothing a preference or a deadline can change about it, and asking invites a
+  request the atelier cannot honour. It stays on the made-to-order side, where the note is read
+  before the piece is cut. The Sheila choice on an abaya is a real option either way and keeps
+  its place in the same panel.
+{%- endcomment -%}
+{%- if zmm_nocust -%}{%- assign zmm_show_comment = false -%}{%- endif -%}
 
 {%- comment -%}
   field spec: "Label:half-inch-min:half-inch-max" (value = h / 2, so half-inch steps). Order =
@@ -313,6 +321,7 @@
   {%- endunless -%}
 
   {%- comment -%} ===== SHEILA (abayas) + COMMENT ===== {%- endcomment -%}
+  {%- if zmm_is_abaya or zmm_show_comment -%}
   <div class="zmm__panel" data-zmm-panel="extra" hidden>
     <div class="zmm__fields" style="margin-top:14px">
       {%- if zmm_is_abaya -%}
@@ -331,9 +340,15 @@
       </div>
       {%- endif -%}
     </div>
-    {%- comment -%} Only true of the Customized side, so it is shown only there. {%- endcomment -%}
-    {%- unless zmm_nocust -%}<p class="zmm__hint" data-zmm-customnote hidden>Made to order. Customized pieces are cut to your measurements and cannot be exchanged for fit.</p>{%- endunless -%}
   </div>
+  {%- endif -%}
+  {%- comment -%}
+    Only true of the Customized side, so it is shown only there. It sits outside the panel
+    above because that panel is not always rendered: the design brief asks for this form with
+    show_comment false, and on a piece that is not an abaya there would be nothing left to
+    hold the note. The script finds it from the form root, not from the panel.
+  {%- endcomment -%}
+  {%- unless zmm_nocust -%}<p class="zmm__hint" data-zmm-customnote hidden>Made to order. Customized pieces are cut to your measurements and cannot be exchanged for fit.</p>{%- endunless -%}
 </div>
 
 <script>
