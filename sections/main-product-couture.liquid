@@ -289,9 +289,13 @@
 
   /* attribute list */
   #shopify-section-{{ section.id }} .zpdp__attrs{background:#fff;border:1px solid #ece8e2;margin:6px 0 30px;overflow:hidden}
-  #shopify-section-{{ section.id }} .zpdp__attrrow{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
-  #shopify-section-{{ section.id }} .zpdp__attrrow + .zpdp__attrrow{border-top:1px solid #ece8e2}
-  #shopify-section-{{ section.id }} .zpdp__attr + .zpdp__attr{border-left:1px solid #ece8e2}
+  /* The facts sit side by side and drop to the next line only when they will not fit
+     (client, 2026-11-16: "may arrange on one line, if more items bring down"). auto-fit
+     collapses the tracks it does not need, so two facts take half the width each and one
+     takes all of it, with no empty cell left over. The hairlines between them are the 1px
+     gap showing the container through, which is the only way to rule a grid that wraps:
+     a border on the cell would draw down the left of every new line. */
+  #shopify-section-{{ section.id }} .zpdp__attrrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:#ece8e2}
   {%- comment -%}Label and value on one line: the strip was three lines tall for two words.{%- endcomment -%}
   #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:center;gap:9px;padding:11px 14px;min-width:0;background:#fff}
   #shopify-section-{{ section.id }} .zpdp__attr>span:last-child{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;min-width:0}
@@ -496,9 +500,10 @@
       {%- endif -%}
 
       {%- if has_attrs -%}
-      {%- comment -%}Two rows by intent, not by wrapping: who wove the cloth and where it
-         comes from on top, what it is below. Each row shares its width equally, however many
-         cells it holds.{%- endcomment -%}
+      {%- comment -%}One run of facts, laid side by side and wrapping only when they will not
+         fit. They used to be split into two rows by intent, cloth and origin above, what it
+         is below, which left a garment with one fact stacked over another and the strip
+         twice as tall as it needed to be.{%- endcomment -%}
       <div class="zpdp__attrs">
         {%- if is_fragrance -%}
           <div class="zpdp__attrrow">
@@ -528,7 +533,7 @@
           {%- endif -%}
           </div>
         {%- else -%}
-          {%- if z_make != blank or origin != blank -%}
+          {%- if z_make != blank or origin != blank or ftype != blank or colours != blank or patterns != blank -%}
           <div class="zpdp__attrrow">
           {%- if z_make != blank -%}
           <div class="zpdp__attr">
@@ -549,10 +554,6 @@
             <span><span class="zpdp__attr-l">Origin</span><span class="zpdp__attr-v">{{ origin }}</span></span>
           </div>
           {%- endif -%}
-          </div>
-          {%- endif -%}
-          {%- if ftype != blank or colours != blank or patterns != blank -%}
-          <div class="zpdp__attrrow">
           {%- if ftype != blank -%}
           <div class="zpdp__attr">
             <span class="zpdp__attr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7c3-2.5 6 2.5 9 0s6-2.5 9 0M3 12c3-2.5 6 2.5 9 0s6-2.5 9 0M3 17c3-2.5 6 2.5 9 0s6-2.5 9 0"/></svg></span>
