@@ -12,6 +12,14 @@
   Usage: {% render 'zaria-sheila-addon', product: product %}
 {%- endcomment -%}
 
+{%- comment -%}
+  The sheilas we hold a rolled-scarf mockup for, as assets/zsheila-<handle>.jpg. Liquid cannot
+  ask whether an asset exists, and asset_url happily returns a URL for a file that is not
+  there, so the list has to be written out. Add a handle here when you add the picture, or
+  the tile will point at nothing. The pictures came out of the client's own PDF, one per
+  sheila, read from the rectangle each VIEW link covers and saved at 560px.
+{%- endcomment -%}
+{%- assign zsa_mockups = 'elegant-blush-pink-sheila,elegant-camel-beige-sheila,elegant-charcoal-grey-sheila,elegant-chocolate-brown-sheila,elegant-classic-black-sheila,elegant-deep-burgundy-sheila,elegant-deep-plum-sheila,elegant-deep-teal-sheila,elegant-dusty-coral-pink-sheila,elegant-dusty-mauve-sheila,elegant-dusty-pink-sheila,elegant-forest-green-sheila,elegant-fuchsia-pink-sheila,elegant-ivory-cream-sheila,elegant-lilac-sheila,elegant-lime-green-sheila,elegant-midnight-blue-sheila,elegant-mint-green-sheila,elegant-mustard-yellow-sheila,elegant-navy-blue-sheila,elegant-olive-green-sheila,elegant-pastel-aqua-blue-sheila,elegant-pastel-yellow-sheila,elegant-pure-white-sheila,elegant-rose-pink-sheila,elegant-royal-blue-sheila,elegant-royal-purple-sheila,elegant-sage-green-sheila,elegant-sky-blue-sheila,elegant-soft-lavender-sheila,elegant-taupe-beige-sheila,elegant-turquoise-blue-sheila,elegant-vibrant-orange-sheila-1' | split: ',' -%}
 {%- assign zsa_list = product.metafields.custom.sheila_options.value -%}
 {%- if zsa_list == blank or zsa_list.size == 0 -%}
   {%- comment -%}No pairing for this piece. Nothing to offer.{%- endcomment -%}
@@ -24,16 +32,21 @@
   .zsa__sub{font-size:12.5px;line-height:1.55;color:#6a6a6a;margin:0 0 12px;max-width:62ch}
   .zsa__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   @media(max-width:479px){.zsa__grid{grid-template-columns:1fr}}
-  .zsa__tile{position:relative;display:flex;align-items:center;gap:12px;text-align:left;
+  .zsa__tile{position:relative;display:flex;align-items:center;gap:14px;text-align:left;
     border:1px solid #e6e2db;background:#fff;padding:0;cursor:pointer;font-family:inherit;
     transition:border-color .2s ease,box-shadow .2s ease}
   .zsa__tile:hover{border-color:#b9b2a7}
   .zsa__tile.is-on{border-color:var(--wine,#7a1f34);box-shadow:inset 0 0 0 1px var(--wine,#7a1f34)}
-  .zsa__tile img{display:block;width:78px;height:98px;object-fit:cover;background:#f6f4f1;flex:none}
-  .zsa__txt{display:flex;flex-direction:column;gap:3px;padding:10px 12px 10px 0;min-width:0}
+  {%- comment -%}
+    The scarf mockups are square, so the well is square too: cropping one to a portrait slot
+    cut the rolled end off and the tile stopped saying "scarf".
+  {%- endcomment -%}
+  .zsa__tile img{display:block;width:132px;height:132px;object-fit:cover;background:#f6f4f1;flex:none}
+  @media(max-width:479px){.zsa__tile img{width:112px;height:112px}}
+  .zsa__txt{display:flex;flex-direction:column;gap:4px;padding:12px 14px 12px 0;min-width:0}
   .zsa__opt{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#a89f94}
-  .zsa__name{font-size:12.5px;line-height:1.35;color:#2a2a2a;overflow-wrap:anywhere}
-  .zsa__price{font-size:12.5px;color:#161616;letter-spacing:.03em}
+  .zsa__name{font-size:14px;line-height:1.35;color:#2a2a2a;overflow-wrap:anywhere}
+  .zsa__price{font-size:13px;color:#161616;letter-spacing:.03em}
   {%- comment -%}The same white-ringed tick the fabric room uses, so a choice reads the same everywhere.{%- endcomment -%}
   .zsa__tile.is-on::after{content:"";position:absolute;top:8px;right:8px;width:17px;height:17px;border-radius:50%;
     background:var(--wine,#7a1f34) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 6.5 4.6 9 10 3.2'/%3E%3C/svg%3E") center/11px 11px no-repeat;
@@ -55,10 +68,26 @@
       {%- if zsa_v == blank -%}{%- continue -%}{%- endif -%}
       <button type="button" class="zsa__tile" data-zsa-tile data-zsa-v="{{ zsa_v.id }}" data-zsa-title="{{ zsa_s.title | escape }}"
         aria-pressed="false">
-        {%- if zsa_s.featured_image -%}
-          <img src="{{ zsa_s.featured_image | image_url: width: 240 }}" alt="{{ zsa_s.title | escape }}" loading="lazy" width="78" height="98">
+        {%- comment -%}
+          The rolled-scarf mockups out of the client's own PDF, shipped with the theme as
+          assets/zsheila-<handle>.jpg (client, 2026-11-16: "extract images from pdf and use
+          that"). They show the cloth itself rather than a model wearing a whole outfit, which
+          is what the shopper is choosing between here. A sheila with no mockup falls back to
+          its own product photograph, so a new colour is never a hole in the row.
+        {%- endcomment -%}
+        {%- assign zsa_file = 'zsheila-' | append: zsa_s.handle | append: '.jpg' -%}
+        {%- assign zsa_src = zsa_file | asset_url -%}
+        {%- unless zsa_mockups contains zsa_s.handle -%}
+          {%- if zsa_s.featured_image -%}
+            {%- assign zsa_src = zsa_s.featured_image | image_url: width: 320 -%}
+          {%- else -%}
+            {%- assign zsa_src = '' -%}
+          {%- endif -%}
+        {%- endunless -%}
+        {%- if zsa_src != blank -%}
+          <img src="{{ zsa_src }}" alt="{{ zsa_s.title | escape }}" loading="lazy" width="132" height="132">
         {%- else -%}
-          <span class="zsa__noimg" style="width:78px;height:98px;background:#f1ece6;flex:none"></span>
+          <span class="zsa__noimg" style="width:132px;height:132px;background:#f1ece6;flex:none"></span>
         {%- endif -%}
         <span class="zsa__txt">
           <span class="zsa__opt">Option {{ forloop.index }}</span>
