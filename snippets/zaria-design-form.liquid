@@ -75,6 +75,10 @@
   .zdf-overlay.zdf--inline{position:static;inset:auto;z-index:auto;display:none;background:none;
     overflow:visible;padding:0;margin-top:26px}
   .zdf-overlay.zdf--inline.is-open{display:block}
+  .zdf-overlay.zdf--inline,
+  .zdf-overlay.zdf--inline .zdf-modal,
+  .zdf-overlay.zdf--inline .zdf-form,
+  .zdf-overlay.zdf--inline .zdf-field{min-width:0}
   .zdf-overlay.zdf--inline .zdf-modal{max-width:none;width:auto;margin:0;padding:0;box-shadow:none}
   .zdf-overlay.zdf--inline .zdf-close{display:none}
   .zdf-overlay.zdf--inline .zdf-eyebrow{margin-bottom:6px}
@@ -93,14 +97,20 @@
      - big enough to judge a garment by - and each carries what the making costs. */
   .zdf-field label span{letter-spacing:.08em;text-transform:none;color:#a0a0a0}
   .zdf-field label .zdf-req{color:var(--wine,#7a1f34);letter-spacing:0}
-  .zdf-carousel{position:relative}
+  .zdf-carousel{position:relative;min-width:0}
   {%- comment -%}No scroll-behavior:smooth here: inside a modal that has only just been shown,
      the browser quietly refuses the animated scroll and the row never moves. The arrows animate
      it themselves.{%- endcomment -%}
-  .zdf-picks{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;
+  .zdf-picks{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;min-width:0;
     scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .zdf-picks::-webkit-scrollbar{display:none}
-  .zdf-pick{position:relative;flex:0 0 calc((100% - 20px) / 3);scroll-snap-align:start;border:1px solid #e6e2db;
+  {%- comment -%}
+    min-width:0 matters more than it looks. A flex item's automatic minimum is its content, and
+    the content here is a photograph, so each tile insisted on its picture's own width and the
+    row asked for 724px it was never given. The row scrolls; a tile may be narrower than its
+    photograph.
+  {%- endcomment -%}
+  .zdf-pick{position:relative;flex:0 0 calc((100% - 20px) / 3);min-width:0;scroll-snap-align:start;border:1px solid #e6e2db;
     background:#fff;padding:0 0 8px;cursor:pointer;font-family:inherit;text-align:center;
     transition:border-color .2s ease,box-shadow .2s ease}
   .zdf-pick:hover{border-color:#b9b2a7}
