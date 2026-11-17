@@ -69,24 +69,27 @@
     {%- for zsa_s in zsa_list -%}
       {%- assign zsa_v = zsa_s.selected_or_first_available_variant -%}
       {%- if zsa_v == blank -%}{%- continue -%}{%- endif -%}
+      {%- comment -%}
+        The rolled-scarf mockups out of the client's own PDF, shipped with the theme as
+        assets/zsheila-<handle>.jpg (client, 2026-11-16: "extract images from pdf and use
+        that"). They show the cloth itself rather than a model wearing a whole outfit, which
+        is what the shopper is choosing between here. A sheila with no mockup falls back to
+        its own product photograph, so a new colour is never a hole in the row.
+
+        Worked out before the button, not inside it, because the button carries the same url in
+        data-zsa-img: the bag is then shown the picture the choice was made from.
+      {%- endcomment -%}
+      {%- assign zsa_file = 'zsheila-' | append: zsa_s.handle | append: '.jpg' -%}
+      {%- assign zsa_src = zsa_file | asset_url -%}
+      {%- unless zsa_mockups contains zsa_s.handle -%}
+        {%- if zsa_s.featured_image -%}
+          {%- assign zsa_src = zsa_s.featured_image | image_url: width: 320 -%}
+        {%- else -%}
+          {%- assign zsa_src = '' -%}
+        {%- endif -%}
+      {%- endunless -%}
       <button type="button" class="zsa__tile" data-zsa-tile data-zsa-v="{{ zsa_v.id }}" data-zsa-title="{{ zsa_s.title | escape }}"
-        data-zsa-price="{{ zsa_v.price }}" aria-pressed="false">
-        {%- comment -%}
-          The rolled-scarf mockups out of the client's own PDF, shipped with the theme as
-          assets/zsheila-<handle>.jpg (client, 2026-11-16: "extract images from pdf and use
-          that"). They show the cloth itself rather than a model wearing a whole outfit, which
-          is what the shopper is choosing between here. A sheila with no mockup falls back to
-          its own product photograph, so a new colour is never a hole in the row.
-        {%- endcomment -%}
-        {%- assign zsa_file = 'zsheila-' | append: zsa_s.handle | append: '.jpg' -%}
-        {%- assign zsa_src = zsa_file | asset_url -%}
-        {%- unless zsa_mockups contains zsa_s.handle -%}
-          {%- if zsa_s.featured_image -%}
-            {%- assign zsa_src = zsa_s.featured_image | image_url: width: 320 -%}
-          {%- else -%}
-            {%- assign zsa_src = '' -%}
-          {%- endif -%}
-        {%- endunless -%}
+        data-zsa-price="{{ zsa_v.price }}" data-zsa-img="{{ zsa_src }}" aria-pressed="false">
         {%- if zsa_src != blank -%}
           <img src="{{ zsa_src }}" alt="{{ zsa_s.title | escape }}" loading="lazy" width="132" height="132">
         {%- else -%}
@@ -143,6 +146,17 @@
     // Two lines on the order: the piece, and the sheila beside it. The fabric room has its own
     // handler on this form and runs first; when it has taken the submit over it adds the sheila
     // line itself, so this one stands down on anything already prevented.
+    // What the bag is told about the sheila: which piece it is for, and the picture it was
+    // chosen from, so the line does not come back as a model in a whole outfit.
+    function zsaProps() {
+      var out = { 'For': root.querySelector('[data-zsa-for]').value };
+      var t = root.querySelector('[data-zsa-tile][data-zsa-v="' + field.value + '"]');
+      var img = t && t.getAttribute('data-zsa-img');
+      if (img) out._mockup = img;
+      return out;
+    }
+    window.zariaSheilaProps = zsaProps;
+
     if (root.hasAttribute('data-zsa-passive')) return;
     var form = root.closest('form');
     if (!form) return;
@@ -164,7 +178,7 @@
       var qty = form.querySelector('[name="quantity"]');
       var items = [
         { id: id ? id.value : '', quantity: qty ? (parseInt(qty.value, 10) || 1) : 1, properties: props },
-        { id: field.value, quantity: 1, properties: { 'For': root.querySelector('[data-zsa-for]').value } }
+        { id: field.value, quantity: 1, properties: zsaProps() }
       ];
       fetch('/cart/add.js', {
         method: 'POST',

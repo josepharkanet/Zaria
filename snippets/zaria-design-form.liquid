@@ -717,7 +717,13 @@
       // And a third, when a sheila was chosen to go with it.
       if (zsaField && zsaField.value) {
         items.push({ id: zsaField.value, quantity: PIECES,
-                     properties: { 'For': (form.getAttribute('data-zdf-fabric') || '') + (designTitle ? ' \u00b7 ' + designTitle : '') } });
+                     properties: (function () {
+                       var pr = { 'For': (form.getAttribute('data-zdf-fabric') || '') + (designTitle ? ' \u00b7 ' + designTitle : '') };
+                       var t = overlay.querySelector('[data-zsa-tile][data-zsa-v="' + zsaField.value + '"]');
+                       var img = t && t.getAttribute('data-zsa-img');
+                       if (img) pr._mockup = img;
+                       return pr;
+                     })() });
       }
 
       fetch('{{ routes.cart_add_url }}.js', {
