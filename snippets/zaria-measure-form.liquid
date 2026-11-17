@@ -293,9 +293,14 @@
           <!-- neckline + front edges -->
           <path d="M138 64 L150 92 L162 64"/>
           <path d="M148 92 L141 470M152 92 L159 470" stroke-width="1.1"/>
-          <!-- guide lines: bust / waist / hip / bottom -->
+          <!-- guide lines: the line each measurement is taken along -->
           <g stroke="#d9c9a4" stroke-dasharray="4 4" stroke-width="1">
+            <!-- bust / waist / hip / bottom -->
             <path d="M114 154 H188"/><path d="M102 216 H202"/><path d="M80 302 H222"/><path d="M40 468 H260"/>
+            <!-- neck wide, across the opening; neck deep, down the middle of it -->
+            <path d="M138 64 H162"/><path d="M150 64 V92"/>
+            <!-- armhole, the seam where the sleeve meets the body -->
+            <path d="M124 66 L140 122"/><path d="M176 66 L160 122"/>
           </g>
           <!-- length arrow -->
           <g stroke="#c9c1b4" stroke-width="1">
@@ -303,14 +308,14 @@
             <path d="M18 80 L22 72 L26 80M18 464 L22 472 L26 464"/>
           </g>
           <g class="zmm__marks">
-            <g class="zmm__mark" data-zmm-mark="1"><circle cx="150" cy="86" r="10"/><text x="150" y="90" text-anchor="middle">1</text></g>
-            <g class="zmm__mark" data-zmm-mark="2"><circle cx="170" cy="60" r="10"/><text x="170" y="64" text-anchor="middle">2</text></g>
-            <g class="zmm__mark" data-zmm-mark="3"><circle cx="104" cy="124" r="10"/><text x="104" y="128" text-anchor="middle">3</text></g>
-            <g class="zmm__mark" data-zmm-mark="4"><circle cx="122" cy="60" r="10"/><text x="122" y="64" text-anchor="middle">4</text></g>
-            <g class="zmm__mark" data-zmm-mark="5"><circle cx="196" cy="154" r="10"/><text x="196" y="158" text-anchor="middle">5</text></g>
-            <g class="zmm__mark" data-zmm-mark="6"><circle cx="206" cy="216" r="10"/><text x="206" y="220" text-anchor="middle">6</text></g>
-            <g class="zmm__mark" data-zmm-mark="7"><circle cx="226" cy="302" r="10"/><text x="226" y="306" text-anchor="middle">7</text></g>
-            <g class="zmm__mark" data-zmm-mark="8"><circle cx="22" cy="272" r="10"/><text x="22" y="276" text-anchor="middle">8</text></g>
+            <g class="zmm__mark" data-zmm-mark="1"><!-- neck deep: inside the V, on the drop itself --><circle cx="150" cy="86" r="10"/><text x="150" y="90" text-anchor="middle">1</text></g>
+            <g class="zmm__mark" data-zmm-mark="2"><!-- neck wide: above the chord across the opening --><circle cx="150" cy="44" r="10"/><text x="150" y="48" text-anchor="middle">2</text></g>
+            <g class="zmm__mark" data-zmm-mark="3"><!-- armhole: on the armscye seam, halfway down it --><circle cx="137" cy="112" r="10"/><text x="137" y="116" text-anchor="middle">3</text></g>
+            <g class="zmm__mark" data-zmm-mark="4"><!-- shoulder: the shoulder line, at its outer point --><circle cx="180" cy="54" r="10"/><text x="180" y="58" text-anchor="middle">4</text></g>
+            <g class="zmm__mark" data-zmm-mark="5"><!-- bust: the end of the bust guide --><circle cx="190" cy="154" r="10"/><text x="190" y="158" text-anchor="middle">5</text></g>
+            <g class="zmm__mark" data-zmm-mark="6"><!-- waist: the end of the waist guide --><circle cx="204" cy="216" r="10"/><text x="204" y="220" text-anchor="middle">6</text></g>
+            <g class="zmm__mark" data-zmm-mark="7"><!-- hips: the end of the hip guide --><circle cx="224" cy="302" r="10"/><text x="224" y="306" text-anchor="middle">7</text></g>
+            <g class="zmm__mark" data-zmm-mark="8"><!-- length: the arrow down the side --><circle cx="22" cy="272" r="10"/><text x="22" y="276" text-anchor="middle">8</text></g>
           </g>
         </svg>
         <p class="zmm__figcap">Where we measure</p>
