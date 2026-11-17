@@ -608,7 +608,18 @@
   // happen: the length, the running total and the carousel's arrows are all set up there.
   var INLINE = overlay.classList.contains('zdf--inline');
   if (INLINE) {
-    readLength(); applyLength(); retotal(); setTimeout(refreshNav, 80);
+    // Deferred and guarded on purpose. open() used to run this after a click, with the page
+    // long since parsed; here it would run mid-parse, and anything it threw would take the
+    // rest of this script with it, including the submit handler below.
+    var startInline = function () {
+      try { readLength(); applyLength(); retotal(); } catch (err) {}
+      setTimeout(refreshNav, 80);
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startInline);
+    } else {
+      setTimeout(startInline, 0);
+    }
   } else {
     openers.forEach(function(b){ b.addEventListener('click', open); });
     overlay.querySelectorAll('[data-zdf-close]').forEach(function(b){ b.addEventListener('click', close); });
