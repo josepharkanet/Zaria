@@ -115,7 +115,14 @@
   .zmm__figure{position:sticky;top:14px}
   .zmm__figure svg{width:100%;height:auto;display:block}
   .zmm__figsay{font-size:11px;line-height:1.55;color:var(--zf-hint,#8a8178);margin:8px 0 0;text-align:center}
+  .zmm__guidewrap{position:relative;line-height:0}
   .zmm__guide{display:block;width:100%;height:auto}
+  .zmm__dot{position:absolute;width:5.6%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;background:var(--wine,#7a1f34);color:#fff;
+    font-family:inherit;font-size:clamp(8px,1.05vw,11px);line-height:1;opacity:0;pointer-events:none;
+    transition:opacity .2s ease,box-shadow .2s ease}
+  .zmm__dot.is-done{opacity:1}
+  .zmm__dot.is-active{opacity:1;box-shadow:0 0 0 4px rgba(122,31,52,.16)}
   .zmm__figcap{text-align:center;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#a79f93;margin:10px 0 0}
   .zmm__mark{transition:transform .18s ease}
   .zmm__mark circle{fill:#fff;stroke:#c9a86a;stroke-width:1.4;transition:fill .18s ease,stroke .18s ease}
@@ -314,7 +321,26 @@
           simply finds nothing. If that interaction is ever wanted back, the drawing has to
           become an SVG again, with their file as the thing to trace.
         {%- endcomment -%}
-        <img src="{{ 'zaria-measure-guide.png' | asset_url }}" alt="Where each measurement is taken on the jalabiya" loading="lazy" width="567" height="912" class="zmm__guide">
+        <div class="zmm__guidewrap">
+          <img src="{{ 'zaria-measure-guide.png' | asset_url }}" alt="Where each measurement is taken on the jalabiya" loading="lazy" width="567" height="912" class="zmm__guide">
+          {%- comment -%}
+            A live dot sits exactly over each printed one, so a measurement fills in on the
+            drawing as it is answered (client, 2026-11-17: "the dot fill dynamically"). The
+            numbers are baked into the artwork and cannot change, so these cover them rather
+            than replace them. Their positions were measured off the file itself, as a
+            percentage of its width and height, so they hold at any size the column takes.
+            They carry data-zmm-mark, which is what the script already looks for.
+          {%- endcomment -%}
+          <span class="zmm__dot" data-zmm-mark="1" style="left:64.85%;top:15.82%" aria-hidden="true">1</span>
+          <span class="zmm__dot" data-zmm-mark="2" style="left:54.11%;top:5.72%" aria-hidden="true">2</span>
+          <span class="zmm__dot" data-zmm-mark="3" style="left:18.5%;top:22.86%" aria-hidden="true">3</span>
+          <span class="zmm__dot" data-zmm-mark="4" style="left:81.73%;top:19.26%" aria-hidden="true">4</span>
+          <span class="zmm__dot" data-zmm-mark="5" style="left:54.55%;top:28.5%" aria-hidden="true">5</span>
+          <span class="zmm__dot" data-zmm-mark="6" style="left:53.95%;top:39.16%" aria-hidden="true">6</span>
+          <span class="zmm__dot" data-zmm-mark="7" style="left:54.48%;top:53.31%" aria-hidden="true">7</span>
+          <span class="zmm__dot" data-zmm-mark="8" style="left:4.76%;top:66.34%" aria-hidden="true">8</span>
+          <span class="zmm__dot" data-zmm-mark="9" style="left:74.64%;top:3.17%" aria-hidden="true">9</span>
+        </div>
         <p class="zmm__figcap">Where we measure</p>
         {%- comment -%}The two things the client's guide asks for before a tape is picked up.{%- endcomment -%}
         <p class="zmm__figsay">Lay a well-fitting jalabiya flat and smooth before measuring.<br>
