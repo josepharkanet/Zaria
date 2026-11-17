@@ -206,10 +206,19 @@
     <p class="zdf-eyebrow">The Design Studio</p>
     <h2 class="zdf-title">Design your look</h2>
     <p class="zdf-lede">Tell us the piece you have in mind in this fabric. The cloth and the making are added to your order as two lines, and a designer follows up to refine the design and confirm measurements.</p>
+    {%- comment -%}
+      Which cloth the brief is for, named only where it is not already obvious. In the page it
+      sits on that bolt's own product page, under its own title and its own photograph, so
+      saying it again is a line of noise (client, 2026-11-17: "this no need again, it is already
+      on top as customer selected"). The cloth still travels with the order either way: the
+      handle is a hidden field and the title an attribute on the form.
+    {%- endcomment -%}
+    {%- unless inline -%}
     <div class="zdf-fabric">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8c3 0 3 2 6 2s3-2 6-2 3 2 6 2M3 14c3 0 3 2 6 2s3-2 6-2 3 2 6 2"/></svg>
       <span>In <b>{{ product.title }}</b></span>
     </div>
+    {%- endunless -%}
 
     {%- comment -%}The brief is a cart line first and a designer's job second: it is added to
       the order here, and the same answers are posted to the studio board so the designer sees
