@@ -163,6 +163,15 @@
     .zmm__figure{position:static;max-width:190px;margin:0 auto}
     .zmm__fields{grid-template-columns:1fr}
   }
+  {%- comment -%}
+    Between a large phone and a small tablet the drawing is stacked above the fields and had
+    nothing but white on either side of it. The guide is the thing a customer measures against,
+    so where there is room it takes it: still centred, simply larger. The dots are placed as
+    percentages, so they follow it up without a number being touched.
+  {%- endcomment -%}
+  @media (min-width:480px) and (max-width:620px){
+    .zmm__figure{max-width:268px}
+  }
 </style>
 
 <div class="zmm" data-zmm{% if zmm_nocust %} data-zmm-readyonly{% endif %}{% if zmm_customonly %} data-zmm-customonly{% endif %}>
