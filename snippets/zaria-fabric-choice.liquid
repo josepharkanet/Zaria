@@ -117,6 +117,15 @@
   {%- comment -%}What the cloth was, beside what it is, the order the shop keeps everywhere.{%- endcomment -%}
   .zfc__sum s{color:#a89f94;text-decoration:line-through;margin-right:7px}
   .zfc__sum [data-zfc-save] {color:var(--wine,#7a1f34)}
+  .zfc__sum .zfc__pcrow{align-items:center}
+  .zfc__pc{display:inline-flex;align-items:center;border:1px solid var(--zf-line,#e6e2db);background:#fff}
+  .zfc__pc button{width:30px;height:30px;border:0;background:none;font-family:inherit;font-size:15px;line-height:1;
+    color:#161616;cursor:pointer}
+  .zfc__pc button:disabled{color:#c9c2b8;cursor:default}
+  .zfc__pc input{width:38px;height:30px;min-height:0;border:0;background:none;padding:0;text-align:center;
+    font-family:inherit;font-size:13px;color:#161616;-moz-appearance:textfield}
+  .zfc__pc input::-webkit-outer-spin-button,.zfc__pc input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .zfc__pc input:focus{outline:none;background:#f4f1ec}
   .zfc__sum .zfc__tot{border-top:1px solid #ece8e2;margin-top:6px;padding-top:8px;color:#161616}
   .zfc__sum .zfc__tot span:last-child{font-size:15px}
   .zfc__warn{font-size:12.5px;color:var(--wine,#7a1f34);margin:10px 0 0}
@@ -160,11 +169,25 @@
   {%- endcomment -%}
   {%- render 'zaria-sheila-addon', product: product, passive: true -%}
 
+  {%- comment -%}
+    The summary reads like the design brief's: the length it is cut to, the number of pieces
+    with its own stepper, then what each part costs (client, 2026-11-17). The stepper is the
+    page's own quantity box under another face - it writes to it and lets everything else
+    react - so there are two ways to say the same thing and never two answers.
+  {%- endcomment -%}
   <div class="zfc__sum">
+    <div><span>Length</span><span data-zfc-sum-len>In the measurements below</span></div>
+    <div class="zfc__pcrow"><span>Pieces</span>
+      <span class="zfc__pc" data-zfc-pc>
+        <button type="button" data-zfc-pcstep="-1" aria-label="One piece fewer">&minus;</button>
+        <input type="number" min="1" step="1" value="1" data-zfc-pcn aria-label="Pieces" inputmode="numeric">
+        <button type="button" data-zfc-pcstep="1" aria-label="One piece more">+</button>
+      </span>
+    </div>
     <div><span data-zfc-sum-fl>Fabric</span><span data-zfc-sum-f>Not chosen yet</span></div>
     <div data-zfc-save-row hidden><span>You save</span><span data-zfc-save></span></div>
     <div><span>Design &amp; tailoring</span><span data-zfc-sum-d></span></div>
-    <div data-zsa-sumrow hidden><span>Matching sheila</span><span data-zsa-sumv></span></div>
+    <div data-zsa-sumrow hidden><span data-zsa-sumlab>Matching sheila</span><span data-zsa-sumv></span></div>
     <div class="zfc__tot"><span>Total</span><span data-zfc-sum-t></span></div>
   </div>
   <p class="zfc__warn" data-zfc-warn hidden>Please choose the fabric this piece is cut from.</p>
@@ -309,6 +332,18 @@
   function retotal() {
     var m = MIN * pieces();
     root.querySelector('[data-zfc-sum-d]').textContent = money(DESIGN * pieces());
+    // The length it is cut to, said the way the brief says it.
+    var lenCell = root.querySelector('[data-zfc-sum-len]');
+    if (lenCell) {
+      var inch = lengthInches();
+      lenCell.textContent = inch
+        ? inch + ' in (' + Math.round(inch * 2.54) + ' cm) \u00b7 ' + tidy(MIN) + ' m'
+        : 'In the measurements below';
+    }
+    if (pcN && pcN.value !== String(pieces())) pcN.value = pieces();
+    var pcDown = root.querySelector('[data-zfc-pcstep="-1"]');
+    if (pcDown) pcDown.disabled = pieces() <= 1;
+
     if (needSay) {
       needSay.textContent = tidy(NEED) + ' m' +
         (MIN !== NEED ? ', cut as ' + tidy(MIN) + ' m' : '') +
@@ -333,8 +368,13 @@
     // A matching sheila counts too, one for each piece, and the total says so.
     var sheilaRow = root.querySelector('[data-zsa-sumrow]');
     var sheilaCell = root.querySelector('[data-zsa-sumv]');
-    var sp = sheilaPrice() * pieces();
+    var sOne = sheilaPrice();
+    var sp = sOne * pieces();
     if (sheilaRow) sheilaRow.hidden = !sp;
+    var sheilaLab = root.querySelector('[data-zsa-sumlab]');
+    if (sheilaLab) sheilaLab.innerHTML = (sp && pieces() > 1)
+      ? 'Matching sheila &middot; ' + pieces() + ' &times; ' + money(sOne)
+      : 'Matching sheila';
     if (sheilaCell) sheilaCell.textContent = sp ? money(sp) : '';
 
     root.querySelector('[data-zfc-sum-t]').textContent =
@@ -373,6 +413,28 @@
     filter();
     retotal();
   }
+  // The Pieces stepper in the summary is a second face on the page's own quantity box: it
+  // writes there and lets everything else react, so the two can never disagree.
+  var pcWrap = root.querySelector('[data-zfc-pc]');
+  var pcN = root.querySelector('[data-zfc-pcn]');
+  function setPieces(n) {
+    var box = qtyBox();
+    if (!box) return;
+    var v = Math.max(1, Math.round(n) || 1);
+    box.value = String(v);
+    box.dispatchEvent(new Event('change', { bubbles: true }));
+    restock();
+  }
+  if (pcWrap) pcWrap.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-zfc-pcstep]');
+    if (!b) return;
+    setPieces(pieces() + (parseInt(b.getAttribute('data-zfc-pcstep'), 10) || 0));
+  });
+  if (pcN) {
+    pcN.addEventListener('change', function () { setPieces(parseInt(pcN.value, 10)); });
+    pcN.addEventListener('blur', function () { setPieces(parseInt(pcN.value, 10)); });
+  }
+
   // Typed into rather than stepped: bind once the box is actually on the page.
   function watchQty() {
     var b = qtyBox();

@@ -345,7 +345,7 @@
         </div>
         <div><span data-zdf-sum-fl>Fabric</span><span data-zdf-sum-fv></span></div>
         <div><span data-zdf-sum-dl>Design &amp; tailoring</span><span data-zdf-sum-dv></span></div>
-        <div data-zsa-sumrow hidden><span>Matching sheila</span><span data-zsa-sumv></span></div>
+        <div data-zsa-sumrow hidden><span data-zsa-sumlab>Matching sheila</span><span data-zsa-sumv></span></div>
         <div class="zdf-sum__t"><span>Total</span><span data-zdf-sum-tv></span></div>
         <p class="zdf-sum__note" data-zdf-lift hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.5"/></svg>
@@ -480,8 +480,14 @@
       ? 'Design &amp; tailoring &middot; ' + PIECES + ' &times; ' + money(designPrice)
       : 'Design &amp; tailoring';
     if (sumDV) sumDV.textContent = designVariant ? money(designPrice * PIECES) : 'Not chosen yet';
-    var sp = sheilaPrice() * PIECES;
+    var one = sheilaPrice();
+    var sp = one * PIECES;
     if (zsaRow) zsaRow.hidden = !sp;
+    // Counted out like the making above it, so three sheilas do not read as one at 180.
+    var zsaLab = overlay.querySelector('[data-zsa-sumlab]');
+    if (zsaLab) zsaLab.innerHTML = (sp && PIECES > 1)
+      ? 'Matching sheila &middot; ' + PIECES + ' &times; ' + money(one)
+      : 'Matching sheila';
     if (zsaVal) zsaVal.textContent = sp ? money(sp) : '';
     if (sumTV) sumTV.textContent = (m && designVariant)
       ? money(FABRIC_PRICE * m + designPrice * PIECES + sp)
