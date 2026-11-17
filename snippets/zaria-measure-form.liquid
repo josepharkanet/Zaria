@@ -175,23 +175,25 @@
 </style>
 
 <div class="zmm" data-zmm{% if zmm_nocust %} data-zmm-readyonly{% endif %}{% if zmm_customonly %} data-zmm-customonly{% endif %}>
+  {%- comment -%}
+    No heading where the two buttons are the heading (client, 2026-11-17). "Ready to Wear" and
+    "Made to Order" say what the choice is better than "Choose your size" did. It stays on the
+    design brief, which shows no buttons and has to say it is made to order.
+
+    A finished piece says nothing here either (client, 2026-11-17). "Size *" over "This piece is
+    finished in the atelier and comes in a standard size..." sat above a row that offers no size
+    at all, only a length, and the line under that row already says the piece is finished at its
+    length, what the sleeve is, where the size chart is and where to go for a longer one. The
+    heading was announcing a choice that is not there.
+  {%- endcomment -%}
+  {%- if zmm_customonly -%}
   <div class="zmm__top">
     <div>
-      {%- comment -%}
-        No heading where the two buttons are the heading (client, 2026-11-17). "Ready to Wear"
-        and "Made to Order" say what the choice is better than "Choose your size" did. It stays
-        on the two pages that show no buttons: a finished piece, which has a size rather than a
-        choice, and the design brief, which is made to order and says so.
-      {%- endcomment -%}
-      {%- assign zmm_head = '' -%}
-      {%- if zmm_customonly -%}{%- assign zmm_head = 'Made to order' -%}
-      {%- elsif zmm_nocust -%}{%- assign zmm_head = 'Size' -%}{%- endif -%}
-      {%- if zmm_head != blank -%}
-        <p class="zmm__head">{{ zmm_head }} <span class="req">*</span></p>
-      {%- endif -%}
-      <p class="zmm__sub" data-zmm-sub>{% if zmm_customonly %}Cut to your own measurements, in inches with the centimetre in brackets. Our designer confirms them with you at the fitting.{% elsif zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}{% endif %}</p>
+      <p class="zmm__head">Made to order <span class="req">*</span></p>
+      <p class="zmm__sub" data-zmm-sub>Cut to your own measurements, in inches with the centimetre in brackets. Our designer confirms them with you at the fitting.</p>
     </div>
   </div>
+  {%- endif -%}
 
   <div class="zmm__modes"{% if zmm_nocust or zmm_customonly %} hidden{% endif %}>
     {%- unless zmm_customonly -%}
