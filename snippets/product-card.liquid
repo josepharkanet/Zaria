@@ -235,14 +235,13 @@
           assign zcard_sign = ''
           assign zcard_sign_url = ''
           comment
-            A bolt is signed by the mill that wove it, the item master's "Make / mill" column
-            and the same mark the fabric room's tiles carry (client, 2026-11-16: "the fabric
-            has make and co given in item master right? that is the brand of fabric ... so
-            show that on fabric, Make"). Only 218 of the 660 published bolts hold one, so the
-            rest keep Freya, the house that sells the cloth, rather than losing the line.
+            Cloth is signed FREYA, the house that sells it (client, 2026-11-17: "all fabric
+            brand name change to Freya"). It read the mill for a day, from custom.supplier,
+            which is the item master's "Make / mill" column and still shows in the Make row on
+            the bolt's own page. The mill is recorded; it is not what signs the card.
           endcomment
           if product.tags contains 'Fabric'
-            assign zcard_sign = product.metafields.custom.supplier | default: 'Freya'
+            assign zcard_sign = 'Freya'
             assign zcard_sign_url = routes.root_url | append: 'collections/all-fabrics'
           elsif product.tags contains 'Freya'
             assign zcard_sign = 'Freya'

@@ -68,11 +68,11 @@
   @media (prefers-reduced-motion:reduce){.zfc__tile.is-on::after{animation:none}}
   .zfc__tile img{display:block;width:100%;aspect-ratio:1/1;height:auto;object-fit:cover;background:#f6f4f1}
   {%- comment -%}
-    A bolt's brand is the mill that wove it, the item master's "Make / mill" column: Hokkoh,
-    Adelberto, Fasac, Ratti Ungaro, Yekpa, Gratacos, Liolios (client, 2026-11-16: "the fabric
-    has make and co given in item master right? that is the brand of fabric"). It was briefly
-    written as Freya, which is the house that sells the cloth rather than the one that made it.
-    Only 218 of the 660 bolts hold a make, so the line is drawn only when there is one.
+    Every bolt in this room is signed FREYA (client, 2026-11-17: "all fabric brand name change to
+    Freya"), the same mark the cloth's own card carries. It read the mill for a day - Hokkoh,
+    Adelberto, Fasac - which is what the item master's "Make / mill" column holds and what the
+    cloth's product page still shows in its Make row. The mill is still recorded; it is just not
+    what signs the tile.
   {%- endcomment -%}
   {%- comment -%}
     The mark keeps its line whether or not the bolt has a mill, so the names and the prices sit
@@ -375,13 +375,7 @@
     img.src = sized(BASE + f.i, 300);
     img.alt = f.t; img.loading = 'lazy'; img.width = 150; img.height = 150;
     var brand = document.createElement('em');
-    if (f.b) {
-      var mk = document.createElement('span');
-      mk.className = 'zfc__mk';
-      mk.textContent = 'Make';
-      brand.appendChild(mk);
-      brand.appendChild(document.createTextNode(f.b));
-    }
+    brand.textContent = 'Freya';
     var t = document.createElement('b'); t.textContent = f.t;
     var p = document.createElement('i');
     // f.c is the price it was, and only the bolts on sale carry one.
