@@ -64,6 +64,20 @@
     font-family:'Jost',sans-serif;color:#1a1a1a;box-shadow:0 30px 80px rgba(0,0,0,.32)}
   .zdf-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border:0;background:transparent;cursor:pointer;font-size:24px;color:#8a8a8a;line-height:1}
   .zdf-close:hover{color:#111}
+  {%- comment -%}
+    Inline, the brief is not a dialogue over the page but a part of it: it sits in the product
+    column under the buy row, the way the size and fabric choices do on a garment (client,
+    2026-11-17: "instead of popup here make on right side like on ready to wear made to order").
+    Same markup, same script; the overlay simply stops being an overlay. These rules come after
+    the ones they undo, so they win on equal specificity, and .is-open never fires here because
+    there is no trigger to fire it.
+  {%- endcomment -%}
+  .zdf-overlay.zdf--inline{position:static;inset:auto;z-index:auto;display:block;background:none;
+    overflow:visible;padding:0;margin-top:26px}
+  .zdf-overlay.zdf--inline .zdf-modal{max-width:none;width:auto;margin:0;padding:0;box-shadow:none}
+  .zdf-overlay.zdf--inline .zdf-close{display:none}
+  .zdf-overlay.zdf--inline .zdf-eyebrow{margin-bottom:6px}
+  .zdf-overlay.zdf--inline .zdf-title{font-size:clamp(18px,1.9vw,25px)}
   .zdf-eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--wine,#7a1f34);margin:0 0 10px}
   .zdf-title{font-family:'Jost',sans-serif;font-weight:400;font-size:clamp(22px,3vw,30px);text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px}
   .zdf-lede{color:#6a6a6a;font-size:14px;line-height:1.7;margin:0 0 18px}
@@ -178,9 +192,15 @@
   .zdf-note{font-size:var(--zf-hint-size);color:var(--zf-hint);margin:12px 0 0;text-align:center;line-height:1.65}
 </style>
 
-<button type="button" class="zdf-trigger" data-zdf-open>Design your look with this fabric</button>
+{%- comment -%}
+  inline: true puts the brief in the page instead of over it. The button that opens the dialogue
+  goes with it, since there is nothing left to open.
+{%- endcomment -%}
+{%- unless inline -%}
+  <button type="button" class="zdf-trigger" data-zdf-open>Design your look with this fabric</button>
+{%- endunless -%}
 
-<div class="zdf-overlay" data-zdf-overlay role="dialog" aria-modal="true" aria-label="Design your look">
+<div class="zdf-overlay{% if inline %} zdf--inline{% endif %}" data-zdf-overlay{% unless inline %} role="dialog" aria-modal="true"{% endunless %} aria-label="Design your look">
   <div class="zdf-modal">
     <button type="button" class="zdf-close" data-zdf-close aria-label="Close">&times;</button>
     <p class="zdf-eyebrow">The Design Studio</p>
@@ -574,10 +594,18 @@
     PER = inch ? clothFor(inch) : 0;
   }
   function close(){ overlay.classList.remove('is-open'); document.body.style.overflow=''; }
-  openers.forEach(function(b){ b.addEventListener('click', open); });
-  overlay.querySelectorAll('[data-zdf-close]').forEach(function(b){ b.addEventListener('click', close); });
-  overlay.addEventListener('click', function(e){ if(e.target===overlay) close(); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+
+  // Inline there is nothing to open, close or dismiss, but the work open() did still has to
+  // happen: the length, the running total and the carousel's arrows are all set up there.
+  var INLINE = overlay.classList.contains('zdf--inline');
+  if (INLINE) {
+    readLength(); applyLength(); retotal(); setTimeout(refreshNav, 80);
+  } else {
+    openers.forEach(function(b){ b.addEventListener('click', open); });
+    overlay.querySelectorAll('[data-zdf-close]').forEach(function(b){ b.addEventListener('click', close); });
+    overlay.addEventListener('click', function(e){ if(e.target===overlay) close(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  }
   readLength();
   retotal();
 

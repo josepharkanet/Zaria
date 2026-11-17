@@ -678,7 +678,7 @@
       {%- endform -%}
       {%- endif -%}
 
-      {%- unless is_fragrance or is_garment or is_accessory or por or is_restock -%}{% render 'zaria-design-form', product: product, variant: fv %}{%- endunless -%}
+      {%- unless is_fragrance or is_garment or is_accessory or por or is_restock -%}{% render 'zaria-design-form', product: product, variant: fv, inline: true %}{%- endunless -%}
       {%- unless is_fragrance or is_garment or is_accessory -%}<div class="zpdp__sizechart">{% render 'zaria-size-chart' %}</div>{%- endunless -%}
 
       <div class="zpdp__acc" style="margin-top:28px">
