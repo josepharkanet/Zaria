@@ -67,8 +67,18 @@
       {%- if zfacet_cloth or zfacet_wear -%}
         {%- assign zfacet_short = true -%}
       {%- endif -%}
-      {%- assign zfacet_short_keep = 'product type,pattern,colour,color' | split: ',' -%}
+      {%- comment -%}
+        Designers is the product tag facet, kept to the two houses and relabelled (client,
+        2026-11-17: "in RTW, in the filter, add Designers to filter by brand"). Every garment
+        carries a pile of other tags - Cotton, Hand-Embroidered, No Customisation,
+        Ready-to-Wear - and none of those is a designer, so the values are sifted below rather
+        than the facet shown whole. It draws nothing at all unless the Product tag filter is
+        switched on in Search & Discovery, which no API can do.
+      {%- endcomment -%}
+      {%- assign zfacet_short_keep = 'product type,pattern,colour,color,tag,product tag,tags' | split: ',' -%}
+      {%- assign zfacet_houses = 'zaria,freya' | split: ',' -%}
       {%- assign zf_slot_type = '' -%}
+      {%- assign zf_slot_house = '' -%}
       {%- assign zf_slot_pattern = '' -%}
       {%- assign zf_slot_colour = '' -%}
 
@@ -81,6 +91,18 @@
 
         {%- comment -%}Display "Family" / "Scent Group" as "Scent"{%- endcomment -%}
         {%- assign filter_label = filter.label -%}
+        {%- assign zf_is_house = false -%}
+        {%- if dl contains 'tag' -%}
+          {%- assign zf_is_house = true -%}
+          {%- assign filter_label = 'Designers' -%}
+          {%- comment -%}Nothing to offer if neither house is among this listing's tags.{%- endcomment -%}
+          {%- assign zf_house_n = 0 -%}
+          {%- for fv in filter.values -%}
+            {%- assign fvl = fv.label | downcase | strip -%}
+            {%- if zfacet_houses contains fvl -%}{%- assign zf_house_n = zf_house_n | plus: 1 -%}{%- endif -%}
+          {%- endfor -%}
+          {%- if zf_house_n == 0 -%}{%- continue -%}{%- endif -%}
+        {%- endif -%}
         {%- if dl == 'family' or dl == 'scent group' or dl == 'scent_group' or dl contains 'scent group' -%}{%- assign filter_label = 'Scent' -%}{%- endif -%}
 
         {%- comment -%}Hide the Country of Origin (COO) filter{%- endcomment -%}
@@ -305,6 +327,22 @@
                   {%- endfor -%}
                 </div>
 
+              {%- elsif zf_is_house -%}
+                <div class="zar-facet__values">
+                  {%- for filter_value in filter.values -%}
+                    {%- assign fvl = filter_value.label | downcase | strip -%}
+                    {%- unless zfacet_houses contains fvl -%}{%- continue -%}{%- endunless -%}
+                    <label class="zar-check">
+                      <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>
+                      <span class="zar-check__box"></span>
+                      <span class="zar-check__label">
+                        {{- filter_value.label -}}
+                        {%- if section.settings.show_filter_values_count %} <span class="zar-check__count">{{ filter_value.count }}</span>{% endif -%}
+                      </span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+
               {%- elsif dl contains 'product type' -%}
                 {%- comment -%}
                   Product type reads Jalabiya, Abaya, Sheila on the garment listings (client,
@@ -373,6 +411,8 @@
         {%- if zfacet_short -%}
           {%- if zf_dl == 'product type' -%}
             {%- assign zf_slot_type = zf_one -%}
+          {%- elsif zf_is_house -%}
+            {%- assign zf_slot_house = zf_one -%}
           {%- elsif zf_dl == 'pattern' -%}
             {%- assign zf_slot_pattern = zf_one -%}
           {%- else -%}
@@ -384,7 +424,7 @@
       {%- endfor -%}
 
       {%- if zfacet_short -%}
-        {{- zf_slot_type -}}{{- zf_slot_pattern -}}{{- zf_slot_colour -}}
+        {{- zf_slot_type -}}{{- zf_slot_house -}}{{- zf_slot_pattern -}}{{- zf_slot_colour -}}
       {%- endif -%}
 
       {%- comment -%}
