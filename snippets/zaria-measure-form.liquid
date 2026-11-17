@@ -67,6 +67,7 @@
   .zmm__top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
   .zmm__head{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#161616;margin:0 0 4px}
   .zmm__head .req{color:var(--wine,#7a1f34)}
+  .zmm__sub:empty{display:none}
   .zmm__sub{font-size:13px;color:var(--zf-hint);margin:0;max-width:52ch;line-height:1.65}
   .zmm__modes{display:flex;gap:10px;margin:14px 0 0}
   .zmm__modes[hidden]{display:none}
@@ -152,7 +153,7 @@
   <div class="zmm__top">
     <div>
       <p class="zmm__head">{% if zmm_customonly %}Made to order{% elsif zmm_nocust %}Size{% else %}Choose your size{% endif %} <span class="req">*</span></p>
-      <p class="zmm__sub" data-zmm-sub>{% if zmm_customonly %}Cut to your own measurements, in inches with the centimetre in brackets. Our designer confirms them with you at the fitting.{% elsif zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}Select Ready to Wear for our standard size, or Made to Order to have it cut to your measurements.{% endif %}</p>
+      <p class="zmm__sub" data-zmm-sub>{% if zmm_customonly %}Cut to your own measurements, in inches with the centimetre in brackets. Our designer confirms them with you at the fitting.{% elsif zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}{% endif %}</p>
     </div>
   </div>
 

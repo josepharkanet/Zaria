@@ -240,8 +240,21 @@
   var ALL = [], ROWS = [], BASE = '', shown = 0, view = [], chosen = null;
 
   // How many pieces are being made, and therefore how much cloth is cut.
-  var qty = form ? form.querySelector('.zpdp__qty') : null;
-  function pieces() { var n = qty ? parseInt(qty.value, 10) : 1; return n > 0 ? n : 1; }
+  //
+  // Looked up when it is asked for, not now. This room is rendered above the buy row, so its
+  // script runs while the page is still being parsed and the quantity box does not exist yet:
+  // resolving it here returned null for good, pieces() answered 1 for ever, and the summary
+  // ignored the quantity entirely (client, 2026-11-17: "here qty is not effecting").
+  var qtyEl = null;
+  function qtyBox() {
+    if (!qtyEl && form) qtyEl = form.querySelector('.zpdp__qty');
+    return qtyEl;
+  }
+  function pieces() {
+    var b = qtyBox();
+    var n = b ? parseInt(b.value, 10) : 1;
+    return n > 0 ? n : 1;
+  }
 
   // Ready to wear is a piece the atelier has already cut and finished, so its cloth is settled
   // and there is nothing to choose: the fabric room belongs to the Made to Order side alone
@@ -360,7 +373,14 @@
     filter();
     retotal();
   }
-  if (qty) qty.addEventListener('change', restock);
+  // Typed into rather than stepped: bind once the box is actually on the page.
+  function watchQty() {
+    var b = qtyBox();
+    if (b) { b.addEventListener('change', restock); b.addEventListener('input', restock); }
+    restock();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchQty);
+  else watchQty();
   // The quantity steppers set the box without firing change, so watch the buttons as well.
   if (form) form.addEventListener('click', function (e) {
     if (e.target.closest('[data-qstep]')) setTimeout(restock, 0);
