@@ -621,32 +621,18 @@
 
   // Inline, the same click unfolds the panel where it stands: no backdrop, nothing to scroll
   // behind, and the button steps aside once there is a brief to read.
-  // Open, the brief takes the whole page rather than half of it. It lives in the right-hand
-  // column, which is the narrower of the two on a cloth page, and a design carousel, eight
-  // measurements and a room full of cloth do not belong in half a page. Rather than move it out
-  // of the column, which would take its form and its handlers with it, it reaches left by the
-  // width of the picture column and the gap beside it, both measured rather than assumed.
-  function widen() {
-    var grid = overlay.closest('.zpdp__grid');
-    var info = overlay.closest('.zpdp__info');
-    if (!grid || !info || grid.firstElementChild === info || window.innerWidth < 1000) {
-      overlay.style.marginLeft = '';
-      return;
-    }
-    var media = grid.firstElementChild.getBoundingClientRect().width;
-    var gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
-    overlay.style.marginLeft = media && gap ? '-' + Math.round(media + gap) + 'px' : '';
-  }
-
+  // The brief stays in its own column. Reaching across the page was tried on 2026-11-17 and
+  // reverted the same day: the picture column still holds that space, so a negative margin put
+  // the brief on top of the photograph. If it ever needs the full width, it has to leave the
+  // grid, not lean out of it.
   function reveal() {
     overlay.classList.add('is-open');
     openers.forEach(function (b) { b.hidden = true; });
-    widen();
     readLength(); applyLength(); retotal(); setTimeout(refreshNav, 80);
     overlay.scrollIntoView({ block: 'start', behavior: 'smooth' });
   }
   window.addEventListener('resize', function () {
-    if (overlay.classList.contains('is-open')) { widen(); refreshNav(); }
+    if (overlay.classList.contains('is-open')) refreshNav();
   });
 
   openers.forEach(function (b) { b.addEventListener('click', INLINE ? reveal : open); });
