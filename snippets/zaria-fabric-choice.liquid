@@ -184,7 +184,7 @@
     </div>
     <div><span data-zfc-sum-fl>Fabric</span><span data-zfc-sum-f>Not chosen yet</span></div>
     <div data-zfc-save-row hidden><span>You save</span><span data-zfc-save></span></div>
-    <div><span>Design &amp; tailoring</span><span data-zfc-sum-d></span></div>
+    <div><span data-zfc-sum-dl>Design &amp; tailoring</span><span data-zfc-sum-d></span></div>
     <div data-zsa-sumrow hidden><span data-zsa-sumlab>Matching sheila</span><span data-zsa-sumv></span></div>
     <div class="zfc__tot"><span>Total</span><span data-zfc-sum-t></span></div>
   </div>
@@ -329,7 +329,14 @@
 
   function retotal() {
     var m = MIN * pieces();
-    root.querySelector('[data-zfc-sum-d]').textContent = money(DESIGN * pieces());
+    /* Every row says how it was arrived at once there is more than one piece, the way the
+       sheila row always has (client, 2026-11-18): a count, a times sign and the figure for
+       one. The right-hand column stays the total for the row. */
+    var times = pieces() > 1 ? (' \u00b7 ' + pieces() + ' \u00d7 ') : '';
+    var dCell = root.querySelector('[data-zfc-sum-d]');
+    dCell.textContent = money(DESIGN * pieces());
+    var dLab = root.querySelector('[data-zfc-sum-dl]');
+    if (dLab) dLab.innerHTML = times ? ('Design &amp; tailoring' + times + money(DESIGN)) : 'Design &amp; tailoring';
     // The length it is cut to, said the way the brief says it.
     var lenCell = root.querySelector('[data-zfc-sum-len]');
     if (lenCell) {
@@ -348,8 +355,10 @@
         (pieces() > 1 ? ' each, ' + tidy(needed()) + ' m in all' : '');
     }
     root.querySelector('[data-zfc-sum-fl]').innerHTML =
-      chosen ? ('Fabric &middot; ' + m + ' m &times; ' + money(chosen.p))
-             : (INCLUDED ? 'Fabric &middot; as photographed' : 'Fabric');
+      chosen ? ('Fabric &middot; ' + (pieces() > 1 ? pieces() + ' &times; ' + tidy(MIN) + ' m' : m + ' m')
+                + ' &times; ' + money(chosen.p))
+             : (INCLUDED ? ('Fabric &middot; as photographed' + (times ? times + money(INCLUDED) : ''))
+                         : 'Fabric');
     // The cloth, and what it was before the sale when the bolt carries a was-price.
     var fcell = root.querySelector('[data-zfc-sum-f]');
     var saveRow = root.querySelector('[data-zfc-save-row]');

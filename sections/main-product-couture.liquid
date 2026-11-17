@@ -336,6 +336,8 @@
   #shopify-section-{{ section.id }} .zpdp__variant:hover{border-color:var(--zf-line-hover)}
   #shopify-section-{{ section.id }} .zpdp__variant:focus{outline:none;border-color:var(--zf-line-focus);box-shadow:var(--zf-ring)}
   #shopify-section-{{ section.id }} .zpdp__qty-wrap{display:flex;align-items:center;border:1px solid var(--zf-line);background:var(--zf-bg);height:var(--zf-h);flex:none}
+  {%- comment -%}display:flex would otherwise beat the hidden attribute and show it anyway.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .zpdp__qty-wrap[hidden]{display:none}
   #shopify-section-{{ section.id }} .zpdp__qbtn{width:42px;height:100%;border:0;background:none;cursor:pointer;font-size:17px;line-height:1;color:#161616;display:flex;align-items:center;justify-content:center;padding:0;transition:color .2s}
   #shopify-section-{{ section.id }} .zpdp__qbtn:hover{color:var(--wine)}
   #shopify-section-{{ section.id }} .zpdp__qty{border:0;background:none;width:38px;height:100%;text-align:center;font-family:inherit;font-size:var(--zf-size);color:var(--zf-ink);padding:0;-moz-appearance:textfield}
@@ -673,7 +675,15 @@
             the form posts is that length in half-metre units, which is what the cart counts.
             Everything else is counted one piece at a time, where the box is the quantity.
           {%- endcomment -%}
-          <div class="zpdp__qty-wrap">
+          {%- comment -%}
+            On a made-to-order piece the running summary above already carries a Pieces stepper,
+            and this one was a second copy of the same number sitting beside Add to Cart
+            (client, 2026-11-18: "remove qty beside add to cart for all where this price table
+            and cart"). It is hidden rather than deleted: the quantity input inside it is what
+            the form posts, and the summary's stepper writes into it. A fabric page keeps its
+            box, where it is the length in metres and not a count of pieces.
+          {%- endcomment -%}
+          <div class="zpdp__qty-wrap"{% if is_madetoorder and is_restock == false %} hidden{% endif %}>
             <button type="button" class="zpdp__qbtn" data-qstep="-1" aria-label="Decrease {% if is_fabric %}length{% else %}quantity{% endif %}">&minus;</button>
             {%- if is_fabric -%}
               <input type="number" class="zpdp__qty" value="1" min="0.5" step="0.5" data-qmin="0.5" data-qstep-by="0.5" data-qunits inputmode="decimal" aria-label="Length in metres">
