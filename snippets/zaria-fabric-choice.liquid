@@ -13,7 +13,13 @@
   .zfc{margin:22px 0 4px}
   .zfc__head{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#161616;margin:0 0 4px}
   .zfc__head .req{color:var(--wine,#7a1f34)}
-  .zfc__sub{font-size:13px;color:var(--zf-hint);margin:0 0 14px;max-width:54ch;line-height:1.65}
+  {%- comment -%}
+    No 54ch cap on this one (client, 2026-11-18: "text should inline"). The measure that keeps
+    a paragraph readable was breaking a single sentence in two with half the column left empty
+    beside it. It runs the width it is given and wraps only when the column is genuinely too
+    narrow for it, which is a phone.
+  {%- endcomment -%}
+  .zfc__sub{font-size:13px;color:var(--zf-hint);margin:0 0 14px;line-height:1.65}
   .zfc__tools{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px}
   .zfc__search{flex:1 1 220px;position:relative}
   .zfc__search input{width:100%;box-sizing:border-box;height:var(--zf-h);padding:0 var(--zf-px);
