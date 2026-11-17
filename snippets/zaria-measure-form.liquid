@@ -29,13 +29,22 @@
   "No Customisation" leaves the size and the size chart and drops the Made to Order mode.
 {%- endcomment -%}
 {%- comment -%}
-  Shoulder to Shoulder sits last on purpose (client, 2026-11-16: "if swap this can get two line
-  heading below in one line"). It is the only label long enough to wrap in half a column, and
-  the seventh field is alone on its row, so down there it has the full width and reads on one
-  line. Length took its place at number two. The numbered points on the sketch are matched to
-  these by position, so those two circles swapped numbers with them.
+  The eight the atelier takes, in the order it takes them (client, 2026-11-17): neck deep,
+  neck wide, armhole, shoulder, bust, waist, hips, length. This replaced a list that asked
+  for neck open and sleeve length and never asked the neck in two directions or the armhole
+  at all.
+
+  Each row is "Label:min:max" and the two numbers are HALF inches, because the dropdown steps
+  in half inches: 76 to 117 is 38 to 58.5 in. The five carried over keep the ranges they had;
+  the three new ones are ordinary garment ranges, worth a word with the atelier if a cutter
+  ever finds them short.
+
+  The numbered points on the drawing are matched to these by position, not by name, so the
+  circles below have to be renumbered and moved with any change to this line. "Shoulder to
+  Shoulder" used to sit last because its label wrapped in half a column; "Shoulder" is short
+  enough to sit anywhere, so that is no longer a constraint.
 {%- endcomment -%}
-{%- assign zmm_fields = "Neck Open:26:35,Length:100:130,Sleeve Length:52:68,Bust:76:117,Waist:76:124,Hip:86:136,Shoulder to Shoulder:26:37" | split: ',' -%}
+{%- assign zmm_fields = "Neck Deep:8:24,Neck Wide:8:22,Armhole:26:52,Shoulder:26:37,Bust:76:117,Waist:76:124,Hips:86:136,Length:100:130" | split: ',' -%}
 {%- assign zmm_nocust = false -%}
 {%- if product.tags contains 'No Customisation' -%}{%- assign zmm_nocust = true -%}{%- endif -%}
 {%- comment -%}
@@ -294,13 +303,14 @@
             <path d="M18 80 L22 72 L26 80M18 464 L22 472 L26 464"/>
           </g>
           <g class="zmm__marks">
-            <g class="zmm__mark" data-zmm-mark="1"><circle cx="150" cy="80" r="10"/><text x="150" y="84" text-anchor="middle">1</text></g>
-            <g class="zmm__mark" data-zmm-mark="7"><circle cx="127" cy="71" r="10"/><text x="127" y="75" text-anchor="middle">7</text></g>
-            <g class="zmm__mark" data-zmm-mark="3"><circle cx="81" cy="209" r="10"/><text x="81" y="213" text-anchor="middle">3</text></g>
-            <g class="zmm__mark" data-zmm-mark="4"><circle cx="196" cy="154" r="10"/><text x="196" y="158" text-anchor="middle">4</text></g>
-            <g class="zmm__mark" data-zmm-mark="5"><circle cx="206" cy="216" r="10"/><text x="206" y="220" text-anchor="middle">5</text></g>
-            <g class="zmm__mark" data-zmm-mark="6"><circle cx="226" cy="302" r="10"/><text x="226" y="306" text-anchor="middle">6</text></g>
-            <g class="zmm__mark" data-zmm-mark="2"><circle cx="22" cy="272" r="10"/><text x="22" y="276" text-anchor="middle">2</text></g>
+            <g class="zmm__mark" data-zmm-mark="1"><circle cx="150" cy="86" r="10"/><text x="150" y="90" text-anchor="middle">1</text></g>
+            <g class="zmm__mark" data-zmm-mark="2"><circle cx="170" cy="60" r="10"/><text x="170" y="64" text-anchor="middle">2</text></g>
+            <g class="zmm__mark" data-zmm-mark="3"><circle cx="104" cy="124" r="10"/><text x="104" y="128" text-anchor="middle">3</text></g>
+            <g class="zmm__mark" data-zmm-mark="4"><circle cx="122" cy="60" r="10"/><text x="122" y="64" text-anchor="middle">4</text></g>
+            <g class="zmm__mark" data-zmm-mark="5"><circle cx="196" cy="154" r="10"/><text x="196" y="158" text-anchor="middle">5</text></g>
+            <g class="zmm__mark" data-zmm-mark="6"><circle cx="206" cy="216" r="10"/><text x="206" y="220" text-anchor="middle">6</text></g>
+            <g class="zmm__mark" data-zmm-mark="7"><circle cx="226" cy="302" r="10"/><text x="226" y="306" text-anchor="middle">7</text></g>
+            <g class="zmm__mark" data-zmm-mark="8"><circle cx="22" cy="272" r="10"/><text x="22" y="276" text-anchor="middle">8</text></g>
           </g>
         </svg>
         <p class="zmm__figcap">Where we measure</p>
