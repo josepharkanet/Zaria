@@ -9,14 +9,6 @@
 
   Usage: {% render 'zaria-fabric-choice', product: product %}
 {%- endcomment -%}
-{%- comment -%}A whole number reads as "3 m", a half as "3.5 m" - never "3.0 m".{%- endcomment -%}
-{%- assign zfc_need = product.metafields.custom.fabric_required.value | default: 3 -%}
-{%- assign zfc_need_round = zfc_need | round -%}
-{%- if zfc_need_round == zfc_need -%}
-  {%- assign zfc_need_say = zfc_need_round -%}
-{%- else -%}
-  {%- assign zfc_need_say = zfc_need -%}
-{%- endif -%}
 <style>
   .zfc{margin:22px 0 4px}
   .zfc__head{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#161616;margin:0 0 4px}
@@ -140,15 +132,15 @@
      data-zfc-need="{{ product.metafields.custom.fabric_required.value | default: 3 }}"
      data-zfc-money="{{ 123456789 | money }}"
      data-zfc-root="{{ routes.root_url }}">
-  <p class="zfc__head">Choose your fabric <span class="req">*</span></p>
   {%- comment -%}
-    The cloth follows the length of the piece, by the same table the design brief uses
-    (client, 2026-11-13): up to 53 in is cut from 3 m, 53 to 56 in from 3.5 m, 56 to 63 in
-    from 4 m. The figure below is written from whichever length the size form is showing,
-    so choosing a longer piece moves it.
+    The client's own words, 2026-11-18: "Make your own", over "with this design you can choose
+    any fabric of your choice options shown below". What stood here before led with the price
+    and with how many metres the piece takes; the metres are still said, in the summary below,
+    the moment a cloth is chosen - "Fabric . 3.5 m x Dhs 204.76" - which is where the figure
+    actually changes what is owed.
   {%- endcomment -%}
-  <p class="zfc__sub">The price above is the making of this piece. Pick the cloth it is cut from and we add it to your order by the metre. This one is cut from <b data-zfc-need-say>{{ zfc_need_say }} m</b>,
-    and the cloth below is what the atelier holds that much of.</p>
+  <p class="zfc__head">Make your own <span class="req">*</span></p>
+  <p class="zfc__sub">With this design you can choose any fabric of your choice, options shown below.</p>
 
   <div class="zfc__tools">
     <div class="zfc__search"><input type="search" placeholder="Search the cloth&hellip;" data-zfc-q aria-label="Search fabrics"></div>
