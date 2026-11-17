@@ -112,6 +112,9 @@
   .zfc__sum{border:1px solid #ece8e2;background:#fbfaf8;padding:12px 14px;margin:14px 0 0;font-size:13px}
   .zfc__sum div{display:flex;justify-content:space-between;gap:16px;padding:3px 0;color:#6a6a6a}
   .zfc__sum div span:last-child{color:#161616;white-space:nowrap}
+  {%- comment -%}What the cloth was, beside what it is, the order the shop keeps everywhere.{%- endcomment -%}
+  .zfc__sum s{color:#a89f94;text-decoration:line-through;margin-right:7px}
+  .zfc__sum [data-zfc-save] {color:var(--wine,#7a1f34)}
   .zfc__sum .zfc__tot{border-top:1px solid #ece8e2;margin-top:6px;padding-top:8px;color:#161616}
   .zfc__sum .zfc__tot span:last-child{font-size:15px}
   .zfc__warn{font-size:12.5px;color:var(--wine,#7a1f34);margin:10px 0 0}
@@ -147,9 +150,19 @@
 
   {%- comment -%}The cloth is read first and the making second, the order the customer
      chooses them in and the order the client asked the cost to be set out in.{%- endcomment -%}
+  {%- comment -%}
+    The sheila is offered before the summary, not after it, so what it costs is in the total a
+    customer reads on the way to the bag (client, 2026-11-17: "the sheila before the price
+    summary, because the sheila cost also needs to be seen before checkout"). Passive, because
+    this snippet owns the submit on this page and adds the line itself.
+  {%- endcomment -%}
+  {%- render 'zaria-sheila-addon', product: product, passive: true -%}
+
   <div class="zfc__sum">
     <div><span data-zfc-sum-fl>Fabric</span><span data-zfc-sum-f>Not chosen yet</span></div>
+    <div data-zfc-save-row hidden><span>You save</span><span data-zfc-save></span></div>
     <div><span>Design &amp; tailoring</span><span data-zfc-sum-d></span></div>
+    <div data-zsa-sumrow hidden><span>Matching sheila</span><span data-zsa-sumv></span></div>
     <div class="zfc__tot"><span>Total</span><span data-zfc-sum-t></span></div>
   </div>
   <p class="zfc__warn" data-zfc-warn hidden>Please choose the fabric this piece is cut from.</p>
@@ -286,15 +299,45 @@
     root.querySelector('[data-zfc-sum-fl]').innerHTML =
       chosen ? ('Fabric &middot; ' + m + ' m &times; ' + money(chosen.p))
              : (INCLUDED ? 'Fabric &middot; as photographed' : 'Fabric');
-    root.querySelector('[data-zfc-sum-f]').textContent =
-      chosen ? money(chosen.p * m) : (INCLUDED ? money(INCLUDED * pieces()) : 'Not chosen yet');
+    // The cloth, and what it was before the sale when the bolt carries a was-price.
+    var fcell = root.querySelector('[data-zfc-sum-f]');
+    var saveRow = root.querySelector('[data-zfc-save-row]');
+    var saveCell = root.querySelector('[data-zfc-save]');
+    var saved = (chosen && chosen.c && chosen.c > chosen.p) ? (chosen.c - chosen.p) * m : 0;
+    if (chosen && saved) {
+      fcell.innerHTML = '<s>' + money(chosen.c * m) + '</s>' + money(chosen.p * m);
+    } else {
+      fcell.textContent = chosen ? money(chosen.p * m) : (INCLUDED ? money(INCLUDED * pieces()) : 'Not chosen yet');
+    }
+    if (saveRow) saveRow.hidden = !saved;
+    if (saveCell) saveCell.textContent = saved ? money(saved) : '';
+
+    // A matching sheila counts too, one for each piece, and the total says so.
+    var sheilaRow = root.querySelector('[data-zsa-sumrow]');
+    var sheilaCell = root.querySelector('[data-zsa-sumv]');
+    var sp = sheilaPrice() * pieces();
+    if (sheilaRow) sheilaRow.hidden = !sp;
+    if (sheilaCell) sheilaCell.textContent = sp ? money(sp) : '';
+
     root.querySelector('[data-zfc-sum-t]').textContent =
-      chosen ? money(DESIGN * pieces() + chosen.p * m)
-             : (INCLUDED ? money((DESIGN + INCLUDED) * pieces()) : money(DESIGN * pieces()) + ' + fabric');
+      chosen ? money(DESIGN * pieces() + chosen.p * m + sp)
+             : (INCLUDED ? money((DESIGN + INCLUDED) * pieces() + sp)
+                         : money(DESIGN * pieces() + sp) + ' + fabric');
     sayPrice();
   }
   // Changing how many pieces changes how much cloth is needed, so the room is sifted again
   // and a bolt that can no longer supply it lets go rather than quietly going short.
+  // Picking a sheila, or taking it back off, moves the summary with it.
+  root.addEventListener('zsa:change', retotal);
+
+  // What the chosen sheila costs, read off its own tile.
+  function sheilaPrice() {
+    var f = root.querySelector('[data-zsa-variant]');
+    if (!f || !f.value) return 0;
+    var t = root.querySelector('[data-zsa-tile][data-zsa-v="' + f.value + '"]');
+    return t ? (parseInt(t.getAttribute('data-zsa-price'), 10) || 0) : 0;
+  }
+
   function restock() {
     ALL = inStock();
     if (chosen && chosen.q !== null && chosen.q < needed()) {

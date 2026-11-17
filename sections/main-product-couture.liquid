@@ -642,7 +642,12 @@
           the thing you add to it, and its script leans on the fabric room's handler running
           first on the same form.
         {%- endcomment -%}
-        {%- if is_garment and is_restock == false -%}{% render 'zaria-sheila-addon', product: product %}{%- endif -%}
+        {%- comment -%}
+          Only where the fabric room is not already showing one. On a made-to-order piece the
+          room renders it itself, above its running summary, so the sheila's cost is counted in
+          the total before the bag.
+        {%- endcomment -%}
+        {%- if is_garment and is_restock == false and is_madetoorder == false -%}{% render 'zaria-sheila-addon', product: product %}{%- endif -%}
 
         {%- comment -%}
           Nothing sits between the attributes and this row on a cloth page: a bolt bought on
