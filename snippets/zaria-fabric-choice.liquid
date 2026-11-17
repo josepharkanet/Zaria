@@ -114,7 +114,6 @@
   .zfc__sum div span:last-child{color:#161616;white-space:nowrap}
   {%- comment -%}What the cloth was, beside what it is, the order the shop keeps everywhere.{%- endcomment -%}
   .zfc__sum s{color:#a89f94;text-decoration:line-through;margin-right:7px}
-  .zfc__sum [data-zfc-save] {color:var(--wine,#7a1f34)}
   .zfc__sum .zfc__pcrow{align-items:center}
   .zfc__pc{display:inline-flex;align-items:center;border:1px solid var(--zf-line,#e6e2db);background:#fff}
   .zfc__pc button{width:30px;height:30px;border:0;background:none;font-family:inherit;font-size:15px;line-height:1;
@@ -183,7 +182,6 @@
       </span>
     </div>
     <div><span data-zfc-sum-fl>Fabric</span><span data-zfc-sum-f>Not chosen yet</span></div>
-    <div data-zfc-save-row hidden><span>You save</span><span data-zfc-save></span></div>
     <div><span data-zfc-sum-dl>Design &amp; tailoring</span><span data-zfc-sum-d></span></div>
     <div data-zsa-sumrow hidden><span data-zsa-sumlab>Matching sheila</span><span data-zsa-sumv></span></div>
     <div class="zfc__tot"><span>Total</span><span data-zfc-sum-t></span></div>
@@ -377,16 +375,16 @@
                          : 'Fabric');
     // The cloth, and what it was before the sale when the bolt carries a was-price.
     var fcell = root.querySelector('[data-zfc-sum-f]');
-    var saveRow = root.querySelector('[data-zfc-save-row]');
-    var saveCell = root.querySelector('[data-zfc-save]');
+    /* No "You save" line of its own (client, 2026-11-18: "not required this because on top
+       already showing compare price"). The saving is still plain on the row above, where the
+       old price is struck through beside the new one; a second line only said the subtraction
+       out loud. `saved` stays, because it is what decides whether to strike. */
     var saved = (chosen && chosen.c && chosen.c > chosen.p) ? (chosen.c - chosen.p) * m : 0;
     if (chosen && saved) {
       fcell.innerHTML = '<s>' + money(chosen.c * m) + '</s>' + money(chosen.p * m);
     } else {
       fcell.textContent = chosen ? money(chosen.p * m) : (INCLUDED ? money(INCLUDED * pieces()) : 'Not chosen yet');
     }
-    if (saveRow) saveRow.hidden = !saved;
-    if (saveCell) saveCell.textContent = saved ? money(saved) : '';
 
     // A matching sheila counts too, one for each piece, and the total says so.
     var sheilaRow = root.querySelector('[data-zsa-sumrow]');
