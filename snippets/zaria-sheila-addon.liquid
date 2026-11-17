@@ -32,9 +32,8 @@
 <style>
   {%- comment -%}Room below it, so the tiles do not sit on the shoulders of Add to Cart.{%- endcomment -%}
   .zsa{margin:22px 0 26px}
-  .zsa__head{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:#161616;margin:0 0 4px}
+  .zsa__head{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:#161616;margin:0 0 12px}
   .zsa__head span{color:#a89f94;letter-spacing:.1em}
-  .zsa__sub{font-size:12.5px;line-height:1.55;color:#6a6a6a;margin:0 0 12px;max-width:62ch}
   .zsa__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   @media(max-width:479px){.zsa__grid{grid-template-columns:1fr}}
   .zsa__tile{position:relative;display:flex;align-items:center;gap:14px;text-align:left;
@@ -65,7 +64,6 @@
 
 <div class="zsa" data-zsa{% if passive %} data-zsa-passive{% endif %}>
   <p class="zsa__head">Add a matching sheila <span>optional</span></p>
-  <p class="zsa__sub">Two shades chosen to go with this piece. Pick one and it joins your order as its own line; leave it and the piece comes on its own.</p>
 
   <div class="zsa__grid">
     {%- for zsa_s in zsa_list -%}
