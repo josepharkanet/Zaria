@@ -207,9 +207,16 @@
 <div class="zdf-overlay{% if inline %} zdf--inline{% endif %}" data-zdf-overlay{% unless inline %} role="dialog" aria-modal="true"{% endunless %} aria-label="Design your look">
   <div class="zdf-modal">
     <button type="button" class="zdf-close" data-zdf-close aria-label="Close">&times;</button>
-    <p class="zdf-eyebrow">The Design Studio</p>
-    <h2 class="zdf-title">Design your look</h2>
-    <p class="zdf-lede">Tell us the piece you have in mind in this fabric. The cloth and the making are added to your order as two lines, and a designer follows up to refine the design and confirm measurements.</p>
+    {%- comment -%}
+      The heading belongs to the dialogue, which arrives with no context of its own. Inline it is
+      three lines saying what the button just said and what the page already shows, so it goes
+      (client, 2026-11-17). The brief then opens straight on "Choose your design".
+    {%- endcomment -%}
+    {%- unless inline -%}
+      <p class="zdf-eyebrow">The Design Studio</p>
+      <h2 class="zdf-title">Design your look</h2>
+      <p class="zdf-lede">Tell us the piece you have in mind in this fabric. The cloth and the making are added to your order as two lines, and a designer follows up to refine the design and confirm measurements.</p>
+    {%- endunless -%}
     {%- comment -%}
       Which cloth the brief is for, named only where it is not already obvious. In the page it
       sits on that bolt's own product page, under its own title and its own photograph, so
