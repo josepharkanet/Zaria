@@ -68,15 +68,18 @@
         {%- assign zfacet_short = true -%}
       {%- endif -%}
       {%- comment -%}
-        Designers is the product tag facet, kept to the two houses and relabelled (client,
-        2026-11-17: "in RTW, in the filter, add Designers to filter by brand"). Every garment
-        carries a pile of other tags - Cotton, Hand-Embroidered, No Customisation,
-        Ready-to-Wear - and none of those is a designer, so the values are sifted below rather
-        than the facet shown whole. It draws nothing at all unless the Product tag filter is
-        switched on in Search & Discovery, which no API can do.
+        Designers filters on custom.designer, a field of its own, and lists whatever it finds
+        (client, 2026-11-17: "in future what will be adding, that brand also will come here").
+        It was first built on the product tag facet sifted to Zaria and Freya by name, which
+        could never answer that: a tag facet cannot be opened up, because a garment's tags also
+        carry Cotton, Hand-Embroidered, No Customisation and Ready-to-Wear, and none of those
+        is a designer. With its own field there is no list here to keep up to date - a new
+        house appears the moment a product carries its name.
+
+        It draws nothing until the Designer metafield is added as a filter in Search &
+        Discovery, which no API can do.
       {%- endcomment -%}
-      {%- assign zfacet_short_keep = 'product type,pattern,colour,color,tag,product tag,tags' | split: ',' -%}
-      {%- assign zfacet_houses = 'zaria,freya' | split: ',' -%}
+      {%- assign zfacet_short_keep = 'product type,pattern,colour,color,designer,designers' | split: ',' -%}
       {%- assign zf_slot_type = '' -%}
       {%- assign zf_slot_house = '' -%}
       {%- assign zf_slot_pattern = '' -%}
@@ -92,16 +95,11 @@
         {%- comment -%}Display "Family" / "Scent Group" as "Scent"{%- endcomment -%}
         {%- assign filter_label = filter.label -%}
         {%- assign zf_is_house = false -%}
-        {%- if dl contains 'tag' -%}
+        {%- if dl contains 'designer' -%}
           {%- assign zf_is_house = true -%}
           {%- assign filter_label = 'Designers' -%}
-          {%- comment -%}Nothing to offer if neither house is among this listing's tags.{%- endcomment -%}
-          {%- assign zf_house_n = 0 -%}
-          {%- for fv in filter.values -%}
-            {%- assign fvl = fv.label | downcase | strip -%}
-            {%- if zfacet_houses contains fvl -%}{%- assign zf_house_n = zf_house_n | plus: 1 -%}{%- endif -%}
-          {%- endfor -%}
-          {%- if zf_house_n == 0 -%}{%- continue -%}{%- endif -%}
+          {%- comment -%}One house on the page is not a choice, so the box is not drawn.{%- endcomment -%}
+          {%- if filter.values.size < 2 -%}{%- continue -%}{%- endif -%}
         {%- endif -%}
         {%- if dl == 'family' or dl == 'scent group' or dl == 'scent_group' or dl contains 'scent group' -%}{%- assign filter_label = 'Scent' -%}{%- endif -%}
 
@@ -330,8 +328,6 @@
               {%- elsif zf_is_house -%}
                 <div class="zar-facet__values">
                   {%- for filter_value in filter.values -%}
-                    {%- assign fvl = filter_value.label | downcase | strip -%}
-                    {%- unless zfacet_houses contains fvl -%}{%- continue -%}{%- endunless -%}
                     <label class="zar-check">
                       <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" {% if filter_value.active %}checked{% endif %}>
                       <span class="zar-check__box"></span>
