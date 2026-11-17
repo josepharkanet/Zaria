@@ -29,22 +29,20 @@
   "No Customisation" leaves the size and the size chart and drops the Made to Order mode.
 {%- endcomment -%}
 {%- comment -%}
-  The eight the atelier takes, in the order it takes them (client, 2026-11-17): neck deep,
-  neck wide, armhole, shoulder, bust, waist, hips, length. This replaced a list that asked
-  for neck open and sleeve length and never asked the neck in two directions or the armhole
-  at all.
+  The nine from the client's own measurement guide (2026-11-17), in its order and its words:
+  neck depth, neck width, sleeve length, armhole, chest, waist, hips, full length, shoulder
+  width. Rows are "Label:min:max:what to measure", separated by | rather than , because the
+  guide's wording has commas in it.
 
-  Each row is "Label:min:max" and the two numbers are HALF inches, because the dropdown steps
-  in half inches: 76 to 117 is 38 to 58.5 in. The five carried over keep the ranges they had;
-  the three new ones are ordinary garment ranges, worth a word with the atelier if a cutter
-  ever finds them short.
+  min and max are HALF inches, since the dropdown steps in halves: 32 to 64 is 16 to 32 in.
+  **Chest, waist and hips are flat widths**, measured across the garment lying down, not
+  around the body, which is why they read about half of a body measurement. The note under
+  the drawing says so, and doubling is left to the atelier rather than to the customer.
 
-  The numbered points on the drawing are matched to these by position, not by name, so the
-  circles below have to be renumbered and moved with any change to this line. "Shoulder to
-  Shoulder" used to sit last because its label wrapped in half a column; "Shoulder" is short
-  enough to sit anywhere, so that is no longer a constraint.
+  The numbered points on the drawing are matched to these by forloop.index, so the circles
+  have to move with any change to this line.
 {%- endcomment -%}
-{%- assign zmm_fields = "Neck Deep:8:24,Neck Wide:8:22,Armhole:26:52,Shoulder:26:37,Bust:76:117,Waist:76:124,Hips:86:136,Length:100:130" | split: ',' -%}
+{%- assign zmm_fields = "Neck depth:6:24:Neckline shoulder level to the lowest point of the V|Neck width:8:22:Straight across the neck opening, from one side to the other|Sleeve length:30:56:Shoulder seam to the cuff, along the outer sleeve|Armhole:26:52:Around the complete armhole seam, where the sleeve joins the body|Chest:32:64:Across the garment, just below the armholes|Waist:30:64:Across the garment, at the natural waist level|Hips:34:72:Across the garment, at the fullest hip level|Full length:96:132:Highest shoulder point beside the neck, straight down to the hem|Shoulder width:26:40:Across the upper back, from one shoulder seam to the other" | split: '|' -%}
 {%- assign zmm_nocust = false -%}
 {%- if product.tags contains 'No Customisation' -%}{%- assign zmm_nocust = true -%}{%- endif -%}
 {%- comment -%}
@@ -115,6 +113,7 @@
   .zmm__visual{display:grid;grid-template-columns:210px 1fr;gap:clamp(18px,3vw,34px);align-items:start}
   .zmm__figure{position:sticky;top:14px}
   .zmm__figure svg{width:100%;height:auto;display:block}
+  .zmm__figsay{font-size:11px;line-height:1.55;color:var(--zf-hint,#8a8178);margin:8px 0 0;text-align:center}
   .zmm__figcap{text-align:center;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#a79f93;margin:10px 0 0}
   .zmm__mark{transition:transform .18s ease}
   .zmm__mark circle{fill:#fff;stroke:#c9a86a;stroke-width:1.4;transition:fill .18s ease,stroke .18s ease}
@@ -132,6 +131,8 @@
   .zmm__readyfoot .zmm__chart{flex:0 0 auto}
   .zmm__readyfoot .zsc__open{padding:0}
   .zmm__field{display:flex;flex-direction:column;position:relative}
+  {%- comment -%}What to measure, in the guide's own words, under the name it belongs to.{%- endcomment -%}
+  .zmm__fsay{display:block;font-size:11px;line-height:1.45;color:var(--zf-hint,#8a8178);margin:2px 0 6px}
   .zmm__field--full{grid-column:1 / -1}
   .zmm__fhead{display:flex;align-items:center;gap:8px;margin:0 0 var(--zf-label-gap);min-height:20px}
   .zmm__num{flex:none;width:20px;height:20px;border-radius:50%;background:#f1ece3;color:#8a7a53;border:1px solid #e0d8c8;
@@ -292,43 +293,68 @@
   <div class="zmm__panel" data-zmm-panel="custom" hidden>
     <div class="zmm__visual">
       <div class="zmm__figure" aria-hidden="true">
-        <svg viewBox="0 0 300 500" fill="none" stroke="#151515" stroke-width="1.4" stroke-linejoin="round">
-          <!-- body A-line -->
-          <path d="M124 66 L176 66 L268 470 Q150 486 32 470 Z" fill="#faf7f2"/>
-          <!-- open front reveal -->
-          <path d="M148 92 L141 470 L159 470 L152 92 Z" fill="#efe7db"/>
+        <svg viewBox="0 0 330 560" fill="none" stroke="#151515" stroke-width="1.4" stroke-linejoin="round">
+          <!-- A V-neck jalabiya, front, laid flat: the client's own measurement guide, redrawn.
+               Everything the numbers point at is drawn here, so a circle never floats free. -->
           <!-- sleeves -->
-          <path d="M124 66 L52 238 L80 252 L140 122 Z" fill="#faf7f2"/>
-          <path d="M176 66 L248 238 L220 252 L160 122 Z" fill="#faf7f2"/>
-          <!-- neckline + front edges -->
-          <path d="M138 64 L150 92 L162 64"/>
-          <path d="M148 92 L141 470M152 92 L159 470" stroke-width="1.1"/>
-          <!-- guide lines: the line each measurement is taken along -->
-          <g stroke="#d9c9a4" stroke-dasharray="4 4" stroke-width="1">
-            <!-- bust / waist / hip / bottom -->
-            <path d="M114 154 H188"/><path d="M102 216 H202"/><path d="M80 302 H222"/><path d="M40 468 H260"/>
-            <!-- neck wide, across the opening; neck deep, down the middle of it -->
-            <path d="M138 64 H162"/><path d="M150 64 V92"/>
-            <!-- armhole, the seam where the sleeve meets the body -->
-            <path d="M124 66 L140 122"/><path d="M176 66 L160 122"/>
+          <path d="M124 92 L62 256 L88 272 L140 150 Z" fill="#faf7f2"/>
+          <path d="M236 92 L298 256 L272 272 L220 150 Z" fill="#faf7f2"/>
+          <!-- body: shoulders, underarms, A-line to the hem -->
+          <path d="M124 92 L160 92 L180 136 L200 92 L236 92 L224 214 L258 522 Q180 534 102 522 L136 214 Z" fill="#faf7f2"/>
+          <!-- neckline -->
+          <path d="M160 92 L180 136 L200 92"/>
+          <!-- the fall of the skirt, faint -->
+          <g stroke="#cfc6b8" stroke-width="1">
+            <path d="M152 300 L136 516"/><path d="M208 300 L224 516"/>
           </g>
-          <!-- length arrow -->
-          <g stroke="#c9c1b4" stroke-width="1">
-            <path d="M22 74 L22 470" stroke-dasharray="3 5"/>
-            <path d="M18 80 L22 72 L26 80M18 464 L22 472 L26 464"/>
+
+          <!-- extension lines, the thin dotted guides the measurements are read against -->
+          <g stroke="#d9cfc0" stroke-width="0.9" stroke-dasharray="3 4">
+            <path d="M124 92 V34"/><path d="M236 92 V34"/>
+            <path d="M160 92 V64"/><path d="M200 92 V64"/>
+            <path d="M124 92 H40"/><path d="M102 522 H40"/>
+            <path d="M180 113 H214"/>
           </g>
+
+          <!-- the measurements themselves -->
+          <g stroke="#7a1f34" stroke-width="1.1">
+            <!-- 9 shoulder width -->
+            <path d="M124 40 H236"/><path d="M130 36 L124 40 L130 44"/><path d="M230 36 L236 40 L230 44"/>
+            <!-- 2 neck width -->
+            <path d="M160 70 H200"/><path d="M166 66 L160 70 L166 74"/><path d="M194 66 L200 70 L194 74"/>
+            <!-- 1 neck depth -->
+            <path d="M180 94 V134"/><path d="M176 100 L180 94 L184 100"/><path d="M176 128 L180 134 L184 128"/>
+            <!-- 3 sleeve length, along the outer sleeve -->
+            <path d="M106 84 L44 248"/><path d="M106 92 L106 84 L114 88"/><path d="M44 240 L44 248 L52 246"/>
+            <!-- 8 full length -->
+            <path d="M44 92 V522"/><path d="M40 98 L44 92 L48 98"/><path d="M40 516 L44 522 L48 516"/>
+            <!-- 4 armhole, around the seam where the sleeve joins -->
+            <path d="M236 92 C258 130 250 184 224 214" stroke-dasharray="4 4"/>
+            <!-- 5 chest / 6 waist / 7 hips, flat across the garment -->
+            <g stroke-dasharray="5 4">
+              <path d="M134 228 H226"/><path d="M126 306 H234"/><path d="M116 390 H244"/>
+            </g>
+            <path d="M140 224 L134 228 L140 232"/><path d="M220 224 L226 228 L220 232"/>
+            <path d="M132 302 L126 306 L132 310"/><path d="M228 302 L234 306 L228 310"/>
+            <path d="M122 386 L116 390 L122 394"/><path d="M238 386 L244 390 L238 394"/>
+          </g>
+
           <g class="zmm__marks">
-            <g class="zmm__mark" data-zmm-mark="1"><!-- neck deep: inside the V, on the drop itself --><circle cx="150" cy="86" r="10"/><text x="150" y="90" text-anchor="middle">1</text></g>
-            <g class="zmm__mark" data-zmm-mark="2"><!-- neck wide: above the chord across the opening --><circle cx="150" cy="44" r="10"/><text x="150" y="48" text-anchor="middle">2</text></g>
-            <g class="zmm__mark" data-zmm-mark="3"><!-- armhole: on the armscye seam, halfway down it --><circle cx="137" cy="112" r="10"/><text x="137" y="116" text-anchor="middle">3</text></g>
-            <g class="zmm__mark" data-zmm-mark="4"><!-- shoulder: the shoulder line, at its outer point --><circle cx="180" cy="54" r="10"/><text x="180" y="58" text-anchor="middle">4</text></g>
-            <g class="zmm__mark" data-zmm-mark="5"><!-- bust: the end of the bust guide --><circle cx="190" cy="154" r="10"/><text x="190" y="158" text-anchor="middle">5</text></g>
-            <g class="zmm__mark" data-zmm-mark="6"><!-- waist: the end of the waist guide --><circle cx="204" cy="216" r="10"/><text x="204" y="220" text-anchor="middle">6</text></g>
-            <g class="zmm__mark" data-zmm-mark="7"><!-- hips: the end of the hip guide --><circle cx="224" cy="302" r="10"/><text x="224" y="306" text-anchor="middle">7</text></g>
-            <g class="zmm__mark" data-zmm-mark="8"><!-- length: the arrow down the side --><circle cx="22" cy="272" r="10"/><text x="22" y="276" text-anchor="middle">8</text></g>
+            <g class="zmm__mark" data-zmm-mark="1"><circle cx="224" cy="113" r="11"/><text x="224" y="117" text-anchor="middle">1</text></g>
+            <g class="zmm__mark" data-zmm-mark="2"><circle cx="180" cy="70" r="11"/><text x="180" y="74" text-anchor="middle">2</text></g>
+            <g class="zmm__mark" data-zmm-mark="3"><circle cx="66" cy="170" r="11"/><text x="66" y="174" text-anchor="middle">3</text></g>
+            <g class="zmm__mark" data-zmm-mark="4"><circle cx="266" cy="152" r="11"/><text x="266" y="156" text-anchor="middle">4</text></g>
+            <g class="zmm__mark" data-zmm-mark="5"><circle cx="180" cy="228" r="11"/><text x="180" y="232" text-anchor="middle">5</text></g>
+            <g class="zmm__mark" data-zmm-mark="6"><circle cx="180" cy="306" r="11"/><text x="180" y="310" text-anchor="middle">6</text></g>
+            <g class="zmm__mark" data-zmm-mark="7"><circle cx="180" cy="390" r="11"/><text x="180" y="394" text-anchor="middle">7</text></g>
+            <g class="zmm__mark" data-zmm-mark="8"><circle cx="44" cy="312" r="11"/><text x="44" y="316" text-anchor="middle">8</text></g>
+            <g class="zmm__mark" data-zmm-mark="9"><circle cx="262" cy="40" r="11"/><text x="262" y="44" text-anchor="middle">9</text></g>
           </g>
         </svg>
         <p class="zmm__figcap">Where we measure</p>
+        {%- comment -%}The two things the client's guide asks for before a tape is picked up.{%- endcomment -%}
+        <p class="zmm__figsay">Lay a well-fitting jalabiya flat and smooth before measuring.<br>
+          Chest, waist and hips are <b>flat widths</b> across the garment, not around the body.</p>
       </div>
 
       <div>
@@ -353,6 +379,7 @@
                 <span class="zmm__num">{{ forloop.index }}</span>
                 <span class="zmm__fname">{{ flabel }}</span>
               </div>
+              {%- if fp[3] != blank -%}<span class="zmm__fsay">{{ fp[3] }}</span>{%- endif -%}
               <select name="properties[{{ flabel }}]" data-zmm-req data-zmm-in="custom" data-zmm-field-select="{{ forloop.index }}" disabled>
                 <option value="">Select</option>
                 {%- for h in (hmin..hmax) -%}
