@@ -212,8 +212,12 @@
   </div>
 
   {%- comment -%} ===== READY TO WEAR ===== {%- endcomment -%}
+  {%- comment -%}
+    Only the length is read here now. The sleeve was read for the line under the Length row and
+    went with it; it is still printed in the product description, which is where a finished
+    piece's measurements belong.
+  {%- endcomment -%}
   {%- assign zmm_len = product.metafields.custom.length.value -%}
-  {%- assign zmm_slv = product.metafields.custom.sleeve_length.value -%}
 
   {%- comment -%}
     Two kinds of ready-to-wear piece sit behind this panel. One is already finished in the atelier
