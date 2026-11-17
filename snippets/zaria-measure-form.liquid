@@ -152,7 +152,18 @@
 <div class="zmm" data-zmm{% if zmm_nocust %} data-zmm-readyonly{% endif %}{% if zmm_customonly %} data-zmm-customonly{% endif %}>
   <div class="zmm__top">
     <div>
-      <p class="zmm__head">{% if zmm_customonly %}Made to order{% elsif zmm_nocust %}Size{% else %}Choose your size{% endif %} <span class="req">*</span></p>
+      {%- comment -%}
+        No heading where the two buttons are the heading (client, 2026-11-17). "Ready to Wear"
+        and "Made to Order" say what the choice is better than "Choose your size" did. It stays
+        on the two pages that show no buttons: a finished piece, which has a size rather than a
+        choice, and the design brief, which is made to order and says so.
+      {%- endcomment -%}
+      {%- assign zmm_head = '' -%}
+      {%- if zmm_customonly -%}{%- assign zmm_head = 'Made to order' -%}
+      {%- elsif zmm_nocust -%}{%- assign zmm_head = 'Size' -%}{%- endif -%}
+      {%- if zmm_head != blank -%}
+        <p class="zmm__head">{{ zmm_head }} <span class="req">*</span></p>
+      {%- endif -%}
       <p class="zmm__sub" data-zmm-sub>{% if zmm_customonly %}Cut to your own measurements, in inches with the centimetre in brackets. Our designer confirms them with you at the fitting.{% elsif zmm_nocust %}This piece is finished in the atelier and comes in a standard size. For a piece cut to your own measurements, start a brief in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% else %}{% endif %}</p>
     </div>
   </div>
