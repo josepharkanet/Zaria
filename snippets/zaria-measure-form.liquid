@@ -113,24 +113,25 @@
   {%- comment -%}A little wider than the old sketch needed: the guide carries nine numbers and fine rules.{%- endcomment -%}
   .zmm__visual{display:grid;grid-template-columns:clamp(210px,24vw,290px) 1fr;gap:clamp(18px,3vw,34px);align-items:start}
   .zmm__figure{position:sticky;top:14px}
-  .zmm__figure svg{width:100%;height:auto;display:block}
   .zmm__figsay{font-size:11px;line-height:1.55;color:var(--zf-hint,#8a8178);margin:8px 0 0;text-align:center}
   .zmm__guidewrap{position:relative;line-height:0}
   .zmm__guide{display:block;width:100%;height:auto}
+  {%- comment -%}
+    A dot is 5.6% of the drawing's width, which is the size of the printed circle it covers,
+    and its numeral is measured off the drawing too (cqw) rather than off the window, so it
+    stays inside the circle at every column width.
+  {%- endcomment -%}
   .zmm__dot{position:absolute;width:5.6%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
     display:flex;align-items:center;justify-content:center;background:var(--wine,#7a1f34);color:#fff;
-    font-family:inherit;font-size:clamp(8px,1.05vw,11px);line-height:1;opacity:0;pointer-events:none;
-    transition:opacity .2s ease,box-shadow .2s ease}
+    font-family:inherit;font-size:9px;font-weight:500;line-height:1;opacity:0;pointer-events:none;
+    transition:opacity .22s ease,box-shadow .22s ease}
+  @supports (width:1cqw){
+    .zmm__guidewrap{container-type:inline-size}
+    .zmm__dot{font-size:3.3cqw}
+  }
   .zmm__dot.is-done{opacity:1}
   .zmm__dot.is-active{opacity:1;box-shadow:0 0 0 4px rgba(122,31,52,.16)}
   .zmm__figcap{text-align:center;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#a79f93;margin:10px 0 0}
-  .zmm__mark{transition:transform .18s ease}
-  .zmm__mark circle{fill:#fff;stroke:#c9a86a;stroke-width:1.4;transition:fill .18s ease,stroke .18s ease}
-  .zmm__mark text{fill:#7a6a3f;stroke:none;font-family:'Jost',sans-serif;font-size:11px;font-weight:600;transition:fill .18s ease;paint-order:stroke fill}
-  .zmm__mark.is-done circle{fill:var(--wine,#7a1f34);stroke:var(--wine,#7a1f34)}
-  .zmm__mark.is-done text{fill:#fff}
-  .zmm__mark.is-active{transform:scale(1.28)}
-  .zmm__mark.is-active circle{stroke:#161616}
 
   .zmm__fields{display:grid;grid-template-columns:1fr 1fr;gap:22px var(--zf-gap);align-items:stretch}
   .zmm__fname .req{color:var(--wine,#7a1f34)}
