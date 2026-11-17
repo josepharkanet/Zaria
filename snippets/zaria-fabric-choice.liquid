@@ -109,6 +109,8 @@
     font-family:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6a6a6a;cursor:pointer}
   .zfc__more:hover{border-color:#161616;color:#161616}
   .zfc__empty{font-size:13px;color:var(--zf-hint);padding:10px 2px}
+  .zfc[hidden],.zfc.is-off > *:not([data-zsa]){display:none}
+  .zfc.is-off{border:0;padding:0;margin:0}
   .zfc__sum{border:1px solid #ece8e2;background:#fbfaf8;padding:12px 14px;margin:14px 0 0;font-size:13px}
   .zfc__sum div{display:flex;justify-content:space-between;gap:16px;padding:3px 0;color:#6a6a6a}
   .zfc__sum div span:last-child{color:#161616;white-space:nowrap}
@@ -281,7 +283,10 @@
   }
   function syncMode() {
     var on = fabricOn();
-    root.hidden = !on;
+    // Ready to wear hides the cloth room, but not the sheila sitting in it: that offer holds
+    // whichever way the piece is bought. Hiding by class rather than by `hidden` so one child
+    // can be spared.
+    root.classList.toggle('is-off', !on);
     if (nameF) nameF.disabled = !on;
     if (handleF) handleF.disabled = !on;
     if (!on && warn) warn.hidden = true;
@@ -508,7 +513,36 @@
   // Two lines on the order: this piece, and the cloth it is cut from.
   if (form) {
     form.addEventListener('submit', function (e) {
-      if (!fabricOn()) return;        /* ready to wear: one line, added the ordinary way */
+      if (!fabricOn()) {
+        // Ready to wear takes no cloth line, but a sheila may still have been chosen and the
+        // sheila's own handler is passive here, so this is the only place it can be added.
+        var rtwSheila = root.querySelector('[data-zsa-variant]');
+        if (!rtwSheila || !rtwSheila.value) return;   /* nothing extra: let the form post itself */
+        e.preventDefault();
+        if (!form.reportValidity()) return;
+        var rtwBtn = form.querySelector('.zpdp__atc');
+        var rtwLabel = rtwBtn ? rtwBtn.textContent : '';
+        if (rtwBtn) { rtwBtn.disabled = true; rtwBtn.textContent = 'Adding\u2026'; }
+        var rtwProps = {};
+        new FormData(form).forEach(function (v, k) {
+          var mm = /^properties\[(.+)\]$/.exec(k);
+          if (mm && String(v).trim() !== '') rtwProps[mm[1]] = v;
+        });
+        var rtwId = form.querySelector('[name="id"]');
+        var rtwFor = root.querySelector('[data-zsa-for]');
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ items: [
+            { id: rtwId ? rtwId.value : '', quantity: pieces(), properties: rtwProps },
+            { id: rtwSheila.value, quantity: pieces(), properties: { 'For': rtwFor ? rtwFor.value : '' } }
+          ] })
+        })
+          .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
+          .then(function () { window.location.href = '/cart'; })
+          .catch(function () { if (rtwBtn) { rtwBtn.disabled = false; rtwBtn.textContent = rtwLabel; } });
+        return;
+      }
       if (!chosen) {
         e.preventDefault();
         warn.hidden = false;
