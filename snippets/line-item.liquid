@@ -7,16 +7,7 @@
 {%- enddoc -%}
 
 <line-item class="line-item">
-  {%- comment -%}
-    A sheila added beside a piece is bought from a rolled-scarf mockup, not from the model shot
-    on its own product page, so the bag shows the picture it was chosen from (client,
-    2026-11-17). The line carries it as `_mockup`, a hidden property, and that is a theme asset
-    rather than a Shopify image, so it cannot go through image_url and is written out as it is.
-  {%- endcomment -%}
-  {%- assign li_mock = line_item.properties._mockup -%}
-  {%- if li_mock != blank -%}
-    <img src="{{ li_mock }}" alt="{{ line_item.title | escape }}" loading="lazy" width="120" height="120" class="line-item__media">
-  {%- elsif line_item.image != blank -%}
+  {%- if line_item.image != blank -%}
     {{-
       line_item.image
       | image_url: width: line_item.image.width
