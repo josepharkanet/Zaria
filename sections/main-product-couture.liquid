@@ -623,7 +623,17 @@
           it is set. That puts the cost at the foot of the fabric room, right above Add to
           Cart, which is where a customer looks for it (client, 2026-11-13).
         {%- endcomment -%}
-        {%- if is_garment -%}{% render 'zaria-measure-form', product: product %}{%- endif -%}
+        {%- comment -%}
+          Reached through Made to Order, the piece does not ask which it is: the journey already
+          said so (client, 2026-11-17: "going through made to order, the ready to wear option is
+          not needed and the made to order one is not needed separately, it's understood"). The
+          two buttons still stand on the piece's own page, where nothing has been decided yet.
+        {%- endcomment -%}
+        {%- assign zpdp_mto_only = false -%}
+        {%- if collection != blank and collection.handle contains 'made-to-order' -%}
+          {%- assign zpdp_mto_only = true -%}
+        {%- endif -%}
+        {%- if is_garment -%}{% render 'zaria-measure-form', product: product, custom_only: zpdp_mto_only %}{%- endif -%}
         {%- if is_madetoorder and is_restock == false -%}{% render 'zaria-fabric-choice', product: product %}{%- endif -%}
         {%- comment -%}
           The matching sheila. It renders itself only where the client's pairing exists, which

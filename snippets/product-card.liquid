@@ -40,6 +40,13 @@
 -%}
 
 {%- comment -%}
+  Links carry the collection they were opened from (product.url | within: collection). Shopify
+  then exposes that collection on the product page, which is how the page knows a piece was
+  reached through Made to Order and can stop asking a question the journey already answered
+  (client, 2026-11-17). On a page with no collection the filter returns the plain product url,
+  so nothing else changes.
+{%- endcomment -%}
+{%- comment -%}
   A product the shop has run out of is not taken off the grid: it falls to the end of it and
   says "Available soon" down the side of its picture, and nothing on it can be bought
   (client, 2026-11-13). Counted stock is what decides, so a piece the shop has never counted
@@ -111,7 +118,7 @@
 {%- endif -%}
 
 
-      <a href="{{ product.url }}" class="product-card__media" draggable="false" data-instant>
+      <a href="{{ product.url | within: collection }}" class="product-card__media" draggable="false" data-instant>
         {%- capture sizes -%}
           {%- assign products_per_row_desktop = section.settings.products_per_row_desktop | default: 3 -%}
 
@@ -276,7 +283,7 @@
 
         {%- if show_title -%}
           <a
-            href="{{ product.url }}"
+            href="{{ product.url | within: collection }}"
             class="product-title {% if text_class != blank %}{{ text_class }}{% endif %} {% if settings.product_title_max_lines > 0 %}line-clamp{% endif %}"
             {% if settings.product_title_max_lines > 0 %}
               style="--line-clamp-count: {{ settings.product_title_max_lines }}"
@@ -388,7 +395,7 @@
               {%- endform -%}
             </product-form>
           {%- else -%}
-            <a href="{{ product.url }}" class="button button--sm button--outline button--subdued" data-instant>
+            <a href="{{ product.url | within: collection }}" class="button button--sm button--outline button--subdued" data-instant>
               {{- 'product.general.choose_options' | t -}}
             </a>
           {%- endif -%}
