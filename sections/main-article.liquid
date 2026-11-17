@@ -19,8 +19,12 @@
   #shopify-section-{{ section.id }} .zaria-ahero__scrim--soft {
     background: linear-gradient(to top, rgba(0,0,0,.42) 0%, rgba(0,0,0,.14) 60%, rgba(0,0,0,0) 100%);
   }
+  /* No width here. The .container class beside it sets the page gutter as a margin and lets
+     the box size itself to what is left; stating width:100% as well made the box the full
+     width of the hero AND pushed it in by the gutter, so on a phone the title and the category
+     line hung 20px off the right edge. */
   #shopify-section-{{ section.id }} .zaria-ahero__inner {
-    position: relative; z-index: 2; width: 100%; text-align: center; color: #fff;
+    position: relative; z-index: 2; text-align: center; color: #fff;
     padding-top: clamp(40px, 6vw, 72px); padding-bottom: clamp(34px, 4.5vw, 56px);
   }
   #shopify-section-{{ section.id }} .zaria-ahero__eyebrow {
