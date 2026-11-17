@@ -230,10 +230,16 @@
     <div class="zmm__ready-grid">
       <div class="zmm__label">Length <span class="req">*</span></div>
       {%- comment -%}
-        The piece's own length first, then every inch below it down to 50 (client, 2026-11-16:
-        "bring back all 55, 54, 53, 52, 51, 50, all lesser than 56"). Cloth can be taken up and
+        The piece's own length first, then every half inch below it down to 50 (client,
+        2026-11-16: "bring back all 55, 54, 53, 52, 51, 50, all lesser than 56", and
+        2026-11-17: "add .5 options eg 51, 51.5, 52, 52.5 so on"). Cloth can be taken up and
         cannot be let down, so the ladder only ever runs downwards from what the piece is: a
-        57 in piece offers 57 to 50, a 54 in piece offers 54 to 50.
+        56 in piece offers 56 down to 50 in half inches, a 54 in piece offers 54 down to 50.
+
+        Counted in half inches rather than inches, because that is the smallest step a hem is
+        taken up by and it is the step the made-to-order side has always used. The arithmetic
+        is done in halves (50 in = 100) so nothing has to divide a decimal: `whole` is an
+        integer division and `rem` says whether to print the half.
 
         It is built by counting down rather than with a range, because Liquid ranges only run
         upwards and cannot be reversed. The first turn of the loop is the piece's own length,
@@ -245,13 +251,17 @@
       {%- endcomment -%}
       <select name="properties[Length]" data-zmm-in="ready" disabled>
         {%- if zmm_len != blank -%}
-          {%- assign zlen_i = zmm_len | plus: 0 -%}
-          {%- assign zlen_span = zlen_i | minus: 50 -%}
+          {%- assign zlen_h = zmm_len | times: 2 | round: 0 -%}
+          {%- assign zlen_span = zlen_h | minus: 100 -%}
           {%- if zlen_span < 0 -%}{%- assign zlen_span = 0 -%}{%- endif -%}
           {%- for zstep in (0..zlen_span) -%}
-            {%- assign zlen_opt = zlen_i | minus: zstep -%}
-            {%- assign zmm_lcm = zlen_opt | times: 2.54 | round: 0 -%}
-            <option value="{{ zlen_opt }} in ({{ zmm_lcm }} cm)"{% if zstep == 0 %} selected{% endif %}>{{ zlen_opt }} in ({{ zmm_lcm }} cm)</option>
+            {%- assign zopt_h = zlen_h | minus: zstep -%}
+            {%- assign zopt_w = zopt_h | divided_by: 2 -%}
+            {%- assign zopt_r = zopt_h | modulo: 2 -%}
+            {%- if zopt_r == 0 -%}{%- capture zlen_lab -%}{{ zopt_w }}{%- endcapture -%}
+            {%- else -%}{%- capture zlen_lab -%}{{ zopt_w }}.5{%- endcapture -%}{%- endif -%}
+            {%- assign zmm_lcm = zopt_h | times: 1.27 | round: 0 -%}
+            <option value="{{ zlen_lab }} in ({{ zmm_lcm }} cm)"{% if zstep == 0 %} selected{% endif %}>{{ zlen_lab }} in ({{ zmm_lcm }} cm)</option>
           {%- endfor -%}
         {%- else -%}
           <option value="One Size" selected>One Size</option>
