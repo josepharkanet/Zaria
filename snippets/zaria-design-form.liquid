@@ -72,8 +72,9 @@
     the ones they undo, so they win on equal specificity, and .is-open never fires here because
     there is no trigger to fire it.
   {%- endcomment -%}
-  .zdf-overlay.zdf--inline{position:static;inset:auto;z-index:auto;display:block;background:none;
+  .zdf-overlay.zdf--inline{position:static;inset:auto;z-index:auto;display:none;background:none;
     overflow:visible;padding:0;margin-top:26px}
+  .zdf-overlay.zdf--inline.is-open{display:block}
   .zdf-overlay.zdf--inline .zdf-modal{max-width:none;width:auto;margin:0;padding:0;box-shadow:none}
   .zdf-overlay.zdf--inline .zdf-close{display:none}
   .zdf-overlay.zdf--inline .zdf-eyebrow{margin-bottom:6px}
@@ -193,12 +194,15 @@
 </style>
 
 {%- comment -%}
-  inline: true puts the brief in the page instead of over it. The button that opens the dialogue
-  goes with it, since there is nothing left to open.
+  The button opens the brief either way. Over the page when it is a dialogue, and in place when
+  it is inline: there the panel below simply unfolds (client, 2026-11-17: "add the previous
+  button which triggered the pop up, and when clicked just reveal the section below").
+
+  It also keeps the brief's set-up on the path it was written for. open() reads the length,
+  prices the cloth and measures the carousel, and it was always called after a click on a
+  finished page; running it mid-parse instead is what left the design tiles dead.
 {%- endcomment -%}
-{%- unless inline -%}
-  <button type="button" class="zdf-trigger" data-zdf-open>Design your look with this fabric</button>
-{%- endunless -%}
+<button type="button" class="zdf-trigger" data-zdf-open>Design your look with this fabric</button>
 
 <div class="zdf-overlay{% if inline %} zdf--inline{% endif %}" data-zdf-overlay{% unless inline %} role="dialog" aria-modal="true"{% endunless %} aria-label="Design your look">
   <div class="zdf-modal">
@@ -607,21 +611,18 @@
   // Inline there is nothing to open, close or dismiss, but the work open() did still has to
   // happen: the length, the running total and the carousel's arrows are all set up there.
   var INLINE = overlay.classList.contains('zdf--inline');
-  if (INLINE) {
-    // Deferred and guarded on purpose. open() used to run this after a click, with the page
-    // long since parsed; here it would run mid-parse, and anything it threw would take the
-    // rest of this script with it, including the submit handler below.
-    var startInline = function () {
-      try { readLength(); applyLength(); retotal(); } catch (err) {}
-      setTimeout(refreshNav, 80);
-    };
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', startInline);
-    } else {
-      setTimeout(startInline, 0);
-    }
-  } else {
-    openers.forEach(function(b){ b.addEventListener('click', open); });
+
+  // Inline, the same click unfolds the panel where it stands: no backdrop, nothing to scroll
+  // behind, and the button steps aside once there is a brief to read.
+  function reveal() {
+    overlay.classList.add('is-open');
+    openers.forEach(function (b) { b.hidden = true; });
+    readLength(); applyLength(); retotal(); setTimeout(refreshNav, 80);
+    overlay.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+
+  openers.forEach(function (b) { b.addEventListener('click', INLINE ? reveal : open); });
+  if (!INLINE) {
     overlay.querySelectorAll('[data-zdf-close]').forEach(function(b){ b.addEventListener('click', close); });
     overlay.addEventListener('click', function(e){ if(e.target===overlay) close(); });
     document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
