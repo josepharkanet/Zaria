@@ -139,8 +139,6 @@
   .zmm__field.is-done .zmm__num{background:var(--wine,#7a1f34);color:#fff;border-color:var(--wine,#7a1f34)}
   .zmm__fname{font-size:var(--zf-label-size);letter-spacing:var(--zf-label-track);text-transform:uppercase;color:var(--zf-label);line-height:1.4}
   .zmm__fname .u{color:#b3aca0;letter-spacing:.02em}
-  .zmm__prog{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8a8a;margin:2px 0 14px}
-  .zmm__prog b{color:var(--wine,#7a1f34);font-weight:500}
 
   @media(max-width:620px){
     .zmm__visual{grid-template-columns:1fr}
@@ -334,7 +332,12 @@
       </div>
 
       <div>
-        <p class="zmm__prog"><b data-zmm-count>0</b> of {{ zmm_fields.size }} measurements added <span class="zmm__fname" style="letter-spacing:.06em">&mdash; inches, with the centimetre in brackets</span></p>
+        {%- comment -%}
+          No counter. "0 of 8 measurements added" announced what had not been done yet, above a
+          form that already shows it: a filled field is marked and its point on the drawing
+          lights up (client, 2026-11-17). The script that keeps the count is guarded on the
+          element, so it simply finds nothing now and the marks still answer.
+        {%- endcomment -%}
         <div class="zmm__fields">
           {%- for f in zmm_fields -%}
             {%- assign fp = f | split: ':' -%}
