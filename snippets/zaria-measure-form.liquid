@@ -62,11 +62,6 @@
 
 <style>
   .zmm{margin:2px 0 18px;padding:4px 0}
-  .zmm__top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
-  .zmm__head{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#161616;margin:0 0 4px}
-  .zmm__head .req{color:var(--wine,#7a1f34)}
-  .zmm__sub:empty{display:none}
-  .zmm__sub{font-size:13px;color:var(--zf-hint);margin:0;max-width:52ch;line-height:1.65}
   .zmm__modes{display:flex;gap:10px;margin:14px 0 0}
   .zmm__modes[hidden]{display:none}
   .zmm__units{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a79f93;margin:14px 0 0}
@@ -176,25 +171,18 @@
 
 <div class="zmm" data-zmm{% if zmm_nocust %} data-zmm-readyonly{% endif %}{% if zmm_customonly %} data-zmm-customonly{% endif %}>
   {%- comment -%}
-    No heading where the two buttons are the heading (client, 2026-11-17). "Ready to Wear" and
-    "Made to Order" say what the choice is better than "Choose your size" did. It stays on the
-    design brief, which shows no buttons and has to say it is made to order.
+    This form opens with no heading of its own anywhere (client, 2026-11-17 and again
+    2026-11-18: "i told to remove this"). Three versions of one have now gone:
 
-    A finished piece says nothing here either (client, 2026-11-17). "Size *" over "This piece is
-    finished in the atelier and comes in a standard size..." sat above a row that offers no size
-    at all, only a length, and the line under that row already says the piece is finished at its
-    length, what the sleeve is, where the size chart is and where to go for a longer one. The
-    heading was announcing a choice that is not there. What is left is the Length row, the Size
-    Chart beside it, and that one line of plain English underneath.
+      "Choose your size", replaced by the two buttons, which name the choice better.
+      "Size *" over "This piece is finished in the atelier and comes in a standard size...",
+        which announced a choice a finished piece does not offer; it has only a length.
+      "Made to order *" over "Cut to your own measurements...", which stood on the pages that
+        show no buttons. The numbered fields below say what they are, and the page has already
+        said it is made to order, in the breadcrumb, in the menu and in the price line.
+
+    .zmm__top, .zmm__head and .zmm__sub are gone with them.
   {%- endcomment -%}
-  {%- if zmm_customonly -%}
-  <div class="zmm__top">
-    <div>
-      <p class="zmm__head">Made to order <span class="req">*</span></p>
-      <p class="zmm__sub" data-zmm-sub>Cut to your own measurements, in inches with the centimetre in brackets. Our designer confirms them with you at the fitting.</p>
-    </div>
-  </div>
-  {%- endif -%}
 
   <div class="zmm__modes"{% if zmm_nocust or zmm_customonly %} hidden{% endif %}>
     {%- unless zmm_customonly -%}
