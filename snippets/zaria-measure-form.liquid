@@ -114,6 +114,7 @@
   .zmm__figure{position:sticky;top:14px}
   .zmm__figure svg{width:100%;height:auto;display:block}
   .zmm__figsay{font-size:11px;line-height:1.55;color:var(--zf-hint,#8a8178);margin:8px 0 0;text-align:center}
+  .zmm__guide{display:block;width:100%;height:auto}
   .zmm__figcap{text-align:center;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#a79f93;margin:10px 0 0}
   .zmm__mark{transition:transform .18s ease}
   .zmm__mark circle{fill:#fff;stroke:#c9a86a;stroke-width:1.4;transition:fill .18s ease,stroke .18s ease}
@@ -300,64 +301,19 @@
   <div class="zmm__panel" data-zmm-panel="custom" hidden>
     <div class="zmm__visual">
       <div class="zmm__figure" aria-hidden="true">
-        <svg viewBox="0 0 330 560" fill="none" stroke="#151515" stroke-width="1.4" stroke-linejoin="round">
-          <!-- A V-neck jalabiya, front, laid flat: the client's own measurement guide, redrawn.
-               Everything the numbers point at is drawn here, so a circle never floats free. -->
-          <!-- sleeves -->
-          <path d="M124 92 L62 256 L88 272 L140 150 Z" fill="#faf7f2"/>
-          <path d="M236 92 L298 256 L272 272 L220 150 Z" fill="#faf7f2"/>
-          <!-- body: shoulders, underarms, A-line to the hem -->
-          <path d="M124 92 L160 92 L180 136 L200 92 L236 92 L224 214 L258 522 Q180 534 102 522 L136 214 Z" fill="#faf7f2"/>
-          <!-- neckline -->
-          <path d="M160 92 L180 136 L200 92"/>
-          <!-- the fall of the skirt, faint -->
-          <g stroke="#cfc6b8" stroke-width="1">
-            <path d="M152 300 L136 516"/><path d="M208 300 L224 516"/>
-          </g>
+        {%- comment -%}
+          The client's own measurement guide, their artwork rather than a redraw of it. Two
+          attempts at drawing it by hand came back as "the shape and measurement marking is
+          different on our drawing" (2026-11-17), and they were right: the sleeve hang, the
+          A-line and where the chest line meets the body are all particular. Their PNG is
+          trimmed to the figure and shipped as assets/zaria-measure-guide.png.
 
-          <!-- extension lines, the thin dotted guides the measurements are read against -->
-          <g stroke="#d9cfc0" stroke-width="0.9" stroke-dasharray="3 4">
-            <path d="M124 92 V34"/><path d="M236 92 V34"/>
-            <path d="M160 92 V64"/><path d="M200 92 V64"/>
-            <path d="M124 92 H40"/><path d="M102 522 H40"/>
-            <path d="M180 113 H214"/>
-          </g>
-
-          <!-- the measurements themselves -->
-          <g stroke="#7a1f34" stroke-width="1.1">
-            <!-- 9 shoulder width -->
-            <path d="M124 40 H236"/><path d="M130 36 L124 40 L130 44"/><path d="M230 36 L236 40 L230 44"/>
-            <!-- 2 neck width -->
-            <path d="M160 70 H200"/><path d="M166 66 L160 70 L166 74"/><path d="M194 66 L200 70 L194 74"/>
-            <!-- 1 neck depth -->
-            <path d="M180 94 V134"/><path d="M176 100 L180 94 L184 100"/><path d="M176 128 L180 134 L184 128"/>
-            <!-- 3 sleeve length, along the outer sleeve -->
-            <path d="M106 84 L44 248"/><path d="M106 92 L106 84 L114 88"/><path d="M44 240 L44 248 L52 246"/>
-            <!-- 8 full length -->
-            <path d="M44 92 V522"/><path d="M40 98 L44 92 L48 98"/><path d="M40 516 L44 522 L48 516"/>
-            <!-- 4 armhole, around the seam where the sleeve joins -->
-            <path d="M236 92 C258 130 250 184 224 214" stroke-dasharray="4 4"/>
-            <!-- 5 chest / 6 waist / 7 hips, flat across the garment -->
-            <g stroke-dasharray="5 4">
-              <path d="M134 228 H226"/><path d="M126 306 H234"/><path d="M116 390 H244"/>
-            </g>
-            <path d="M140 224 L134 228 L140 232"/><path d="M220 224 L226 228 L220 232"/>
-            <path d="M132 302 L126 306 L132 310"/><path d="M228 302 L234 306 L228 310"/>
-            <path d="M122 386 L116 390 L122 394"/><path d="M238 386 L244 390 L238 394"/>
-          </g>
-
-          <g class="zmm__marks">
-            <g class="zmm__mark" data-zmm-mark="1"><circle cx="224" cy="113" r="11"/><text x="224" y="117" text-anchor="middle">1</text></g>
-            <g class="zmm__mark" data-zmm-mark="2"><circle cx="180" cy="70" r="11"/><text x="180" y="74" text-anchor="middle">2</text></g>
-            <g class="zmm__mark" data-zmm-mark="3"><circle cx="66" cy="170" r="11"/><text x="66" y="174" text-anchor="middle">3</text></g>
-            <g class="zmm__mark" data-zmm-mark="4"><circle cx="266" cy="152" r="11"/><text x="266" y="156" text-anchor="middle">4</text></g>
-            <g class="zmm__mark" data-zmm-mark="5"><circle cx="180" cy="228" r="11"/><text x="180" y="232" text-anchor="middle">5</text></g>
-            <g class="zmm__mark" data-zmm-mark="6"><circle cx="180" cy="306" r="11"/><text x="180" y="310" text-anchor="middle">6</text></g>
-            <g class="zmm__mark" data-zmm-mark="7"><circle cx="180" cy="390" r="11"/><text x="180" y="394" text-anchor="middle">7</text></g>
-            <g class="zmm__mark" data-zmm-mark="8"><circle cx="44" cy="312" r="11"/><text x="44" y="316" text-anchor="middle">8</text></g>
-            <g class="zmm__mark" data-zmm-mark="9"><circle cx="262" cy="40" r="11"/><text x="262" y="44" text-anchor="middle">9</text></g>
-          </g>
-        </svg>
+          What it costs: the numbers are printed into the picture, so a point no longer lights
+          up when its field is focused. The script that did that is guarded on the element and
+          simply finds nothing. If that interaction is ever wanted back, the drawing has to
+          become an SVG again, with their file as the thing to trace.
+        {%- endcomment -%}
+        <img src="{{ 'zaria-measure-guide.png' | asset_url }}" alt="Where each measurement is taken on the jalabiya" loading="lazy" width="567" height="912" class="zmm__guide">
         <p class="zmm__figcap">Where we measure</p>
         {%- comment -%}The two things the client's guide asks for before a tape is picked up.{%- endcomment -%}
         <p class="zmm__figsay">Lay a well-fitting jalabiya flat and smooth before measuring.<br>
