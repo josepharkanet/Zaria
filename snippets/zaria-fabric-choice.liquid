@@ -205,6 +205,11 @@
   var more = root.querySelector('[data-zfc-more]');
   var empty = root.querySelector('[data-zfc-empty]');
   var warn = root.querySelector('[data-zfc-warn]');
+  /* The one line of red serves two complaints: "choose a cloth" and "that cloth cannot supply
+     this many". The second overwrites the text, so the first has to be able to put it back. */
+  var WARN_ASK = warn ? warn.textContent : '';
+  function warnSay(text) { if (!warn) return; warn.textContent = text || WARN_ASK; warn.hidden = false; }
+  function warnClear() { if (!warn) return; warn.hidden = true; warn.textContent = WARN_ASK; warn.removeAttribute('data-zfc-outofcloth'); }
   var nameF = root.querySelector('[data-zfc-name]');
   var handleF = root.querySelector('[data-zfc-handle]');
   var DESIGN = parseInt(root.getAttribute('data-zfc-design'), 10) || 0;
@@ -323,7 +328,7 @@
     root.classList.toggle('is-off', !on);
     if (nameF) nameF.disabled = !on;
     if (handleF) handleF.disabled = !on;
-    if (!on && warn) warn.hidden = true;
+    if (!on) warnClear();
     sayPrice();
   }
 
@@ -411,11 +416,14 @@
       if (nameF) nameF.value = '';
       if (handleF) handleF.value = '';
       grid.querySelectorAll('.is-on').forEach(function (x) { x.classList.remove('is-on'); });
-      if (warn) {
-        warn.hidden = false;
-        warn.textContent = gone.t + ' holds ' + tidy(gone.q) + ' m, not the ' +
-          tidy(needed()) + ' m these pieces take. Please choose another cloth.';
-      }
+      warnSay(gone.t + ' holds ' + tidy(gone.q) + ' m, not the ' +
+        tidy(needed()) + ' m these pieces take. Please choose another cloth.');
+      if (warn) warn.setAttribute('data-zfc-outofcloth', '');
+    } else if (warn && warn.hasAttribute('data-zfc-outofcloth')) {
+      /* The count came back down, so the complaint is no longer true and must not be left
+         standing - it was still naming the metres the larger order would have taken
+         (client, 2026-11-18: "when qty reduced the warning msg is not going"). */
+      warnClear();
     }
     filter();
     retotal();
@@ -557,7 +565,7 @@
     b.classList.add('is-on');
     if (nameF) nameF.value = chosen ? chosen.t : '';
     if (handleF) handleF.value = chosen ? chosen.h : '';
-    warn.hidden = true;
+    warnClear();
     retotal();
   });
 
@@ -628,7 +636,7 @@
       }
       if (!chosen) {
         e.preventDefault();
-        warn.hidden = false;
+        warnSay('');                       /* the ask, never whatever the stock line last said */
         root.scrollIntoView({ block: 'center', behavior: 'smooth' });
         return;
       }
