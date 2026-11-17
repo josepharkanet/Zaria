@@ -209,7 +209,14 @@
      this many". The second overwrites the text, so the first has to be able to put it back. */
   var WARN_ASK = warn ? warn.textContent : '';
   function warnSay(text) { if (!warn) return; warn.textContent = text || WARN_ASK; warn.hidden = false; }
-  function warnClear() { if (!warn) return; warn.hidden = true; warn.textContent = WARN_ASK; warn.removeAttribute('data-zfc-outofcloth'); }
+  function warnClear() { if (!warn) return; warn.hidden = true; warn.textContent = WARN_ASK; shortAt = null; }
+  /* How much the cloth we had to let go could have supplied. While the order still asks for
+     more than that, the complaint is true and stands; the moment it asks for that much or
+     less, it is no longer true and goes. Holding the figure rather than a flag matters because
+     one step of the stepper runs restock twice - once on the quantity box's own change event,
+     once from setPieces - and by the second run `chosen` is already null, so anything keyed on
+     "is a cloth chosen" would wipe the warning it had just put up. */
+  var shortAt = null;
   var nameF = root.querySelector('[data-zfc-name]');
   var handleF = root.querySelector('[data-zfc-handle]');
   var DESIGN = parseInt(root.getAttribute('data-zfc-design'), 10) || 0;
@@ -416,10 +423,10 @@
       if (nameF) nameF.value = '';
       if (handleF) handleF.value = '';
       grid.querySelectorAll('.is-on').forEach(function (x) { x.classList.remove('is-on'); });
+      shortAt = gone.q;
       warnSay(gone.t + ' holds ' + tidy(gone.q) + ' m, not the ' +
         tidy(needed()) + ' m these pieces take. Please choose another cloth.');
-      if (warn) warn.setAttribute('data-zfc-outofcloth', '');
-    } else if (warn && warn.hasAttribute('data-zfc-outofcloth')) {
+    } else if (shortAt !== null && needed() <= shortAt) {
       /* The count came back down, so the complaint is no longer true and must not be left
          standing - it was still naming the metres the larger order would have taken
          (client, 2026-11-18: "when qty reduced the warning msg is not going"). */
