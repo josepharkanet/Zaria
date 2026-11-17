@@ -273,9 +273,12 @@
       <div class="zmm__chart">{% render 'zaria-size-chart' %}</div>
     </div>
     <input type="hidden" name="properties[Size]" value="One Size" data-zmm-in="ready" disabled>
-    {%- assign zmm_len_cm = zmm_len | times: 2.54 | round: 0 -%}
-    {%- assign zmm_slv_cm = zmm_slv | times: 2.54 | round: 0 -%}
-    <p class="zmm__hint">{% if zmm_len != blank %}This piece is finished at <b>{{ zmm_len }} in ({{ zmm_len_cm }} cm)</b> and can be taken up to any shorter length above{% else %}This piece comes in <b>one standard length</b>{% endif %}{% if zmm_slv != blank %}, with a {{ zmm_slv }} in ({{ zmm_slv_cm }} cm) sleeve{% endif %}. Open the <b>Size Chart</b> for full measurements{% unless zmm_nocust %}, or choose <b>Made to Order</b> to have it cut to your own measurements{% endunless %}.{% if zmm_nocust %} For a longer one, we cut to your own measurements in <a href="{{ routes.root_url }}pages/design-your-look">Design Your Look</a>.{% endif %}</p>
+    {%- comment -%}
+      No line under the row either (client, 2026-11-17: "remove this too"). It repeated the
+      length that is already standing in the field above it, the sleeve that is already in the
+      description list, and the Size Chart that is already a button beside it. The row says
+      what it needs to say on its own.
+    {%- endcomment -%}
     {%- else -%}
     <div class="zmm__fields zmm__fields--ready">
       {%- comment -%}
