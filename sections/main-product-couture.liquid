@@ -288,26 +288,29 @@
   #shopify-section-{{ section.id }} .zpdp__desc p{margin:0 0 10px}
 
   /* attribute list */
-  #shopify-section-{{ section.id }} .zpdp__attrs{background:#fff;border:1px solid #ece8e2;margin:6px 0 30px;overflow:hidden}
-  /* The facts sit side by side and drop to the next line only when they will not fit
-     (client, 2026-11-16: "may arrange on one line, if more items bring down"). Flex rather
-     than grid, because a wrapped grid leaves the unused tracks of its last row standing
-     empty and they showed as a grey block beside the final fact ("no colour change here
-     pls"). Flex items grow into the line they land on, so one fact alone on the second row
-     fills it. The hairlines are the 1px gap letting the container through, which is the only
-     way to rule a run that wraps: a border on the cell would draw down the left of every new
-     line as well as between neighbours. */
-  #shopify-section-{{ section.id }} .zpdp__attrrow{display:flex;flex-wrap:wrap;gap:1px;background:#ece8e2}
+  /* The facts are told, not tabulated (client, 2026-11-17: "instead of box this info show in a
+     different way"). The boxed grid made two words look like a specification sheet and drew
+     more lines than it had facts. They now read as a run between two hairlines: the mark, the
+     label small and quiet, the value in the reading colour, with air between them.
+
+     Still flex and still wrapping, for the reason it was flex before: a wrapped grid leaves the
+     tracks it did not use standing empty, and that showed as a grey block beside the last fact.
+     Nothing is ruled between the items now, so there is nothing to draw down the left of a new
+     line either. */
+  #shopify-section-{{ section.id }} .zpdp__attrs{background:none;border:0;border-top:1px solid #ece8e2;
+    border-bottom:1px solid #ece8e2;margin:14px 0 30px;overflow:visible}
+  #shopify-section-{{ section.id }} .zpdp__attrrow{display:flex;flex-wrap:wrap;gap:4px clamp(22px,3vw,44px);background:none}
   {%- comment -%}Label and value on one line: the strip was three lines tall for two words.{%- endcomment -%}
-  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:center;gap:9px;padding:11px 14px;min-width:0;background:#fff;flex:1 1 180px}
+  #shopify-section-{{ section.id }} .zpdp__attr{display:flex;align-items:center;gap:9px;padding:13px 0;min-width:0;background:none;flex:0 1 auto}
   #shopify-section-{{ section.id }} .zpdp__attr>span:last-child{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;min-width:0}
   #shopify-section-{{ section.id }} .zpdp__attr>div{min-width:0}
   @media (max-width:600px){
-    #shopify-section-{{ section.id }} .zpdp__attr{gap:7px;padding:10px 9px}
+    #shopify-section-{{ section.id }} .zpdp__attrrow{gap:0 22px}
+    #shopify-section-{{ section.id }} .zpdp__attr{gap:7px;padding:10px 0}
     #shopify-section-{{ section.id }} .zpdp__attr>span:last-child{display:block}
     #shopify-section-{{ section.id }} .zpdp__attr-l{white-space:normal;margin-bottom:2px}
   }
-  #shopify-section-{{ section.id }} .zpdp__attr-ic{flex:none;color:var(--wine);display:inline-flex}
+  #shopify-section-{{ section.id }} .zpdp__attr-ic{flex:none;color:var(--wine);display:inline-flex;opacity:.85}
   #shopify-section-{{ section.id }} .zpdp__attr-ic svg{width:19px;height:19px;display:block}
   #shopify-section-{{ section.id }} .zpdp__attr-l{display:block;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:#a89f94;white-space:nowrap}
   #shopify-section-{{ section.id }} .zpdp__attr-v{display:block;font-size:13.5px;letter-spacing:.02em;color:#2a2a2a;min-width:0;overflow-wrap:anywhere}
