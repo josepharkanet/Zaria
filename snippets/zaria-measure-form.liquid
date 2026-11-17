@@ -110,7 +110,8 @@
   }
 
   /* Made to Order */
-  .zmm__visual{display:grid;grid-template-columns:210px 1fr;gap:clamp(18px,3vw,34px);align-items:start}
+  {%- comment -%}A little wider than the old sketch needed: the guide carries nine numbers and fine rules.{%- endcomment -%}
+  .zmm__visual{display:grid;grid-template-columns:clamp(210px,24vw,290px) 1fr;gap:clamp(18px,3vw,34px);align-items:start}
   .zmm__figure{position:sticky;top:14px}
   .zmm__figure svg{width:100%;height:auto;display:block}
   .zmm__figsay{font-size:11px;line-height:1.55;color:var(--zf-hint,#8a8178);margin:8px 0 0;text-align:center}
