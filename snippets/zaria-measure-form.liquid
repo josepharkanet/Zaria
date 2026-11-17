@@ -123,16 +123,23 @@
   .zmm__mark.is-active{transform:scale(1.28)}
   .zmm__mark.is-active circle{stroke:#161616}
 
-  .zmm__fields{display:grid;grid-template-columns:1fr 1fr;gap:var(--zf-gap)}
+  .zmm__fields{display:grid;grid-template-columns:1fr 1fr;gap:22px var(--zf-gap);align-items:stretch}
   .zmm__fname .req{color:var(--wine,#7a1f34)}
   .zmm__fields--ready{margin-top:4px}
   .zmm__readyfoot{display:flex;align-items:flex-start;justify-content:space-between;gap:10px 20px;flex-wrap:wrap;margin-top:16px}
   .zmm__readyfoot .zmm__hint{margin:0;flex:1 1 280px;max-width:54ch}
   .zmm__readyfoot .zmm__chart{flex:0 0 auto}
   .zmm__readyfoot .zsc__open{padding:0}
-  .zmm__field{display:flex;flex-direction:column;position:relative}
+  {%- comment -%}
+    A row's two boxes line up however long the wording above them runs. The guide's sentences
+    wrap to one, two or three lines, and with the boxes following the text straight down, one
+    column sat lower than the other and the form read as a mess (client, 2026-11-17). The field
+    fills its row and the box is pushed to the foot of it, so the two always meet.
+  {%- endcomment -%}
+  .zmm__field{display:flex;flex-direction:column;position:relative;height:100%}
+  .zmm__field > select{margin-top:auto}
   {%- comment -%}What to measure, in the guide's own words, under the name it belongs to.{%- endcomment -%}
-  .zmm__fsay{display:block;font-size:11px;line-height:1.45;color:var(--zf-hint,#8a8178);margin:2px 0 6px}
+  .zmm__fsay{display:block;font-size:11px;line-height:1.45;color:var(--zf-hint,#8a8178);margin:3px 0 8px;max-width:34ch}
   .zmm__field--full{grid-column:1 / -1}
   .zmm__fhead{display:flex;align-items:center;gap:8px;margin:0 0 var(--zf-label-gap);min-height:20px}
   .zmm__num{flex:none;width:20px;height:20px;border-radius:50%;background:#f1ece3;color:#8a7a53;border:1px solid #e0d8c8;
