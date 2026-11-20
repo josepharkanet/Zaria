@@ -319,6 +319,10 @@
   // quotes, as a headline price does; the summary at the foot of this room carries the
   // figure for the whole order.
   var amountEl = document.querySelector('[data-zpdp-amount]');
+  // "Design cost" in front of the figure, at the figure's own size. It belongs only to the
+  // one state where the number is the making and nothing else: made to order with no cloth
+  // picked yet. Once a cloth is chosen the figure is the whole piece, so the words come off.
+  var labelEl = document.querySelector('[data-zpdp-plabel]');
   var priceBox = document.querySelector('[data-zpdp-price]');
   var TOTAL = priceBox ? (parseInt(priceBox.getAttribute('data-zpdp-total'), 10) || 0) : 0;
   // What the cloth in the photographs costs: the listed figure less the making. The summary
@@ -340,10 +344,11 @@
       else if (TOTAL) amountEl.textContent = money(TOTAL);
       else amountEl.textContent = money(DESIGN);
     }
+    if (labelEl) labelEl.hidden = !(on && !chosen);
     if (!taxP) return;
     if (on && chosen) taxP.textContent = 'Making ' + money(DESIGN) + ' plus ' + tidy(MIN) +
       ' m of cloth ' + money(chosen.p * MIN);
-    else if (on) taxP.textContent = 'The design cost \u00b7 the cloth you choose is added to this';
+    else if (on) taxP.textContent = 'The cloth you choose is added to this';
     else if (!on && TOTAL) taxP.textContent = 'A standard size, in the cloth photographed \u00b7 price per piece';
     else if (!on) taxP.textContent = 'Ready to wear in our standard size \u00b7 price per piece';
     else taxP.textContent = taxMade;

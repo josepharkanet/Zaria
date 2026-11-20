@@ -257,6 +257,13 @@
     font-size:clamp(18px,1.9vw,25px);line-height:1.3;letter-spacing:.02em;margin:0 0 16px;text-transform:uppercase}
   #shopify-section-{{ section.id }} .zpdp__price{font-size:19px;letter-spacing:.04em;color:#161616;margin:0 0 4px}
   #shopify-section-{{ section.id }} .zpdp__price .zpdp__cut{color:#a0a0a0;text-decoration:line-through;margin-right:10px}
+  {%- comment -%}
+    "Design cost" is set at the price's own size and sits in front of it, because the figure
+    alone was being read as what the piece costs (client, 2026-11-20). It inherits the size
+    rather than declaring one, so the two can never drift apart.
+  {%- endcomment -%}
+  #shopify-section-{{ section.id }} .zpdp__price .zpdp__plabel{margin-right:.45em}
+  #shopify-section-{{ section.id }} .zpdp__price .zpdp__plabel[hidden]{display:none}
   #shopify-section-{{ section.id }} .zpdp__price--por{letter-spacing:.14em;text-transform:uppercase;font-size:14px}
   {%- comment -%}The ask button is not a cart button. It borrowed .zpdp__atc at first, whose
      width comes from being a flex child of the buy row; standing alone it collapsed to a
@@ -523,6 +530,7 @@
           {%- if product.compare_at_price > product.price -%}
             <span class="zpdp__cut">{{ zpdp_shown_cut | money }}</span>
           {%- endif -%}
+          <span class="zpdp__plabel" data-zpdp-plabel{% unless is_madetoorder and zpdp_mto_only %} hidden{% endunless %}>Design cost</span>
           <span data-zpdp-amount>{% if zpdp_total > 0 and zpdp_mto_only == false %}{{ zpdp_total | money }}{% else %}{{ zpdp_shown | money }}{% endif %}</span>
         </div>
         {%- if is_restock -%}
@@ -530,7 +538,7 @@
         {%- endif -%}
         {%- comment -%}Zaria is not VAT registered, so this line names the unit and makes no tax claim.{%- endcomment -%}
         {%- unless is_fragrance -%}
-          <p class="zpdp__tax" data-zpdp-tax>{% if product.tags contains 'Fabric' %}Price per metre, cut in half metres{% elsif is_madetoorder and zpdp_mto_only %}The design cost &middot; the cloth you choose is added to this{% elsif is_madetoorder %}The cloth it is made in and the making, together &middot; change the cloth below and the price follows{% else %}Price per unit{% endif %}</p>
+          <p class="zpdp__tax" data-zpdp-tax>{% if product.tags contains 'Fabric' %}Price per metre, cut in half metres{% elsif is_madetoorder and zpdp_mto_only %}The cloth you choose is added to this{% elsif is_madetoorder %}The cloth it is made in and the making, together &middot; change the cloth below and the price follows{% else %}Price per unit{% endif %}</p>
         {%- endunless -%}
       {%- endif -%}
 
