@@ -26,6 +26,11 @@
         <img class="zqz__img" data-zqz-img alt="" src="" draggable="false">
       </div>
       <span class="zqz__lens" data-zqz-lens aria-hidden="true"></span>
+      <div class="zqz__pow" data-zqz-pow hidden>
+        <button type="button" data-zqz-pow-step="-1" aria-label="Less magnification">&minus;</button>
+        <span data-zqz-pow-val aria-live="polite">1.0&times;</span>
+        <button type="button" data-zqz-pow-step="1" aria-label="More magnification">+</button>
+      </div>
       <button class="zqz__nav zqz__nav--prev" type="button" aria-label="Previous image">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"/></svg>
       </button>
@@ -60,6 +65,23 @@
     pointer-events:none;opacity:0;transition:opacity .16s ease;background-repeat:no-repeat;
     background-color:#0e0c0c;box-shadow:0 3px 26px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.4) inset}
   .zqz__lens.is-on{opacity:1}
+  /* How hard the glass pulls. It opens at the sharpest setting a file can honestly give and
+     steps up from there on request: past that point it is enlarging rather than revealing,
+     which the mark beside the number says plainly rather than pretending otherwise. */
+  /* inside the frame, bottom left: below it the dots and the hint already sit */
+  .zqz__pow{position:absolute;left:12px;bottom:12px;z-index:5;
+    display:flex;align-items:center;gap:2px;padding:3px;border-radius:999px;
+    background:rgba(20,18,18,.55);backdrop-filter:blur(4px);transition:opacity .2s ease}
+  .zqz.is-zoomed .zqz__pow{opacity:0;pointer-events:none}
+  .zqz__pow button{width:26px;height:26px;border:0;border-radius:50%;cursor:pointer;
+    background:transparent;color:rgba(255,255,255,.85);font-size:15px;line-height:1;
+    display:grid;place-items:center;transition:background .15s ease}
+  .zqz__pow button:hover{background:rgba(255,255,255,.18)}
+  .zqz__pow button[disabled]{opacity:.3;cursor:default}
+  .zqz__pow span{min-width:58px;text-align:center;color:rgba(255,255,255,.85);
+    font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+  .zqz__pow span .beyond{color:rgba(255,255,255,.45)}
+  @media (hover:none),(pointer:coarse){.zqz__pow{display:none}}
   @media (max-width:699px){.zqz__lens{width:180px;height:180px}}
   @media (hover:none),(pointer:coarse){.zqz__lens{display:none}}
   .zqz__img.is-swapping{opacity:0;transition:opacity .13s ease}

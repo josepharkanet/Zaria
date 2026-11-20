@@ -12,6 +12,11 @@
   further. Where there is less than about a sixth to gain, the glass does not appear at all,
   because enlarging a file past itself shows bigger pixels and no more beadwork.
 
+  It opens at that honest setting and a stepper beside it pulls harder on request - 1.5, 2, 3
+  or 4 times beyond - for anyone who would rather see enlarged beadwork than none. The reading
+  carries a mark once it is past what the file holds, so nobody is misled about which it is.
+  The choice is remembered between pictures and between visits.
+
   It stands down while the picture is zoomed by pinch or wheel, which the viewer marks with
   `is-zoomed`: then the whole picture is already magnified and two magnifications stacked on
   each other help nobody.
@@ -34,9 +39,53 @@
     lb.setAttribute('data-zqz-lensed', '1');
 
     var GAIN = 1.16;               /* below this there is nothing worth showing */
-    var armed = false, mag = 1, dw = 0, dh = 0, ox = 0, oy = 0;
+    var armed = false, mag = 1, base = 1, dw = 0, dh = 0, ox = 0, oy = 0;
+
+    /* How hard the glass pulls. It opens at `1`, which is the sharpest a file can honestly
+       give - one file pixel on one screen pixel - and steps up from there when asked. Past
+       that first step it is enlarging rather than revealing, and the reading says so instead
+       of pretending otherwise. The choice is remembered, because someone who wants a closer
+       look at beadwork wants it on the next picture too. */
+    var POWERS = [1, 1.5, 2, 3, 4];
+    var pow = 0;
+    try { var saved = parseInt(localStorage.getItem('zariaGlassPower'), 10);
+          if (saved >= 0 && saved < POWERS.length) pow = saved; } catch (e) {}
+
+    var powBox = lb.querySelector('[data-zqz-pow]');
+    var powVal = lb.querySelector('[data-zqz-pow-val]');
 
     function hide() { lens.classList.remove('is-on'); }
+
+    function paintPow() {
+      if (!powBox) return;
+      powBox.hidden = false;
+      var shown = base * POWERS[pow];
+      if (powVal) {
+        powVal.innerHTML = shown.toFixed(1) + '&times;'
+          + (POWERS[pow] > 1 ? ' <span class="beyond">&bull;</span>' : '');
+        powVal.title = POWERS[pow] > 1
+          ? 'Beyond what the photograph holds, so it will look softer'
+          : 'As sharp as this photograph can be shown';
+      }
+      var btns = powBox.querySelectorAll('[data-zqz-pow-step]');
+      for (var i = 0; i < btns.length; i += 1) {
+        var d = parseInt(btns[i].getAttribute('data-zqz-pow-step'), 10);
+        btns[i].disabled = (pow + d < 0) || (pow + d >= POWERS.length);
+      }
+    }
+
+    if (powBox) {
+      powBox.addEventListener('click', function (e) {
+        var b = e.target.closest ? e.target.closest('[data-zqz-pow-step]') : null;
+        if (!b || b.disabled) return;
+        var next = pow + parseInt(b.getAttribute('data-zqz-pow-step'), 10);
+        if (next < 0 || next >= POWERS.length) return;
+        pow = next;
+        try { localStorage.setItem('zariaGlassPower', String(pow)); } catch (err) {}
+        armed = false;
+        paintPow();
+      });
+    }
 
     function arm() {
       armed = false;
@@ -51,7 +100,9 @@
       ox = (r.width - dw) / 2;
       oy = (r.height - dh) / 2;
       var dpr = window.devicePixelRatio || 1;
-      mag = img.naturalWidth / (dw * dpr);     /* one file pixel on one screen pixel */
+      base = img.naturalWidth / (dw * dpr);    /* one file pixel on one screen pixel */
+      mag = base * POWERS[pow];
+      paintPow();
       if (mag < GAIN) return;
       lens.style.backgroundImage = 'url("' + (img.currentSrc || img.src) + '")';
       lens.style.backgroundSize = Math.round(dw * mag) + 'px ' + Math.round(dh * mag) + 'px';
@@ -79,7 +130,10 @@
     clip.addEventListener('mousemove', move);
     clip.addEventListener('mouseleave', hide);
     lb.addEventListener('mouseleave', hide);
-    img.addEventListener('load', function () { armed = false; });
+    /* measure on load rather than waiting for the first hover, so the reading beside the
+       stepper is right the moment the picture appears */
+    img.addEventListener('load', function () { armed = false; arm(); });
+    if (img.complete && img.naturalWidth) arm(); else paintPow();
     window.addEventListener('resize', function () { armed = false; });
     /* a new picture, a close, or a zoom all want measuring again */
     lb.addEventListener('click', function () { armed = false; });
