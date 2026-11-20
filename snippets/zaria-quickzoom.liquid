@@ -304,9 +304,11 @@
     lb.querySelector('.zqz__close').addEventListener('click', close);
 
     // ---- pointers: pinch, pan, swipe, double-tap ----
-    // The arrows and the close sit inside the stage, and capturing the pointer would retarget
-    // their click to the stage itself - which is how pressing an arrow came to close the viewer.
-    function onControl(e) { return !!(e.target.closest && e.target.closest('.zqz__nav,.zqz__close')); }
+    // The arrows, the close and the glass stepper sit inside the stage, and capturing the
+    // pointer would retarget their click to the stage itself - which is how pressing an arrow
+    // came to close the viewer, and how the stepper came to be stuck on its opening setting.
+    // Anything clickable added inside the stage from here on has to be named here too.
+    function onControl(e) { return !!(e.target.closest && e.target.closest('.zqz__nav,.zqz__close,.zqz__pow')); }
     stage.addEventListener('pointerdown', function (e) {
       if (onControl(e)) return;
       fromBackdrop = !(e.target.closest && e.target.closest('.zqz__frame'));
