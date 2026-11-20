@@ -331,12 +331,19 @@
     // one the piece is photographed in drops out and the chosen one takes its place.
     if (amountEl) {
       if (on && chosen) amountEl.textContent = money(DESIGN + chosen.p * MIN);
+      // Made to order with no cloth picked yet is the design cost and nothing else. It used
+      // to fall through to the listed figure, which is the piece as photographed - a price
+      // for something this customer is not being offered. Worst of all through the
+      // made-to-order collection, where the ready-to-wear side is hidden altogether, so the
+      // page quoted 1,580 for a thing that could not be bought (client, 2026-11-20).
+      else if (on) amountEl.textContent = money(DESIGN);
       else if (TOTAL) amountEl.textContent = money(TOTAL);
       else amountEl.textContent = money(DESIGN);
     }
     if (!taxP) return;
     if (on && chosen) taxP.textContent = 'Making ' + money(DESIGN) + ' plus ' + tidy(MIN) +
       ' m of cloth ' + money(chosen.p * MIN);
+    else if (on) taxP.textContent = 'The design cost \u00b7 the cloth you choose is added to this';
     else if (!on && TOTAL) taxP.textContent = 'A standard size, in the cloth photographed \u00b7 price per piece';
     else if (!on) taxP.textContent = 'Ready to wear in our standard size \u00b7 price per piece';
     else taxP.textContent = taxMade;
