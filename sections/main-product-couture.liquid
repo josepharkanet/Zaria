@@ -258,9 +258,13 @@
   #shopify-section-{{ section.id }} .zpdp__price{font-size:19px;letter-spacing:.04em;color:#161616;margin:0 0 4px}
   #shopify-section-{{ section.id }} .zpdp__price .zpdp__cut{color:#a0a0a0;text-decoration:line-through;margin-right:10px}
   {%- comment -%}
-    "Design cost" is set at the price's own size and sits in front of it, because the figure
-    alone was being read as what the piece costs (client, 2026-11-20). It inherits the size
-    rather than declaring one, so the two can never drift apart.
+    "Design & tailoring" is set at the price's own size and sits in front of it, because the
+    figure alone was being read as what the piece costs (client, 2026-11-20). It inherits the
+    size rather than declaring one, so the two can never drift apart.
+
+    Those exact words, and not "Design cost", because the summary at the foot of the fabric
+    room and the design form's own summary have always said "Design & tailoring" - the client
+    asked for one wording everywhere rather than two names for the same money.
   {%- endcomment -%}
   #shopify-section-{{ section.id }} .zpdp__price .zpdp__plabel{margin-right:.45em}
   #shopify-section-{{ section.id }} .zpdp__price .zpdp__plabel[hidden]{display:none}
@@ -530,7 +534,7 @@
           {%- if product.compare_at_price > product.price -%}
             <span class="zpdp__cut">{{ zpdp_shown_cut | money }}</span>
           {%- endif -%}
-          <span class="zpdp__plabel" data-zpdp-plabel{% unless is_madetoorder and zpdp_mto_only %} hidden{% endunless %}>Design cost</span>
+          <span class="zpdp__plabel" data-zpdp-plabel{% unless is_madetoorder and zpdp_mto_only %} hidden{% endunless %}>Design &amp; tailoring</span>
           <span data-zpdp-amount>{% if zpdp_total > 0 and zpdp_mto_only == false %}{{ zpdp_total | money }}{% else %}{{ zpdp_shown | money }}{% endif %}</span>
         </div>
         {%- if is_restock -%}

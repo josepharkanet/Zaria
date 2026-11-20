@@ -319,7 +319,7 @@
   // quotes, as a headline price does; the summary at the foot of this room carries the
   // figure for the whole order.
   var amountEl = document.querySelector('[data-zpdp-amount]');
-  // "Design cost" in front of the figure, at the figure's own size. It belongs only to the
+  // "Design & tailoring" in front of the figure, at the figure's own size. It belongs only to the
   // one state where the number is the making and nothing else: made to order with no cloth
   // picked yet. Once a cloth is chosen the figure is the whole piece, so the words come off.
   var labelEl = document.querySelector('[data-zpdp-plabel]');
@@ -335,7 +335,7 @@
     // one the piece is photographed in drops out and the chosen one takes its place.
     if (amountEl) {
       if (on && chosen) amountEl.textContent = money(DESIGN + chosen.p * MIN);
-      // Made to order with no cloth picked yet is the design cost and nothing else. It used
+      // Made to order with no cloth picked yet is the design and tailoring and nothing else. It used
       // to fall through to the listed figure, which is the piece as photographed - a price
       // for something this customer is not being offered. Worst of all through the
       // made-to-order collection, where the ready-to-wear side is hidden altogether, so the
@@ -346,7 +346,9 @@
     }
     if (labelEl) labelEl.hidden = !(on && !chosen);
     if (!taxP) return;
-    if (on && chosen) taxP.textContent = 'Making ' + money(DESIGN) + ' plus ' + tidy(MIN) +
+    // "Design & tailoring", not "Making": the summary at the foot of this room has always
+    // called it that, and the client asked for one wording everywhere.
+    if (on && chosen) taxP.textContent = 'Design & tailoring ' + money(DESIGN) + ' plus ' + tidy(MIN) +
       ' m of cloth ' + money(chosen.p * MIN);
     else if (on) taxP.textContent = 'The cloth you choose is added to this';
     else if (!on && TOTAL) taxP.textContent = 'A standard size, in the cloth photographed \u00b7 price per piece';
