@@ -101,6 +101,18 @@
   {%- comment -%}No scroll-behavior:smooth here: inside a modal that has only just been shown,
      the browser quietly refuses the animated scroll and the row never moves. The arrows animate
      it themselves.{%- endcomment -%}
+  .zdf-more{margin-top:10px}
+  .zdf-more-lab{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:#8a8178;margin-bottom:7px}
+  .zdf-more-row{display:flex;gap:8px;flex-wrap:wrap}
+  .zdf-more-row button{position:relative;width:76px;height:101px;padding:0;border:1px solid #e6e2db;
+    background:#f4f1ec;cursor:zoom-in;overflow:hidden;transition:border-color .2s ease}
+  .zdf-more-row button:hover{border-color:#b9b2a7}
+  .zdf-more-row img{width:100%;height:100%;object-fit:cover;display:block}
+  .zdf-more-row .zdf-more-ic{position:absolute;right:4px;bottom:4px;width:20px;height:20px;border-radius:50%;
+    background:rgba(255,255,255,.92);color:#161616;display:grid;place-items:center;pointer-events:none}
+  .zdf-more-row .zdf-more-ic svg{width:12px;height:12px}
+  @media (max-width:560px){.zdf-more-row button{width:64px;height:85px}}
   .zdf-picks{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;min-width:0;
     scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .zdf-picks::-webkit-scrollbar{display:none}
@@ -286,11 +298,13 @@
             {%- for zp in zdf_designs -%}
               {%- if zp.featured_image != blank -%}
                 {%- capture zp_gallery -%}{%- for zpi in zp.images limit: 6 -%}{{ zpi | image_url: width: 1400 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+                {%- capture zp_thumbs -%}{%- for zpi in zp.images limit: 6 -%}{{ zpi | image_url: width: 240 }}{%- unless forloop.last -%}|{%- endunless -%}{%- endfor -%}{%- endcapture -%}
                 {%- assign zp_need = zp.metafields.custom.fabric_required.value | default: 3 -%}
                 <button type="button" class="zdf-pick" data-zdf-pick="{{ zp.title | escape }}" data-zdf-handle="{{ zp.handle }}"
                         data-zdf-variant="{{ zp.selected_or_first_available_variant.id }}" data-zdf-price="{{ zp.price }}"
                         data-zdf-need="{{ zp_need }}"
-                        data-zdf-piece="{{ zp.type | default: 'Jalabiya' | escape }}">
+                        data-zdf-piece="{{ zp.type | default: 'Jalabiya' | escape }}"
+                        data-zdf-gallery="{{ zp_gallery }}" data-zdf-thumbs="{{ zp_thumbs }}">
                   <img src="{{ zp.featured_image | image_url: width: 320 }}" alt="{{ zp.title | escape }}" loading="lazy" width="132" height="176">
                   <span>{{ zp.title | split: ' ' | slice: 0, 2 | join: ' ' }}</span>
                   <span class="zdf-pick-p">{{ zp.price | money }}</span>
@@ -305,6 +319,17 @@
           <button type="button" class="zdf-nav zdf-nav--next" data-zdf-next aria-label="More designs">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 L16 12 L9 19"/></svg>
           </button>
+        </div>
+        {%- comment -%}
+          The chosen design, seen properly. The row shows one photograph of each piece and
+          three more sit behind it, which until now could only be reached through a small
+          icon that appears on hover - so on a touch screen, and for anyone not hunting for
+          it, they may as well not have existed. Picking a design now lays the rest of it out
+          underneath, and any of them opens the full-screen viewer at that picture.
+        {%- endcomment -%}
+        <div class="zdf-more" data-zdf-more hidden>
+          <span class="zdf-more-lab" data-zdf-more-lab></span>
+          <div class="zdf-more-row" data-zdf-more-row></div>
         </div>
         <input type="hidden" name="properties[Our design]" value="" data-zdf-pickval>
         <input type="hidden" name="properties[_design_handle]" value="" data-zdf-pickhandle>
@@ -565,8 +590,42 @@
       if (pickHandle) pickHandle.value = b.getAttribute('data-zdf-handle') || '';
       if (pieceField && b.getAttribute('data-zdf-piece')) pieceField.value = b.getAttribute('data-zdf-piece');
       if (warn) warn.hidden = true;
+      showMore(b);
       retotal();
     });
+
+    /* Everything else there is of the chosen design, laid out under the row. The tile's own
+       photograph is left out - it is already on screen, two inches above - and each of the
+       rest opens the full-screen viewer at that picture rather than at the first. */
+    var moreBox = overlay.querySelector('[data-zdf-more]');
+    var moreRow = overlay.querySelector('[data-zdf-more-row]');
+    var moreLab = overlay.querySelector('[data-zdf-more-lab]');
+    function showMore(b) {
+      if (!moreBox || !moreRow) return;
+      moreRow.textContent = '';
+      var big = (b.getAttribute('data-zdf-gallery') || '').split('|').filter(Boolean);
+      var small = (b.getAttribute('data-zdf-thumbs') || '').split('|').filter(Boolean);
+      if (big.length < 2) { moreBox.hidden = true; return; }
+      if (moreLab) moreLab.textContent = (b.getAttribute('data-zdf-pick') || 'This design') + ' \u00b7 look closer';
+      for (var i = 1; i < big.length; i += 1) {
+        var t = document.createElement('button');
+        t.type = 'button';
+        t.setAttribute('data-zoom-gallery', big.join('|'));
+        t.setAttribute('data-zoom-start', String(i));
+        t.setAttribute('aria-label', 'Look closer, picture ' + (i + 1));
+        var im = document.createElement('img');
+        im.src = small[i] || big[i];
+        im.alt = '';
+        im.loading = 'lazy';
+        t.appendChild(im);
+        var ic = document.createElement('span');
+        ic.className = 'zdf-more-ic';
+        ic.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#zdf-zoomic"></use></svg>';
+        t.appendChild(ic);
+        moreRow.appendChild(t);
+      }
+      moreBox.hidden = false;
+    }
 
     // Nothing here is closed off by what is on the shelf: every fabric is set to keep selling
     // when the bolt runs out, because the cloth is reordered rather than discontinued. What
