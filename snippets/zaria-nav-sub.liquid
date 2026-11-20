@@ -17,6 +17,11 @@
   {%- when 'ready-to-wear' -%}
     <a href="{{ routes.root_url }}collections/ready-to-wear-jalabiya">Jalabiya</a>
     <a href="{{ routes.root_url }}collections/ready-to-wear-abaya">Abaya</a>
+  {%- when 'sales' -%}
+    <a href="{{ routes.root_url }}collections/sale">Everything on Sale</a>
+    <a href="{{ routes.root_url }}collections/sale/fabric">Fabrics</a>
+    <a href="{{ routes.root_url }}collections/sale/jalabiya">Jalabiya</a>
+    <a href="{{ routes.root_url }}collections/sale/abaya">Abaya</a>
   {%- when 'made-to-order' -%}
     <a href="{{ routes.root_url }}collections/made-to-order-jalabiya">Jalabiya</a>
     {%- if zs_mto_abaya > 0 -%}<a href="{{ routes.root_url }}collections/made-to-order-abaya">Abaya</a>{%- endif -%}

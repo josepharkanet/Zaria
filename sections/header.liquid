@@ -116,6 +116,39 @@
       -webkit-text-fill-color: {{ zar_promo_hex }};
     }
   }
+  {%- comment -%}Sales grew a dropdown, so the word is a <summary> now rather than an <a>.
+     The sheen cannot be painted on the summary itself: background-clip:text would take the
+     caret beside the word with it. So the word wears its own span and the caret, which draws
+     in currentColor, takes the wine from the summary.{%- endcomment -%}
+  #shopify-section-{{ section.id }} .header__primary-nav summary.zar-navpromo {
+    color: {{ zar_promo_hex }} !important;
+    transition: opacity .2s ease;
+  }
+  #shopify-section-{{ section.id }} .header__primary-nav summary.zar-navpromo:hover { opacity: .72; }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    #shopify-section-{{ section.id }} .header__primary-nav summary.zar-navpromo .zar-promo-ink {
+      background-image: linear-gradient(
+        100deg,
+        {{ zar_promo_hex }} 0%,
+        {{ zar_promo_hex }} 42%,
+        #c9a86a 50%,
+        {{ zar_promo_hex }} 58%,
+        {{ zar_promo_hex }} 100%
+      );
+      background-size: 300% 100%;
+      background-repeat: no-repeat;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: zar-promo-sheen 4s ease-in-out infinite;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section.id }} .header__primary-nav summary.zar-navpromo .zar-promo-ink {
+      animation: none;
+      -webkit-text-fill-color: {{ zar_promo_hex }};
+    }
+  }
   #shopify-section-{{ section.id }} .header__logo-text {
     text-transform: uppercase;
     letter-spacing: 0.22em;
@@ -428,8 +461,8 @@
                 {%- else -%}
                   {%- capture disclosure_content -%}
                     <details class="header__menu-disclosure">
-                      <summary data-follow-link="{{ link_href }}" {% if section.settings.menu_text_font == 'heading' %}class="h6"{% endif %} data-title="{{ zar_link_label | escape }}">
-                        {{- zar_link_label -}}<svg class="zaria-nav-caret" aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                      <summary data-follow-link="{{ link_href }}" class="{% if section.settings.menu_text_font == 'heading' %}h6{% endif %}{% if zar_kind == 'sale' %} zar-navpromo{% endif %}" data-title="{{ zar_link_label | escape }}">
+                        {%- if zar_kind == 'sale' -%}<span class="zar-promo-ink">{{- zar_link_label -}}</span>{%- else -%}{{- zar_link_label -}}{%- endif -%}<svg class="zaria-nav-caret" aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
                       </summary>
                       {{- zar_panel -}}
                     </details>

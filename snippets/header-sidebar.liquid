@@ -94,7 +94,7 @@
           <li>
             {%- if zsub_links != blank -%}
               <details class="zaria-msub">
-                <summary class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">
+                <summary class="header-sidebar__linklist-button {% if zkind == 'sale' %}zar-sidepromo {% endif %}{% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">
                   {{- zlink_label -}}
                   {%- render 'icon' with 'chevron-right', width: 12, direction_aware: true -%}
                 </summary>
