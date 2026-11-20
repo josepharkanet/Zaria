@@ -522,13 +522,15 @@
     } else {
       p.textContent = money(f.p) + ' / m';
     }
-    // What is on the shelf: nothing is hidden, it is said on the tile. Cloth keeps selling
-    // when a bolt runs out, so an empty one is cloth that is coming rather than cloth that is gone.
-    // Enough for this order but not much more: worth saying, since it is the last of it.
+    // Every bolt on show already has enough for this order - inStock() drops the short ones
+    // before the grid is drawn - so this badge can never mean "you cannot have it". It means
+    // there is not enough left for a SECOND piece. "Only 3.5 m left" read as a warning on a
+    // roll that covers the order twice over, and the client asked why a 3.5 m bolt was being
+    // flagged before any length had been chosen (2026-11-20). It says what it means now.
     if (f.q !== null && f.q < needed() + MIN) {
       var badge = document.createElement('s');
       badge.className = 'is-low';
-      badge.textContent = 'Only ' + tidy(f.q) + ' m left';
+      badge.textContent = 'Last of this roll \u00b7 ' + tidy(f.q) + ' m';
       b.appendChild(badge);
     }
     // A closer look at the cloth, through the same lightbox the design tiles open. A span

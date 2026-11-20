@@ -27,7 +27,12 @@
     --zf-label:#6a6a6a;
     --zf-label-size:11px;
     --zf-label-track:.16em;
-    --zf-hint:#8d867d;
+    {%- comment -%}
+      The hint under a field - "Across the upper back, from one shoulder seam to the other" -
+      was #8d867d, which is 3.6:1 against white and below the 4.5:1 a reader needs. The client
+      could not read it (2026-11-20). #6f6961 is 5.4:1 and still clearly the quieter voice.
+    {%- endcomment -%}
+    --zf-hint:#6f6961;
     --zf-hint-size:12.5px;
 
     /* spacing */
