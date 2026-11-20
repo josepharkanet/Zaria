@@ -26,6 +26,18 @@
     var MINSRC = 1.6;              /* at least 1.6x the drawn size, or there is nothing to magnify */
     var armed = false, zoom = 1, dw = 0, dh = 0;
 
+    /* The width of the file the glass will actually draw from. NOT the picture the page
+       chose off srcset: on a narrow window that can be the 600-wide copy, and sizing the
+       glass by it threw away most of what the file had. The zoom gallery holds each picture
+       at its own full width, so read the number out of that URL and fall back to the drawn
+       copy only when there is no gallery. */
+    function sourceWidth(im, i) {
+      var u = full[i] || '';
+      var m = u.match(/[?&]width=(\d+)/);
+      if (m) return parseInt(m[1], 10);
+      return im.naturalWidth || 0;
+    }
+
     function arm() {
       armed = false;
       var im = stage.querySelector('.zpdp__img.is-active') || stage.querySelector('.zpdp__img');
@@ -37,10 +49,11 @@
       var box = r.width / r.height;
       dw = ar > box ? r.width : r.height * ar;
       dh = ar > box ? r.width / ar : r.height;
-      var headroom = im.naturalWidth / dw;
+      var i = parseInt(im.getAttribute('data-i'), 10) || 0;
+      var sw = sourceWidth(im, i);
+      var headroom = sw / dw;
       if (headroom < MINSRC) return;
       zoom = headroom;
-      var i = parseInt(im.getAttribute('data-i'), 10) || 0;
       lens.style.backgroundImage = 'url("' + (full[i] || im.currentSrc || im.src) + '")';
       lens.style.backgroundSize = Math.round(dw * zoom) + 'px ' + Math.round(dh * zoom) + 'px';
       armed = true;
