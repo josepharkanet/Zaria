@@ -747,22 +747,39 @@
             {%- if is_fragrance -%}
               {% if fr_family != blank %}{{ fr_family }} composition.{% endif %} {% if fr_conc != blank %}{{ fr_conc }}{% endif %}{% if fr_size != blank %} &middot; {{ fr_size }}{% endif %}. A Zaria signature scent; contact us for gifting and bespoke sets.
             {%- else -%}
-              {%- liquid
-                assign z_cloth_word = ftype
-                if is_fabric == false and z_make != blank
-                  assign z_cloth_word = z_make
-                endif
-              -%}
-              {% if z_cloth_word != blank %}A {{ z_cloth_word | downcase }} fabric{% else %}A premium fabric{% endif %}{% if origin != blank %}, woven in {{ origin }}{% endif %}.
-              {% if colours != blank %} Available in {{ colours | join: ', ' | downcase }}.{% endif %}
-              {% if patterns != blank %} {{ patterns | join: ', ' }} pattern.{% endif %}
-              Sold by the piece; contact us for bulk lengths and bespoke orders.
+              {%- comment -%}
+                Three things were wrong here and all three were visible on the page.
+
+                "Available in blue, pink" promised colourways that do not exist. The colour
+                metafield lists the colours IN the cloth, not alternatives to buy, so a single
+                orange paisley jalabiya was offering itself in blue and pink.
+
+                "Sold by the piece" was printed on bolts of cloth, which are sold by the metre,
+                and "contact us for bulk lengths" on garments, which have no length to buy.
+
+                And the cloth word fell back to `custom.supplier` on a garment, which holds the
+                MILL, not a material - so a piece could announce itself as "a Zaria fabric".
+                The word now always comes from the type read off the title.
+
+                "woven in {{ origin }}" was ungrammatical as well: the origins are adjectives,
+                so it read "woven in Italian". The adjective now sits in front of the cloth,
+                which is how the product titles already say it.
+              {%- endcomment -%}
+              {%- if is_fabric -%}
+                A premium{% if origin != blank %} {{ origin }}{% endif %}{% if ftype != blank %} {{ ftype | downcase }}{% else %} fabric{% endif %}.
+                {% if patterns != blank %}{{ patterns | join: ', ' }} pattern{% if colours != blank %} in {{ colours | join: ', ' | downcase }}{% endif %}.{% elsif colours != blank %}In {{ colours | join: ', ' | downcase }}.{% endif %}
+                Sold by the metre and cut in half metres; contact us for bulk lengths and bespoke orders.
+              {%- else -%}
+                Cut from a premium{% if origin != blank %} {{ origin }}{% endif %}{% if ftype != blank %} {{ ftype | downcase }}{% else %} cloth{% endif %}.
+                {% if patterns != blank %}{{ patterns | join: ', ' }} pattern{% if colours != blank %} in {{ colours | join: ', ' | downcase }}{% endif %}.{% elsif colours != blank %}In {{ colours | join: ', ' | downcase }}.{% endif %}
+                Contact us for bespoke orders.
+              {%- endif -%}
             {%- endif -%}
           </div>
         </details>
         <details>
           <summary>{% if is_fragrance %}How to Wear{% else %}Care{% endif %}</summary>
-          <div class="zpdp__acc-body">{% if is_fragrance %}Apply to pulse points: the wrists, neck and behind the ears. Do not rub, to preserve the notes. Store away from heat and direct light.{% else %}Dry clean recommended to preserve colour and finish. Warm iron on the reverse. Store away from direct sunlight.{% endif %}</div>
+          <div class="zpdp__acc-body">{% if is_fragrance %}Apply to pulse points: the wrists, neck and behind the ears. Do not rub, to preserve the notes. Store away from heat and direct light.{% else %}Dry clean recommended to preserve colour and finish. Warm iron on the reverse.{% endif %}</div>
         </details>
         <details>
           <summary>Delivery</summary>
