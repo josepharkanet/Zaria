@@ -25,6 +25,7 @@
       <div class="zqz__clip" data-zqz-clip>
         <img class="zqz__img" data-zqz-img alt="" src="" draggable="false">
       </div>
+      <span class="zqz__lens" data-zqz-lens aria-hidden="true"></span>
       <button class="zqz__nav zqz__nav--prev" type="button" aria-label="Previous image">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"/></svg>
       </button>
@@ -51,6 +52,16 @@
   .zqz__img{display:block;max-width:min(92vw, calc(100vw - 150px));max-height:min(82vh, calc(100vh - 150px));
     object-fit:contain;transform-origin:center center;will-change:transform;-webkit-user-drag:none;user-select:none}
   .zqz__img.is-eased{transition:transform .26s cubic-bezier(.2,.7,.3,1)}
+  /* The glass, driven by assets/zaria-pdp-lens.js. It lives here in the full-screen view and
+     not on the product page, and it stands down the moment the picture is zoomed by pinch or
+     wheel, because then the whole picture is already magnified and two magnifications on top
+     of each other help nobody. */
+  .zqz__lens{position:absolute;left:0;top:0;z-index:4;width:260px;height:260px;border-radius:50%;
+    pointer-events:none;opacity:0;transition:opacity .16s ease;background-repeat:no-repeat;
+    background-color:#0e0c0c;box-shadow:0 3px 26px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.4) inset}
+  .zqz__lens.is-on{opacity:1}
+  @media (max-width:699px){.zqz__lens{width:180px;height:180px}}
+  @media (hover:none),(pointer:coarse){.zqz__lens{display:none}}
   .zqz__img.is-swapping{opacity:0;transition:opacity .13s ease}
 
   .zqz__close{position:absolute;bottom:calc(100% + 12px);right:-6px;
@@ -155,9 +166,14 @@
       if (!img.naturalWidth || !img.offsetWidth || !img.offsetHeight) return;
       var k = Math.min(img.offsetWidth / img.naturalWidth, img.offsetHeight / img.naturalHeight);
       if (!k) return;
-      var trueScale = 1 / k;
-      MAX = Math.min(6, Math.max(2.2, trueScale * 1.4));
-      TAP = Math.min(MAX, Math.max(1.8, trueScale));
+      /* DEVICE pixels, not CSS ones. Nearly every screen this shop is read on draws two
+         device pixels for each CSS pixel, so a picture that looks one-to-one in CSS is
+         already being doubled on the glass. Counting in CSS is what made "true resolution"
+         still look soft. */
+      var dpr = window.devicePixelRatio || 1;
+      var trueScale = 1 / (k * dpr);
+      MAX = Math.min(6, Math.max(2.2, trueScale * 2));
+      TAP = Math.min(MAX, Math.max(1.6, trueScale));
     }
     img.addEventListener('load', fitLimits);
     window.addEventListener('resize', fitLimits);
