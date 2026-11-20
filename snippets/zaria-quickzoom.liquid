@@ -144,6 +144,24 @@
     }
     function reset(eased) { scale = 1; tx = 0; ty = 0; draw(eased); }
 
+    /* How far this particular picture can actually go. A file holds what it holds, and
+       enlarging past its own resolution shows nothing new, only bigger pixels - which is
+       what made the beadwork go soft at five times on a 1,600 pixel photograph. So the
+       ceiling is read off the file rather than fixed at five: a double-click lands exactly
+       at the file's own resolution, the sharpest view there is, and the limit allows a
+       little beyond it and no further. Upload a bigger photograph and both rise on their
+       own. */
+    function fitLimits() {
+      if (!img.naturalWidth || !img.offsetWidth || !img.offsetHeight) return;
+      var k = Math.min(img.offsetWidth / img.naturalWidth, img.offsetHeight / img.naturalHeight);
+      if (!k) return;
+      var trueScale = 1 / k;
+      MAX = Math.min(6, Math.max(2.2, trueScale * 1.4));
+      TAP = Math.min(MAX, Math.max(1.8, trueScale));
+    }
+    img.addEventListener('load', fitLimits);
+    window.addEventListener('resize', fitLimits);
+
     // Zoom to `next` keeping the point (px,py) - measured from the stage centre - still.
     function zoomTo(nextScale, px, py, eased) {
       nextScale = Math.max(MIN, Math.min(MAX, nextScale));
