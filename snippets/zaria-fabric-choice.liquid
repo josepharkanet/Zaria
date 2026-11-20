@@ -196,6 +196,18 @@
 (function () {
   var root = document.querySelector('[data-zfc]');
   if (!root) return;
+  /* A short mark shared by every line of one Add to Cart, so the cutting room can see at a
+     glance which cloth belongs to which piece. Without it, a customer ordering the same
+     jalabiya twice in two different fabrics leaves four lines that can only be paired by
+     reading a long fabric name off each one, and the lines do not even sit next to each
+     other on the order. Letters that can be misread as digits are left out of the alphabet,
+     because this mark gets written on a cutting ticket by hand. */
+  function zRef() {
+    var a = 'ACDEFGHJKLMNPQRTUVWXY34679', s = '';
+    for (var i = 0; i < 4; i += 1) s += a.charAt(Math.floor(Math.random() * a.length));
+    return s;
+  }
+
   var form = root.closest('form');
   var grid = root.querySelector('[data-zfc-grid]');
   var qBox = root.querySelector('[data-zfc-q]');
@@ -625,7 +637,8 @@
         var rtwBtn = form.querySelector('.zpdp__atc');
         var rtwLabel = rtwBtn ? rtwBtn.textContent : '';
         if (rtwBtn) { rtwBtn.disabled = true; rtwBtn.textContent = 'Adding\u2026'; }
-        var rtwProps = {};
+        var rtwRef = zRef();
+        var rtwProps = { Ref: rtwRef };
         new FormData(form).forEach(function (v, k) {
           var mm = /^properties\[(.+)\]$/.exec(k);
           if (mm && String(v).trim() !== '') rtwProps[mm[1]] = v;
@@ -637,7 +650,7 @@
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify({ items: [
             { id: rtwId ? rtwId.value : '', quantity: pieces(), properties: rtwProps },
-            { id: rtwSheila.value, quantity: pieces(), properties: { 'For': rtwFor ? rtwFor.value : '' } }
+            { id: rtwSheila.value, quantity: pieces(), properties: { Ref: rtwRef, 'For': rtwFor ? rtwFor.value : '' } }
           ] })
         })
           .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
@@ -657,7 +670,8 @@
       var label = btn ? btn.textContent : '';
       if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
 
-      var props = {};
+      var ref = zRef();
+      var props = { Ref: ref };
       new FormData(form).forEach(function (v, k) {
         var m = /^properties\[(.+)\]$/.exec(k);
         if (m && String(v).trim() !== '') props[m[1]] = v;
@@ -665,9 +679,13 @@
       var n = pieces(), metres = MIN * n;
       props['Fabric cut'] = tidy(metres) + ' m';
       var id = form.querySelector('[name="id"]');
+      // The mark goes first on the cloth line, because that is the line someone reads when
+      // they are standing at the table deciding which bolt to cut. The cloth also carries its
+      // own mark rather than sharing the garment's quantity, so two pieces of the same design
+      // in the same cloth stay as two cuts instead of merging into one length.
       var items = [
         { id: id ? id.value : '', quantity: n, properties: props },
-        { id: String(chosen.v), quantity: units(metres), properties: { 'For': root.getAttribute('data-zfc-title') || '', 'Length': tidy(metres) + ' m', 'Request': 'Cut for a made-to-order piece' } }
+        { id: String(chosen.v), quantity: units(metres), properties: { Ref: ref, 'For': root.getAttribute('data-zfc-title') || '', 'Length': tidy(metres) + ' m', 'Request': 'Cut for a made-to-order piece' } }
       ];
       // A matching sheila, if one was picked. It lives in its own snippet with its own submit
       // handler, which stands down once this one has taken the submit over, so the line has to
@@ -675,7 +693,7 @@
       var sheila = document.querySelector('[data-zsa-variant]');
       if (sheila && sheila.value) {
         var sfor = document.querySelector('[data-zsa-for]');
-        items.push({ id: sheila.value, quantity: n, properties: { 'For': sfor ? sfor.value : '' } });
+        items.push({ id: sheila.value, quantity: n, properties: { Ref: ref, 'For': sfor ? sfor.value : '' } });
       }
       fetch('/cart/add.js', {
         method: 'POST',

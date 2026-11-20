@@ -139,7 +139,11 @@
       var label = btn ? btn.textContent : '';
       if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
 
-      var props = {};
+      /* The same short mark the fabric room uses, so a piece and the sheila beside it are
+         one group on the order however they were added. See zaria-fabric-choice.liquid. */
+      var zsaAlpha = 'ACDEFGHJKLMNPQRTUVWXY34679', ref = '';
+      for (var zi = 0; zi < 4; zi += 1) ref += zsaAlpha.charAt(Math.floor(Math.random() * zsaAlpha.length));
+      var props = { Ref: ref };
       new FormData(form).forEach(function (v, k) {
         var m = /^properties\[(.+)\]$/.exec(k);
         if (m && String(v).trim() !== '') props[m[1]] = v;
@@ -148,7 +152,7 @@
       var qty = form.querySelector('[name="quantity"]');
       var items = [
         { id: id ? id.value : '', quantity: qty ? (parseInt(qty.value, 10) || 1) : 1, properties: props },
-        { id: field.value, quantity: 1, properties: { 'For': root.querySelector('[data-zsa-for]').value } }
+        { id: field.value, quantity: 1, properties: { Ref: ref, 'For': root.querySelector('[data-zsa-for]').value } }
       ];
       fetch('/cart/add.js', {
         method: 'POST',
