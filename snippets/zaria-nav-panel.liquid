@@ -43,13 +43,13 @@
     with nothing left over, so the list is complete by construction rather than by hand.
     The links are Shopify's own collection-and-tag URLs, which need no second collection and
     no app: /collections/sale/abaya is the Sale collection narrowed to the Abaya tag.
-    "Everything on Sale" leads, because in the mobile drawer the parent word becomes a
-    summary that opens the list instead of following its link, and without this row the whole
-    sale would be unreachable from a phone.
+    "All" leads, because in the mobile drawer the parent word becomes a summary that opens
+    the list instead of following its link, and without this row the whole sale would be
+    unreachable from a phone.
   {%- endcomment -%}
   {%- when 'sales' -%}
     <ul class="header__dropdown-menu unstyled-list" role="list">
-      <li><a href="{{ routes.root_url }}collections/sale" class="link-faded-reverse zar-ddlink">Everything on Sale</a></li>
+      <li><a href="{{ routes.root_url }}collections/sale" class="link-faded-reverse zar-ddlink">All</a></li>
       <li><a href="{{ routes.root_url }}collections/sale/fabric" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'silk' %}Fabrics</a></li>
       <li><a href="{{ routes.root_url }}collections/sale/jalabiya" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'jalabiya' %}Jalabiya</a></li>
       <li><a href="{{ routes.root_url }}collections/sale/abaya" class="link-faded-reverse zar-ddlink">{% render 'zaria-mega-icon', name: 'abaya' %}Abaya</a></li>
