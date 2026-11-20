@@ -621,15 +621,32 @@
       </div>
       {%- else -%}
       {%- form 'product', product, id: 'zpdp-form', class: 'zpdp__form' -%}
-        {%- unless product.has_only_default_variant -%}
+        {%- comment -%}
+          A Ramadan piece is two prices, not one. Bought as photographed it is the cloth and
+          the making together, the figure the client's cost sheet calls the RSP; bought made
+          to order it is the making alone, and the cloth the customer picks is added as a
+          second line. Those are two real variants under the option "Size Type", so the whole
+          figure reaches the checkout either way, and the size radios below are what chooses
+          between them (client, 2026-11-20: "when adding this as ready to wear this cost need
+          to go to checkout, now showing only design cost"). The variant picker is therefore a
+          hidden field the radios write into, not a dropdown of its own.
+        {%- endcomment -%}
+        {%- assign zpdp_fitvar = false -%}
+        {%- for zpdp_o in product.options -%}
+          {%- if zpdp_o == 'Size Type' -%}{%- assign zpdp_fitvar = true -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if zpdp_fitvar -%}
+          {%- capture zpdp_vmap -%}{%- for v in product.variants -%}{%- unless forloop.first -%},{%- endunless -%}"{{ v.title }}":"{{ v.id }}"{%- endfor -%}{%- endcapture -%}
+          <input type="hidden" name="id" value="{{ fv.id }}" data-zpdp-id data-zpdp-vmap='{ {{ zpdp_vmap }} }'>
+        {%- elsif product.has_only_default_variant -%}
+          <input type="hidden" name="id" value="{{ fv.id }}">
+        {%- else -%}
           <select name="id" class="zpdp__variant">
             {%- for v in product.variants -%}
               <option value="{{ v.id }}" {% unless v.available %}disabled{% endunless %} {% if v == fv %}selected{% endif %}>{{ v.title }} &middot; {{ v.price | money }}</option>
             {%- endfor -%}
           </select>
-        {%- else -%}
-          <input type="hidden" name="id" value="{{ fv.id }}">
-        {%- endunless -%}
+        {%- endif -%}
 
         {%- comment -%}
           The size comes first, because it is the size that says how much cloth the piece
@@ -833,7 +850,24 @@
      });});
      if(qin){qin.addEventListener('change',function(){qsync();});qsync();}}
   var bn=document.querySelector('[data-zpdp-buynow]');
-  if(bn){bn.addEventListener('click',function(){var q=1,vid=bn.getAttribute('data-variant');if(f){var v=qsync();q=qhalf?Math.round(v*2):Math.round(v);var vs=f.querySelector('select.zpdp__variant');if(vs&&vs.value)vid=vs.value;}bn.setAttribute('href','/checkout?variant='+vid+'&quantity='+q);});}
+  if(bn){bn.addEventListener('click',function(){var q=1,vid=bn.getAttribute('data-variant');if(f){var v=qsync();q=qhalf?Math.round(v*2):Math.round(v);var vs=f.querySelector('[name="id"]');if(vs&&vs.value)vid=vs.value;}bn.setAttribute('href','/checkout?variant='+vid+'&quantity='+q);});}
+
+  /* Ready to Wear and Made to Order are two variants of the same piece, so the size radios
+     have to say which one the order is for. The field opens on the first variant, which is
+     the piece as photographed, and that is the figure the headline above opens on too; a
+     radio the customer has not touched therefore cannot undercharge. */
+  var zid=document.querySelector('input[data-zpdp-id]');
+  if(zid){
+    var zmap={};
+    try{zmap=JSON.parse(zid.getAttribute('data-zpdp-vmap')||'{}');}catch(e){}
+    var zpick=function(){
+      var r=document.querySelector('input[data-zmm-mode]:checked');
+      var want=r&&zmap[r.value];
+      if(want)zid.value=want;
+    };
+    Array.prototype.forEach.call(document.querySelectorAll('input[data-zmm-mode]'),function(r){r.addEventListener('change',zpick);});
+    zpick();
+  }
 })();
 (function(){
   var root=document.getElementById('zpdp-gal-{{ section.id }}');
