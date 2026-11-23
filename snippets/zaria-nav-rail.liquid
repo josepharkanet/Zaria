@@ -5,7 +5,12 @@
   hostage to that, it is written here and the admin's Main menu is no longer read.
 
   Structure asked for by the client, 2026-11-13:
-      New In · Designers · Categories · Ready to Wear · Made to Order · Sales
+      New In · Designers · Categories · Ready to Wear · Made to Order · Sale
+
+  The key stays `sales` while the word reads "Sale" (client, 2026-11-23). The key is what
+  zaria-nav-panel and zaria-nav-sub answer to for the dropdown, and what header.liquid tests
+  to paint the word in the house colour; renaming it would silently drop the dropdown and the
+  colour, so only the label moved.
 
   One row per item, fields separated by ~ and rows by ||
       key ~ label ~ href ~ kind
@@ -24,4 +29,4 @@ designers     ~ Designers     ~ {{ routes.root_url }}collections/ready-to-wear  
 categories    ~ Categories    ~ {{ routes.root_url }}collections/all               ~ drop ||
 ready-to-wear ~ Ready to Wear  ~ {{ routes.root_url }}collections/ready-to-wear      ~ drop ||
 made-to-order ~ Made to Order ~ {{ routes.root_url }}collections/made-to-order-jalabiya ~ drop ||
-sales         ~ Sales         ~ {{ routes.root_url }}collections/sale               ~ sale
+sales         ~ Sale          ~ {{ routes.root_url }}collections/sale               ~ sale
