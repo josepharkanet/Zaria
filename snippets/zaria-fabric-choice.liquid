@@ -138,9 +138,10 @@
   they settled it: **56 is 4 m**. So the 3.5 band ends at 55.5, the last half-inch step the
   dropdown offers before 56, rather than at 56.
 
-  Above 63 the client's table stops, and the length dropdown runs to 66. Those lengths take
-  4.5 m, which is this list's own rule for a piece longer than the table covers, and is still
-  to be confirmed.
+  Above 63 takes 4.5 m, confirmed by the client the same day. It is written into the table
+  rather than left to the rule below it, which adds half a metre to the last band for a piece
+  longer than the table covers: the dropdown stops at 66 in, so the rule is now only a
+  safety net and the four figures on the page are the four the client gave.
   A product can carry its own table in custom.fabric_bands, same shape, for a cut that takes
   more than the house figure. The client has their own size-range table and it goes here once
   they send it; nothing else has to change.
@@ -149,7 +150,7 @@
   opening div reads to Shopify's theme check as the end of the element, and it answered with
   "Attempting to close HtmlElement 'p' before HtmlElement 'div' was closed" forty lines later.
 {%- endcomment -%}
-{%- assign zfc_bands = product.metafields.custom.fabric_bands.value | default: '53:3,55.5:3.5,63:4' -%}
+{%- assign zfc_bands = product.metafields.custom.fabric_bands.value | default: '53:3,55.5:3.5,63:4,66:4.5' -%}
 <div class="zfc" data-zfc
      data-zfc-src="{{ 'zaria-fabrics.json' | asset_url }}"
      data-zfc-design="{{ product.price }}"
@@ -273,7 +274,7 @@
   // cut in whole metres.
   var STEP = 0.5;                                     // cloth is cut in half metres
   function units(m) { return Math.round(m / STEP); }  // what the cart counts
-  var BANDS = (root.getAttribute('data-zfc-bands') || '53:3,55.5:3.5,63:4').split(',').map(function (b) {
+  var BANDS = (root.getAttribute('data-zfc-bands') || '53:3,55.5:3.5,63:4,66:4.5').split(',').map(function (b) {
     var p = b.split(':'); return { to: parseFloat(p[0]), m: parseFloat(p[1]) };
   });
   var FALLBACK = parseFloat(root.getAttribute('data-zfc-need')) || 3;
