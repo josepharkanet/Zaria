@@ -46,8 +46,6 @@
   .zsa{margin:22px 0 26px}
   .zsa__head{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:#161616;margin:0 0 12px}
   .zsa__head span{color:#a89f94;letter-spacing:.1em}
-  .zsa__why{font-size:12px;color:#6f6961;margin:-6px 0 12px;line-height:1.6}
-  .zsa__why[hidden]{display:none}
   .zsa[hidden]{display:none}
   .zsa__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   @media(max-width:479px){.zsa__grid{grid-template-columns:1fr}}
@@ -79,10 +77,7 @@
 
 <div class="zsa" data-zsa{% if passive %} data-zsa-passive{% endif %}{% if zsa_dyn %} data-zsa-dynamic{% endif %}{% if zsa_empty %} hidden{% endif %}
      data-zsa-money="{{ 123456789 | money }}">
-  <p class="zsa__head">Add a matching sheila <span>optional &middot; choose any</span></p>
-  {%- if zsa_dyn -%}
-    <p class="zsa__why" data-zsa-why hidden>Chosen to sit with the fabric you picked.</p>
-  {%- endif -%}
+  <p class="zsa__head">Add a matching sheila <span>optional</span></p>
 
   <div class="zsa__grid" data-zsa-grid>
     {%- for zsa_s in zsa_list -%}
@@ -129,7 +124,6 @@
     var grid = root.querySelector('[data-zsa-grid]');
     var field = root.querySelector('[data-zsa-variant]');
     var clear = root.querySelector('[data-zsa-clear]');
-    var why = root.querySelector('[data-zsa-why]');
     var OWN = grid ? grid.innerHTML : '';    // the piece's own pairing, to come back to
 
     function tiles() { return root.querySelectorAll('[data-zsa-tile]'); }
@@ -192,7 +186,6 @@
       pick([]);                              // a scarf chosen for the last fabric is not this one
       if (!list) {
         if (grid) grid.innerHTML = OWN;
-        if (why) why.hidden = true;
         root.hidden = OWN.trim() === '';
         return;
       }
@@ -224,7 +217,6 @@
           grid.appendChild(b);
         });
       }
-      if (why) why.hidden = list.length === 0;
       root.hidden = list.length === 0;
     });
 
