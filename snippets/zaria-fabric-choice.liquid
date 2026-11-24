@@ -133,7 +133,14 @@
      data-zfc-src="{{ 'zaria-fabrics.json' | asset_url }}"
      data-zfc-design="{{ product.price }}"
      data-zfc-title="{{ product.title | escape }}"
-     data-zfc-bands="53:3,56:3.5,63:4"
+     {%- comment -%}
+       How much cloth a piece is cut from, by its finished length in inches:
+       up to 53 in -> 3 m, up to 56 -> 3.5, up to 63 -> 4, longer than that -> 4.5.
+       A product can carry its own table in custom.fabric_bands, same shape, for a cut that
+       takes more than the house figure. The client has their own size-range table and it
+       goes here once they send it; nothing else has to change.
+     {%- endcomment -%}
+     data-zfc-bands="{{ product.metafields.custom.fabric_bands.value | default: '53:3,56:3.5,63:4' }}"
      data-zfc-need="{{ product.metafields.custom.fabric_required.value | default: 3 }}"
      data-zfc-money="{{ 123456789 | money }}"
      data-zfc-root="{{ routes.root_url }}">
@@ -261,12 +268,21 @@
   var needSay = root.querySelector('[data-zfc-need-say]');
 
   function tidy(n) { return String(Math.round(n * 100) / 100); }
+  /* The length is asked under two different names, and this read only ever knew one of them.
+     The readymade side has `properties[Length]`; the made-to-measure side asks for the nine
+     measurements, where the same thing is `properties[Full length]`. So a customer who set
+     Full length to 66 in was told "Choose the length" and the total stayed "1,100 + fabric"
+     with the length already on the screen above it (client, 2026-11-24). Both names are read
+     now, the enabled one winning, since only one panel is ever showing. */
+  var LENGTH_FIELDS = ['properties[Length]', 'properties[Full length]'];
   function lengthInches() {
-    var sels = document.querySelectorAll('select[name="properties[Length]"]');
-    for (var i = 0; i < sels.length; i++) {
-      if (sels[i].disabled || sels[i].closest('[hidden]')) continue;
-      var m = /([\d.]+)\s*in/.exec(sels[i].value || '');
-      if (m) return parseFloat(m[1]);
+    for (var f = 0; f < LENGTH_FIELDS.length; f++) {
+      var sels = document.querySelectorAll('select[name="' + LENGTH_FIELDS[f] + '"]');
+      for (var i = 0; i < sels.length; i++) {
+        if (sels[i].disabled || sels[i].closest('[hidden]')) continue;
+        var m = /([\d.]+)\s*in/.exec(sels[i].value || '');
+        if (m) return parseFloat(m[1]);
+      }
     }
     return 0;
   }
@@ -576,7 +592,7 @@
   document.addEventListener('change', function (e) {
     var t = e.target;
     if (!t || !t.name || t.name.indexOf('properties[') !== 0) return;
-    if (t.name !== 'properties[Length]' && t.name !== 'properties[Size Type]') return;
+    if (LENGTH_FIELDS.indexOf(t.name) < 0 && t.name !== 'properties[Size Type]') return;
     syncMode();
     readLength();
     restock();
