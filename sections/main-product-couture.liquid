@@ -56,6 +56,21 @@
   endif
 
   comment
+    A product of type "Test" is the one the shop keeps unlisted for running an order through
+    end to end - payment, shipping, the courier, the emails. Everything on this page assumes a
+    piece of clothing or a bolt of fabric, so without this it fell to the fabric branch and
+    opened the design brief, which asks for nine measurements, a name and a contact before it
+    will go in the bag. A test order should be one click.
+
+    Type rather than a tag, because the Accessories tag would file it in that collection, and
+    nothing in the shop matches on a type of "Test".
+  endcomment
+  assign is_test = false
+  if product.type == 'Test'
+    assign is_test = true
+  endif
+
+  comment
     Zaria: the Ramadan 2027 pieces are cut to order from cloth the customer picks on this
     page, so the price here is the making of the piece and the fabric is charged beside it
     by the metre. Both reach the cart as their own line.
@@ -763,8 +778,8 @@
       {%- endform -%}
       {%- endif -%}
 
-      {%- unless is_fragrance or is_garment or is_accessory or por or is_restock -%}{% render 'zaria-design-form', product: product, variant: fv, inline: true %}{%- endunless -%}
-      {%- unless is_fragrance or is_garment or is_accessory -%}<div class="zpdp__sizechart">{% render 'zaria-size-chart' %}</div>{%- endunless -%}
+      {%- unless is_fragrance or is_garment or is_accessory or por or is_restock or is_test -%}{% render 'zaria-design-form', product: product, variant: fv, inline: true %}{%- endunless -%}
+      {%- unless is_fragrance or is_garment or is_accessory or is_test -%}<div class="zpdp__sizechart">{% render 'zaria-size-chart' %}</div>{%- endunless -%}
 
       <div class="zpdp__acc" style="margin-top:28px">
         <details open>
