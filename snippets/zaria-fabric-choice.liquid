@@ -129,18 +129,23 @@
   .zfc__warn[hidden]{display:none}
 </style>
 
+{%- comment -%}
+  How much cloth a piece is cut from, by its finished length in inches:
+  up to 53 in -> 3 m, up to 56 -> 3.5, up to 63 -> 4, longer than that -> 4.5.
+  A product can carry its own table in custom.fabric_bands, same shape, for a cut that takes
+  more than the house figure. The client has their own size-range table and it goes here once
+  they send it; nothing else has to change.
+
+  Worked out here, above the tag. A Liquid comment placed between two attributes inside the
+  opening div reads to Shopify's theme check as the end of the element, and it answered with
+  "Attempting to close HtmlElement 'p' before HtmlElement 'div' was closed" forty lines later.
+{%- endcomment -%}
+{%- assign zfc_bands = product.metafields.custom.fabric_bands.value | default: '53:3,56:3.5,63:4' -%}
 <div class="zfc" data-zfc
      data-zfc-src="{{ 'zaria-fabrics.json' | asset_url }}"
      data-zfc-design="{{ product.price }}"
      data-zfc-title="{{ product.title | escape }}"
-     {%- comment -%}
-       How much cloth a piece is cut from, by its finished length in inches:
-       up to 53 in -> 3 m, up to 56 -> 3.5, up to 63 -> 4, longer than that -> 4.5.
-       A product can carry its own table in custom.fabric_bands, same shape, for a cut that
-       takes more than the house figure. The client has their own size-range table and it
-       goes here once they send it; nothing else has to change.
-     {%- endcomment -%}
-     data-zfc-bands="{{ product.metafields.custom.fabric_bands.value | default: '53:3,56:3.5,63:4' }}"
+     data-zfc-bands="{{ zfc_bands }}"
      data-zfc-need="{{ product.metafields.custom.fabric_required.value | default: 3 }}"
      data-zfc-money="{{ 123456789 | money }}"
      data-zfc-root="{{ routes.root_url }}">
