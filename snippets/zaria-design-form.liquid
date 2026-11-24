@@ -245,7 +245,7 @@
     {%- unless inline -%}
       <p class="zdf-eyebrow">The Design Studio</p>
       <h2 class="zdf-title">Design your look</h2>
-      <p class="zdf-lede">Tell us the piece you have in mind in this fabric. The cloth and the making are added to your order as two lines, and a designer follows up to refine the design and confirm measurements.</p>
+      <p class="zdf-lede">Tell us the piece you have in mind in this fabric. The fabric and the making are added to your order as two lines, and a designer follows up to refine the design and confirm measurements.</p>
     {%- endunless -%}
     {%- comment -%}
       Which cloth the brief is for, named only where it is not already obvious. In the page it
@@ -316,7 +316,7 @@
                   <img src="{{ zp.featured_image | image_url: width: 320 }}" alt="{{ zp.title | escape }}" loading="lazy" width="132" height="176">
                   <span>{{ zp.title | split: ' ' | slice: 0, 2 | join: ' ' }}</span>
                   <span class="zdf-pick-p">{{ zp.price | money }}</span>
-                  <span class="zdf-pick-x">Not enough cloth</span>
+                  <span class="zdf-pick-x">Not enough fabric</span>
                   <span class="zdf-zoom" role="button" tabindex="0" aria-label="Look closer at {{ zp.title | escape }}" data-zoom-gallery="{{ zp_gallery }}">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#zdf-zoomic"></use></svg>
                   </span>
@@ -397,7 +397,7 @@
       </div>
 
       <button type="submit" class="zdf-submit" data-zdf-submit>Add to order &amp; continue</button>
-      <p class="zdf-note">The cloth and the making are added as two lines on your order. Confirm details at checkout.<br>Our atelier then reaches out.</p>
+      <p class="zdf-note">The fabric and the making are added as two lines on your order. Confirm details at checkout.<br>Our atelier then reaches out.</p>
     </form>
   </div>
 </div>
@@ -511,16 +511,16 @@
     if (lift && liftT) {
       var says = [];
       if (!PER) {
-        says.push('The cloth is cut to the length of the piece, so it is priced once you set the length in the measurements below.');
+        says.push('The fabric is cut to the length of the piece, so it is priced once you set the length in the measurements below.');
       }
       if (PER && m !== wanted()) {
-        says.push('Cloth is cut in half metres, so ' + tidy(wanted()) + ' m is cut as <b>' + tidy(m) + ' m</b>.');
+        says.push('Fabric is cut in half metres, so ' + tidy(wanted()) + ' m is cut as <b>' + tidy(m) + ' m</b>.');
       }
       if (PIECES >= PC_MAX) {
         says.push('Ten pieces is as many as the brief takes. For a larger order, ask for the atelier and they will quote it with you.');
       }
       if (PER && STOCK >= 0 && m > STOCK) {
-        says.push('We hold <b>' + STOCK + ' m</b> of this cloth on the shelf. The rest is cut from the next roll, and your designer confirms the timing when they call.');
+        says.push('We hold <b>' + STOCK + ' m</b> of this fabric on the shelf. The rest is cut from the next roll, and your designer confirms the timing when they call.');
       }
       lift.hidden = says.length === 0;
       if (!says.length) liftT.innerHTML = '';
@@ -798,7 +798,7 @@
       // making of that design, one for each piece. The brief itself rides on whichever line
       // it describes.
       var m = cut();
-      var cloth = { Request: 'Design your look', Design: designTitle,
+      var fabricLine = { Request: 'Design your look', Design: designTitle,
                     Length: tidy(m) + ' m',
                     'Cut for': PIECES > 1 ? (PIECES + ' pieces') : 'one piece',
                     _fabric_handle: props._fabric_handle };
@@ -806,7 +806,7 @@
       Object.keys(props).forEach(function (k) { made[k] = props[k]; });
       made['Fabric'] = form.getAttribute('data-zdf-fabric') || '';
       made['Fabric cut'] = tidy(m) + ' m';
-      var items = [{ id: form.getAttribute('data-zdf-fabric-id'), quantity: units(m), properties: designVariant ? cloth : props }];
+      var items = [{ id: form.getAttribute('data-zdf-fabric-id'), quantity: units(m), properties: designVariant ? fabricLine : props }];
       // Only if the collection itself were empty would there be no second line to add.
       if (designVariant) items.push({ id: designVariant, quantity: PIECES, properties: made });
       // And a third, when a sheila was chosen to go with it.

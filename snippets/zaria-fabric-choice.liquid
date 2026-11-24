@@ -109,23 +109,28 @@
   .zfc__empty{font-size:13px;color:var(--zf-hint);padding:10px 2px}
   .zfc[hidden],.zfc.is-off > *:not([data-zsa]){display:none}
   .zfc.is-off{border:0;padding:0;margin:0}
-  {%- comment -%}The cloth that was ticked, repeated below the grid. The wine edge is the same
-     mark the chosen tile carries, so the two read as one choice.{%- endcomment -%}
-  .zfc__chose{display:flex;align-items:center;gap:14px;margin:18px 0 0;padding:0;
-    border:1px solid var(--zf-line,#e6e2db);border-left:2px solid var(--wine,#7a1f34);background:#fff}
+  {%- comment -%}
+    The fabric that was ticked, repeated below the grid. One plain rule all the way round: the
+    wine edge down the left read as a flag rather than as a choice already made, and the client
+    asked for it off and the whole thing a size up (2026-11-24).
+  {%- endcomment -%}
+  .zfc__chose{display:flex;align-items:center;gap:18px;margin:18px 0 0;padding:0;
+    border:1px solid var(--zf-line,#e6e2db);background:#fff}
   .zfc__chose[hidden]{display:none}
-  .zfc__chose-img{display:block;width:92px;height:92px;object-fit:cover;background:#f6f4f1;flex:none}
-  .zfc__chose-txt{display:flex;flex-direction:column;gap:4px;min-width:0;padding:10px 0}
-  .zfc__chose-lab{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#a89f94}
-  .zfc__chose-txt b{font-weight:400;font-size:14px;line-height:1.35;color:#2a2a2a;overflow-wrap:anywhere}
-  .zfc__chose-txt i{font-style:normal;font-size:13px;letter-spacing:.03em;color:#161616}
-  .zfc__chose-ch{margin:0 14px 0 auto;flex:none;background:none;border:0;padding:0;font-family:inherit;
+  .zfc__chose-img{display:block;width:124px;height:124px;object-fit:cover;background:#f6f4f1;flex:none}
+  .zfc__chose-txt{display:flex;flex-direction:column;gap:6px;min-width:0;padding:12px 0}
+  .zfc__chose-lab{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#a89f94}
+  .zfc__chose-txt b{font-weight:400;font-size:16px;line-height:1.35;color:#2a2a2a;overflow-wrap:anywhere}
+  .zfc__chose-txt i{font-style:normal;font-size:14px;letter-spacing:.03em;color:#161616}
+  .zfc__chose-ch{margin:0 18px 0 auto;flex:none;background:none;border:0;padding:0;font-family:inherit;
     font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a89f94;cursor:pointer;
     text-decoration:underline;text-underline-offset:3px}
   .zfc__chose-ch:hover{color:#161616}
   @media(max-width:479px){
-    .zfc__chose-img{width:76px;height:76px}
-    .zfc__chose-ch{margin:0 10px 0 auto}
+    .zfc__chose{gap:14px}
+    .zfc__chose-img{width:96px;height:96px}
+    .zfc__chose-txt b{font-size:15px}
+    .zfc__chose-ch{margin:0 12px 0 auto}
   }
   .zfc__sum{border:1px solid #ece8e2;background:#fbfaf8;padding:12px 14px;margin:14px 0 0;font-size:13px}
   .zfc__sum div{display:flex;justify-content:space-between;gap:16px;padding:3px 0;color:#6a6a6a}
@@ -188,12 +193,12 @@
   <p class="zfc__sub">With this design you can choose any fabric of your choice, options shown below.</p>
 
   <div class="zfc__tools">
-    <div class="zfc__search"><input type="search" placeholder="Search the cloth&hellip;" data-zfc-q aria-label="Search fabrics"></div>
+    <div class="zfc__search"><input type="search" placeholder="Search the fabric&hellip;" data-zfc-q aria-label="Search fabrics"></div>
     <select data-zfc-kind aria-label="Fabric type"><option value="">All fabrics</option></select>
   </div>
 
   <div class="zfc__grid" data-zfc-grid></div>
-  <p class="zfc__empty" data-zfc-empty hidden>No cloth matches that. Try another word.</p>
+  <p class="zfc__empty" data-zfc-empty hidden>No fabric matches that. Try another word.</p>
   <button type="button" class="zfc__more" data-zfc-more hidden>Show more</button>
 
   {%- comment -%}
@@ -204,9 +209,9 @@
     and the way back to the grid to change it.
   {%- endcomment -%}
   <div class="zfc__chose" data-zfc-chosen hidden>
-    <img class="zfc__chose-img" data-zfc-chosen-img alt="" width="92" height="92">
+    <img class="zfc__chose-img" data-zfc-chosen-img alt="" width="124" height="124">
     <span class="zfc__chose-txt">
-      <span class="zfc__chose-lab">Your cloth</span>
+      <span class="zfc__chose-lab">Your fabric</span>
       <b data-zfc-chosen-name></b>
       <i data-zfc-chosen-price></i>
     </span>
@@ -285,7 +290,7 @@
   function warnClear() { if (!warn) return; warn.hidden = true; warn.textContent = WARN_ASK; shortAt = null; shortName = ''; }
   function warnShort() {
     warnSay(shortName + ' holds ' + tidy(shortAt) + ' m, not the ' + tidy(needed()) +
-      ' m these pieces take. Please choose another cloth.');
+      ' m these pieces take. Please choose another fabric.');
   }
   /* How much the cloth we had to let go could have supplied. While the order still asks for
      more than that, the complaint is true and stands; the moment it asks for that much or
@@ -373,7 +378,7 @@
   function sayChosen() {
     if (!choseBox) return;
     if (!chosen || !fabricOn()) { choseBox.hidden = true; return; }
-    if (choseImg) { choseImg.src = sized(BASE + chosen.i, 200); choseImg.alt = chosen.t; }
+    if (choseImg) { choseImg.src = sized(BASE + chosen.i, 300); choseImg.alt = chosen.t; }
     if (choseName) choseName.textContent = chosen.t;
     if (chosePrice) {
       chosePrice.textContent = '';
@@ -472,9 +477,9 @@
     // "Design & tailoring", not "Making": the summary at the foot of this room has always
     // called it that, and the client asked for one wording everywhere.
     if (on && chosen) taxP.textContent = 'Design & tailoring ' + money(DESIGN) + ' plus ' + tidy(MIN) +
-      ' m of cloth ' + money(chosen.p * MIN);
-    else if (on) taxP.textContent = 'The cloth you choose is added to this';
-    else if (!on && TOTAL) taxP.textContent = 'A standard size, in the cloth photographed \u00b7 price per piece';
+      ' m of fabric ' + money(chosen.p * MIN);
+    else if (on) taxP.textContent = 'The fabric you choose is added to this';
+    else if (!on && TOTAL) taxP.textContent = 'A standard size, in the fabric photographed \u00b7 price per piece';
     else if (!on) taxP.textContent = 'Ready to wear in our standard size \u00b7 price per piece';
     else taxP.textContent = taxMade;
   }

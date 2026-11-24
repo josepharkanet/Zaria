@@ -43,7 +43,7 @@
 
 {%- assign zaria_og_desc = page_description -%}
 {%- if request.page_type == 'index' and zaria_og_desc == blank -%}
-  {%- assign zaria_og_desc = 'Zaria is a UAE house of fine fabrics and ready-to-wear. Premium silk, cotton, chiffon and embellished cloth by the metre, with abayas and jalabiyas designed in Dubai.' -%}
+  {%- assign zaria_og_desc = 'Zaria is a UAE house of fine fabrics and ready-to-wear. Premium silk, cotton, chiffon and embellished fabric by the metre, with abayas and jalabiyas designed in Dubai.' -%}
 {%- endif -%}
 {%- if zaria_og_desc != blank -%}
   <meta property="og:description" content="{{ zaria_og_desc | escape }}">
