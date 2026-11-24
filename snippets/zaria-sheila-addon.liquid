@@ -7,7 +7,12 @@
   this snippet is self-silencing: render it anywhere and it appears only where a pairing exists.
 
   Nothing is pre-selected. A sheila is an extra thing to buy, not a default, so the customer
-  picks one or leaves it and the garment goes into the bag alone.
+  picks what they want or leaves it and the garment goes into the bag alone.
+
+  Any number of them (client, 2026-11-24: "i need and customer can slect multiple options").
+  The hidden field carries the chosen variant ids separated by commas, and each one becomes its
+  own line on the order. The fabric room and the design brief both read that field, so the
+  comma-separated list is the contract between the three of them.
 
   Usage: {% render 'zaria-sheila-addon', product: product %}
          {% render 'zaria-sheila-addon', product: fabric, passive: true %}
@@ -74,7 +79,7 @@
 
 <div class="zsa" data-zsa{% if passive %} data-zsa-passive{% endif %}{% if zsa_dyn %} data-zsa-dynamic{% endif %}{% if zsa_empty %} hidden{% endif %}
      data-zsa-money="{{ 123456789 | money }}">
-  <p class="zsa__head">Add a matching sheila <span>optional</span></p>
+  <p class="zsa__head">Add a matching sheila <span>optional &middot; choose any</span></p>
   {%- if zsa_dyn -%}
     <p class="zsa__why" data-zsa-why hidden>Chosen to sit with the fabric you picked.</p>
   {%- endif -%}
@@ -129,14 +134,15 @@
 
     function tiles() { return root.querySelectorAll('[data-zsa-tile]'); }
 
-    function pick(v) {
-      field.value = v || '';
+    function chosen() { return (field.value || '').split(',').filter(Boolean); }
+    function pick(list) {
+      field.value = list.join(',');
       tiles().forEach(function (t) {
-        var on = !!v && t.getAttribute('data-zsa-v') === v;
+        var on = list.indexOf(t.getAttribute('data-zsa-v')) > -1;
         t.classList.toggle('is-on', on);
         t.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
-      if (clear) clear.hidden = !v;
+      if (clear) clear.hidden = list.length === 0;
     }
 
     // Clicks are taken on the grid rather than on each tile, because the tiles are replaced
@@ -145,11 +151,14 @@
       var t = e.target.closest('[data-zsa-tile]');
       if (!t || !grid.contains(t)) return;
       var v = t.getAttribute('data-zsa-v');
-      pick(field.value === v ? '' : v);     // a second click takes it back off
+      var list = chosen();
+      var at = list.indexOf(v);
+      if (at > -1) list.splice(at, 1); else list.push(v);   // a second click takes it back off
+      pick(list);
       root.dispatchEvent(new CustomEvent('zsa:change', { bubbles: true }));
     });
     if (clear) clear.addEventListener('click', function () {
-      pick('');
+      pick([]);
       root.dispatchEvent(new CustomEvent('zsa:change', { bubbles: true }));
     });
 
@@ -180,7 +189,7 @@
     root.addEventListener('zsa:source', function (e) {
       var d = e.detail || {};
       var list = d.list;
-      pick('');                              // a scarf chosen for the last cloth is not this one
+      pick([]);                              // a scarf chosen for the last fabric is not this one
       if (!list) {
         if (grid) grid.innerHTML = OWN;
         if (why) why.hidden = true;
@@ -227,7 +236,7 @@
     if (!form) return;
     form.addEventListener('submit', function (e) {
       if (e.defaultPrevented) return;
-      if (!field.value) return;
+      if (!chosen().length) return;
       e.preventDefault();
       if (!form.reportValidity()) return;
       var btn = form.querySelector('.zpdp__atc');
@@ -245,10 +254,13 @@
       });
       var id = form.querySelector('[name="id"]');
       var qty = form.querySelector('[name="quantity"]');
+      var forName = root.querySelector('[data-zsa-for]').value;
       var items = [
-        { id: id ? id.value : '', quantity: qty ? (parseInt(qty.value, 10) || 1) : 1, properties: props },
-        { id: field.value, quantity: 1, properties: { Ref: ref, 'For': root.querySelector('[data-zsa-for]').value } }
+        { id: id ? id.value : '', quantity: qty ? (parseInt(qty.value, 10) || 1) : 1, properties: props }
       ];
+      chosen().forEach(function (sid) {
+        items.push({ id: sid, quantity: 1, properties: { Ref: ref, 'For': forName } });
+      });
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },

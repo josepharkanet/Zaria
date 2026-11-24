@@ -478,14 +478,20 @@
   var sumDL = overlay.querySelector('[data-zdf-sum-dl]');
   var sumLN = overlay.querySelector('[data-zdf-sum-ln]');
   var qtyField = overlay.querySelector('[data-zdf-qty]');
-  // The matching sheila, chosen in the passive tiles above the summary. One per piece.
+  // The matching sheilas, chosen in the passive tiles above the summary. Any number of them
+  // (client, 2026-11-24), one of each per piece; the add-on carries them as one comma-separated
+  // field and each becomes its own line on the order.
   var zsaField = overlay.querySelector('[data-zsa-variant]');
   var zsaRow = overlay.querySelector('[data-zsa-sumrow]');
   var zsaVal = overlay.querySelector('[data-zsa-sumv]');
+  function sheilaIds() {
+    return zsaField && zsaField.value ? zsaField.value.split(',').filter(Boolean) : [];
+  }
   function sheilaPrice() {
-    if (!zsaField || !zsaField.value) return 0;
-    var t = overlay.querySelector('[data-zsa-tile][data-zsa-v="' + zsaField.value + '"]');
-    return t ? (parseInt(t.getAttribute('data-zsa-price'), 10) || 0) : 0;
+    return sheilaIds().reduce(function (sum, v) {
+      var t = overlay.querySelector('[data-zsa-tile][data-zsa-v="' + v + '"]');
+      return sum + (t ? (parseInt(t.getAttribute('data-zsa-price'), 10) || 0) : 0);
+    }, 0);
   }
   var PC_MAX = {{ zdf_pc_max }};
   var pcWrap = overlay.querySelector('.zdf-sum__pieces');
@@ -540,9 +546,12 @@
     if (zsaRow) zsaRow.hidden = !sp;
     // Counted out like the making above it, so three sheilas do not read as one at 180.
     var zsaLab = overlay.querySelector('[data-zsa-sumlab]');
-    if (zsaLab) zsaLab.innerHTML = (sp && PIECES > 1)
-      ? 'Matching sheila &middot; ' + PIECES + ' &times; ' + money(one)
-      : 'Matching sheila';
+    var zsaN = sheilaIds().length;
+    if (zsaLab) zsaLab.innerHTML = zsaN > 1
+      ? 'Matching sheilas &middot; ' + zsaN + (PIECES > 1 ? ', ' + PIECES + ' of each' : '')
+      : (sp && PIECES > 1
+        ? 'Matching sheila &middot; ' + PIECES + ' &times; ' + money(one)
+        : 'Matching sheila');
     if (zsaVal) zsaVal.textContent = sp ? money(sp) : '';
     if (sumTV) sumTV.textContent = (m && designVariant)
       ? money(FABRIC_PRICE * m + designPrice * PIECES + sp)
@@ -809,11 +818,11 @@
       var items = [{ id: form.getAttribute('data-zdf-fabric-id'), quantity: units(m), properties: designVariant ? fabricLine : props }];
       // Only if the collection itself were empty would there be no second line to add.
       if (designVariant) items.push({ id: designVariant, quantity: PIECES, properties: made });
-      // And a third, when a sheila was chosen to go with it.
-      if (zsaField && zsaField.value) {
-        items.push({ id: zsaField.value, quantity: PIECES,
-                     properties: { 'For': (form.getAttribute('data-zdf-fabric') || '') + (designTitle ? ' \u00b7 ' + designTitle : '') } });
-      }
+      // And one more for each sheila chosen to go with it.
+      var zsaFor = (form.getAttribute('data-zdf-fabric') || '') + (designTitle ? ' \u00b7 ' + designTitle : '');
+      sheilaIds().forEach(function (sid) {
+        items.push({ id: sid, quantity: PIECES, properties: { 'For': zsaFor } });
+      });
 
       fetch('{{ routes.cart_add_url }}.js', {
         method:'POST',

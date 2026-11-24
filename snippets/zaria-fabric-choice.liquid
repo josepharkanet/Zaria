@@ -549,9 +549,12 @@
     var sp = sOne * pieces();
     if (sheilaRow) sheilaRow.hidden = !sp;
     var sheilaLab = root.querySelector('[data-zsa-sumlab]');
-    if (sheilaLab) sheilaLab.innerHTML = (sp && pieces() > 1)
-      ? 'Matching sheila &middot; ' + pieces() + ' &times; ' + money(sOne)
-      : 'Matching sheila';
+    var sn = sheilaIds().length;
+    if (sheilaLab) sheilaLab.innerHTML = sn > 1
+      ? 'Matching sheilas &middot; ' + sn + (pieces() > 1 ? ', ' + pieces() + ' of each' : '')
+      : (sp && pieces() > 1
+        ? 'Matching sheila &middot; ' + pieces() + ' &times; ' + money(sOne)
+        : 'Matching sheila');
     if (sheilaCell) sheilaCell.textContent = sp ? money(sp) : '';
 
     root.querySelector('[data-zfc-sum-t]').textContent =
@@ -565,12 +568,17 @@
   // Picking a sheila, or taking it back off, moves the summary with it.
   root.addEventListener('zsa:change', retotal);
 
-  // What the chosen sheila costs, read off its own tile.
-  function sheilaPrice() {
+  // The scarves chosen, and what they cost for one piece. More than one may be picked
+  // (client, 2026-11-24), and the add-on carries them as one comma-separated field.
+  function sheilaIds() {
     var f = root.querySelector('[data-zsa-variant]');
-    if (!f || !f.value) return 0;
-    var t = root.querySelector('[data-zsa-tile][data-zsa-v="' + f.value + '"]');
-    return t ? (parseInt(t.getAttribute('data-zsa-price'), 10) || 0) : 0;
+    return f && f.value ? f.value.split(',').filter(Boolean) : [];
+  }
+  function sheilaPrice() {
+    return sheilaIds().reduce(function (sum, v) {
+      var t = root.querySelector('[data-zsa-tile][data-zsa-v="' + v + '"]');
+      return sum + (t ? (parseInt(t.getAttribute('data-zsa-price'), 10) || 0) : 0);
+    }, 0);
   }
 
   function restock() {
@@ -781,8 +789,8 @@
       if (!fabricOn()) {
         // Ready to wear takes no cloth line, but a sheila may still have been chosen and the
         // sheila's own handler is passive here, so this is the only place it can be added.
-        var rtwSheila = root.querySelector('[data-zsa-variant]');
-        if (!rtwSheila || !rtwSheila.value) return;   /* nothing extra: let the form post itself */
+        var rtwSheilas = sheilaIds();
+        if (!rtwSheilas.length) return;   /* nothing extra: let the form post itself */
         e.preventDefault();
         if (!form.reportValidity()) return;
         var rtwBtn = form.querySelector('.zpdp__atc');
@@ -800,9 +808,10 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify({ items: [
-            { id: rtwId ? rtwId.value : '', quantity: pieces(), properties: rtwProps },
-            { id: rtwSheila.value, quantity: pieces(), properties: { Ref: rtwRef, 'For': rtwFor ? rtwFor.value : '' } }
-          ] })
+            { id: rtwId ? rtwId.value : '', quantity: pieces(), properties: rtwProps }
+          ].concat(rtwSheilas.map(function (sid) {
+            return { id: sid, quantity: pieces(), properties: { Ref: rtwRef, 'For': rtwFor ? rtwFor.value : '' } };
+          })) })
         })
           .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
           .then(function () { window.location.href = '/cart'; })
@@ -838,14 +847,13 @@
         { id: id ? id.value : '', quantity: n, properties: props },
         { id: String(chosen.v), quantity: units(metres), properties: { Ref: ref, 'For': root.getAttribute('data-zfc-title') || '', 'Length': tidy(metres) + ' m', 'Request': 'Cut for a made-to-order piece' } }
       ];
-      // A matching sheila, if one was picked. It lives in its own snippet with its own submit
-      // handler, which stands down once this one has taken the submit over, so the line has to
-      // be added here instead or it would be lost.
-      var sheila = document.querySelector('[data-zsa-variant]');
-      if (sheila && sheila.value) {
-        var sfor = document.querySelector('[data-zsa-for]');
-        items.push({ id: sheila.value, quantity: n, properties: { Ref: ref, 'For': sfor ? sfor.value : '' } });
-      }
+      // The matching sheilas, if any were picked - a line each. They live in their own snippet
+      // with their own submit handler, which stands down once this one has taken the submit
+      // over, so the lines have to be added here instead or they would be lost.
+      var sfor = document.querySelector('[data-zsa-for]');
+      sheilaIds().forEach(function (sid) {
+        items.push({ id: sid, quantity: n, properties: { Ref: ref, 'For': sfor ? sfor.value : '' } });
+      });
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
