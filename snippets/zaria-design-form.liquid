@@ -18,12 +18,18 @@
   atelier cuts to these bands, and the figures are the finished length in inches:
 
       up to 53 in      3 m     (anything shorter is covered by the same 3 m)
-      53 to 56 in      3.5 m
+      53 to 55.5 in    3.5 m
       56 to 63 in      4 m     (60 to 63 in is covered by the same 4 m)
+      above 63 in      4.5 m
 
-  Each band is "<inches at the top of the band>:<metres>". A longer piece than the table goes
-  is cut from 4.5 m, half a metre on for the next step of the same ladder, so the cutter is
-  never short; the client has not set a figure above 63 in.
+  Each band is "<inches at the top of the band>:<metres>". The client settled the boundary
+  themselves: **56 is 4 m**, so the 3.5 band ends at 55.5, the last half-inch step the
+  dropdown offers before 56, and **above 63 takes 4.5 m**. The dropdown stops at 66 in, so the
+  four figures on the page are the four the client gave and the rule below the table - half a
+  metre on from the last band for a piece longer than the table covers - is only a safety net.
+
+  The same four figures are in zaria-fabric-choice.liquid, which prices the cloth on the
+  product page. A change to one belongs in both.
 
   Cart quantities are whole numbers, so the 3.5 m band cuts 4 m for one piece and 7 m for two.
 
@@ -38,7 +44,7 @@
   finger on the plus builds a cart of tens of thousands of dirhams.
 {%- endcomment -%}
 {%- assign zdf_pc_max = 10 -%}
-{%- assign zdf_bands = '53:3,56:3.5,63:4' | split: ',' -%}
+{%- assign zdf_bands = '53:3,55.5:3.5,63:4,66:4.5' | split: ',' -%}
 {%- assign zdf_band_first = zdf_bands | first | split: ':' -%}
 {%- assign zdf_need_min = zdf_band_first[1] | plus: 0 | ceil -%}
 {%- comment -%}
@@ -423,7 +429,7 @@
   // The length is one of the ten measurements below, and that is the only place it is asked
   // (client, 2026-11-13). The cloth follows it through the atelier's table, so the figures
   // settle as the measurements are filled in rather than before them.
-  var BANDS = (form.getAttribute('data-zdf-bands') || '53:3,56:3.5,63:4').split(',').map(function (b) {
+  var BANDS = (form.getAttribute('data-zdf-bands') || '53:3,55.5:3.5,63:4,66:4.5').split(',').map(function (b) {
     var p = b.split(':'); return { to: parseFloat(p[0]), m: parseFloat(p[1]) };
   });
   var PER = 0;                      // metres one piece is cut from, from the length table
@@ -433,7 +439,19 @@
   function wanted() { return PER ? PER * PIECES : 0; }       // the metres the pieces take
   function cut() { return wanted() ? Math.ceil(wanted() / STEP) * STEP : 0; }
   function units(m) { return Math.round(m / STEP); }         // what the cart counts
-  function lengthField() { return overlay.querySelector('select[name="properties[Length]"]:not([disabled])'); }
+  // The length is asked under two names: 'Length' where it is picked from a list, and
+  // 'Full length' among the custom measurements. Either one moves the cloth.
+  var LENGTH_FIELDS = ['properties[Length]', 'properties[Full length]'];
+  function lengthField() {
+    for (var f = 0; f < LENGTH_FIELDS.length; f++) {
+      var sels = overlay.querySelectorAll('select[name="' + LENGTH_FIELDS[f] + '"], input[name="' + LENGTH_FIELDS[f] + '"]');
+      for (var i = 0; i < sels.length; i++) {
+        if (sels[i].disabled || sels[i].closest('[hidden]')) continue;
+        if (inchesOf(sels[i])) return sels[i];
+      }
+    }
+    return null;
+  }
   function inchesOf(sel) { var m = sel && /([\d.]+)\s*in/.exec(sel.value || ''); return m ? parseFloat(m[1]) : 0; }
   function clothFor(inch) {
     for (var i = 0; i < BANDS.length; i++) if (inch <= BANDS[i].to) return BANDS[i].m;
@@ -536,7 +554,7 @@
   // The length among the measurements below is what moves the cloth, with the pieces.
   overlay.addEventListener('change', function (e) {
     var t = e.target;
-    if (!t || t.getAttribute('name') !== 'properties[Length]') return;
+    if (!t || LENGTH_FIELDS.indexOf(t.getAttribute('name')) < 0) return;
     var inch = inchesOf(t);
     PER = inch ? clothFor(inch) : 0;
     applyLength();
