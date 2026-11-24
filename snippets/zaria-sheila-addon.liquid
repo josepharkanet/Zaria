@@ -14,10 +14,25 @@
 
   passive leaves the submit alone. The design brief has its own handler and its own running
   total, so there it only wants the tiles and the hidden field; anything else would race it.
+
+  dynamic: true says someone else will choose the tiles. The sheila follows the CLOTH, not the
+  design (client, 2026-11-24: "whenever fabric choose the sheila need to be selected based on
+  the fabric selected not based on the design"), so inside the fabric room this snippet renders
+  an empty shell and the room fills it from the bolt the customer picks, by dispatching
+  zsa:source on this element. Only a finished piece bought as photographed keeps the pairing
+  that is written on the garment, which is the case the client kept: "only the ready to wear
+  without customization the sheila selected its color based on the rtw".
+
+  The shell has to exist before anything can fill it, so with dynamic it is rendered even when
+  the piece itself has no pairing - sixteen garments have none - and starts hidden.
 {%- endcomment -%}
 
 {%- assign zsa_list = product.metafields.custom.sheila_options.value -%}
-{%- if zsa_list == blank or zsa_list.size == 0 -%}
+{%- assign zsa_dyn = false -%}
+{%- if dynamic == true -%}{%- assign zsa_dyn = true -%}{%- endif -%}
+{%- assign zsa_empty = false -%}
+{%- if zsa_list == blank or zsa_list.size == 0 -%}{%- assign zsa_empty = true -%}{%- endif -%}
+{%- if zsa_empty and zsa_dyn == false -%}
   {%- comment -%}No pairing for this piece. Nothing to offer.{%- endcomment -%}
 {%- else -%}
 
@@ -26,6 +41,9 @@
   .zsa{margin:22px 0 26px}
   .zsa__head{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:#161616;margin:0 0 12px}
   .zsa__head span{color:#a89f94;letter-spacing:.1em}
+  .zsa__why{font-size:12px;color:#6f6961;margin:-6px 0 12px;line-height:1.6}
+  .zsa__why[hidden]{display:none}
+  .zsa[hidden]{display:none}
   .zsa__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   @media(max-width:479px){.zsa__grid{grid-template-columns:1fr}}
   .zsa__tile{position:relative;display:flex;align-items:center;gap:14px;text-align:left;
@@ -54,10 +72,14 @@
   .zsa__clear[hidden]{display:none}
 </style>
 
-<div class="zsa" data-zsa{% if passive %} data-zsa-passive{% endif %}>
+<div class="zsa" data-zsa{% if passive %} data-zsa-passive{% endif %}{% if zsa_dyn %} data-zsa-dynamic{% endif %}{% if zsa_empty %} hidden{% endif %}
+     data-zsa-money="{{ 123456789 | money }}">
   <p class="zsa__head">Add a matching sheila <span>optional</span></p>
+  {%- if zsa_dyn -%}
+    <p class="zsa__why" data-zsa-why hidden>Chosen to sit with the cloth you picked.</p>
+  {%- endif -%}
 
-  <div class="zsa__grid">
+  <div class="zsa__grid" data-zsa-grid>
     {%- for zsa_s in zsa_list -%}
       {%- assign zsa_v = zsa_s.selected_or_first_available_variant -%}
       {%- if zsa_v == blank -%}{%- continue -%}{%- endif -%}
@@ -99,29 +121,102 @@
     var root = document.currentScript && document.currentScript.previousElementSibling;
     if (!root || !root.matches('[data-zsa]')) { root = document.querySelector('[data-zsa]'); }
     if (!root) return;
-    var tiles = root.querySelectorAll('[data-zsa-tile]');
+    var grid = root.querySelector('[data-zsa-grid]');
     var field = root.querySelector('[data-zsa-variant]');
     var clear = root.querySelector('[data-zsa-clear]');
+    var why = root.querySelector('[data-zsa-why]');
+    var OWN = grid ? grid.innerHTML : '';    // the piece's own pairing, to come back to
+
+    function tiles() { return root.querySelectorAll('[data-zsa-tile]'); }
 
     function pick(v) {
       field.value = v || '';
-      tiles.forEach(function (t) {
+      tiles().forEach(function (t) {
         var on = !!v && t.getAttribute('data-zsa-v') === v;
         t.classList.toggle('is-on', on);
         t.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
       if (clear) clear.hidden = !v;
     }
-    tiles.forEach(function (t) {
-      t.addEventListener('click', function () {
-        var v = t.getAttribute('data-zsa-v');
-        pick(field.value === v ? '' : v);   // a second click takes it back off
-        root.dispatchEvent(new CustomEvent('zsa:change', { bubbles: true }));
-      });
+
+    // Clicks are taken on the grid rather than on each tile, because the tiles are replaced
+    // whenever the cloth changes and a listener bound to the old ones would go with them.
+    if (grid) grid.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-zsa-tile]');
+      if (!t || !grid.contains(t)) return;
+      var v = t.getAttribute('data-zsa-v');
+      pick(field.value === v ? '' : v);     // a second click takes it back off
+      root.dispatchEvent(new CustomEvent('zsa:change', { bubbles: true }));
     });
     if (clear) clear.addEventListener('click', function () {
       pick('');
       root.dispatchEvent(new CustomEvent('zsa:change', { bubbles: true }));
+    });
+
+    /* The shop's own money format, read off a number Liquid has already written out, so the
+       dirham sign and the separators are whatever the shop is set to. */
+    var MT = root.getAttribute('data-zsa-money') || '1,234,567.89';
+    var mn = /\d[\d.,]*/.exec(MT) || { index: MT.length, 0: '' };
+    var mPre = MT.slice(0, mn.index), mPost = MT.slice(mn.index + mn[0].length);
+    function money(c) {
+      var q = (Math.round(c) / 100).toFixed(2).split('.');
+      return mPre + q[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '.' + q[1] + mPost;
+    }
+
+    /* Built as elements rather than as a string of markup. Theme check reads the inside of a
+       script tag as markup too, and an opening tag written across a few joined strings left it
+       looking for a quote that never closed - it swallowed the end of the script and reported
+       it as unclosed. Nothing here is a tag until the browser makes one. */
+    function el(tag, cls, text) {
+      var n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (text != null) n.textContent = text;
+      return n;
+    }
+
+    /* Someone else chooses the tiles: the fabric room hands over the scarves that sit with the
+       bolt the customer picked. A null list puts the piece's own pairing back, which is what
+       happens when the cloth is cleared or the room is switched off for ready to wear. */
+    root.addEventListener('zsa:source', function (e) {
+      var d = e.detail || {};
+      var list = d.list;
+      pick('');                              // a scarf chosen for the last cloth is not this one
+      if (!list) {
+        if (grid) grid.innerHTML = OWN;
+        if (why) why.hidden = true;
+        root.hidden = OWN.trim() === '';
+        return;
+      }
+      if (grid) {
+        grid.textContent = '';
+        list.forEach(function (sh, i) {
+          var b = el('button', 'zsa__tile');
+          b.type = 'button';
+          b.setAttribute('data-zsa-tile', '');
+          b.setAttribute('data-zsa-v', sh.v);
+          b.setAttribute('data-zsa-title', sh.t);
+          b.setAttribute('data-zsa-price', sh.p);
+          b.setAttribute('aria-pressed', 'false');
+          if (d.base && sh.i) {
+            var im = el('img');
+            im.src = d.base + sh.i + '&width=320';
+            im.alt = sh.t; im.loading = 'lazy'; im.width = 132; im.height = 132;
+            b.appendChild(im);
+          } else {
+            var ph = el('span', 'zsa__noimg');
+            ph.style.cssText = 'width:132px;height:132px;background:#f1ece6;flex:none';
+            b.appendChild(ph);
+          }
+          var txt = el('span', 'zsa__txt');
+          txt.appendChild(el('span', 'zsa__opt', 'Option ' + (i + 1)));
+          txt.appendChild(el('span', 'zsa__name', sh.t));
+          txt.appendChild(el('span', 'zsa__price', money(sh.p)));
+          b.appendChild(txt);
+          grid.appendChild(b);
+        });
+      }
+      if (why) why.hidden = list.length === 0;
+      root.hidden = list.length === 0;
     });
 
     // Two lines on the order: the piece, and the sheila beside it. The fabric room has its own

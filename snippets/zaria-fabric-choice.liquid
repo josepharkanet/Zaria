@@ -186,7 +186,13 @@
     summary, because the sheila cost also needs to be seen before checkout"). Passive, because
     this snippet owns the submit on this page and adds the line itself.
   {%- endcomment -%}
-  {%- render 'zaria-sheila-addon', product: product, passive: true -%}
+  {%- comment -%}
+    dynamic: the scarves are the ones that sit with the BOLT, filled in by this room as soon as
+    one is chosen (client, 2026-11-24). On the ready-to-wear side no cloth is chosen, the room
+    switches itself off, and the garment's own pairing comes back - the one case the client
+    kept for the design: "only the ready to wear without customization".
+  {%- endcomment -%}
+  {%- render 'zaria-sheila-addon', product: product, passive: true, dynamic: true -%}
 
   {%- comment -%}
     The summary reads like the design brief's: the length it is cut to, the number of pieces
@@ -316,6 +322,25 @@
     return true;
   }
   var ALL = [], ROWS = [], BASE = '', shown = 0, view = [], chosen = null;
+  var SHEILAS = [];                       // the scarf catalogue, shared by every bolt
+
+  // The scarves that sit with the cloth now chosen.
+  //
+  // Ready to wear is the one route that keeps the pairing written on the garment, because there
+  // the piece is bought as photographed and its own colours are the ones to answer. Everywhere
+  // else the cloth decides, and until a bolt is chosen there is nothing to match: the offer
+  // waits rather than showing the photographed piece's colours for cloth nobody has picked.
+  var zsaBox = root.querySelector('[data-zsa]');
+  function saySheilas() {
+    if (!zsaBox) return;
+    var list = null;                                   // null = the garment's own pairing
+    if (fabricOn()) {
+      list = (chosen && chosen.sh && SHEILAS.length)
+        ? chosen.sh.map(function (i) { return SHEILAS[i]; }).filter(Boolean)
+        : [];
+    }
+    zsaBox.dispatchEvent(new CustomEvent('zsa:source', { detail: { list: list, base: BASE } }));
+  }
 
   // How many pieces are being made, and therefore how much cloth is cut.
   //
@@ -395,6 +420,7 @@
     if (nameF) nameF.disabled = !on;
     if (handleF) handleF.disabled = !on;
     if (!on) warnClear();
+    saySheilas();
     sayPrice();
   }
 
@@ -482,6 +508,7 @@
       if (nameF) nameF.value = '';
       if (handleF) handleF.value = '';
       grid.querySelectorAll('.is-on').forEach(function (x) { x.classList.remove('is-on'); });
+      saySheilas();
       shortAt = gone.q; shortName = gone.t;
       warnShort();
     } else if (shortAt !== null && needed() > shortAt) {
@@ -636,6 +663,7 @@
     if (nameF) nameF.value = chosen ? chosen.t : '';
     if (handleF) handleF.value = chosen ? chosen.h : '';
     warnClear();
+    saySheilas();
     retotal();
   });
 
@@ -648,6 +676,7 @@
     .then(function (j) {
       if (!j || !j.rows) { empty.hidden = false; empty.textContent = 'The fabric list could not be loaded. Please call the atelier.'; return; }
       BASE = j.base;
+      SHEILAS = j.sheilas || [];
       // A bolt counted at less than the shortest cut cannot make this piece. One that has
       // never been counted is offered: most of the cloth carries no count yet.
       ROWS = j.rows;
