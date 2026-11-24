@@ -117,7 +117,14 @@
   .zfc__chose{display:flex;align-items:center;gap:18px;margin:18px 0 0;padding:0;
     border:1px solid var(--zf-line,#e6e2db);background:#fff}
   .zfc__chose[hidden]{display:none}
-  .zfc__chose-img{display:block;width:124px;height:124px;object-fit:cover;background:#f6f4f1;flex:none}
+  .zfc__chose-well{position:relative;flex:none;display:block;line-height:0}
+  .zfc__chose-img{display:block;width:168px;height:168px;object-fit:cover;background:#f6f4f1}
+  .zfc__chose-zoom{position:absolute;top:8px;right:8px;width:30px;height:30px;border:0;border-radius:50%;
+    background:rgba(255,255,255,.92);color:#161616;display:flex;align-items:center;justify-content:center;
+    cursor:zoom-in;padding:0;opacity:0;transition:opacity .2s ease}
+  .zfc__chose-zoom svg{width:15px;height:15px}
+  .zfc__chose:hover .zfc__chose-zoom,.zfc__chose-zoom:focus-visible{opacity:1}
+  @media (hover:none){.zfc__chose-zoom{opacity:1}}
   .zfc__chose-txt{display:flex;flex-direction:column;gap:6px;min-width:0;padding:12px 0}
   .zfc__chose-lab{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#a89f94}
   .zfc__chose-txt b{font-weight:400;font-size:16px;line-height:1.35;color:#2a2a2a;overflow-wrap:anywhere}
@@ -128,7 +135,8 @@
   .zfc__chose-ch:hover{color:#161616}
   @media(max-width:479px){
     .zfc__chose{gap:14px}
-    .zfc__chose-img{width:96px;height:96px}
+    .zfc__chose-img{width:116px;height:116px}
+    .zfc__chose-zoom{width:26px;height:26px;top:6px;right:6px}
     .zfc__chose-txt b{font-size:15px}
     .zfc__chose-ch{margin:0 12px 0 auto}
   }
@@ -209,7 +217,17 @@
     and the way back to the grid to change it.
   {%- endcomment -%}
   <div class="zfc__chose" data-zfc-chosen hidden>
-    <img class="zfc__chose-img" data-zfc-chosen-img alt="" width="124" height="124">
+    {%- comment -%}
+      The same glass the grid tiles carry, on the piece of fabric that was actually chosen
+      (client, 2026-11-24: "here need lense to see pattern and increae the tile size"). It opens
+      the quick-zoom viewer, which carries the magnifier, so the weave can be read at full size.
+    {%- endcomment -%}
+    <span class="zfc__chose-well">
+      <img class="zfc__chose-img" data-zfc-chosen-img alt="" width="168" height="168">
+      <button type="button" class="zfc__chose-zoom" data-zfc-chosen-zoom aria-label="Look closer at this fabric">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5M8.5 11h5M11 8.5v5"></path></svg>
+      </button>
+    </span>
     <span class="zfc__chose-txt">
       <span class="zfc__chose-lab">Your fabric</span>
       <b data-zfc-chosen-name></b>
@@ -375,10 +393,15 @@
   var choseImg = root.querySelector('[data-zfc-chosen-img]');
   var choseName = root.querySelector('[data-zfc-chosen-name]');
   var chosePrice = root.querySelector('[data-zfc-chosen-price]');
+  var choseZoom = root.querySelector('[data-zfc-chosen-zoom]');
   function sayChosen() {
     if (!choseBox) return;
     if (!chosen || !fabricOn()) { choseBox.hidden = true; return; }
-    if (choseImg) { choseImg.src = sized(BASE + chosen.i, 300); choseImg.alt = chosen.t; }
+    if (choseImg) { choseImg.src = sized(BASE + chosen.i, 400); choseImg.alt = chosen.t; }
+    if (choseZoom) {
+      choseZoom.setAttribute('data-zoom-src', sized(BASE + chosen.i, 1600));
+      choseZoom.setAttribute('aria-label', 'Look closer at ' + chosen.t);
+    }
     if (choseName) choseName.textContent = chosen.t;
     if (chosePrice) {
       chosePrice.textContent = '';
