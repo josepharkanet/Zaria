@@ -547,11 +547,19 @@
         (MIN !== NEED ? ', cut as ' + tidy(MIN) + ' m' : '') +
         (pieces() > 1 ? ' each, ' + tidy(needed()) + ' m in all' : '');
     }
+    /* The piece as photographed is a real price on the ready-to-wear side and no price at all
+       on this one: made to order will not be added to the cart without a fabric chosen, so the
+       figure for the photographed fabric is for something this customer is not being offered.
+       The headline above was put right on 2026-11-20 and this summary was not, which is how a
+       fabric too short for the order could be refused in red while the total underneath still
+       read as a finished order (client, 2026-11-24: "when fabric not available, showing wrong
+       price"). It is the same rule in both places now. */
+    var inc = fabricOn() ? 0 : INCLUDED;
     root.querySelector('[data-zfc-sum-fl]').innerHTML =
       chosen ? ('Fabric &middot; ' + (pieces() > 1 ? pieces() + ' &times; ' + tidy(MIN) + ' m' : m + ' m')
                 + ' &times; ' + money(chosen.p))
-             : (INCLUDED ? ('Fabric &middot; as photographed' + (times ? times + money(INCLUDED) : ''))
-                         : 'Fabric');
+             : (inc ? ('Fabric &middot; as photographed' + (times ? times + money(inc) : ''))
+                    : 'Fabric');
     // The cloth, and what it was before the sale when the bolt carries a was-price.
     var fcell = root.querySelector('[data-zfc-sum-f]');
     /* No "You save" line of its own (client, 2026-11-18: "not required this because on top
@@ -562,7 +570,7 @@
     if (chosen && saved) {
       fcell.innerHTML = '<s>' + money(chosen.c * m) + '</s>' + money(chosen.p * m);
     } else {
-      fcell.textContent = chosen ? money(chosen.p * m) : (INCLUDED ? money(INCLUDED * pieces()) : 'Not chosen yet');
+      fcell.textContent = chosen ? money(chosen.p * m) : (inc ? money(inc * pieces()) : 'Not chosen yet');
     }
 
     // A matching sheila counts too, one for each piece, and the total says so.
@@ -582,8 +590,8 @@
 
     root.querySelector('[data-zfc-sum-t]').textContent =
       chosen ? money(DESIGN * pieces() + chosen.p * m + sp)
-             : (INCLUDED ? money((DESIGN + INCLUDED) * pieces() + sp)
-                         : money(DESIGN * pieces() + sp) + ' + fabric');
+             : (inc ? money((DESIGN + inc) * pieces() + sp)
+                    : money(DESIGN * pieces() + sp) + ' + fabric');
     sayPrice();
   }
   // Changing how many pieces changes how much cloth is needed, so the room is sifted again
